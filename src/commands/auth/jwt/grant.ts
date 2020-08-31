@@ -1,0 +1,112 @@
+/*
+ * Copyright (c) 2020, salesforce.com, inc.
+ * All rights reserved.
+ * Licensed under the BSD 3-Clause license.
+ * For full license text, see LICENSE.txt file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+ */
+
+import * as os from 'os';
+import { flags, FlagsConfig, SfdxCommand } from '@salesforce/command';
+import { AuthFields, AuthInfo, AuthRemover, Messages, SfdxError } from '@salesforce/core';
+
+Messages.importMessagesDirectory(__dirname);
+const messages = Messages.loadMessages('@salesforce/plugin-auth', 'jwt.grant');
+const commonMessages = Messages.loadMessages('@salesforce/plugin-auth', 'messages');
+
+export default class Grant extends SfdxCommand {
+  public static readonly description = messages.getMessage('description');
+  public static readonly examples = messages.getMessage('examples').split(os.EOL);
+  public static readonly flagsConfig: FlagsConfig = {
+    username: flags.string({
+      char: 'u',
+      description: messages.getMessage('username'),
+      required: true,
+    }),
+    jwtkeyfile: flags.filepath({
+      char: 'f',
+      description: messages.getMessage('key'),
+      required: true,
+    }),
+    clientid: flags.string({
+      char: 'i',
+      description: commonMessages.getMessage('clientId'),
+      required: true,
+    }),
+    instanceurl: flags.url({
+      char: 'r',
+      description: commonMessages.getMessage('instanceUrl'),
+    }),
+    setdefaultdevhubusername: flags.boolean({
+      char: 'd',
+      description: commonMessages.getMessage('setDefaultDevHub'),
+    }),
+    setdefaultusername: flags.boolean({
+      char: 's',
+      description: commonMessages.getMessage('setDefaultUsername'),
+    }),
+    setalias: flags.string({
+      char: 'a',
+      description: commonMessages.getMessage('setAlias'),
+    }),
+  };
+
+  public async run(): Promise<AuthFields> {
+    let result: AuthFields = {};
+
+    try {
+      const authInfo = await this.initAuthInfo();
+
+      if (this.flags.setalias) {
+        await authInfo.setAlias(this.flags.setalias);
+      }
+
+      if (this.flags.setdefaultdevhubusername || this.flags.setdefaultusername) {
+        await authInfo.setAsDefault({
+          defaultUsername: this.flags.setdefaultusername,
+          defaultDevhubUsername: this.flags.setdefaultdevhubusername,
+        });
+      }
+
+      result = authInfo.getFields();
+    } catch (err) {
+      throw SfdxError.create('@salesforce/plugin-auth', 'jwt.grant', 'JwtGrantError', [err.message]);
+    }
+
+    const successMsg = commonMessages.getMessage('authorizeCommandSuccess', [result.username, result.orgId]);
+    this.ux.log(successMsg);
+    return result;
+  }
+
+  private async initAuthInfo(): Promise<AuthInfo> {
+    const oauth2OptionsBase = {
+      clientId: this.flags.clientid,
+      privateKeyFile: this.flags.jwtkeyfile,
+    };
+
+    const oauth2Options = this.flags.instanceurl
+      ? Object.assign(oauth2OptionsBase, { loginUrl: this.flags.instanceurl })
+      : oauth2OptionsBase;
+
+    let authInfo: AuthInfo;
+    try {
+      authInfo = await AuthInfo.create({
+        username: this.flags.username,
+        oauth2Options,
+      });
+    } catch (err) {
+      if (err.name === 'AuthInfoOverwriteError') {
+        this.logger.debug('Auth file already exists. Removing and starting fresh.');
+        const remover = await AuthRemover.create();
+        await remover.removeAuth(this.flags.username);
+        authInfo = await AuthInfo.create({
+          username: this.flags.username,
+          oauth2Options,
+        });
+      } else {
+        throw SfdxError.create('@salesforce/plugin-auth', 'jwt.grant', 'JwtGrantError', [err.message]);
+      }
+    }
+    await authInfo.save();
+    return authInfo;
+  }
+}

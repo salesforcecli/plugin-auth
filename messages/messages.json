@@ -14,9 +14,15 @@
   "Test": "test",
   "Component": "component",
   "Page": "page",
-
   "AlphaNumericNameError": "Name must contain only alphanumeric characters.",
   "NameMustStartWithLetterError": "Name must start with a letter.",
   "EndWithUnderscoreError": "Name can't end with an underscore.",
-  "DoubleUnderscoreError": "Name can't contain 2 consecutive underscores."
+  "DoubleUnderscoreError": "Name can't contain 2 consecutive underscores.",
+  "clientId": "OAuth client ID (sometimes called the consumer key)",
+  "setDefaultDevHub": "set the authenticated org as the default dev hub org for scratch org creation",
+  "setDefaultUsername": "set the authenticated org as the default username that all commands run against",
+  "setAlias": "set an alias for the authenticated org",
+  "instanceUrl": "the login URL of the instance the org lives on",
+  "authorizeCommandSuccess": "Successfully authorized %s with org ID %s",
+  "authorizeCommandCloseBrowser": "You may now close the browser"
 }
