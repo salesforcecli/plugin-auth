@@ -8,12 +8,12 @@
     "@oclif/config": "^1",
     "@salesforce/command": "^3.0.3",
     "@salesforce/core": "^2.12.1",
+    "@salesforce/dev-scripts": "^0.6.2",
     "tslib": "^1"
   },
   "devDependencies": {
     "@oclif/dev-cli": "^1",
     "@salesforce/dev-config": "^2.0.0",
-    "@salesforce/dev-scripts": "^0.6.2",
     "@salesforce/prettier-config": "^0.0.1",
     "@salesforce/ts-sinon": "^1.2.2",
     "@types/mkdirp": "^1.0.1",
