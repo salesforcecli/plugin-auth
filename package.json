@@ -109,5 +109,8 @@
       "commit-msg": "sf-husky-commit-msg",
       "pre-push": "sf-husky-pre-push"
     }
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
