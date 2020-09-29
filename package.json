@@ -5,7 +5,7 @@
   "author": "Salesforce",
   "bugs": "https://github.com/forcedotcom/cli/issues",
   "dependencies": {
-    "@oclif/config": "^1",
+    "@oclif/config": "^1.17.0",
     "@salesforce/command": "^3.0.3",
     "@salesforce/core": "^2.12.1",
     "tslib": "^1"
@@ -87,7 +87,7 @@
   "repository": "salesforcecli/plugin-auth",
   "scripts": {
     "build": "sf-build",
-    "clean-all": "-clean all",
+    "clean-all": "sf-clean all",
     "clean:lib": "shx rm -rf lib && shx rm -rf coverage && shx rm -rf .nyc_output && shx rm -f oclif.manifest.json",
     "clean": "sf-clean",
     "compile": "sf-compile",
