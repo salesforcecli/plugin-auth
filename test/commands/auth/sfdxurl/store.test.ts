@@ -9,6 +9,7 @@ import { $$, expect, test } from '@salesforce/command/lib/test';
 import { AuthFields, AuthInfo, fs } from '@salesforce/core';
 import { MockTestOrgData } from '@salesforce/core/lib/testSetup';
 import { StubbedType, stubInterface, stubMethod } from '@salesforce/ts-sinon';
+import { UX } from '@salesforce/command';
 
 interface Options {
   authInfoCreateFails?: boolean;
@@ -172,5 +173,58 @@ describe('auth:sfdxurl:store', async () => {
           defaultUsername: true,
         },
       ]);
+    });
+
+  test
+    .do(async () => {
+      await prepareStubs();
+      process.env['SFDX_ENV'] = 'demo';
+      $$.SANDBOX.stub(UX.prototype, 'prompt').returns(Promise.resolve('yes'));
+    })
+    .finally(() => {
+      delete process.env['SFDX_ENV'];
+    })
+    .stdout()
+    .command(['auth:sfdxurl:store', '-f', 'path/to/key.txt', '--json'])
+    .it('should auth when in demo mode (SFDX_ENV=demo) and prompt is answered with yes', (ctx) => {
+      const response = JSON.parse(ctx.stdout);
+      expect(response.status).to.equal(0);
+      expect(response.result).to.deep.equal(authFields);
+      expect(authInfoStub.save.callCount).to.equal(1);
+    });
+
+  test
+    .do(async () => {
+      await prepareStubs();
+      process.env['SFDX_ENV'] = 'demo';
+      $$.SANDBOX.stub(UX.prototype, 'prompt').returns(Promise.resolve('no'));
+    })
+    .finally(() => {
+      delete process.env['SFDX_ENV'];
+    })
+    .stdout()
+    .command(['auth:sfdxurl:store', '-f', 'path/to/key.txt', '--json'])
+    .it('should do nothing when in demo mode (SFDX_ENV=demo) and prompt is answered with no', (ctx) => {
+      const response = JSON.parse(ctx.stdout);
+      expect(response.status).to.equal(0);
+      expect(response.result).to.deep.equal({});
+      expect(authInfoStub.save.callCount).to.equal(0);
+    });
+
+  test
+    .do(async () => {
+      await prepareStubs();
+      process.env['SFDX_ENV'] = 'demo';
+    })
+    .finally(() => {
+      delete process.env['SFDX_ENV'];
+    })
+    .stdout()
+    .command(['auth:sfdxurl:store', '-f', 'path/to/key.txt', '--json', '-p'])
+    .it('should ignore prompt when in demo mode (SFDX_ENV=demo) and -p is provided', (ctx) => {
+      const response = JSON.parse(ctx.stdout);
+      expect(response.status).to.equal(0);
+      expect(response.result).to.deep.equal(authFields);
+      expect(authInfoStub.save.callCount).to.equal(1);
     });
 });
