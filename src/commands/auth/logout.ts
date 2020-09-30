@@ -8,6 +8,7 @@
 import * as os from 'os';
 import { flags, FlagsConfig, SfdxCommand } from '@salesforce/command';
 import { AuthConfigs, AuthRemover, Global, Messages, Mode, SfdxError } from '@salesforce/core';
+import { Prompts } from '../../prompts';
 
 Messages.importMessagesDirectory(__dirname);
 const messages = Messages.loadMessages('@salesforce/plugin-auth', 'logout');
@@ -58,12 +59,8 @@ export default class Logout extends SfdxCommand {
   }
 
   private async shouldRunCommand(authConfigs: AuthConfigs): Promise<boolean> {
-    if (this.flags.noprompt || Global.getEnvironmentMode() === Mode.DEMO) {
-      return true;
-    } else {
-      const orgsToDelete = [[...authConfigs.keys()].join(os.EOL)];
-      const answer = await this.ux.prompt(messages.getMessage('logoutCommandYesNo', orgsToDelete));
-      return answer.toUpperCase() === 'YES' || answer.toUpperCase() === 'Y';
-    }
+    const orgsToDelete = [[...authConfigs.keys()].join(os.EOL)];
+    const message = messages.getMessage('logoutCommandYesNo', orgsToDelete);
+    return Prompts.shouldRunCommand(this.ux, this.flags.noprompt, message);
   }
 }

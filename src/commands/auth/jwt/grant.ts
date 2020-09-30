@@ -8,6 +8,7 @@
 import * as os from 'os';
 import { flags, FlagsConfig, SfdxCommand } from '@salesforce/command';
 import { AuthFields, AuthInfo, AuthRemover, Messages, SfdxError } from '@salesforce/core';
+import { Prompts } from '../../../prompts';
 
 Messages.importMessagesDirectory(__dirname);
 const messages = Messages.loadMessages('@salesforce/plugin-auth', 'jwt.grant');
@@ -48,10 +49,18 @@ export default class Grant extends SfdxCommand {
       char: 'a',
       description: commonMessages.getMessage('setAlias'),
     }),
+    noprompt: flags.boolean({
+      char: 'p',
+      description: commonMessages.getMessage('noPromptAuth'),
+      required: false,
+      hidden: true,
+    }),
   };
 
   public async run(): Promise<AuthFields> {
     let result: AuthFields = {};
+
+    if (await Prompts.shouldExitCommand(this.ux, this.flags.noprompt)) return {};
 
     try {
       const authInfo = await this.initAuthInfo();

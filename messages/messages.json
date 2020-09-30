@@ -24,5 +24,7 @@
   "setAlias": "set an alias for the authenticated org",
   "instanceUrl": "the login URL of the instance the org lives on",
   "authorizeCommandSuccess": "Successfully authorized %s with org ID %s",
-  "authorizeCommandCloseBrowser": "You may now close the browser"
+  "authorizeCommandCloseBrowser": "You may now close the browser",
+  "warnAuth": "Logging in to a business or production org is not recommended on a demo or shared machine. Please run \"sfdx force:auth:logout --targetusername <your username> --noprompt\" when finished using this org, which is similar to logging out of the org in the browser.\n\nDo you want to authorize this org, %s, for use with the Salesforce CLI (y/n)?",
+  "noPromptAuth": "do not prompt for auth confirmation in demo mode"
 }
