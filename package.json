@@ -7,7 +7,7 @@
   "dependencies": {
     "@oclif/config": "^1.17.0",
     "@salesforce/command": "^3.0.3",
-    "@salesforce/core": "^2.12.1",
+    "@salesforce/core": "^2.13.0",
     "@salesforce/kit": "^1.3.3",
     "open": "^7.3.0",
     "tslib": "^1"
@@ -17,7 +17,7 @@
     "@salesforce/dev-config": "^2.0.0",
     "@salesforce/dev-scripts": "^0.6.2",
     "@salesforce/prettier-config": "^0.0.1",
-    "@salesforce/ts-sinon": "^1.2.2",
+    "@salesforce/ts-sinon": "^1.2.3",
     "@types/mkdirp": "^1.0.1",
     "@typescript-eslint/eslint-plugin": "^2.30.0",
     "@typescript-eslint/parser": "^2.30.0",
@@ -84,6 +84,9 @@
           },
           "web": {
             "description": "authorize an org using a web browser"
+          },
+          "device": {
+            "description": "authorize an org using a device code"
           }
         }
       }

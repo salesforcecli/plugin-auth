@@ -9,6 +9,7 @@ import * as os from 'os';
 import { flags, FlagsConfig, SfdxCommand } from '@salesforce/command';
 import { AuthFields, AuthInfo, AuthRemover, Messages, SfdxError } from '@salesforce/core';
 import { Prompts } from '../../../prompts';
+import { Common } from '../../../common';
 
 Messages.importMessagesDirectory(__dirname);
 const messages = Messages.loadMessages('@salesforce/plugin-auth', 'jwt.grant');
@@ -64,18 +65,7 @@ export default class Grant extends SfdxCommand {
 
     try {
       const authInfo = await this.initAuthInfo();
-
-      if (this.flags.setalias) {
-        await authInfo.setAlias(this.flags.setalias);
-      }
-
-      if (this.flags.setdefaultdevhubusername || this.flags.setdefaultusername) {
-        await authInfo.setAsDefault({
-          defaultUsername: this.flags.setdefaultusername,
-          defaultDevhubUsername: this.flags.setdefaultdevhubusername,
-        });
-      }
-
+      await Common.handleSideEffects(authInfo, this.flags);
       result = authInfo.getFields();
     } catch (err) {
       throw SfdxError.create('@salesforce/plugin-auth', 'jwt.grant', 'JwtGrantError', [err.message]);

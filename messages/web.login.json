@@ -6,8 +6,6 @@
     "To log in to a sandbox, set --instanceurl to https://test.salesforce.com.",
     "sfdx auth:web:login -r https://test.salesforce.com"
   ],
-  "disableMasking": "disable masking of user input (for use with problematic terminals)",
   "deviceWarning": "auth:web:login doesn't work when authorizing to a headless environment. Use auth:device:login instead.",
-  "clientSecretStdin": "OAuth client secret of personal connected app?",
   "invalidClientId": "Invalid client credentials. Verify the OAuth client secret and ID."
 }

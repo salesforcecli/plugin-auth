@@ -6,16 +6,14 @@
  */
 
 import * as os from 'os';
-import * as open from 'open';
 
 import { flags, FlagsConfig, SfdxCommand } from '@salesforce/command';
-import { AuthFields, AuthInfo, Messages, OAuth2Options, SfdxError, WebOAuthServer } from '@salesforce/core';
-import { Env } from '@salesforce/kit';
+import { AuthFields, DeviceOauthService, Messages, OAuth2Options } from '@salesforce/core';
 import { Prompts } from '../../../prompts';
 import { Common } from '../../../common';
 
 Messages.importMessagesDirectory(__dirname);
-const messages = Messages.loadMessages('@salesforce/plugin-auth', 'web.login');
+const messages = Messages.loadMessages('@salesforce/plugin-auth', 'device.login');
 const commonMessages = Messages.loadMessages('@salesforce/plugin-auth', 'messages');
 
 export default class Login extends SfdxCommand {
@@ -46,19 +44,9 @@ export default class Login extends SfdxCommand {
       description: commonMessages.getMessage('disableMasking'),
       hidden: true,
     }),
-    noprompt: flags.boolean({
-      char: 'p',
-      description: commonMessages.getMessage('noPromptAuth'),
-      required: false,
-      hidden: true,
-    }),
   };
 
   public async run(): Promise<AuthFields> {
-    if (this.isSFDXContainerMode()) {
-      throw new SfdxError(messages.getMessage('deviceWarning'), 'DEVICE_WARNING');
-    }
-
     if (await Prompts.shouldExitCommand(this.ux, this.flags.noprompt)) return {};
 
     const oauthConfig: OAuth2Options = {
@@ -70,32 +58,27 @@ export default class Login extends SfdxCommand {
       oauthConfig.clientSecret = await Prompts.askForClientSecret(this.ux, this.flags.disablemasking);
     }
 
-    try {
-      const authInfo = await this.executeLoginFlow(oauthConfig);
+    const deviceOauthService = await DeviceOauthService.create(oauthConfig);
+    const loginData = await deviceOauthService.requestDeviceLogin();
+
+    if (this.flags.json) {
+      this.ux.logJson(loginData);
+    } else {
+      this.ux.styledHeader(messages.getMessage('actionRequired'));
+      this.ux.log(messages.getMessage('enterCode'), loginData.user_code, loginData.verification_uri);
+      this.ux.log();
+    }
+
+    const approval = await deviceOauthService.awaitDeviceApproval(loginData);
+    if (approval) {
+      const authInfo = await deviceOauthService.authorizeAndSave(approval);
       await Common.handleSideEffects(authInfo, this.flags);
       const fields = authInfo.getFields();
-      const successMsg = commonMessages.getMessage('authorizeCommandSuccess', [fields.username, fields.orgId]);
+      const successMsg = messages.getMessage('success', [fields.username]);
       this.ux.log(successMsg);
       return fields;
-    } catch (err) {
-      if (err.name === 'AuthCodeExchangeError') {
-        this.ux.error(messages.getMessage('invalidClientId'));
-      } else {
-        this.ux.error(err.message);
-      }
+    } else {
       return {};
     }
-  }
-
-  private async executeLoginFlow(oauthConfig: OAuth2Options): Promise<AuthInfo> {
-    const oauthServer = await WebOAuthServer.create({ oauthConfig });
-    await oauthServer.start();
-    await open(oauthServer.getAuthorizationUrl(), { wait: false });
-    return oauthServer.authorizeAndSave();
-  }
-
-  private isSFDXContainerMode(): boolean {
-    const env = new Env();
-    return env.getBoolean('SFDX_CONTAINER_MODE');
   }
 }

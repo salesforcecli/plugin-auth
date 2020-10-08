@@ -9,6 +9,7 @@ import * as os from 'os';
 import { flags, FlagsConfig, SfdxCommand } from '@salesforce/command';
 import { AuthFields, AuthInfo, fs, Messages } from '@salesforce/core';
 import { Prompts } from '../../../prompts';
+import { Common } from '../../../common';
 
 Messages.importMessagesDirectory(__dirname);
 const messages = Messages.loadMessages('@salesforce/plugin-auth', 'sfdxurl.store');
@@ -54,19 +55,9 @@ export default class Store extends SfdxCommand {
     const authInfo = await AuthInfo.create({ oauth2Options });
     await authInfo.save();
 
-    let result: AuthFields = {};
-    if (this.flags.setalias) {
-      await authInfo.setAlias(this.flags.setalias);
-    }
+    await Common.handleSideEffects(authInfo, this.flags);
 
-    if (this.flags.setdefaultdevhubusername || this.flags.setdefaultusername) {
-      await authInfo.setAsDefault({
-        defaultUsername: this.flags.setdefaultusername,
-        defaultDevhubUsername: this.flags.setdefaultdevhubusername,
-      });
-    }
-
-    result = authInfo.getFields();
+    const result = authInfo.getFields();
     const successMsg = commonMessages.getMessage('authorizeCommandSuccess', [result.username, result.orgId]);
     this.ux.log(successMsg);
     return result;
