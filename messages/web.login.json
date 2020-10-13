@@ -1,0 +1,11 @@
+{
+  "description": "authorizes a Salesforce org by opening a browser so you can log in through salesforce.com.",
+  "examples": [
+    "sfdx auth:web:login -a TestOrg1",
+    "sfdx auth:web:login -i <OAuth client id>",
+    "To log in to a sandbox, set --instanceurl to https://test.salesforce.com.",
+    "sfdx auth:web:login -r https://test.salesforce.com"
+  ],
+  "deviceWarning": "auth:web:login doesn't work when authorizing to a headless environment. Use auth:device:login instead.",
+  "invalidClientId": "Invalid client credentials. Verify the OAuth client secret and ID."
+}

@@ -1,0 +1,11 @@
+{
+  "description": "authorize an org using a device code",
+  "examples": [
+    "sfdx auth:device:login -d -a TestOrg1",
+    "sfdx auth:device:login -i <OAuth client id>",
+    "sfdx auth:device:login -r https://test.salesforce.com"
+  ],
+  "actionRequired": "Action Required!",
+  "enterCode": "Enter %s user code in the verification URL %s",
+  "success": "Login successful for %s. You can now close the browser."
+}

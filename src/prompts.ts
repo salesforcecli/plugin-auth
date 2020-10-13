@@ -29,6 +29,12 @@ export class Prompts {
     }
   }
 
+  public static async askForClientSecret(ux: UX, disableMasking: false): Promise<string> {
+    return ux.prompt(messages.getMessage('clientSecretStdin'), {
+      type: disableMasking ? 'normal' : 'hide',
+    });
+  }
+
   private static answeredYes(answer: string): boolean {
     return ['YES', 'Y'].includes(answer.toUpperCase());
   }

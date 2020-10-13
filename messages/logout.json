@@ -1,10 +1,6 @@
 {
   "description": "log out from authorized orgs. By default, this command logs you out from your default scratch org.",
-  "examples": [
-    "sfdx force:auth:logout -u me@my.org",
-    "sfdx force:auth:logout -a",
-    "sfdx force:auth:logout -p"
-  ],
+  "examples": ["sfdx auth:logout -u me@my.org", "sfdx auth:logout -a", "sfdx auth:logout -p"],
   "all": "include all authenticated orgs",
   "allLong": "Includes all authenticated orgs: for example, Dev Hubs, sandboxes, DE orgs, and expired, deleted, and unknown-status scratch orgs.",
   "noPrompt": "do not prompt for confirmation",
