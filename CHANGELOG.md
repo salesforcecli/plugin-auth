@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.3.0](https://github.com/salesforcecli/plugin-auth/compare/v1.2.0...v1.3.0) (2020-10-13)
+
+
+### Features
+
+* add auth:device:login ([3e880d7](https://github.com/salesforcecli/plugin-auth/commit/3e880d7133ea045726a28d818e3118d8a602662f))
+* add auth:web:login ([dc231e5](https://github.com/salesforcecli/plugin-auth/commit/dc231e581e6648b45ce06e249585a7a21cc93df4))
+
 ## [1.2.0](https://github.com/salesforcecli/plugin-auth/compare/v1.1.3...v1.2.0) (2020-09-30)
 
 
