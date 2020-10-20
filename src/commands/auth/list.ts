@@ -23,6 +23,8 @@ export type AuthListInfo = {
 
 export default class List extends SfdxCommand {
   public static readonly description = messages.getMessage('description');
+  public static aliases = ['force:auth:list'];
+
   public static readonly flagsConfig: FlagsConfig = {};
   public async run(): Promise<Authorization[]> {
     try {

@@ -19,6 +19,8 @@ const commonMessages = Messages.loadMessages('@salesforce/plugin-auth', 'message
 export default class Login extends SfdxCommand {
   public static readonly description = messages.getMessage('description');
   public static readonly examples = messages.getMessage('examples').split(os.EOL);
+  public static aliases = ['force:auth:device:login'];
+
   public static readonly flagsConfig: FlagsConfig = {
     clientid: flags.string({
       char: 'i',
