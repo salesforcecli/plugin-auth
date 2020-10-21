@@ -1,5 +1,5 @@
 {
-  "description": "authorize a Salesforce org using an SFDX auth URL stored within a file\nThe file must have the format \"%s\" or \"%s\".\nThe file must contain only the URL or be a JSON file that has a top-level property named sfdxAuthUrl.\nUse this command to get the SFDX auth URL for a Dev Hub org you have already authorized:\n\n    $ sfdx force:org:display -u <DevHub> --verbose",
+  "description": "authorize an org using an SFDX auth URL\nThe file must have the format \"%s\" or \"%s\".\nThe file must contain only the URL or be a JSON file that has a top-level property named sfdxAuthUrl.\nUse this command to get the SFDX auth URL for a Dev Hub org you have already authorized:\n\n    $ sfdx force:org:display -u <DevHub> --verbose",
   "file": "path to a file containing the sfdx url",
   "examples": [
     "sfdx auth:sfdxurl:store -f <path to sfdxAuthUrl file>",
