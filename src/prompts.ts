@@ -6,16 +6,22 @@
  */
 import { Messages, Global, Mode } from '@salesforce/core';
 import { UX } from '@salesforce/command';
+import * as chalk from 'chalk';
 
 Messages.importMessagesDirectory(__dirname);
 const messages = Messages.loadMessages('@salesforce/plugin-auth', 'messages');
+
+function dimMessage(message: string): string {
+  return chalk.dim(message);
+}
 
 export class Prompts {
   public static async shouldExitCommand(ux: UX, noPrompt?: boolean, message?: string): Promise<boolean> {
     if (noPrompt || Global.getEnvironmentMode() !== Mode.DEMO) {
       return false;
     } else {
-      const answer = await ux.prompt(message || messages.getMessage('warnAuth'));
+      const msg = dimMessage(message || messages.getMessage('warnAuth'));
+      const answer = await ux.prompt(msg);
       return Prompts.answeredNo(answer);
     }
   }
@@ -24,13 +30,15 @@ export class Prompts {
     if (noPrompt || Global.getEnvironmentMode() === Mode.DEMO) {
       return true;
     } else {
-      const answer = await ux.prompt(message || messages.getMessage('warnAuth'));
+      const msg = dimMessage(message || messages.getMessage('warnAuth'));
+      const answer = await ux.prompt(msg);
       return Prompts.answeredYes(answer);
     }
   }
 
   public static async askForClientSecret(ux: UX, disableMasking: false): Promise<string> {
-    return ux.prompt(messages.getMessage('clientSecretStdin'), {
+    const msg = dimMessage(messages.getMessage('clientSecretStdin'));
+    return ux.prompt(msg, {
       type: disableMasking ? 'normal' : 'hide',
     });
   }
