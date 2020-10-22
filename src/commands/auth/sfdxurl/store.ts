@@ -57,7 +57,7 @@ export default class Store extends SfdxCommand {
 
     await Common.handleSideEffects(authInfo, this.flags);
 
-    const result = authInfo.getFields();
+    const result = authInfo.getFields(true);
     const successMsg = commonMessages.getMessage('authorizeCommandSuccess', [result.username, result.orgId]);
     this.ux.log(successMsg);
     return result;

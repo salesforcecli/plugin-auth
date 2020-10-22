@@ -73,7 +73,7 @@ export default class Login extends SfdxCommand {
     if (approval) {
       const authInfo = await deviceOauthService.authorizeAndSave(approval);
       await Common.handleSideEffects(authInfo, this.flags);
-      const fields = authInfo.getFields();
+      const fields = authInfo.getFields(true);
       const successMsg = messages.getMessage('success', [fields.username]);
       this.ux.log(successMsg);
       return fields;

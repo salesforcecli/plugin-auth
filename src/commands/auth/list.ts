@@ -25,14 +25,19 @@ export default class List extends SfdxCommand {
   public static readonly description = messages.getMessage('description');
   public static readonly flagsConfig: FlagsConfig = {};
   public async run(): Promise<Authorization[]> {
-    const auths = await AuthInfo.listAllAuthorizations();
-    const hasErrors = auths.filter((auth) => !!auth.error).length > 0;
-    const columns = ['alias', 'username', 'orgId', 'instanceUrl', 'oauthMethod'];
-    if (hasErrors) {
-      columns.push('error');
+    try {
+      const auths = await AuthInfo.listAllAuthorizations();
+      const hasErrors = auths.filter((auth) => !!auth.error).length > 0;
+      const columns = ['alias', 'username', 'orgId', 'instanceUrl', 'oauthMethod'];
+      if (hasErrors) {
+        columns.push('error');
+      }
+      this.ux.styledHeader('authenticated orgs');
+      this.ux.table(auths, columns);
+      return auths;
+    } catch (err) {
+      this.ux.log(messages.getMessage('noResultsFound'));
+      return [];
     }
-    this.ux.styledHeader('authenticated orgs');
-    this.ux.table(auths, columns);
-    return auths;
   }
 }
