@@ -1,7 +1,7 @@
 {
   "name": "@salesforce/plugin-auth",
   "description": "plugin for sfdx auth commands",
-  "version": "1.3.2",
+  "version": "0.0.1-test",
   "author": "Salesforce",
   "bugs": "https://github.com/forcedotcom/cli/issues",
   "dependencies": {
