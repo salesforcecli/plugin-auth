@@ -2,12 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-## [1.4.0](https://github.com/salesforcecli/plugin-auth/compare/v1.3.2...v1.4.0) (2020-10-29)
-
+### [0.0.1-test](https://github.com/salesforcecli/plugin-auth/compare/v1.3.2...v0.0.1-test) (2020-10-29)
 
 ### Features
 
-* add new test feature ([adcbe6e](https://github.com/salesforcecli/plugin-auth/commit/adcbe6e7da4108c563b19ca192bbfefd4ad6547d))
+- add new test feature ([a0b7b2d](https://github.com/salesforcecli/plugin-auth/commit/a0b7b2de17655bc69ea7ea69962e182abbf89bb7))
+
+## [1.4.0](https://github.com/salesforcecli/plugin-auth/compare/v1.3.2...v1.4.0) (2020-10-29)
+
+### Features
+
+- add new test feature ([adcbe6e](https://github.com/salesforcecli/plugin-auth/commit/adcbe6e7da4108c563b19ca192bbfefd4ad6547d))
 
 ### [1.3.3](https://github.com/salesforcecli/plugin-auth/compare/v1.3.2...v1.3.3) (2020-10-29)
 
