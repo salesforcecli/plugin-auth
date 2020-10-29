@@ -1,7 +1,7 @@
 {
   "name": "@salesforce/plugin-auth",
   "description": "plugin for sfdx auth commands",
-  "version": "0.0.1-test",
+  "version": "0.0.2-test",
   "author": "Salesforce",
   "bugs": "https://github.com/forcedotcom/cli/issues",
   "dependencies": {
@@ -121,5 +121,9 @@
   },
   "publishConfig": {
     "access": "public"
+  },
+  "sfdx": {
+    "publicKeyUrl": "https://developer.salesforce.com/media/salesforce-cli/sfdx-cli-03032020.crt",
+    "signatureUrl": "https://developer.salesforce.com/media/salesforce-cli/signatures/salesforce-plugin-auth-0.0.2-test.sig"
   }
 }
