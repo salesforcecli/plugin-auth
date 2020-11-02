@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.4-test](https://github.com/salesforcecli/plugin-auth/compare/v0.0.3-test...v0.0.4-test) (2020-11-02)
+
 ### [0.0.3-test](https://github.com/salesforcecli/plugin-auth/compare/v0.0.2-test...v0.0.3-test) (2020-11-02)
 
 ### [0.0.2-test](https://github.com/salesforcecli/plugin-auth/compare/v0.0.1-test...v0.0.2-test) (2020-10-29)
