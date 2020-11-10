@@ -20,7 +20,7 @@ workflows:
       #     name: node-12
       - release-management/release-package:
           sign: true
-          github-release: true
+          # github-release: true
           tag: test
           # requires:
           #   - node-latest
