@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.6](https://github.com/salesforcecli/plugin-auth/compare/v0.0.5...v0.0.6) (2020-11-10)
+
+
+### Bug Fixes
+
+* update circle ([a349db8](https://github.com/salesforcecli/plugin-auth/commit/a349db8f6494ad9c0685ef97a85d0edb6a34cd3f))
+
 ### [0.0.5](https://github.com/salesforcecli/plugin-auth/compare/v0.0.5-test...v0.0.5) (2020-11-10)
 
 
