@@ -20,6 +20,7 @@ workflows:
       - release-management/release-package:
           sign: true
           github-release: true
+          tag: test
           # requires:
           #   - node-latest
           filters:
