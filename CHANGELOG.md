@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.5](https://github.com/salesforcecli/plugin-auth/compare/v0.0.5-test...v0.0.5) (2020-11-10)
+
+
+### Bug Fixes
+
+* update circle ([7af3411](https://github.com/salesforcecli/plugin-auth/commit/7af34113540a61a0b8fc2a861f7336cb4b556c21))
+* update circle ([c8ef11e](https://github.com/salesforcecli/plugin-auth/commit/c8ef11e7758f3bbb298a10b9a515dedd4166aef8))
+* update circle ([818e04a](https://github.com/salesforcecli/plugin-auth/commit/818e04a5362883959b4af5d12dea788d66252c1f))
+* update circle ([ef2be85](https://github.com/salesforcecli/plugin-auth/commit/ef2be85c845d3667a3f9fda756480bfb1cb61f72))
+* update circle ([c7a988c](https://github.com/salesforcecli/plugin-auth/commit/c7a988ca1f42e1c86d10837aaf57c37c1ae0f97c))
+* update circle ([63adfa1](https://github.com/salesforcecli/plugin-auth/commit/63adfa191083eb2bc708b5b5cac566089ef0f4b6))
+* update circle ([4f6f394](https://github.com/salesforcecli/plugin-auth/commit/4f6f394660b35c9a007f832357eb69b76951f3d5))
+* update circle ([5532ba9](https://github.com/salesforcecli/plugin-auth/commit/5532ba96cea43a6bf338bfcced09c1c7229a695c))
+* update circle ([028f790](https://github.com/salesforcecli/plugin-auth/commit/028f790808924c82e37b59d7cb34b486fd6fa491))
+* update circle ([066971a](https://github.com/salesforcecli/plugin-auth/commit/066971a1a090ae4a1872eb035ff4ae9a0582fe17))
+* update circle ([a2d3892](https://github.com/salesforcecli/plugin-auth/commit/a2d3892d6e66083d41ddc3cf638f1e51a4fe83c5))
+
 ### [0.0.5-test](https://github.com/salesforcecli/plugin-auth/compare/v0.0.4-test...v0.0.5-test) (2020-11-05)
 
 ### [0.0.4-test](https://github.com/salesforcecli/plugin-auth/compare/v0.0.3-test...v0.0.4-test) (2020-11-02)
