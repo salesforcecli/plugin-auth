@@ -8,20 +8,20 @@ workflows:
   version: 2
   test-and-release:
     jobs:
-      - release-management/validate-pr:
-          filters:
-            branches:
-              ignore: master
-      - release-management/test-package:
-          name: node-latest
-          node_version: latest
-      - release-management/test-package:
-          name: node-12
-      # - release-management/release-package:
-      #     sign: true
-      #     github-release: true
-      #     requires:
-      #       - node-latest
+      # - release-management/validate-pr:
       #     filters:
       #       branches:
-      #         only: mdonnalley/test-branch
+      #         ignore: master
+      # - release-management/test-package:
+      #     name: node-latest
+      #     node_version: latest
+      # - release-management/test-package:
+      #     name: node-12
+      - release-management/release-package:
+          sign: true
+          github-release: true
+          # requires:
+          #   - node-latest
+          filters:
+            branches:
+              only: mdonnalley/test-branch
