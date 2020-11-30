@@ -18,6 +18,8 @@ const commonMessages = Messages.loadMessages('@salesforce/plugin-auth', 'message
 export default class Grant extends SfdxCommand {
   public static readonly description = messages.getMessage('description');
   public static readonly examples = messages.getMessage('examples').split(os.EOL);
+  public static aliases = ['force:auth:jwt:grant'];
+
   public static readonly flagsConfig: FlagsConfig = {
     username: flags.string({
       char: 'u',

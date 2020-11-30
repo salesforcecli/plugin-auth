@@ -17,6 +17,8 @@ export default class Logout extends SfdxCommand {
   public static readonly description = messages.getMessage('description');
   public static readonly examples = messages.getMessage('examples').split(os.EOL);
   public static readonly supportsUsername = true;
+  public static aliases = ['force:auth:logout'];
+
   public static readonly flagsConfig: FlagsConfig = {
     all: flags.boolean({
       char: 'a',

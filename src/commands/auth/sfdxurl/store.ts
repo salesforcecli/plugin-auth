@@ -21,6 +21,8 @@ const AUTH_URL_FORMAT2 = 'force://<clientId>:<clientSecret>:<refreshToken>@<inst
 export default class Store extends SfdxCommand {
   public static readonly description = messages.getMessage('description', [AUTH_URL_FORMAT1, AUTH_URL_FORMAT2]);
   public static readonly examples = messages.getMessage('examples').split(os.EOL);
+  public static aliases = ['force:auth:sfdxurl:store'];
+
   public static readonly flagsConfig: FlagsConfig = {
     sfdxurlfile: flags.filepath({
       char: 'f',
