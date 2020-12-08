@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.4.2](https://github.com/salesforcecli/plugin-auth/compare/v1.4.1...v1.4.2) (2020-12-08)
+
+
+### Bug Fixes
+
+* bumped npm release to v4 ([1e72e22](https://github.com/salesforcecli/plugin-auth/commit/1e72e22513152dc4331a4ce10f945084f9f329d2))
+
 ### [1.4.1](https://github.com/salesforcecli/plugin-auth/compare/v1.4.0...v1.4.1) (2020-12-08)
 
 
