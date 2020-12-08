@@ -14,11 +14,13 @@
     "tslib": "^1"
   },
   "devDependencies": {
+    "@mshanemc/plugin-helpers": "^2.1.0",
     "@oclif/dev-cli": "^1",
     "@salesforce/dev-config": "^2.0.0",
     "@salesforce/dev-scripts": "^0.6.2",
     "@salesforce/prettier-config": "^0.0.1",
     "@salesforce/ts-sinon": "^1.2.3",
+    "@types/fs-extra": "^9.0.4",
     "@types/mkdirp": "^1.0.1",
     "@typescript-eslint/eslint-plugin": "^2.30.0",
     "@typescript-eslint/parser": "^2.30.0",
