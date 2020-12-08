@@ -104,7 +104,7 @@ export default class Grant extends SfdxCommand {
           oauth2Options,
         });
       } else {
-        throw SfdxError.create('@salesforce/plugin-auth', 'jwt.grant', 'JwtGrantError', [err.message]);
+        throw err;
       }
     }
     await authInfo.save();
