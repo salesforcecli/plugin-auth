@@ -2,7 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2160b2d1-9a43-4578-ab73-864e0dc5715a" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.circleci/config.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.circleci/config.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/commands/auth/logout.test.ts" beforeDir="false" afterPath="$PROJECT_DIR$/test/commands/auth/logout.test.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -12,18 +15,10 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="IgnoredFileRootStore">
-    <option name="generatedRoots">
-      <set>
-        <option value="$PROJECT_DIR$/.idea" />
-      </set>
-    </option>
-  </component>
   <component name="ProjectId" id="1ey0Il3Tz7m2hHhwgwuCBXLm1Ko" />
   <component name="ProjectViewState">
     <option name="autoscrollFromSource" value="true" />
     <option name="hideEmptyMiddlePackages" value="true" />
-    <option name="showExcludedFiles" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
@@ -36,9 +31,57 @@
     <property name="node.js.path.for.package.tslint" value="project" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
+    <property name="nodejs.mocha.mocha_node_package_dir" value="$PROJECT_DIR$/node_modules/mocha" />
     <property name="nodejs_package_manager_path" value="yarn" />
     <property name="prettierjs.PrettierConfiguration.Package" value="$PROJECT_DIR$/node_modules/prettier" />
+    <property name="ts.external.directory.path" value="$PROJECT_DIR$/node_modules/typescript/lib" />
+    <property name="vue.rearranger.settings.migration" value="true" />
   </component>
+  <component name="RunManager" selected="Mocha.auth:logout">
+    <configuration name="build" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="build" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <configuration name="test" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="test" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <configuration name="auth:logout" type="mocha-javascript-test-runner" temporary="true" nameIsGenerated="true">
+      <node-interpreter>project</node-interpreter>
+      <node-options />
+      <mocha-package>$PROJECT_DIR$/node_modules/mocha</mocha-package>
+      <working-directory>$PROJECT_DIR$</working-directory>
+      <pass-parent-env>true</pass-parent-env>
+      <ui>bdd</ui>
+      <extra-mocha-options>--require ts-node/register</extra-mocha-options>
+      <test-kind>SUITE</test-kind>
+      <test-file>$PROJECT_DIR$/test/commands/auth/logout.test.ts</test-file>
+      <test-names>
+        <name value="auth:logout" />
+      </test-names>
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Mocha.auth:logout" />
+        <item itemvalue="npm.test" />
+        <item itemvalue="npm.build" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -50,36 +93,37 @@
       <option name="presentableId" value="Default" />
       <updated>1595278447145</updated>
       <workItem from="1595278448529" duration="1371000" />
+      <workItem from="1605809611374" duration="1596000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
-    <option name="version" value="1" />
+    <option name="version" value="3" />
   </component>
   <component name="WindowStateProjectService">
-    <state width="2518" height="423" key="GridCell.Tab.0.bottom" timestamp="1595280996793">
-      <screen x="-453" y="-1440" width="2560" height="1440" />
+    <state x="-347" y="-1340" width="2360" height="1240" key="#com.intellij.execution.junit2.states.ComparisonFailureState$DiffDialog" timestamp="1605811408260">
+      <screen x="-447" y="-1440" width="2560" height="1440" />
     </state>
-    <state width="2518" height="423" key="GridCell.Tab.0.bottom/-453.-1440.2560.1440/0.0.1680.1050@-453.-1440.2560.1440" timestamp="1595280996793" />
-    <state width="2518" height="423" key="GridCell.Tab.0.center" timestamp="1595280996790">
-      <screen x="-453" y="-1440" width="2560" height="1440" />
+    <state x="-347" y="-1340" width="2360" height="1240" key="#com.intellij.execution.junit2.states.ComparisonFailureState$DiffDialog/-447.-1440.2560.1440/0.0.1680.1050@-447.-1440.2560.1440" timestamp="1605811408260" />
+    <state width="2518" height="422" key="GridCell.Tab.0.bottom" timestamp="1605811369081">
+      <screen x="-447" y="-1440" width="2560" height="1440" />
     </state>
-    <state width="2518" height="423" key="GridCell.Tab.0.center/-453.-1440.2560.1440/0.0.1680.1050@-453.-1440.2560.1440" timestamp="1595280996790" />
-    <state width="2518" height="423" key="GridCell.Tab.0.left" timestamp="1595280996789">
-      <screen x="-453" y="-1440" width="2560" height="1440" />
+    <state width="2518" height="422" key="GridCell.Tab.0.bottom/-447.-1440.2560.1440/0.0.1680.1050@-447.-1440.2560.1440" timestamp="1605811369081" />
+    <state width="2518" height="422" key="GridCell.Tab.0.center" timestamp="1605811369077">
+      <screen x="-447" y="-1440" width="2560" height="1440" />
     </state>
-    <state width="2518" height="423" key="GridCell.Tab.0.left/-453.-1440.2560.1440/0.0.1680.1050@-453.-1440.2560.1440" timestamp="1595280996789" />
-    <state width="2518" height="423" key="GridCell.Tab.0.right" timestamp="1595280996792">
-      <screen x="-453" y="-1440" width="2560" height="1440" />
+    <state width="2518" height="422" key="GridCell.Tab.0.center/-447.-1440.2560.1440/0.0.1680.1050@-447.-1440.2560.1440" timestamp="1605811369077" />
+    <state width="2518" height="422" key="GridCell.Tab.0.left" timestamp="1605811369075">
+      <screen x="-447" y="-1440" width="2560" height="1440" />
     </state>
-    <state width="2518" height="423" key="GridCell.Tab.0.right/-453.-1440.2560.1440/0.0.1680.1050@-453.-1440.2560.1440" timestamp="1595280996792" />
-    <state x="605" y="-1002" key="RollbackChangesDialog" timestamp="1595279093711">
-      <screen x="-453" y="-1440" width="2560" height="1440" />
+    <state width="2518" height="422" key="GridCell.Tab.0.left/-447.-1440.2560.1440/0.0.1680.1050@-447.-1440.2560.1440" timestamp="1605811369075" />
+    <state width="2518" height="422" key="GridCell.Tab.0.right" timestamp="1605811369079">
+      <screen x="-447" y="-1440" width="2560" height="1440" />
     </state>
-    <state x="605" y="-1002" key="RollbackChangesDialog/-453.-1440.2560.1440/0.0.1680.1050@-453.-1440.2560.1440" timestamp="1595279093711" />
-    <state x="492" y="-1109" width="670" height="676" key="search.everywhere.popup" timestamp="1595280727735">
-      <screen x="-453" y="-1440" width="2560" height="1440" />
+    <state width="2518" height="422" key="GridCell.Tab.0.right/-447.-1440.2560.1440/0.0.1680.1050@-447.-1440.2560.1440" timestamp="1605811369079" />
+    <state x="498" y="-1109" width="670" height="676" key="search.everywhere.popup" timestamp="1605809901249">
+      <screen x="-447" y="-1440" width="2560" height="1440" />
     </state>
-    <state x="492" y="-1109" width="670" height="676" key="search.everywhere.popup/-453.-1440.2560.1440/0.0.1680.1050@-453.-1440.2560.1440" timestamp="1595280727735" />
+    <state x="498" y="-1109" width="670" height="676" key="search.everywhere.popup/-447.-1440.2560.1440/0.0.1680.1050@-447.-1440.2560.1440" timestamp="1605809901249" />
   </component>
 </project>
