@@ -53,7 +53,7 @@ export default class Login extends SfdxCommand {
     if (await Prompts.shouldExitCommand(this.ux, this.flags.noprompt)) return {};
 
     const oauthConfig: OAuth2Options = {
-      loginUrl: get(this.flags.instanceurl, 'href', null) as Optional<string>,
+      loginUrl: await Common.getLoginUrl(get(this.flags.instanceurl, 'href', null) as Optional<string>),
       clientId: this.flags.clientid,
     };
 

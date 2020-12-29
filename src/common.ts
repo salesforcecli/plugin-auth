@@ -5,7 +5,8 @@
  * For full license text, see LICENSE.txt file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  */
 
-import { AuthInfo } from '@salesforce/core';
+import { AuthInfo, SfdcUrl, SfdxProject } from '@salesforce/core';
+import { getString, Optional } from '@salesforce/ts-types';
 
 interface Flags {
   setalias?: string;
@@ -22,6 +23,19 @@ export class Common {
         defaultUsername: flags.setdefaultusername,
         defaultDevhubUsername: flags.setdefaultdevhubusername,
       });
+    }
+  }
+  public static async getLoginUrl(instanceUrl: Optional<string>): Promise<Optional<string>> {
+    if (instanceUrl) {
+      return instanceUrl;
+    }
+    try {
+      const project = await SfdxProject.resolve();
+      const projectJson = await project.resolveProjectConfig();
+      return getString(projectJson, 'sfdcLoginUrl', SfdcUrl.PRODUCTION);
+    } catch (err) {
+      // just return production URL
+      return SfdcUrl.PRODUCTION;
     }
   }
 }
