@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.4.6](https://github.com/salesforcecli/plugin-auth/compare/v1.4.5...v1.4.6) (2021-01-06)
+
+### [1.4.5](https://github.com/salesforcecli/plugin-auth/compare/v1.4.4...v1.4.5) (2020-12-10)
+
+### [1.4.4](https://github.com/salesforcecli/plugin-auth/compare/v1.4.3...v1.4.4) (2020-12-10)
+
+
+### Bug Fixes
+
+* device login with instanceurl ([ebd60d1](https://github.com/salesforcecli/plugin-auth/commit/ebd60d1bb3a64528d22b2fb280c9b25d6d3371ac))
+
+### [1.4.3](https://github.com/salesforcecli/plugin-auth/compare/v1.4.2...v1.4.3) (2020-12-09)
+
+### [1.4.2](https://github.com/salesforcecli/plugin-auth/compare/v1.4.1...v1.4.2) (2020-12-08)
+
+
+### Bug Fixes
+
+* bumped npm release to v4 ([1e72e22](https://github.com/salesforcecli/plugin-auth/commit/1e72e22513152dc4331a4ce10f945084f9f329d2))
+
 ### [1.4.1](https://github.com/salesforcecli/plugin-auth/compare/v1.4.0...v1.4.1) (2020-12-08)
 
 

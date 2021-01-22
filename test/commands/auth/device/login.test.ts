@@ -95,6 +95,18 @@ describe('auth:device:login', async () => {
   test
     .do(async () => prepareStubs())
     .stdout()
+    .command(['auth:device:login', '-r', 'https://login.salesforce.com', '--json'])
+    .it('should return auth fields with instance url', (ctx) => {
+      const [action, response] = parseJsonResponse(ctx.stdout);
+      expect(action).to.deep.equal(mockAction);
+      expect(response.status).to.equal(0);
+      expect(response.result).to.deep.equal(authFields);
+      expect(response.result.username).to.equal(testData.username);
+    });
+
+  test
+    .do(async () => prepareStubs())
+    .stdout()
     .command(['auth:device:login', '-a', 'MyAlias', '--json'])
     .it('should set alias when -a is provided', (ctx) => {
       const [action, response] = parseJsonResponse(ctx.stdout);
