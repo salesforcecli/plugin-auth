@@ -80,12 +80,11 @@ export default class Login extends SfdxCommand {
       this.ux.log(successMsg);
       return fields;
     } catch (err) {
+      this.logger.debug(err);
       if (err.name === 'AuthCodeExchangeError') {
-        this.ux.error(messages.getMessage('invalidClientId'));
-      } else {
-        this.ux.error(err.message);
+        throw new SfdxError(messages.getMessage('invalidClientId', [err.message]));
       }
-      return {};
+      throw err;
     }
   }
 
