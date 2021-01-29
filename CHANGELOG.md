@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.4.7](https://github.com/salesforcecli/plugin-auth/compare/v1.4.6...v1.4.7) (2021-01-29)
+
+
+### Bug Fixes
+
+* Add info about specifying a My Domain URL ([a2be042](https://github.com/salesforcecli/plugin-auth/commit/a2be0423837a1b28e543f84d3d3c20ab9725d1ec))
+
 ### [1.4.6](https://github.com/salesforcecli/plugin-auth/compare/v1.4.5...v1.4.6) (2021-01-06)
 
 ### [1.4.5](https://github.com/salesforcecli/plugin-auth/compare/v1.4.4...v1.4.5) (2020-12-10)
