@@ -5,7 +5,7 @@
  * For full license text, see LICENSE.txt file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  */
 
-import { AuthInfo, SfdcUrl, SfdxProject } from '@salesforce/core';
+import { AuthInfo, Logger, SfdcUrl, SfdxProject } from '@salesforce/core';
 import { getString, Optional } from '@salesforce/ts-types';
 
 interface Flags {
@@ -29,13 +29,17 @@ export class Common {
     if (instanceUrl) {
       return instanceUrl;
     }
+    const logger = await Logger.child('Common', { tag: 'getLoginUrl' });
+    let loginUrl: string;
     try {
       const project = await SfdxProject.resolve();
       const projectJson = await project.resolveProjectConfig();
-      return getString(projectJson, 'sfdcLoginUrl', SfdcUrl.PRODUCTION);
+      loginUrl = getString(projectJson, 'sfdcLoginUrl', SfdcUrl.PRODUCTION);
     } catch (err) {
-      // just return production URL
-      return SfdcUrl.PRODUCTION;
+      logger.debug(`error occurred while trying to determin loginUrl: ${err.message as string}`);
+      loginUrl = SfdcUrl.PRODUCTION;
     }
+    logger.debug(`loginUrl: ${loginUrl}`);
+    return loginUrl;
   }
 }

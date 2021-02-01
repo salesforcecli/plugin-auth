@@ -13,8 +13,8 @@ import { Common } from '../src/common';
 describe('common unit tests', () => {
   const sandbox = sinon.createSandbox();
   const $$ = testSetup();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars,@typescript-eslint/no-explicit-any
-  let projectPath: any;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  let projectPath: string;
   beforeEach(async () => {
     projectPath = await $$.localPathRetriever($$.id);
     // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
