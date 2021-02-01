@@ -25,11 +25,11 @@ export class Common {
       });
     }
   }
-  public static async getLoginUrl(instanceUrl: Optional<string>): Promise<Optional<string>> {
+  public static async resolveLoginUrl(instanceUrl: Optional<string>): Promise<Optional<string>> {
     if (instanceUrl) {
       return instanceUrl;
     }
-    const logger = await Logger.child('Common', { tag: 'getLoginUrl' });
+    const logger = await Logger.child('Common', { tag: 'resolveLoginUrl' });
     let loginUrl: string;
     try {
       const project = await SfdxProject.resolve();

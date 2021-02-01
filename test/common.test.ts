@@ -28,7 +28,7 @@ describe('common unit tests', () => {
   describe('production url', () => {
     it('should return production URL if not in a dx project', async () => {
       sandbox.stub(SfdxProject, 'resolve').throwsException();
-      const loginUrl = await Common.getLoginUrl(undefined);
+      const loginUrl = await Common.resolveLoginUrl(undefined);
       expect(loginUrl).to.equal(SfdcUrl.PRODUCTION);
       expect(projectPath).to.be.ok;
     });
@@ -42,7 +42,7 @@ describe('common unit tests', () => {
         ],
         sourceApiVersion: '50.0',
       });
-      const loginUrl = await Common.getLoginUrl(undefined);
+      const loginUrl = await Common.resolveLoginUrl(undefined);
       expect(loginUrl).to.equal(SfdcUrl.PRODUCTION);
     });
     it('should return production URL if project with property sfdcLoginUrl present', async () => {
@@ -56,7 +56,7 @@ describe('common unit tests', () => {
         sfdcLoginUrl: SfdcUrl.PRODUCTION,
         sourceApiVersion: '50.0',
       });
-      const loginUrl = await Common.getLoginUrl(undefined);
+      const loginUrl = await Common.resolveLoginUrl(undefined);
       expect(loginUrl).to.equal(SfdcUrl.PRODUCTION);
     });
   });
@@ -66,7 +66,7 @@ describe('common unit tests', () => {
 
     it('should return custom login URL if not in a dx project and instanceurl given', async () => {
       sandbox.stub(SfdxProject, 'resolve').throwsException();
-      const loginUrl = await Common.getLoginUrl(INSTANCE_URL_1);
+      const loginUrl = await Common.resolveLoginUrl(INSTANCE_URL_1);
       expect(loginUrl).to.equal(INSTANCE_URL_1);
     });
     it('should return custom login URL if project with property sfdcLoginUrl absent and instanceurl given', async () => {
@@ -79,7 +79,7 @@ describe('common unit tests', () => {
         ],
         sourceApiVersion: '50.0',
       });
-      const loginUrl = await Common.getLoginUrl(INSTANCE_URL_1);
+      const loginUrl = await Common.resolveLoginUrl(INSTANCE_URL_1);
       expect(loginUrl).to.equal(INSTANCE_URL_1);
     });
     it('should return custom login URL if project with property sfdcLoginUrl present and not equal to production URL', async () => {
@@ -93,7 +93,7 @@ describe('common unit tests', () => {
         sfdcLoginUrl: INSTANCE_URL_2,
         sourceApiVersion: '50.0',
       });
-      const loginUrl = await Common.getLoginUrl(undefined);
+      const loginUrl = await Common.resolveLoginUrl(undefined);
       expect(loginUrl).to.equal(INSTANCE_URL_2);
     });
     it('should return custom login URL 1 if project with property sfdcLoginUrl equal to ciustom url 2', async () => {
@@ -107,7 +107,7 @@ describe('common unit tests', () => {
         sfdcLoginUrl: INSTANCE_URL_2,
         sourceApiVersion: '50.0',
       });
-      const loginUrl = await Common.getLoginUrl(INSTANCE_URL_1);
+      const loginUrl = await Common.resolveLoginUrl(INSTANCE_URL_1);
       expect(loginUrl).to.equal(INSTANCE_URL_1);
     });
   });

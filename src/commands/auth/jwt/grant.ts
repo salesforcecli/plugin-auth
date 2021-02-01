@@ -85,7 +85,7 @@ export default class Grant extends SfdxCommand {
       privateKeyFile: this.flags.jwtkeyfile,
     };
 
-    const loginUrl = await Common.getLoginUrl(get(this.flags.instanceurl, 'href', null) as Optional<string>);
+    const loginUrl = await Common.resolveLoginUrl(get(this.flags.instanceurl, 'href', null) as Optional<string>);
 
     const oauth2Options = loginUrl ? Object.assign(oauth2OptionsBase, { loginUrl }) : oauth2OptionsBase;
 
