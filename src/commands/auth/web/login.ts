@@ -64,8 +64,8 @@ export default class Login extends SfdxCommand {
     if (await Prompts.shouldExitCommand(this.ux, this.flags.noprompt)) return {};
 
     const oauthConfig: OAuth2Options = {
-      loginUrl: this.flags.instanceurl,
-      clientId: this.flags.clientid,
+      loginUrl: this.flags.instanceurl as string,
+      clientId: this.flags.clientid as string,
     };
 
     if (this.flags.clientid) {
@@ -79,7 +79,8 @@ export default class Login extends SfdxCommand {
       const successMsg = commonMessages.getMessage('authorizeCommandSuccess', [fields.username, fields.orgId]);
       this.ux.log(successMsg);
       return fields;
-    } catch (err) {
+    } catch (error) {
+      const err = error as SfdxError;
       if (err.name === 'AuthCodeExchangeError') {
         this.ux.error(messages.getMessage('invalidClientId'));
       } else {
