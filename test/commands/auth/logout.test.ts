@@ -163,8 +163,8 @@ describe('auth:logout', () => {
       expect(authInfoConfigStub.unlink.callCount).to.equal(1);
       expect(spies.get('aliasesUnset').callCount).to.equal(1);
       expect(spies.get('aliasesUnset').args[0]).to.deep.equal(['TestAlias']);
-      // expect the Config.unset to be called once for the global config
-      expect(spies.get('configUnset').callCount).to.equal(1);
+      // expect the Config.unset to be called twice for the global config and local config
+      expect(spies.get('configUnset').callCount).to.equal(2);
       expect(spies.get('configUnset').args[0]).to.deep.equal([Config.DEFAULT_USERNAME]);
     });
 
@@ -215,8 +215,8 @@ describe('auth:logout', () => {
       expect(authInfoConfigStub.unlink.callCount).to.equal(3);
       expect(spies.get('aliasesUnset').callCount).to.equal(3);
       expect(spies.get('aliasesUnset').args).to.deep.equal([['TestAlias'], ['TestAlias1'], ['TestAlias2']]);
-      // expect the Config.unset to be called once for the global config
-      expect(spies.get('configUnset').callCount).to.equal(1);
+      // expect the Config.unset to be called twice for the global config and local config
+      expect(spies.get('configUnset').callCount).to.equal(2);
     });
 
   test
@@ -243,8 +243,8 @@ describe('auth:logout', () => {
       expect(spies.get('authInfoClearCache').callCount).to.equal(3);
       expect(authInfoConfigStub.unlink.callCount).to.equal(3);
       expect(spies.get('aliasesUnset').callCount).to.equal(3);
-      // expect the Config.unset to be called once for the global config
-      expect(spies.get('configUnset').callCount).to.equal(1);
+      // expect the Config.unset to be called twice for the global config and local config
+      expect(spies.get('configUnset').callCount).to.equal(2);
     });
 
   test
@@ -319,8 +319,8 @@ describe('auth:logout', () => {
       const response = JSON.parse(ctx.stdout);
       expect(response.status).to.equal(0);
       expect(response.result).to.deep.equal([testData.username]);
-      // expect the Config.unset to be called once for the global config
-      expect(spies.get('configUnset').callCount).to.equal(1);
+      // expect the Config.unset to be called twice for the global config and local config
+      expect(spies.get('configUnset').callCount).to.equal(2);
     });
 
   test
@@ -337,8 +337,10 @@ describe('auth:logout', () => {
       const response = JSON.parse(ctx.stdout);
       expect(response.status).to.equal(0);
       expect(response.result).to.deep.equal([testData.username]);
-      expect(spies.get('configUnset').callCount).to.equal(2);
+      expect(spies.get('configUnset').callCount).to.equal(4);
       expect(spies.get('configUnset').args).to.deep.equal([
+        [Config.DEFAULT_DEV_HUB_USERNAME],
+        [Config.DEFAULT_USERNAME],
         [Config.DEFAULT_DEV_HUB_USERNAME],
         [Config.DEFAULT_USERNAME],
       ]);
@@ -357,8 +359,8 @@ describe('auth:logout', () => {
       const response = JSON.parse(ctx.stdout);
       expect(response.status).to.equal(0);
       expect(response.result).to.deep.equal([testData.username]);
-      // expect the Config.unset to be called once for the global config
-      expect(spies.get('configUnset').callCount).to.equal(1);
+      // expect the Config.unset to be called twice for the global config and local config
+      expect(spies.get('configUnset').callCount).to.equal(2);
       expect(spies.get('configUnset').args[0]).to.deep.equal([Config.DEFAULT_USERNAME]);
     });
 
