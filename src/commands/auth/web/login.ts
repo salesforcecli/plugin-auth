@@ -11,6 +11,7 @@ import * as open from 'open';
 import { flags, FlagsConfig, SfdxCommand } from '@salesforce/command';
 import { AuthFields, AuthInfo, Messages, OAuth2Options, SfdxError, WebOAuthServer } from '@salesforce/core';
 import { Env } from '@salesforce/kit';
+import { get, Optional } from '@salesforce/ts-types';
 import { Prompts } from '../../../prompts';
 import { Common } from '../../../common';
 
@@ -64,7 +65,7 @@ export default class Login extends SfdxCommand {
     if (await Prompts.shouldExitCommand(this.ux, this.flags.noprompt)) return {};
 
     const oauthConfig: OAuth2Options = {
-      loginUrl: this.flags.instanceurl as string,
+      loginUrl: await Common.resolveLoginUrl(get(this.flags.instanceurl, 'href', null) as Optional<string>),
       clientId: this.flags.clientid as string,
     };
 

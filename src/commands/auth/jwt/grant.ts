@@ -8,7 +8,7 @@
 import * as os from 'os';
 import { flags, FlagsConfig, SfdxCommand } from '@salesforce/command';
 import { AuthFields, AuthInfo, AuthRemover, Messages, SfdxError } from '@salesforce/core';
-import { getString } from '@salesforce/ts-types';
+import { get, getString, Optional } from '@salesforce/ts-types';
 import { Prompts } from '../../../prompts';
 import { Common } from '../../../common';
 
@@ -86,9 +86,9 @@ export default class Grant extends SfdxCommand {
       privateKeyFile: this.flags.jwtkeyfile as string,
     };
 
-    const oauth2Options = this.flags.instanceurl
-      ? Object.assign(oauth2OptionsBase, { loginUrl: this.flags.instanceurl as string })
-      : oauth2OptionsBase;
+    const loginUrl = await Common.resolveLoginUrl(get(this.flags.instanceurl, 'href', null) as Optional<string>);
+
+    const oauth2Options = loginUrl ? Object.assign(oauth2OptionsBase, { loginUrl }) : oauth2OptionsBase;
 
     let authInfo: AuthInfo;
     try {
