@@ -80,7 +80,8 @@ export default class Login extends SfdxCommand {
       const successMsg = commonMessages.getMessage('authorizeCommandSuccess', [fields.username, fields.orgId]);
       this.ux.log(successMsg);
       return fields;
-    } catch (err) {
+    } catch (error) {
+      const err = error as SfdxError;
       if (err.name === 'AuthCodeExchangeError') {
         this.ux.error(messages.getMessage('invalidClientId'));
       } else {

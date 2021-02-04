@@ -5,7 +5,7 @@
  * For full license text, see LICENSE.txt file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  */
 
-/* eslint-disable @typescript-eslint/ban-ts-ignore */
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 
 import { $$, expect } from '@salesforce/command/lib/test';
 import { IConfig } from '@oclif/config';
@@ -23,7 +23,10 @@ describe('auth:web:login', () => {
   let authInfoStub: StubbedType<AuthInfo>;
   let uxStub: StubbedType<UX>;
 
-  async function createNewLoginCommand(flags: object = {}, promptAnswer = 'NO'): Promise<Login> {
+  async function createNewLoginCommand(
+    flags: Record<string, string | boolean> = {},
+    promptAnswer = 'NO'
+  ): Promise<Login> {
     authFields = await testData.getConfig();
     authInfoStub = stubInterface<AuthInfo>($$.SANDBOX, {
       getFields: () => authFields,

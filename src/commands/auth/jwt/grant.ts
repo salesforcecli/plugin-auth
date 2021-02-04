@@ -71,7 +71,8 @@ export default class Grant extends SfdxCommand {
       await Common.handleSideEffects(authInfo, this.flags);
       result = authInfo.getFields(true);
     } catch (err) {
-      throw SfdxError.create('@salesforce/plugin-auth', 'jwt.grant', 'JwtGrantError', [err.message]);
+      const msg = getString(err, 'message');
+      throw SfdxError.create('@salesforce/plugin-auth', 'jwt.grant', 'JwtGrantError', [msg]);
     }
 
     const successMsg = commonMessages.getMessage('authorizeCommandSuccess', [result.username, result.orgId]);
@@ -81,8 +82,8 @@ export default class Grant extends SfdxCommand {
 
   private async initAuthInfo(): Promise<AuthInfo> {
     const oauth2OptionsBase = {
-      clientId: this.flags.clientid,
-      privateKeyFile: this.flags.jwtkeyfile,
+      clientId: this.flags.clientid as string,
+      privateKeyFile: this.flags.jwtkeyfile as string,
     };
 
     const loginUrl = await Common.resolveLoginUrl(get(this.flags.instanceurl, 'href', null) as Optional<string>);
@@ -92,16 +93,17 @@ export default class Grant extends SfdxCommand {
     let authInfo: AuthInfo;
     try {
       authInfo = await AuthInfo.create({
-        username: this.flags.username,
+        username: this.flags.username as string,
         oauth2Options,
       });
-    } catch (err) {
+    } catch (error) {
+      const err = error as SfdxError;
       if (err.name === 'AuthInfoOverwriteError') {
         this.logger.debug('Auth file already exists. Removing and starting fresh.');
         const remover = await AuthRemover.create();
         await remover.removeAuth(this.flags.username);
         authInfo = await AuthInfo.create({
-          username: this.flags.username,
+          username: this.flags.username as string,
           oauth2Options,
         });
       } else {
