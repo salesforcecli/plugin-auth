@@ -54,7 +54,7 @@ export default class Login extends SfdxCommand {
 
     const oauthConfig: OAuth2Options = {
       loginUrl: await Common.resolveLoginUrl(get(this.flags.instanceurl, 'href', null) as Optional<string>),
-      clientId: this.flags.clientid,
+      clientId: this.flags.clientid as string,
     };
 
     if (this.flags.clientid) {

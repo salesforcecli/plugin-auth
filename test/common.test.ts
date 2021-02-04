@@ -17,9 +17,6 @@ describe('common unit tests', () => {
   let projectPath: string;
   beforeEach(async () => {
     projectPath = await $$.localPathRetriever($$.id);
-    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-    // @ts-ignore
-    SfdxProject.instances.clear();
   });
   afterEach(() => {
     restoreContext($$);

@@ -6,7 +6,7 @@
  */
 
 import { AuthInfo, Logger, SfdcUrl, SfdxProject } from '@salesforce/core';
-import { getString, Optional } from '@salesforce/ts-types';
+import { getString, isObject, Optional } from '@salesforce/ts-types';
 
 interface Flags {
   setalias?: string;
@@ -36,7 +36,8 @@ export class Common {
       const projectJson = await project.resolveProjectConfig();
       loginUrl = getString(projectJson, 'sfdcLoginUrl', SfdcUrl.PRODUCTION);
     } catch (err) {
-      logger.debug(`error occurred while trying to determin loginUrl: ${err.message as string}`);
+      const message: string = (isObject(err) ? Reflect.get(err, 'message') ?? err : err) as string;
+      logger.debug(`error occurred while trying to determine loginUrl: ${message}`);
       loginUrl = SfdcUrl.PRODUCTION;
     }
     logger.debug(`loginUrl: ${loginUrl}`);

@@ -8,7 +8,7 @@
 import * as os from 'os';
 import { flags, FlagsConfig, SfdxCommand } from '@salesforce/command';
 import { AuthFields, AuthInfo, AuthRemover, Messages, SfdxError } from '@salesforce/core';
-import { get, Optional } from '@salesforce/ts-types';
+import { get, getString, Optional } from '@salesforce/ts-types';
 import { Prompts } from '../../../prompts';
 import { Common } from '../../../common';
 
