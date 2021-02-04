@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.4.8](https://github.com/salesforcecli/plugin-auth/compare/v1.4.7...v1.4.8) (2021-02-04)
+
+
+### Bug Fixes
+
+* w-8612427 load project, if available, to establish loginurl ([2f3907a](https://github.com/salesforcecli/plugin-auth/commit/2f3907a227f7994dc40fdf15ee8c0025ef837fdb))
+
 ### [1.4.7](https://github.com/salesforcecli/plugin-auth/compare/v1.4.6...v1.4.7) (2021-01-29)
 
 
