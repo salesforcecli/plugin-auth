@@ -14,6 +14,7 @@ import { MockTestOrgData } from '@salesforce/core/lib/testSetup';
 import { StubbedType, stubInterface, stubMethod } from '@salesforce/ts-sinon';
 import { UX } from '@salesforce/command';
 import { Env } from '@salesforce/kit';
+import { assert } from 'chai';
 import Login from '../../../../src/commands/auth/web/login';
 
 describe('auth:web:login', () => {
@@ -122,15 +123,21 @@ describe('auth:web:login', () => {
 
   it('should show invalidClientId error if AuthCodeExchangeError', async () => {
     const login = await createNewLoginCommandWithError('AuthCodeExchangeError');
-    const result = await login.run();
-    expect(uxStub.error.firstCall.args[0]).to.include('Invalid client credentials');
-    expect(result).to.deep.equal({});
+    try {
+      await login.run();
+      assert(false, 'should throw error');
+    } catch (e) {
+      expect(e.message).to.include('Invalid client credentials');
+    }
   });
 
   it('should show generic error if there is an error', async () => {
     const login = await createNewLoginCommandWithError('SomeOtherError');
-    const result = await login.run();
-    expect(uxStub.error.firstCall.args[0]).to.include('error!');
-    expect(result).to.deep.equal({});
+    try {
+      await login.run();
+      assert(false, 'should throw error');
+    } catch (e) {
+      expect(e.message).to.include('error!');
+    }
   });
 });

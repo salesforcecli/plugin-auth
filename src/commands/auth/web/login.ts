@@ -9,7 +9,7 @@ import * as os from 'os';
 import * as open from 'open';
 
 import { flags, FlagsConfig, SfdxCommand } from '@salesforce/command';
-import { AuthFields, AuthInfo, Messages, OAuth2Options, SfdxError, WebOAuthServer } from '@salesforce/core';
+import { AuthFields, AuthInfo, Logger, Messages, OAuth2Options, SfdxError, WebOAuthServer } from '@salesforce/core';
 import { Env } from '@salesforce/kit';
 import { Prompts } from '../../../prompts';
 import { Common } from '../../../common';
@@ -80,7 +80,7 @@ export default class Login extends SfdxCommand {
       this.ux.log(successMsg);
       return fields;
     } catch (err) {
-      this.logger.debug(err);
+      Logger.childFromRoot('auth').debug(err);
       if (err.name === 'AuthCodeExchangeError') {
         throw new SfdxError(messages.getMessage('invalidClientId', [err.message]));
       }
