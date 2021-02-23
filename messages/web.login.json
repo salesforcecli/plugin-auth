@@ -6,5 +6,5 @@
     "sfdx auth:web:login -r https://test.salesforce.com"
   ],
   "deviceWarning": "auth:web:login doesn't work when authorizing to a headless environment. Use auth:device:login instead.",
-  "invalidClientId": "Invalid client credentials. Verify the OAuth client secret and ID."
+  "invalidClientId": "Invalid client credentials. Verify the OAuth client secret and ID. %s"
 }

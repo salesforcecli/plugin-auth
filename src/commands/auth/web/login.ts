@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020, salesforce.com, inc.
+ * Copyright (c) 2021, salesforce.com, inc.
  * All rights reserved.
  * Licensed under the BSD 3-Clause license.
  * For full license text, see LICENSE.txt file in the repo root or https://opensource.org/licenses/BSD-3-Clause
@@ -9,7 +9,7 @@ import * as os from 'os';
 import * as open from 'open';
 
 import { flags, FlagsConfig, SfdxCommand } from '@salesforce/command';
-import { AuthFields, AuthInfo, Messages, OAuth2Options, SfdxError, WebOAuthServer } from '@salesforce/core';
+import { AuthFields, AuthInfo, Logger, Messages, OAuth2Options, SfdxError, WebOAuthServer } from '@salesforce/core';
 import { Env } from '@salesforce/kit';
 import { get, Optional } from '@salesforce/ts-types';
 import { Prompts } from '../../../prompts';
@@ -80,14 +80,13 @@ export default class Login extends SfdxCommand {
       const successMsg = commonMessages.getMessage('authorizeCommandSuccess', [fields.username, fields.orgId]);
       this.ux.log(successMsg);
       return fields;
-    } catch (error) {
-      const err = error as SfdxError;
-      if (err.name === 'AuthCodeExchangeError') {
-        this.ux.error(messages.getMessage('invalidClientId'));
-      } else {
-        this.ux.error(err.message);
+    } catch (err) {
+      const error = err as Error;
+      Logger.childFromRoot('auth').debug(error);
+      if (error.name === 'AuthCodeExchangeError') {
+        throw new SfdxError(messages.getMessage('invalidClientId', [error.message]));
       }
-      return {};
+      throw error;
     }
   }
 

@@ -65,6 +65,7 @@ sfdx plugins:link .
 # To verify
 sfdx plugins
 ```
+
 # Commands
 
 <!-- commands -->
