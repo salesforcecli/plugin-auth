@@ -57,7 +57,7 @@ export default class Logout extends SfdxCommand {
   }
 
   private shouldFindAllAuths(): boolean {
-    return this.flags.all || (!this.flags.targetusername && Global.getEnvironmentMode() === Mode.DEMO);
+    return !!this.flags.all || (!this.flags.targetusername && Global.getEnvironmentMode() === Mode.DEMO);
   }
 
   private async shouldRunCommand(authConfigs: AuthConfigs): Promise<boolean> {

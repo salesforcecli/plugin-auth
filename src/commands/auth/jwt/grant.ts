@@ -8,6 +8,7 @@
 import * as os from 'os';
 import { flags, FlagsConfig, SfdxCommand } from '@salesforce/command';
 import { AuthFields, AuthInfo, AuthRemover, Messages, SfdxError } from '@salesforce/core';
+import { get, getString, Optional } from '@salesforce/ts-types';
 import { Prompts } from '../../../prompts';
 import { Common } from '../../../common';
 
@@ -70,7 +71,8 @@ export default class Grant extends SfdxCommand {
       await Common.handleSideEffects(authInfo, this.flags);
       result = authInfo.getFields(true);
     } catch (err) {
-      throw SfdxError.create('@salesforce/plugin-auth', 'jwt.grant', 'JwtGrantError', [err.message]);
+      const msg = getString(err, 'message');
+      throw SfdxError.create('@salesforce/plugin-auth', 'jwt.grant', 'JwtGrantError', [msg]);
     }
 
     const successMsg = commonMessages.getMessage('authorizeCommandSuccess', [result.username, result.orgId]);
@@ -80,27 +82,28 @@ export default class Grant extends SfdxCommand {
 
   private async initAuthInfo(): Promise<AuthInfo> {
     const oauth2OptionsBase = {
-      clientId: this.flags.clientid,
-      privateKeyFile: this.flags.jwtkeyfile,
+      clientId: this.flags.clientid as string,
+      privateKeyFile: this.flags.jwtkeyfile as string,
     };
 
-    const oauth2Options = this.flags.instanceurl
-      ? Object.assign(oauth2OptionsBase, { loginUrl: this.flags.instanceurl })
-      : oauth2OptionsBase;
+    const loginUrl = await Common.resolveLoginUrl(get(this.flags.instanceurl, 'href', null) as Optional<string>);
+
+    const oauth2Options = loginUrl ? Object.assign(oauth2OptionsBase, { loginUrl }) : oauth2OptionsBase;
 
     let authInfo: AuthInfo;
     try {
       authInfo = await AuthInfo.create({
-        username: this.flags.username,
+        username: this.flags.username as string,
         oauth2Options,
       });
-    } catch (err) {
+    } catch (error) {
+      const err = error as SfdxError;
       if (err.name === 'AuthInfoOverwriteError') {
         this.logger.debug('Auth file already exists. Removing and starting fresh.');
         const remover = await AuthRemover.create();
         await remover.removeAuth(this.flags.username);
         authInfo = await AuthInfo.create({
-          username: this.flags.username,
+          username: this.flags.username as string,
           oauth2Options,
         });
       } else {

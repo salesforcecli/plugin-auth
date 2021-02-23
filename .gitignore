@@ -1,5 +1,5 @@
 # -- CLEAN
-
+tmp/
 # use yarn by default, so ignore npm
 package-lock.json
 
@@ -20,17 +20,15 @@ lib
 *unitcoverage
 .nyc_output
 coverage
+test_session*
 
-# ignore oclif manifest file
-oclif.manifest.json
+# generated docs
+docs
 
 # ignore sfdx-trust files
 *.tgz
 *.sig
 package.json.bak.
-
-# generated docs
-docs
 
 # -- CLEAN ALL
 node_modules

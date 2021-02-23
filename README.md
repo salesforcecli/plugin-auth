@@ -1,5 +1,7 @@
 # plugin-auth
 
+[![NPM](https://img.shields.io/npm/v/@salesforce/plugin-auth.svg?label=@salesforce/plugin-auth)](https://www.npmjs.com/package/@salesforce/plugin-auth) [![CircleCI](https://circleci.com/gh/salesforcecli/plugin-auth/tree/main.svg?style=shield)](https://circleci.com/gh/salesforcecli/plugin-auth/tree/main) [![Downloads/week](https://img.shields.io/npm/dw/@salesforce/plugin-auth.svg)](https://npmjs.org/package/@salesforce/plugin-auth) [![License](https://img.shields.io/badge/License-BSD%203--Clause-brightgreen.svg)](https://raw.githubusercontent.com/salesforcecli/plugin-auth/main/LICENSE.txt)
+
 Auth commands for Salesforce CLI
 
 This plugin is bundled with the [Salesforce CLI](https://developer.salesforce.com/tools/sfdxcli). For more information on the CLI, read the [getting started guide](https://developer.salesforce.com/docs/atlas.en-us.sfdx_setup.meta/sfdx_setup/sfdx_setup_intro.htm).
@@ -63,6 +65,7 @@ sfdx plugins:link .
 # To verify
 sfdx plugins
 ```
+
 # Commands
 
 <!-- commands -->

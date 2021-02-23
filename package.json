@@ -1,7 +1,7 @@
 {
   "name": "@salesforce/plugin-auth",
   "description": "plugin for sfdx auth commands",
-  "version": "1.4.6",
+  "version": "1.4.8",
   "author": "Salesforce",
   "bugs": "https://github.com/forcedotcom/cli/issues",
   "dependencies": {
@@ -11,24 +11,27 @@
     "@salesforce/kit": "^1.3.3",
     "chalk": "^4.1.0",
     "open": "^7.3.0",
-    "tslib": "^1"
+    "tslib": "^2"
   },
   "devDependencies": {
     "@oclif/dev-cli": "^1",
-    "@salesforce/dev-config": "^2.0.0",
-    "@salesforce/dev-scripts": "^0.6.2",
+    "@oclif/plugin-command-snapshot": "^2.0.0",
+    "@salesforce/cli-plugins-testkit": "^0.0.8",
+    "@salesforce/dev-config": "^2.1.0",
+    "@salesforce/dev-scripts": "^0.7.0",
+    "@salesforce/plugin-command-reference": "^1.3.0",
     "@salesforce/prettier-config": "^0.0.1",
     "@salesforce/ts-sinon": "^1.2.3",
     "@types/mkdirp": "^1.0.1",
-    "@typescript-eslint/eslint-plugin": "^2.30.0",
-    "@typescript-eslint/parser": "^2.30.0",
+    "@typescript-eslint/eslint-plugin": "^4.2.0",
+    "@typescript-eslint/parser": "^4.2.0",
     "chai": "^4.2.0",
     "cz-conventional-changelog": "^3.2.0",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-config-salesforce": "^0.1.0",
     "eslint-config-salesforce-license": "^0.1.0",
-    "eslint-config-salesforce-typescript": "^0.1.0",
+    "eslint-config-salesforce-typescript": "^0.2.0",
     "eslint-plugin-header": "^3.0.0",
     "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-jsdoc": "^27.0.3",
@@ -39,10 +42,10 @@
     "nyc": "^15.1.0",
     "prettier": "^2.0.5",
     "pretty-quick": "^2.0.1",
-    "shx": "0.2.2",
+    "shx": "0.3.3",
     "sinon": "^9.0.2",
     "ts-node": "^8.10.2",
-    "typescript": "^3.9.3"
+    "typescript": "^4.1.3"
   },
   "config": {
     "commitizen": {
@@ -70,7 +73,9 @@
     "commands": "./lib/commands",
     "bin": "sfdx",
     "devPlugins": [
-      "@oclif/plugin-help"
+      "@oclif/plugin-help",
+      "@oclif/plugin-command-snapshot",
+      "@salesforce/plugin-command-reference"
     ],
     "topics": {
       "auth": {
@@ -104,13 +109,16 @@
     "format": "sf-format",
     "lint": "sf-lint",
     "postpack": "shx rm -f oclif.manifest.json",
-    "posttest": "yarn lint",
+    "posttest": "yarn lint && yarn test:deprecation-policy && yarn test:command-reference",
     "prepack": "sf-build",
     "prepare": "sf-install",
     "pretest": "sf-compile-test",
     "reformat": "prettier --config .prettierrc --write './*.{js,json,md}' './**/*.{ts,json,md}'",
     "test": "sf-test",
-    "version": "oclif-dev readme && git add README.md"
+    "version": "oclif-dev readme",
+    "test:deprecation-policy": "./bin/run snapshot:compare",
+    "test:command-reference": "./bin/run commandreference:generate --erroronwarnings",
+    "test:nuts": "nyc mocha \"**/*.nut.ts\" --slow 4500 --timeout 600000 --parallel"
   },
   "husky": {
     "hooks": {

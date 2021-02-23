@@ -1,5 +1,5 @@
 {
-  "description": "authorize an org using the web login flow\nTo log in to a sandbox, set --instanceurl to https://test.salesforce.com.",
+  "description": "authorize an org using the web login flow\nIf you specify an --instanceurl value, this value overrides the sfdcLoginUrl value in your sfdx-project.json file. To specify a My Domain URL, use the format MyDomainName.my.salesforce.com (not MyDomainName.lightning.force.com). To log in to a sandbox, set --instanceurl to https://test.salesforce.com.",
   "examples": [
     "sfdx auth:web:login -a TestOrg1",
     "sfdx auth:web:login -i <OAuth client id>",

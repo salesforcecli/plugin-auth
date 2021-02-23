@@ -11,6 +11,7 @@ import * as open from 'open';
 import { flags, FlagsConfig, SfdxCommand } from '@salesforce/command';
 import { AuthFields, AuthInfo, Logger, Messages, OAuth2Options, SfdxError, WebOAuthServer } from '@salesforce/core';
 import { Env } from '@salesforce/kit';
+import { get, Optional } from '@salesforce/ts-types';
 import { Prompts } from '../../../prompts';
 import { Common } from '../../../common';
 
@@ -64,8 +65,8 @@ export default class Login extends SfdxCommand {
     if (await Prompts.shouldExitCommand(this.ux, this.flags.noprompt)) return {};
 
     const oauthConfig: OAuth2Options = {
-      loginUrl: this.flags.instanceurl,
-      clientId: this.flags.clientid,
+      loginUrl: await Common.resolveLoginUrl(get(this.flags.instanceurl, 'href', null) as Optional<string>),
+      clientId: this.flags.clientid as string,
     };
 
     if (this.flags.clientid) {
@@ -80,11 +81,12 @@ export default class Login extends SfdxCommand {
       this.ux.log(successMsg);
       return fields;
     } catch (err) {
-      Logger.childFromRoot('auth').debug(err);
-      if (err.name === 'AuthCodeExchangeError') {
-        throw new SfdxError(messages.getMessage('invalidClientId', [err.message]));
+      const error = err as Error;
+      Logger.childFromRoot('auth').debug(error);
+      if (error.name === 'AuthCodeExchangeError') {
+        throw new SfdxError(messages.getMessage('invalidClientId', [error.message]));
       }
-      throw err;
+      throw error;
     }
   }
 

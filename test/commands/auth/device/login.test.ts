@@ -5,8 +5,8 @@
  * For full license text, see LICENSE.txt file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  */
 
-/* eslint-disable @typescript-eslint/ban-ts-ignore */
-/* eslint-disable @typescript-eslint/camelcase */
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+/* eslint-disable camelcase */
 
 import * as os from 'os';
 
@@ -24,15 +24,26 @@ interface Options {
   approvalFails?: boolean;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function parseJsonResponse(str: string): any[] {
+interface Action {
+  device_code: string;
+  interval: number;
+  user_code: string;
+  verification_uri: string;
+}
+
+interface Response {
+  status: number;
+  result: Record<string, unknown>;
+}
+
+function parseJsonResponse(str: string): [Action, Response] {
   return str.split(`}${os.EOL}{`).map((p) => {
     if (p.startsWith('{')) {
-      return JSON.parse(`${p}}`);
+      return JSON.parse(`${p}}`) as Action;
     } else {
-      return JSON.parse(`{${p}`);
+      return JSON.parse(`{${p}`) as Response;
     }
-  });
+  }) as [Action, Response];
 }
 
 describe('auth:device:login', async () => {
