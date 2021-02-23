@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.4.9](https://github.com/salesforcecli/plugin-auth/compare/v1.4.8...v1.4.9) (2021-02-23)
+
+
+### Bug Fixes
+
+* add actual error from API and throw ([bf29ff1](https://github.com/salesforcecli/plugin-auth/commit/bf29ff1d5c49e1dcd3dc82baf94345a3f979af32))
+* should throw error with message ([95d53dd](https://github.com/salesforcecli/plugin-auth/commit/95d53ddf767c4b7ea5f289195595f11a0fd11c0f))
+
 ### [1.4.8](https://github.com/salesforcecli/plugin-auth/compare/v1.4.7...v1.4.8) (2021-02-04)
 
 ### Bug Fixes
