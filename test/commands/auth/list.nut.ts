@@ -11,18 +11,21 @@ import { ensureString, getString } from '@salesforce/ts-types';
 import { Authorization } from '@salesforce/core';
 import { Result, expectPropsToExist, scrubSecrets } from '../../testHelper';
 
-let testSession: TestSession;
-
 describe('auth:list NUTs', () => {
+  let testSession: TestSession;
   let username: string;
 
-  before('ensure required environment variables exist', () => {
+  before('prepare session and ensure environment variables', () => {
     const env = new Env();
     ensureString(env.getString('TESTKIT_JWT_KEY'));
     ensureString(env.getString('TESTKIT_JWT_CLIENT_ID'));
     ensureString(env.getString('TESTKIT_HUB_INSTANCE'));
     username = ensureString(env.getString('TESTKIT_HUB_USERNAME'));
     testSession = TestSession.create({});
+  });
+
+  after(async () => {
+    await testSession.clean();
   });
 
   it('should list auth files (json)', () => {
@@ -49,8 +52,4 @@ describe('auth:list NUTs', () => {
         `       ${username}  00DB0000000EfT0MAK  https://gs0-dev-hub.my.salesforce.com  jwt\n`
     );
   });
-});
-
-after(async () => {
-  await testSession?.clean();
 });
