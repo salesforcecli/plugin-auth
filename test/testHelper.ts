@@ -6,16 +6,12 @@
  */
 
 import { expect } from 'chai';
-import { Authorization } from '@salesforce/core';
-
-export type AuthorizationResult = {
-  status: number;
-  result: Authorization[];
-};
+import { AuthFields } from '@salesforce/core';
+import { AnyJson } from '@salesforce/ts-types';
 
 export type Result<T> = {
   status: number;
-  result: T;
+  result: T & AnyJson;
 };
 
 export type ErrorResult = {
@@ -24,16 +20,22 @@ export type ErrorResult = {
   message: string;
 };
 
-export function scrubAccessTokens(auths: Authorization[]): Authorization[] {
-  auths.forEach((auth) => {
+export function scrubSecrets(auths: AuthFields | AuthFields[]): AuthFields | AuthFields[] {
+  const authsToScrub = Array.isArray(auths) ? auths : [auths];
+  authsToScrub.forEach((auth) => {
     delete auth.accessToken;
+    delete auth.clientSecret;
+    delete auth.clientId;
+    delete auth.refreshToken;
   });
   return auths;
 }
 
-export function expectAccessTokenToExist(auth: Authorization): void {
-  expect(auth.accessToken).to.exist;
-  expect(auth.accessToken).to.be.a('string');
+export function expectPropsToExist(auth: AuthFields, ...props: Array<keyof AuthFields>): void {
+  props.forEach((prop) => {
+    expect(auth[prop]).to.exist;
+    expect(auth[prop]).to.be.a('string');
+  });
 }
 
 export function parseJson<T = unknown>(jsonString: string): Result<T> {

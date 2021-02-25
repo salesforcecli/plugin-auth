@@ -4,47 +4,52 @@
  * Licensed under the BSD 3-Clause license.
  * For full license text, see LICENSE.txt file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  */
-import { execCmd, TestSession } from '@salesforce/cli-plugins-testkit';
+import { execCmd, TestSession, prepareForAuthUrl } from '@salesforce/cli-plugins-testkit';
 import { expect } from 'chai';
 import { Env } from '@salesforce/kit';
-import { ensureString } from '@salesforce/ts-types';
-import { AuthorizationResult, expectAccessTokenToExist, scrubAccessTokens } from '../../../testHelper';
+import { ensureString, getString } from '@salesforce/ts-types';
+import { AuthFields } from '@salesforce/core';
+import { Result, expectPropsToExist, scrubSecrets } from '../../../testHelper';
 
 let testSession: TestSession;
 
 describe('auth:sfdxurl:store NUTs', () => {
   const env = new Env();
+  let authUrl: string;
+  let username: string;
 
-  before('ensure required environment variables exist', () => {
+  before('prepare session and ensure environment variables', () => {
     ensureString(env.getString('TESTKIT_AUTH_URL'));
-
-    // Unset these env vars so that testkit doesn't default to jwt auth
-    env.unset('TESTKIT_JWT_KEY');
-    env.unset('TESTKIT_JWT_CLIENT_ID');
-    env.unset('TESTKIT_HUB_INSTANCE');
-    env.unset('TESTKIT_HUB_USERNAME');
+    username = ensureString(env.getString('TESTKIT_HUB_USERNAME'));
+    testSession = TestSession.create({ authStrategy: 'NONE' });
+    authUrl = prepareForAuthUrl(testSession.homeDir);
   });
 
-  beforeEach(() => {
-    testSession = TestSession.create({});
-  });
-
-  afterEach(async () => {
+  after(async () => {
     await testSession.clean();
   });
 
-  it('should authorize an org using sfdxurl', () => {
-    // TestSession does sfdxurl auth for us, so we just want to make sure that the auth file exists
-    const json = execCmd('auth:list --json', { ensureExitCode: 0 }).jsonOutput as AuthorizationResult;
-    expectAccessTokenToExist(json.result[0]);
-    const auths = scrubAccessTokens(json.result);
-    expect(auths).to.deep.equal([
-      {
-        instanceUrl: 'https://gs0-dev-hub.my.salesforce.com',
-        oauthMethod: 'web',
-        orgId: '00DB0000000EfT0MAK',
-        username: 'admin@integrationtesthubgs0.org',
-      },
-    ]);
+  afterEach(() => {
+    execCmd(`auth:logout -p -u ${username}`, { ensureExitCode: 0 });
+  });
+
+  it('should authorize an org using sfdxurl (json)', () => {
+    const command = `auth:sfdxurl:store -d -f ${authUrl} --json`;
+    const json = execCmd(command, { ensureExitCode: 0 }).jsonOutput as Result<AuthFields>;
+    expectPropsToExist(json.result, 'accessToken', 'refreshToken');
+    const auths = scrubSecrets(json.result);
+    expect(auths).to.deep.equal({
+      loginUrl: 'https://gs0-dev-hub.my.salesforce.com',
+      instanceUrl: 'https://gs0-dev-hub.my.salesforce.com',
+      orgId: '00DB0000000EfT0MAK',
+      username,
+    });
+  });
+
+  it('should authorize an org using sfdxurl (human readable)', () => {
+    const command = `auth:sfdxurl:store -d -f ${authUrl}`;
+    const result = execCmd(command, { ensureExitCode: 0 });
+    const output = getString(result, 'shellOutput.stdout', '');
+    expect(output).to.equal(`Successfully authorized ${username} with org ID 00DB0000000EfT0MAK\n`);
   });
 });
