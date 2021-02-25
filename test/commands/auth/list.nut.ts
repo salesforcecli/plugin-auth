@@ -7,7 +7,7 @@
 import { execCmd, TestSession } from '@salesforce/cli-plugins-testkit';
 import { expect } from 'chai';
 import { Env } from '@salesforce/kit';
-import { ensureString } from '@salesforce/ts-types';
+import { ensureString, getString } from '@salesforce/ts-types';
 import { AuthorizationResult, expectAccessTokenToExist, scrubAccessTokens } from '../../testHelper';
 
 let testSession: TestSession;
@@ -37,7 +37,8 @@ describe('auth:list NUTs', () => {
   });
 
   it('should list auth files (human readable)', () => {
-    const output = execCmd('auth:list', { ensureExitCode: 0 }).shellOutput.stdout;
+    const result = execCmd('auth:list', { ensureExitCode: 0 });
+    const output = getString(result, 'shellOutput.stdout');
     expect(output).to.equal(
       '=== authenticated orgs\n' +
         'ALIAS  USERNAME                         ORG ID              INSTANCE URL                           OAUTH METHOD\n' +

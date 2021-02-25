@@ -10,6 +10,7 @@ import { AuthFields, AuthInfo, fs } from '@salesforce/core';
 import { MockTestOrgData } from '@salesforce/core/lib/testSetup';
 import { StubbedType, stubInterface, stubMethod } from '@salesforce/ts-sinon';
 import { UX } from '@salesforce/command';
+import { parseJson } from '../../../testHelper';
 
 interface Options {
   authInfoCreateFails?: boolean;
@@ -51,7 +52,7 @@ describe('auth:sfdxurl:store', async () => {
     .stdout()
     .command(['auth:sfdxurl:store', '-f', 'path/to/key.txt', '--json'])
     .it('should return auth fields', (ctx) => {
-      const response = JSON.parse(ctx.stdout);
+      const response = parseJson<AuthFields>(ctx.stdout);
       expect(response.status).to.equal(0);
       expect(response.result).to.deep.equal(authFields);
       expect(response.result.username).to.equal(testData.username);
@@ -62,7 +63,7 @@ describe('auth:sfdxurl:store', async () => {
     .stdout()
     .command(['auth:sfdxurl:store', '-f', 'path/to/key.txt', '-a', 'MyAlias', '--json'])
     .it('should set alias when -a is provided', (ctx) => {
-      const response = JSON.parse(ctx.stdout);
+      const response = parseJson<AuthFields>(ctx.stdout);
       expect(response.status).to.equal(0);
       expect(response.result).to.deep.equal(authFields);
       expect(authInfoStub.setAlias.callCount).to.equal(1);
@@ -73,7 +74,7 @@ describe('auth:sfdxurl:store', async () => {
     .stdout()
     .command(['auth:sfdxurl:store', '-f', 'path/to/key.txt', '-a', 'MyAlias', '-s', '--json'])
     .it('should set defaultusername to alias when -s and -a are provided', (ctx) => {
-      const response = JSON.parse(ctx.stdout);
+      const response = parseJson<AuthFields>(ctx.stdout);
       expect(response.status).to.equal(0);
       expect(response.result).to.deep.equal(authFields);
       expect(authInfoStub.setAlias.args[0]).to.deep.equal(['MyAlias']);
@@ -91,7 +92,7 @@ describe('auth:sfdxurl:store', async () => {
     .stdout()
     .command(['auth:sfdxurl:store', '-f', 'path/to/key.txt', '-s', '--json'])
     .it('should set defaultusername to username when -s is provided', (ctx) => {
-      const response = JSON.parse(ctx.stdout);
+      const response = parseJson<AuthFields>(ctx.stdout);
       expect(response.status).to.equal(0);
       expect(response.result).to.deep.equal(authFields);
       expect(authInfoStub.setAlias.callCount).to.equal(0);
@@ -109,7 +110,7 @@ describe('auth:sfdxurl:store', async () => {
     .stdout()
     .command(['auth:sfdxurl:store', '-f', 'path/to/key.txt', '-a', 'MyAlias', '-d', '--json'])
     .it('should set defaultdevhubusername to alias when -d and -a are provided', (ctx) => {
-      const response = JSON.parse(ctx.stdout);
+      const response = parseJson<AuthFields>(ctx.stdout);
       expect(response.status).to.equal(0);
       expect(response.result).to.deep.equal(authFields);
       expect(authInfoStub.setAlias.args[0]).to.deep.equal(['MyAlias']);
@@ -127,7 +128,7 @@ describe('auth:sfdxurl:store', async () => {
     .stdout()
     .command(['auth:sfdxurl:store', '-f', 'path/to/key.txt', '-d', '--json'])
     .it('should set defaultdevhubusername to username when -d is provided', (ctx) => {
-      const response = JSON.parse(ctx.stdout);
+      const response = parseJson<AuthFields>(ctx.stdout);
       expect(response.status).to.equal(0);
       expect(response.result).to.deep.equal(authFields);
       expect(authInfoStub.setAlias.callCount).to.equal(0);
@@ -144,7 +145,7 @@ describe('auth:sfdxurl:store', async () => {
     .stdout()
     .command(['auth:sfdxurl:store', '-f', 'path/to/key.txt', '-d', '-s', '--json'])
     .it('should set defaultusername and defaultdevhubusername to username when -d and -s are provided', (ctx) => {
-      const response = JSON.parse(ctx.stdout);
+      const response = parseJson<AuthFields>(ctx.stdout);
       expect(response.status).to.equal(0);
       expect(response.result).to.deep.equal(authFields);
       expect(authInfoStub.setAlias.callCount).to.equal(0);
@@ -162,7 +163,7 @@ describe('auth:sfdxurl:store', async () => {
     .stdout()
     .command(['auth:sfdxurl:store', '-f', 'path/to/key.txt', '-d', '-s', '-a', 'MyAlias', '--json'])
     .it('should set defaultusername and defaultdevhubusername to alias when -a, -d, and -s are provided', (ctx) => {
-      const response = JSON.parse(ctx.stdout);
+      const response = parseJson<AuthFields>(ctx.stdout);
       expect(response.status).to.equal(0);
       expect(response.result).to.deep.equal(authFields);
       expect(authInfoStub.setAlias.args[0]).to.deep.equal(['MyAlias']);
@@ -187,7 +188,7 @@ describe('auth:sfdxurl:store', async () => {
     .stdout()
     .command(['auth:sfdxurl:store', '-f', 'path/to/key.txt', '--json'])
     .it('should auth when in demo mode (SFDX_ENV=demo) and prompt is answered with yes', (ctx) => {
-      const response = JSON.parse(ctx.stdout);
+      const response = parseJson<AuthFields>(ctx.stdout);
       expect(response.status).to.equal(0);
       expect(response.result).to.deep.equal(authFields);
       expect(authInfoStub.save.callCount).to.equal(1);
@@ -205,7 +206,7 @@ describe('auth:sfdxurl:store', async () => {
     .stdout()
     .command(['auth:sfdxurl:store', '-f', 'path/to/key.txt', '--json'])
     .it('should do nothing when in demo mode (SFDX_ENV=demo) and prompt is answered with no', (ctx) => {
-      const response = JSON.parse(ctx.stdout);
+      const response = parseJson<AuthFields>(ctx.stdout);
       expect(response.status).to.equal(0);
       expect(response.result).to.deep.equal({});
       expect(authInfoStub.save.callCount).to.equal(0);
@@ -222,7 +223,7 @@ describe('auth:sfdxurl:store', async () => {
     .stdout()
     .command(['auth:sfdxurl:store', '-f', 'path/to/key.txt', '--json', '-p'])
     .it('should ignore prompt when in demo mode (SFDX_ENV=demo) and -p is provided', (ctx) => {
-      const response = JSON.parse(ctx.stdout);
+      const response = parseJson<AuthFields>(ctx.stdout);
       expect(response.status).to.equal(0);
       expect(response.result).to.deep.equal(authFields);
       expect(authInfoStub.save.callCount).to.equal(1);

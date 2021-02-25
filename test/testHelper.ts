@@ -13,6 +13,17 @@ export type AuthorizationResult = {
   result: Authorization[];
 };
 
+export type Result<T> = {
+  status: number;
+  result: T;
+};
+
+export type ErrorResult = {
+  status: number;
+  name: string;
+  message: string;
+};
+
 export function scrubAccessTokens(auths: Authorization[]): Authorization[] {
   auths.forEach((auth) => {
     delete auth.accessToken;
@@ -23,4 +34,12 @@ export function scrubAccessTokens(auths: Authorization[]): Authorization[] {
 export function expectAccessTokenToExist(auth: Authorization): void {
   expect(auth.accessToken).to.exist;
   expect(auth.accessToken).to.be.a('string');
+}
+
+export function parseJson<T = unknown>(jsonString: string): Result<T> {
+  return JSON.parse(jsonString) as Result<T>;
+}
+
+export function parseJsonError(jsonString: string): ErrorResult {
+  return JSON.parse(jsonString) as ErrorResult;
 }

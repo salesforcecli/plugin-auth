@@ -18,6 +18,7 @@ import { DeviceOauthService } from '@salesforce/core';
 import { DeviceCodeResponse } from '@salesforce/core/lib/deviceOauthService';
 import { UX } from '@salesforce/command';
 import { SinonStub } from 'sinon';
+import { parseJson } from '../../../testHelper';
 
 interface Options {
   approvalTimesout?: boolean;
@@ -233,7 +234,7 @@ describe('auth:device:login', async () => {
     .stdout()
     .command(['auth:device:login', '--json'])
     .it('should exit early when prompt is answered NO', (ctx) => {
-      const response = JSON.parse(ctx.stdout);
+      const response = parseJson<AuthFields>(ctx.stdout);
       expect(uxStub.callCount).to.equal(1);
       expect(response.status).to.equal(0);
       expect(response.result).to.deep.equal({});
