@@ -7,9 +7,8 @@
 import { execCmd, TestSession, prepareForJwt } from '@salesforce/cli-plugins-testkit';
 import { expect } from 'chai';
 import { Env } from '@salesforce/kit';
-import { ensureString, getString } from '@salesforce/ts-types';
+import { ensureString } from '@salesforce/ts-types';
 import { Authorization } from '@salesforce/core';
-import { Result } from '../../testHelper';
 
 describe('auth:logout NUTs', () => {
   const env = new Env();
@@ -30,7 +29,7 @@ describe('auth:logout NUTs', () => {
   });
 
   after(async () => {
-    await testSession.clean();
+    await testSession?.clean();
   });
 
   beforeEach(() => {
@@ -45,19 +44,18 @@ describe('auth:logout NUTs', () => {
       result: [username],
     });
 
-    const list = execCmd('auth:list --json', { ensureExitCode: 0 }).jsonOutput as Result<Authorization[]>;
+    const list = execCmd<Authorization[]>('auth:list --json', { ensureExitCode: 0 }).jsonOutput;
     const found = !!list.result.find((r) => r.username === username);
     expect(found).to.be.false;
   });
 
   it('should remove the org specified by the -u flag (human readable)', () => {
-    const result = execCmd(`auth:logout -p -u ${username}`, { ensureExitCode: 0 });
-    const output = getString(result, 'shellOutput.stdout');
+    const output = execCmd(`auth:logout -p -u ${username}`, { ensureExitCode: 0 }).shellOutput.stdout;
     expect(output).to.include(`Successfully logged out of orgs: ${username}`);
   });
 
   it('should fail if there is no default org and the -u flag is not specified (json)', () => {
-    const json = execCmd('auth:logout -p --json', { ensureExitCode: 1 }).jsonOutput as { name: string };
+    const json = execCmd<{ name: string }>('auth:logout -p --json', { ensureExitCode: 1 }).jsonOutput;
     expect(json.name).to.equal('NoOrgFound');
   });
 
@@ -70,9 +68,8 @@ describe('auth:logout NUTs', () => {
     });
 
     // we expect the config for defaultusername to be cleared out after the logout
-    const configGet = execCmd('config:get defaultusername --json', { ensureExitCode: 0 }).jsonOutput as {
-      result: Array<{ key: string }>;
-    };
+    const configGet = execCmd<Array<{ key: string }>>('config:get defaultusername --json', { ensureExitCode: 0 })
+      .jsonOutput;
     expect(configGet.result).to.deep.equal([{ key: 'defaultusername' }]);
   });
 });

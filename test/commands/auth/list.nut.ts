@@ -7,9 +7,9 @@
 import { execCmd, TestSession } from '@salesforce/cli-plugins-testkit';
 import { expect } from 'chai';
 import { Env } from '@salesforce/kit';
-import { ensureString, getString } from '@salesforce/ts-types';
+import { ensureString } from '@salesforce/ts-types';
 import { Authorization } from '@salesforce/core';
-import { Result, expectUrlToExist, expectOrgIdToExist, expectAccessTokenToExist } from '../../testHelper';
+import { expectUrlToExist, expectOrgIdToExist, expectAccessTokenToExist } from '../../testHelper';
 
 describe('auth:list NUTs', () => {
   let testSession: TestSession;
@@ -25,11 +25,11 @@ describe('auth:list NUTs', () => {
   });
 
   after(async () => {
-    await testSession.clean();
+    await testSession?.clean();
   });
 
   it('should list auth files (json)', () => {
-    const json = execCmd('auth:list --json', { ensureExitCode: 0 }).jsonOutput as Result<Authorization[]>;
+    const json = execCmd<Authorization[]>('auth:list --json', { ensureExitCode: 0 }).jsonOutput;
     const auth = json.result[0];
     expectAccessTokenToExist(auth);
     expectOrgIdToExist(auth);
@@ -38,8 +38,7 @@ describe('auth:list NUTs', () => {
   });
 
   it('should list auth files (human readable)', () => {
-    const result = execCmd('auth:list', { ensureExitCode: 0 });
-    const output = getString(result, 'shellOutput.stdout');
+    const output = execCmd('auth:list', { ensureExitCode: 0 }).shellOutput.stdout;
     expect(output).to.include(username);
     expect(output).to.include('jwt');
   });

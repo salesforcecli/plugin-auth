@@ -8,9 +8,9 @@ import * as path from 'path';
 import { execCmd, TestSession, prepareForJwt } from '@salesforce/cli-plugins-testkit';
 import { expect } from 'chai';
 import { Env } from '@salesforce/kit';
-import { ensureString, getString } from '@salesforce/ts-types';
+import { ensureString } from '@salesforce/ts-types';
 import { AuthFields } from '@salesforce/core';
-import { Result, expectUrlToExist, expectOrgIdToExist, expectAccessTokenToExist } from '../../../testHelper';
+import { expectUrlToExist, expectOrgIdToExist, expectAccessTokenToExist } from '../../../testHelper';
 
 let testSession: TestSession;
 
@@ -32,7 +32,7 @@ describe('auth:jwt:grant NUTs', () => {
   });
 
   after(async () => {
-    await testSession.clean();
+    await testSession?.clean();
   });
 
   afterEach(() => {
@@ -41,8 +41,7 @@ describe('auth:jwt:grant NUTs', () => {
 
   it('should authorize an org using jwt (json)', () => {
     const command = `auth:jwt:grant -d -u ${username} -i ${clientId} -f ${jwtKey} -r ${instanceUrl} --json`;
-    const json = execCmd(command, { ensureExitCode: 0 }).jsonOutput as Result<AuthFields>;
-
+    const json = execCmd<AuthFields>(command, { ensureExitCode: 0 }).jsonOutput;
     expectAccessTokenToExist(json.result);
     expectOrgIdToExist(json.result);
     expectUrlToExist(json.result, 'instanceUrl');
@@ -53,8 +52,7 @@ describe('auth:jwt:grant NUTs', () => {
 
   it('should authorize an org using jwt (human readable)', () => {
     const command = `auth:jwt:grant -d -u ${username} -i ${clientId} -f ${jwtKey} -r ${instanceUrl}`;
-    const result = execCmd(command, { ensureExitCode: 0 });
-    const output = getString(result, 'shellOutput.stdout', '');
+    const output = execCmd(command, { ensureExitCode: 0 }).shellOutput.stdout;
     expect(output).to.include(`Successfully authorized ${username} with org ID`);
   });
 });
