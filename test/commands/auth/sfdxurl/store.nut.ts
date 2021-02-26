@@ -50,6 +50,6 @@ describe('auth:sfdxurl:store NUTs', () => {
     const command = `auth:sfdxurl:store -d -f ${authUrl}`;
     const result = execCmd(command, { ensureExitCode: 0 });
     const output = getString(result, 'shellOutput.stdout', '');
-    expect(output).to.equal(`Successfully authorized ${username} with org ID 00DB0000000EfT0MAK\n`);
+    expect(output).to.include(`Successfully authorized ${username} with org ID 00DB0000000EfT0MAK`);
   });
 });

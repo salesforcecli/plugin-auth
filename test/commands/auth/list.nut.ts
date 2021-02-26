@@ -45,11 +45,9 @@ describe('auth:list NUTs', () => {
   it('should list auth files (human readable)', () => {
     const result = execCmd('auth:list', { ensureExitCode: 0 });
     const output = getString(result, 'shellOutput.stdout');
-    expect(output).to.equal(
-      '=== authenticated orgs\n' +
-        'ALIAS  USERNAME                         ORG ID              INSTANCE URL                           OAUTH METHOD\n' +
-        '─────  ───────────────────────────────  ──────────────────  ─────────────────────────────────────  ────────────\n' +
-        `       ${username}  00DB0000000EfT0MAK  https://gs0-dev-hub.my.salesforce.com  jwt\n`
-    );
+    expect(output).to.include(username);
+    expect(output).to.include('00DB0000000EfT0MAK');
+    expect(output).to.include('https://gs0-dev-hub.my.salesforce.com');
+    expect(output).to.include('jwt');
   });
 });
