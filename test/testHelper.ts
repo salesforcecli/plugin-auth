@@ -20,22 +20,28 @@ export type ErrorResult = {
   message: string;
 };
 
-export function scrubSecrets(auths: AuthFields | AuthFields[]): AuthFields | AuthFields[] {
-  const authsToScrub = Array.isArray(auths) ? auths : [auths];
-  authsToScrub.forEach((auth) => {
-    delete auth.accessToken;
-    delete auth.clientSecret;
-    delete auth.clientId;
-    delete auth.refreshToken;
-  });
-  return auths;
-}
+type UrlKey = Extract<keyof AuthFields, 'instanceUrl' | 'loginUrl'>;
 
 export function expectPropsToExist(auth: AuthFields, ...props: Array<keyof AuthFields>): void {
   props.forEach((prop) => {
     expect(auth[prop]).to.exist;
     expect(auth[prop]).to.be.a('string');
   });
+}
+
+export function expectOrgIdToExist(auth: AuthFields): void {
+  expect(auth.orgId).to.exist;
+  expect(auth.orgId.length).to.equal(18);
+}
+
+export function expectUrlToExist(auth: AuthFields, urlKey: UrlKey): void {
+  expect(auth[urlKey]).to.exist;
+  expect(auth[urlKey].startsWith('https://')).to.be.true;
+}
+
+export function expectAccessTokenToExist(auth: AuthFields): void {
+  expect(auth.accessToken).to.exist;
+  expect(auth.accessToken.startsWith(auth.orgId.substr(0, 15))).to.be.true;
 }
 
 export function parseJson<T = unknown>(jsonString: string): Result<T> {

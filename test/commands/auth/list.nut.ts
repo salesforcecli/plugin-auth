@@ -9,7 +9,7 @@ import { expect } from 'chai';
 import { Env } from '@salesforce/kit';
 import { ensureString, getString } from '@salesforce/ts-types';
 import { Authorization } from '@salesforce/core';
-import { Result, expectPropsToExist, scrubSecrets } from '../../testHelper';
+import { Result, expectUrlToExist, expectOrgIdToExist, expectAccessTokenToExist } from '../../testHelper';
 
 describe('auth:list NUTs', () => {
   let testSession: TestSession;
@@ -30,24 +30,17 @@ describe('auth:list NUTs', () => {
 
   it('should list auth files (json)', () => {
     const json = execCmd('auth:list --json', { ensureExitCode: 0 }).jsonOutput as Result<Authorization[]>;
-    expectPropsToExist(json.result[0], 'accessToken');
-    const auths = scrubSecrets(json.result);
-    expect(auths).to.deep.equal([
-      {
-        instanceUrl: 'https://gs0-dev-hub.my.salesforce.com',
-        oauthMethod: 'jwt',
-        orgId: '00DB0000000EfT0MAK',
-        username,
-      },
-    ]);
+    const auth = json.result[0];
+    expectAccessTokenToExist(auth);
+    expectOrgIdToExist(auth);
+    expectUrlToExist(auth, 'instanceUrl');
+    expect(auth.username).to.equal(username);
   });
 
   it('should list auth files (human readable)', () => {
     const result = execCmd('auth:list', { ensureExitCode: 0 });
     const output = getString(result, 'shellOutput.stdout');
     expect(output).to.include(username);
-    expect(output).to.include('00DB0000000EfT0MAK');
-    expect(output).to.include('https://gs0-dev-hub.my.salesforce.com');
     expect(output).to.include('jwt');
   });
 });

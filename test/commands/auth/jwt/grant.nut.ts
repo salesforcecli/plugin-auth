@@ -10,7 +10,7 @@ import { expect } from 'chai';
 import { Env } from '@salesforce/kit';
 import { ensureString, getString } from '@salesforce/ts-types';
 import { AuthFields } from '@salesforce/core';
-import { Result, expectPropsToExist, scrubSecrets } from '../../../testHelper';
+import { Result, expectUrlToExist, expectOrgIdToExist, expectAccessTokenToExist } from '../../../testHelper';
 
 let testSession: TestSession;
 
@@ -43,15 +43,12 @@ describe('auth:jwt:grant NUTs', () => {
     const command = `auth:jwt:grant -d -u ${username} -i ${clientId} -f ${jwtKey} -r ${instanceUrl} --json`;
     const json = execCmd(command, { ensureExitCode: 0 }).jsonOutput as Result<AuthFields>;
 
-    expectPropsToExist(json.result, 'accessToken');
-    const auths = scrubSecrets(json.result);
-    expect(auths).to.deep.equal({
-      username,
-      orgId: '00DB0000000EfT0MAK',
-      loginUrl: 'https://login.salesforce.com/',
-      privateKey: path.join(testSession.homeDir, 'jwtKey'),
-      instanceUrl: 'https://gs0-dev-hub.my.salesforce.com',
-    });
+    expectAccessTokenToExist(json.result);
+    expectOrgIdToExist(json.result);
+    expectUrlToExist(json.result, 'instanceUrl');
+    expectUrlToExist(json.result, 'loginUrl');
+    expect(json.result.privateKey).to.equal(path.join(testSession.homeDir, 'jwtKey'));
+    expect(json.result.username).to.equal(username);
   });
 
   it('should authorize an org using jwt (human readable)', () => {

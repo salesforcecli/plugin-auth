@@ -9,7 +9,13 @@ import { expect } from 'chai';
 import { Env } from '@salesforce/kit';
 import { ensureString, getString } from '@salesforce/ts-types';
 import { AuthFields } from '@salesforce/core';
-import { Result, expectPropsToExist, scrubSecrets } from '../../../testHelper';
+import {
+  Result,
+  expectPropsToExist,
+  expectAccessTokenToExist,
+  expectOrgIdToExist,
+  expectUrlToExist,
+} from '../../../testHelper';
 
 let testSession: TestSession;
 
@@ -36,14 +42,13 @@ describe('auth:sfdxurl:store NUTs', () => {
   it('should authorize an org using sfdxurl (json)', () => {
     const command = `auth:sfdxurl:store -d -f ${authUrl} --json`;
     const json = execCmd(command, { ensureExitCode: 0 }).jsonOutput as Result<AuthFields>;
-    expectPropsToExist(json.result, 'accessToken', 'refreshToken');
-    const auths = scrubSecrets(json.result);
-    expect(auths).to.deep.equal({
-      loginUrl: 'https://gs0-dev-hub.my.salesforce.com',
-      instanceUrl: 'https://gs0-dev-hub.my.salesforce.com',
-      orgId: '00DB0000000EfT0MAK',
-      username,
-    });
+
+    expectPropsToExist(json.result, 'refreshToken');
+    expectAccessTokenToExist(json.result);
+    expectOrgIdToExist(json.result);
+    expectUrlToExist(json.result, 'instanceUrl');
+    expectUrlToExist(json.result, 'loginUrl');
+    expect(json.result.username).to.equal(username);
   });
 
   it('should authorize an org using sfdxurl (human readable)', () => {
