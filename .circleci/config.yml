@@ -1,7 +1,7 @@
 version: 2.1
 orbs:
   # release-management: salesforce/npm-release-management@4
-  # temporary until orb is published
+  # temporary until orb is published 1
   release-management: salesforce/npm-release-management@dev:alpha
 
 workflows:
