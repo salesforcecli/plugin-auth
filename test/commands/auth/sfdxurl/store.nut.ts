@@ -7,7 +7,7 @@
 import { execCmd, TestSession, prepareForAuthUrl } from '@salesforce/cli-plugins-testkit';
 import { expect } from 'chai';
 import { Env } from '@salesforce/kit';
-import { ensureString } from '@salesforce/ts-types';
+import { ensureString, getString } from '@salesforce/ts-types';
 import { AuthFields } from '@salesforce/core';
 import {
   expectPropsToExist,
@@ -52,7 +52,8 @@ describe('auth:sfdxurl:store NUTs', () => {
 
   it('should authorize an org using sfdxurl (human readable)', () => {
     const command = `auth:sfdxurl:store -d -f ${authUrl}`;
-    const output = execCmd(command, { ensureExitCode: 0 }).shellOutput.stdout;
+    const result = execCmd(command, { ensureExitCode: 0 });
+    const output = getString(result, 'shellOutput.stdout');
     expect(output).to.include(`Successfully authorized ${username} with org ID`);
   });
 });

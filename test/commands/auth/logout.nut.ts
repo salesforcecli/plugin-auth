@@ -7,7 +7,7 @@
 import { execCmd, TestSession, prepareForJwt } from '@salesforce/cli-plugins-testkit';
 import { expect } from 'chai';
 import { Env } from '@salesforce/kit';
-import { ensureString } from '@salesforce/ts-types';
+import { ensureString, getString } from '@salesforce/ts-types';
 import { Authorization } from '@salesforce/core';
 
 describe('auth:logout NUTs', () => {
@@ -74,7 +74,8 @@ describe('auth:logout NUTs', () => {
   });
 
   it('should remove the org specified by the -u flag (human readable)', () => {
-    const output = execCmd(`auth:logout -p -u ${username}`, { ensureExitCode: 0 }).shellOutput.stdout;
+    const result = execCmd(`auth:logout -p -u ${username}`, { ensureExitCode: 0 });
+    const output = getString(result, 'shellOutput.stdout');
     expect(output).to.include(`Successfully logged out of orgs: ${username}`);
   });
 

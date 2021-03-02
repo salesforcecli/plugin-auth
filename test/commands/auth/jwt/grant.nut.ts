@@ -8,7 +8,7 @@ import * as path from 'path';
 import { execCmd, TestSession, prepareForJwt } from '@salesforce/cli-plugins-testkit';
 import { expect } from 'chai';
 import { Env } from '@salesforce/kit';
-import { ensureString } from '@salesforce/ts-types';
+import { ensureString, getString } from '@salesforce/ts-types';
 import { AuthFields } from '@salesforce/core';
 import { expectUrlToExist, expectOrgIdToExist, expectAccessTokenToExist } from '../../../testHelper';
 
@@ -52,7 +52,8 @@ describe('auth:jwt:grant NUTs', () => {
 
   it('should authorize an org using jwt (human readable)', () => {
     const command = `auth:jwt:grant -d -u ${username} -i ${clientId} -f ${jwtKey} -r ${instanceUrl}`;
-    const output = execCmd(command, { ensureExitCode: 0 }).shellOutput.stdout;
+    const result = execCmd(command, { ensureExitCode: 0 });
+    const output = getString(result, 'shellOutput.stdout');
     expect(output).to.include(`Successfully authorized ${username} with org ID`);
   });
 });
