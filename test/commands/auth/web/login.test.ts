@@ -97,7 +97,8 @@ describe('auth:web:login', () => {
     const login = await createNewLoginCommand();
     try {
       await login.run();
-    } catch (err) {
+    } catch (error) {
+      const err = error as SfdxError;
       expect(err.name).to.equal('DEVICE_WARNING');
     }
   });
@@ -130,7 +131,8 @@ describe('auth:web:login', () => {
       await login.run();
       assert(false, 'should throw error');
     } catch (e) {
-      expect(e.message).to.include('Invalid client credentials');
+      const err = e as SfdxError;
+      expect(err.message).to.include('Invalid client credentials');
     }
   });
 
@@ -140,7 +142,8 @@ describe('auth:web:login', () => {
       await login.run();
       assert(false, 'should throw error');
     } catch (e) {
-      expect(e.message).to.include('error!');
+      const err = e as SfdxError;
+      expect(err.message).to.include('error!');
     }
   });
 });

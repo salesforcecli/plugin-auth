@@ -6,9 +6,10 @@
  */
 
 import { $$, expect, test } from '@salesforce/command/lib/test';
-import { Aliases, AuthInfo, AuthInfoConfig } from '@salesforce/core';
+import { Aliases, AuthInfo, AuthInfoConfig, Authorization } from '@salesforce/core';
 import { MockTestOrgData } from '@salesforce/core/lib/testSetup';
 import { StubbedType, stubInterface, stubMethod } from '@salesforce/ts-sinon';
+import { parseJson } from '../../testHelper';
 
 describe('auth:list', async () => {
   const testData = new MockTestOrgData();
@@ -47,7 +48,7 @@ describe('auth:list', async () => {
     .stdout()
     .command(['auth:list', '--json'])
     .it('should show auth files', (ctx) => {
-      const auths = JSON.parse(ctx.stdout).result;
+      const auths = parseJson<Authorization[]>(ctx.stdout).result;
       expect(auths[0].alias).to.equal('TestAlias');
       expect(auths[0].username).to.equal(testData.username);
       expect(auths[0].instanceUrl).to.equal(testData.instanceUrl);
@@ -60,7 +61,7 @@ describe('auth:list', async () => {
     .stdout()
     .command(['auth:list', '--json'])
     .it('should show files with auth errors', (ctx) => {
-      const auths = JSON.parse(ctx.stdout).result;
+      const auths = parseJson<Authorization[]>(ctx.stdout).result;
       expect(auths[0].alias).to.equal('TestAlias');
       expect(auths[0].username).to.equal(testData.username);
       expect(auths[0].instanceUrl).to.equal(testData.instanceUrl);

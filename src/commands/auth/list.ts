@@ -11,16 +11,6 @@ import { AuthInfo, Authorization, Messages } from '@salesforce/core';
 Messages.importMessagesDirectory(__dirname);
 const messages = Messages.loadMessages('@salesforce/plugin-auth', 'list');
 
-export type AuthListInfo = {
-  alias: string;
-  username: string;
-  orgId: string;
-  instanceUrl: string;
-  accessToken?: string;
-  oauthMethod?: 'jwt' | 'web' | 'token' | 'unknown';
-  error?: string;
-};
-
 export default class List extends SfdxCommand {
   public static readonly description = messages.getMessage('description');
   public static aliases = ['force:auth:list'];

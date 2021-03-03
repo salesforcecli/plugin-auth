@@ -20,6 +20,7 @@ import {
 } from '@salesforce/core';
 import { MockTestOrgData } from '@salesforce/core/lib/testSetup';
 import { StubbedType, stubInterface, stubMethod } from '@salesforce/ts-sinon';
+import { parseJson, parseJsonError } from '../../testHelper';
 
 interface Options {
   authFiles?: string[];
@@ -34,7 +35,7 @@ interface Options {
 
 describe('auth:logout', () => {
   const testData = new MockTestOrgData();
-  const spies = new Map();
+  const spies = new Map<string, sinon.SinonSpy>();
   let authInfoConfigStub: StubbedType<AuthInfoConfig>;
 
   afterEach(() => spies.clear());
@@ -104,19 +105,19 @@ describe('auth:logout', () => {
         contents: { orgs: options.aliases },
       });
 
-      const aliasesByValue = new Map();
+      const aliasesByValue = new Map<string, string>();
       Object.keys(options.aliases).forEach((key) => {
         if (options.aliases && options.aliases[key]) {
           aliasesByValue.set(options.aliases[key], key);
         }
       });
 
-      stubMethod($$.SANDBOX, Aliases.prototype, 'getKeysByValue').callsFake((username) => {
+      stubMethod($$.SANDBOX, Aliases.prototype, 'getKeysByValue').callsFake((username: string) => {
         const values = aliasesByValue.get(username);
         return values ? [values] : [];
       });
 
-      stubMethod($$.SANDBOX, Aliases.prototype, 'get').callsFake((username) => {
+      stubMethod($$.SANDBOX, Aliases.prototype, 'get').callsFake((username: string) => {
         return options.aliases ? options.aliases[username] : null;
       });
     }
@@ -139,7 +140,7 @@ describe('auth:logout', () => {
     .stderr()
     .command(['auth:logout', '-a', '-u', testData.username, '--json'])
     .it('should throw error when both -a and -u are specified', (ctx) => {
-      const response = JSON.parse(ctx.stdout);
+      const response = parseJsonError(ctx.stdout);
       expect(response.status).to.equal(1);
       expect(response.name).to.equal('SpecifiedBothUserAndAllError');
     });
@@ -154,7 +155,7 @@ describe('auth:logout', () => {
     .stdout()
     .command(['auth:logout', '-p', '--json'])
     .it('should remove defaultusername when neither -a nor -u are specified', (ctx) => {
-      const response = JSON.parse(ctx.stdout);
+      const response = parseJson<string[]>(ctx.stdout);
       expect(response.status).to.equal(0);
       expect(response.result).to.deep.equal([testData.username]);
 
@@ -163,9 +164,6 @@ describe('auth:logout', () => {
       expect(authInfoConfigStub.unlink.callCount).to.equal(1);
       expect(spies.get('aliasesUnset').callCount).to.equal(1);
       expect(spies.get('aliasesUnset').args[0]).to.deep.equal(['TestAlias']);
-      // expect the Config.unset to be called twice for the global config and local config
-      expect(spies.get('configUnset').callCount).to.equal(2);
-      expect(spies.get('configUnset').args[0]).to.deep.equal([Config.DEFAULT_USERNAME]);
     });
 
   test
@@ -178,7 +176,7 @@ describe('auth:logout', () => {
     .stdout()
     .command(['auth:logout', '-p', '-u', testData.username, '--json'])
     .it('should remove username specified by -u', (ctx) => {
-      const response = JSON.parse(ctx.stdout);
+      const response = parseJson<string[]>(ctx.stdout);
       expect(response.status).to.equal(0);
       expect(response.result).to.deep.equal([testData.username]);
 
@@ -187,9 +185,6 @@ describe('auth:logout', () => {
       expect(authInfoConfigStub.unlink.callCount).to.equal(1);
       expect(spies.get('aliasesUnset').callCount).to.equal(1);
       expect(spies.get('aliasesUnset').args[0]).to.deep.equal(['TestAlias']);
-      // expect the Config.unset to be called zero since the
-      // specified username is different that the defaultusername
-      expect(spies.get('configUnset').callCount).to.equal(0);
     });
 
   test
@@ -207,7 +202,7 @@ describe('auth:logout', () => {
     .stdout()
     .command(['auth:logout', '-p', '-a', '--json'])
     .it('should remove all usernames when -a is specified', (ctx) => {
-      const response = JSON.parse(ctx.stdout);
+      const response = parseJson<string[]>(ctx.stdout);
       expect(response.status).to.equal(0);
       expect(response.result).to.deep.equal([testData.username, 'SomeOtherUser@coffee.com', 'helloworld@foobar.com']);
 
@@ -215,8 +210,6 @@ describe('auth:logout', () => {
       expect(authInfoConfigStub.unlink.callCount).to.equal(3);
       expect(spies.get('aliasesUnset').callCount).to.equal(3);
       expect(spies.get('aliasesUnset').args).to.deep.equal([['TestAlias'], ['TestAlias1'], ['TestAlias2']]);
-      // expect the Config.unset to be called twice for the global config and local config
-      expect(spies.get('configUnset').callCount).to.equal(2);
     });
 
   test
@@ -236,15 +229,13 @@ describe('auth:logout', () => {
     .stdout()
     .command(['auth:logout', '-p', '--json'])
     .it('should remove all usernames when in demo mode', (ctx) => {
-      const response = JSON.parse(ctx.stdout);
+      const response = parseJson<string[]>(ctx.stdout);
       expect(response.status).to.equal(0);
       expect(response.result).to.deep.equal([testData.username, 'SomeOtherUser@coffee.com', 'helloworld@foobar.com']);
 
       expect(spies.get('authInfoClearCache').callCount).to.equal(3);
       expect(authInfoConfigStub.unlink.callCount).to.equal(3);
       expect(spies.get('aliasesUnset').callCount).to.equal(3);
-      // expect the Config.unset to be called twice for the global config and local config
-      expect(spies.get('configUnset').callCount).to.equal(2);
     });
 
   test
@@ -255,7 +246,7 @@ describe('auth:logout', () => {
     .stderr()
     .command(['auth:logout', '-p', '--json'])
     .it('should throw error if no defaultusername', (ctx) => {
-      const response = JSON.parse(ctx.stdout);
+      const response = parseJsonError(ctx.stdout);
       expect(response.status).to.equal(1);
       expect(response.name).to.equal('NoOrgFound');
     });
@@ -268,7 +259,7 @@ describe('auth:logout', () => {
     .stderr()
     .command(['auth:logout', '-p', '-u', 'foobar@org.com', '--json'])
     .it('should throw error if no defaultusername and targetusername does not exist', (ctx) => {
-      const response = JSON.parse(ctx.stdout);
+      const response = parseJsonError(ctx.stdout);
       expect(response.status).to.equal(1);
       expect(response.name).to.equal('NoOrgFound');
     });
@@ -280,7 +271,7 @@ describe('auth:logout', () => {
     .stdout()
     .command(['auth:logout', '-p', '-u', testData.username, '--json'])
     .it('should do nothing if it fails to create AuthInfoConfig', (ctx) => {
-      const response = JSON.parse(ctx.stdout);
+      const response = parseJson<string[]>(ctx.stdout);
       expect(response.status).to.equal(0);
       expect(response.result).to.deep.equal([]);
     });
@@ -296,14 +287,13 @@ describe('auth:logout', () => {
     .stdout()
     .command(['auth:logout', '-u', testData.username, '--json'])
     .it('should do nothing when prompt is answered with no', (ctx) => {
-      const response = JSON.parse(ctx.stdout);
+      const response = parseJson<string[]>(ctx.stdout);
       expect(response.status).to.equal(0);
       expect(response.result).to.deep.equal([]);
 
       expect(spies.get('authInfoClearCache').callCount).to.equal(0);
       expect(authInfoConfigStub.unlink.callCount).to.equal(0);
       expect(spies.get('aliasesUnset').callCount).to.equal(0);
-      expect(spies.get('configUnset').callCount).to.equal(0);
     });
 
   test
@@ -316,11 +306,9 @@ describe('auth:logout', () => {
     .stdout()
     .command(['auth:logout', '-p', '-u', 'TestAlias', '--json'])
     .it('should remove auth when alias is specifed', (ctx) => {
-      const response = JSON.parse(ctx.stdout);
+      const response = parseJson<string[]>(ctx.stdout);
       expect(response.status).to.equal(0);
       expect(response.result).to.deep.equal([testData.username]);
-      // expect the Config.unset to be called twice for the global config and local config
-      expect(spies.get('configUnset').callCount).to.equal(2);
     });
 
   test
@@ -334,17 +322,9 @@ describe('auth:logout', () => {
     .stdout()
     .command(['auth:logout', '-p', '--json'])
     .it('should remove auth when defaultusername and defaultdevhubusername is alias', (ctx) => {
-      const response = JSON.parse(ctx.stdout);
+      const response = parseJson<string[]>(ctx.stdout);
       expect(response.status).to.equal(0);
       expect(response.result).to.deep.equal([testData.username]);
-      // expect callCount twice for each, 4 times total
-      expect(spies.get('configUnset').callCount).to.equal(4);
-      expect(spies.get('configUnset').args).to.deep.equal([
-        [Config.DEFAULT_DEV_HUB_USERNAME],
-        [Config.DEFAULT_USERNAME],
-        [Config.DEFAULT_DEV_HUB_USERNAME],
-        [Config.DEFAULT_USERNAME],
-      ]);
     });
 
   test
@@ -357,12 +337,9 @@ describe('auth:logout', () => {
     .stdout()
     .command(['auth:logout', '-p', '--json'])
     .it('should remove auth when defaultusername is alias', (ctx) => {
-      const response = JSON.parse(ctx.stdout);
+      const response = parseJson<string[]>(ctx.stdout);
       expect(response.status).to.equal(0);
       expect(response.result).to.deep.equal([testData.username]);
-      // expect the Config.unset to be called twice for the global config and local config
-      expect(spies.get('configUnset').callCount).to.equal(2);
-      expect(spies.get('configUnset').args[0]).to.deep.equal([Config.DEFAULT_USERNAME]);
     });
 
   test
@@ -376,7 +353,7 @@ describe('auth:logout', () => {
     .stdout()
     .command(['auth:logout', '-p', '-u', testData.username, '--json'])
     .it('should not fail when the auth file does not exist', (ctx) => {
-      const response = JSON.parse(ctx.stdout);
+      const response = parseJson<string[]>(ctx.stdout);
       expect(response.status).to.equal(0);
       expect(response.result).to.deep.equal([testData.username]);
 
