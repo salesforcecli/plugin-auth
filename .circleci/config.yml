@@ -1,8 +1,6 @@
 version: 2.1
 orbs:
-  # release-management: salesforce/npm-release-management@4
-  # temporary until orb is published 123
-  release-management: salesforce/npm-release-management@dev:alpha
+  release-management: salesforce/npm-release-management@4
 
 workflows:
   version: 2
@@ -20,6 +18,10 @@ workflows:
       - release-management/test-nut:
           name: nuts-on-linux
           sfdx_version: latest
+          requires:
+            - node-latest
+      - release-management/test-nut:
+          name: nuts-on-linux-from-installer
           requires:
             - node-latest
       - release-management/test-nut:
