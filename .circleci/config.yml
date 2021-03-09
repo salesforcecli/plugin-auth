@@ -22,13 +22,10 @@ workflows:
           filters:
             branches:
               only: main
+  test-windows:
+    jobs:
       - release-management/test-package:
-          name: windows-node-latest
-          node_version: latest
-          os: windows
-      - release-management/test-package:
-          name: windows-node-12
-          node_version: '12'
+          name: win-node
           os: windows
   test-ts-update:
     triggers:
