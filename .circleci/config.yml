@@ -22,6 +22,11 @@ workflows:
           filters:
             branches:
               only: main
+  test-windows:
+    jobs:
+      - release-management/test-package:
+          name: win-node
+          os: windows
   test-ts-update:
     triggers:
       - schedule:
