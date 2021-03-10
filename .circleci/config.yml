@@ -13,6 +13,9 @@ workflows:
           name: node-latest
           node_version: latest
       - release-management/test-package:
+          name: node-lts
+          node_version: lts
+      - release-management/test-package:
           name: node-12
       - release-management/release-package:
           sign: true
