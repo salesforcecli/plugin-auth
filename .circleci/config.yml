@@ -13,10 +13,11 @@ workflows:
           name: node-latest
           node_version: latest
       - release-management/test-package:
-          name: node-lts
-          node_version: lts
+          name: node-lts-active
+          node_version: '14'
       - release-management/test-package:
-          name: node-12
+          name: node-lts-maintenance
+          node_version: '12'
       - release-management/release-package:
           sign: true
           github-release: true
