@@ -30,9 +30,9 @@ describe('auth:sfdxurl:store', async () => {
     });
 
     if (!options.fileDoesNotExist) {
-      $$.SANDBOX.stub(fs, 'readFile').callsFake(async () => {
-        return 'force://PlatformCLI::CoffeeAndBacon@su0503.my.salesforce.com';
-      });
+      $$.SANDBOX.stub(fs, 'readFile').callsFake(
+        async () => 'force://PlatformCLI::CoffeeAndBacon@su0503.my.salesforce.com'
+      );
     }
 
     if (options.authInfoCreateFails) {
@@ -58,6 +58,22 @@ describe('auth:sfdxurl:store', async () => {
       expect(response.result.username).to.equal(testData.username);
     });
 
+  test
+    .do(async () => {
+      await prepareStubs({ fileDoesNotExist: true });
+      $$.SANDBOX.stub(fs, 'readFile').callsFake(
+        async () => '{"sfdxAuthUrl": "force://PlatformCLI::CoffeeAndBacon@su0503.my.salesforce.com"}'
+      );
+    })
+    .stdout()
+    .command(['auth:sfdxurl:store', '-f', 'path/to/key.json', '--json'])
+    .it('should return auth fields when passing in a json file', (ctx) => {
+      const response = parseJson<AuthFields>(ctx.stdout);
+      expect(response.status).to.equal(0);
+      expect(response.result).to.deep.equal(authFields);
+      expect(response.result.username).to.equal(testData.username);
+    });
+  
   test
     .do(async () => prepareStubs())
     .stdout()
