@@ -52,16 +52,12 @@ export default class Store extends SfdxCommand {
   public async run(): Promise<AuthFields> {
     if (await Prompts.shouldExitCommand(this.ux, this.flags.noprompt)) return {};
 
-    let sfdxAuthUrl;
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
-    if (this.flags.sfdxurlfile.endsWith('json')) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      sfdxAuthUrl = await fs.readJson(this.flags.sfdxurlfile);
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
-      sfdxAuthUrl = sfdxAuthUrl.sfdxAuthUrl;
-    } else {
-      sfdxAuthUrl = await fs.readFile(this.flags.sfdxurlfile, 'utf8');
-    }
+    const authFile = this.flags.sfdxurlfile as string;
+
+    const sfdxAuthUrl = authFile.endsWith('.json')
+      ? ((await fs.readJson(authFile)) as Record<string, string>).sfdxAuthUrl
+      : await fs.readFile(authFile, 'utf8');
+
     const oauth2Options = AuthInfo.parseSfdxAuthUrl(sfdxAuthUrl);
     const authInfo = await AuthInfo.create({ oauth2Options });
     await authInfo.save();
