@@ -73,7 +73,7 @@ describe('auth:sfdxurl:store', async () => {
       expect(response.result).to.deep.equal(authFields);
       expect(response.result.username).to.equal(testData.username);
     });
-  
+
   test
     .do(async () => prepareStubs())
     .stdout()
