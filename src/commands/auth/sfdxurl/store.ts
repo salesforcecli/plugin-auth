@@ -55,7 +55,7 @@ export default class Store extends SfdxCommand {
     const authFile = this.flags.sfdxurlfile as string;
 
     const sfdxAuthUrl = authFile.endsWith('.json')
-      ? ((await fs.readJson(authFile)) as Record<string, string>).sfdxAuthUrl
+      ? await this.getUrlFromJson(authFile)
       : await fs.readFile(authFile, 'utf8');
 
     const oauth2Options = AuthInfo.parseSfdxAuthUrl(sfdxAuthUrl);
@@ -68,5 +68,16 @@ export default class Store extends SfdxCommand {
     const successMsg = commonMessages.getMessage('authorizeCommandSuccess', [result.username, result.orgId]);
     this.ux.log(successMsg);
     return result;
+  }
+
+  private async getUrlFromJson(authFile: string): Promise<string> {
+    const authFileJson = (await fs.readJson(authFile)) as Record<string, string>;
+
+    if (authFileJson.result) {
+      // Do a bunch of casting to get TSC to recognize the `sfdxAuthUrl` property as a string
+      return ((authFileJson as unknown) as Record<string, Record<string, string>>).result.sfdxAuthUrl;
+    }
+
+    return authFileJson.sfdxAuthUrl;
   }
 }

@@ -75,6 +75,25 @@ describe('auth:sfdxurl:store', async () => {
     });
 
   test
+    .do(async () => {
+      await prepareStubs({ fileDoesNotExist: true });
+      $$.SANDBOX.stub(fs, 'readFile').callsFake(
+        async () => '{"result": {"sfdxAuthUrl": "force://PlatformCLI::CoffeeAndBacon@su0503.my.salesforce.com"}}'
+      );
+    })
+    .stdout()
+    .command(['auth:sfdxurl:store', '-f', 'path/to/key.json', '--json'])
+    .it(
+      'should return auth fields when passing in a json result a la `sfdx force:org:display --verbose --json`',
+      (ctx) => {
+        const response = parseJson<AuthFields>(ctx.stdout);
+        expect(response.status).to.equal(0);
+        expect(response.result).to.deep.equal(authFields);
+        expect(response.result.username).to.equal(testData.username);
+      }
+    );
+
+  test
     .do(async () => prepareStubs())
     .stdout()
     .command(['auth:sfdxurl:store', '-f', 'path/to/key.txt', '-a', 'MyAlias', '--json'])
