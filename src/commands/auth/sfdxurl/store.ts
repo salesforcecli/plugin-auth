@@ -63,7 +63,17 @@ export default class Store extends SfdxCommand {
       ? await this.getUrlFromJson(authFile)
       : await fs.readFile(authFile, 'utf8');
 
-    const oauth2Options = AuthInfo.parseSfdxAuthUrl(sfdxAuthUrl);
+    let oauth2Options: AuthFields;
+    try {
+      oauth2Options = AuthInfo.parseSfdxAuthUrl(sfdxAuthUrl);
+    } catch (e) {
+      this.ux.error(
+        `Error getting the auth URL from file ${authFile}. Please ensure it meets the description shown in the documentation for this command.`
+      );
+      this.ux.error(this.statics.description);
+      return;
+    }
+
     const authInfo = await AuthInfo.create({ oauth2Options });
     await authInfo.save();
 
