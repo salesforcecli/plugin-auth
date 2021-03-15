@@ -262,12 +262,16 @@ OPTIONS
                                                                                     this command invocation
 
 DESCRIPTION
-  Authorize a Salesforce org using an SFDX auth URL stored within a file. The file must have the format
-  "force://<refreshToken>@<instanceUrl>" or "force://<clientId>:<clientSecret>:<refreshToken>@<instanceUrl>".
-  The file must contain only the URL or be a JSON file that has a top-level property named sfdxAuthUrl  or be a JSON file with the same format as the `sfdx force:org:display --verbose --json` command.
-  Use this command to get the SFDX auth URL for a Dev Hub org you have already authorized:
+  Authorize a Salesforce org using an SFDX auth URL stored within a file. The URL must have the format \"%s\" or \"%s\".
+  You have three options when creating the auth file. The easiest option is to redirect the output of the `sfdx force:org:display --verbose --json` command into a file.
+  For example, using an org you have already authorized:
 
-       $ sfdx force:org:display -u <DevHub> --verbose
+      $ sfdx force:org:display -u <DevHub> --verbose --json > authFile.json
+      $ sfdx auth:sfdxurl:store -f authFile.json
+
+  The resulting JSON file contains the URL in the sfdxAuthUrl property inside of a results object.
+  You can also create a JSON file that has a top-level property named sfdxAuthUrl whose value is the auth URL.
+  Finally, you can create a normal text file that includes just the URL and nothing else.
 
 ALIASES
   $ sfdx force:auth:sfdxurl:store
