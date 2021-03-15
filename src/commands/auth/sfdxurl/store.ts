@@ -8,6 +8,7 @@
 import * as os from 'os';
 import { flags, FlagsConfig, SfdxCommand } from '@salesforce/command';
 import { AuthFields, AuthInfo, fs, Messages } from '@salesforce/core';
+import { AnyJson } from '@salesforce/ts-types';
 import { Prompts } from '../../../prompts';
 import { Common } from '../../../common';
 
@@ -18,6 +19,10 @@ const commonMessages = Messages.loadMessages('@salesforce/plugin-auth', 'message
 const AUTH_URL_FORMAT1 = 'force://<refreshToken>@<instanceUrl>';
 const AUTH_URL_FORMAT2 = 'force://<clientId>:<clientSecret>:<refreshToken>@<instanceUrl>';
 
+type AuthJson = AnyJson & {
+  result?: AnyJson & { sfdxAuthUrl: string };
+  sfdxAuthUrl: string;
+};
 export default class Store extends SfdxCommand {
   public static readonly description = messages.getMessage('description', [AUTH_URL_FORMAT1, AUTH_URL_FORMAT2]);
   public static readonly examples = messages.getMessage('examples').split(os.EOL);
@@ -71,13 +76,7 @@ export default class Store extends SfdxCommand {
   }
 
   private async getUrlFromJson(authFile: string): Promise<string> {
-    const authFileJson = (await fs.readJson(authFile)) as Record<string, string>;
-
-    if (authFileJson.result) {
-      // Do a bunch of casting to get TSC to recognize the `sfdxAuthUrl` property as a string
-      return ((authFileJson as unknown) as Record<string, Record<string, string>>).result.sfdxAuthUrl;
-    }
-
-    return authFileJson.sfdxAuthUrl;
+    const authFileJson = (await fs.readJson(authFile)) as AuthJson;
+    return authFileJson.result?.sfdxAuthUrl || authFileJson.sfdxAuthUrl;
   }
 }

@@ -61,9 +61,9 @@ describe('auth:sfdxurl:store', async () => {
   test
     .do(async () => {
       await prepareStubs({ fileDoesNotExist: true });
-      $$.SANDBOX.stub(fs, 'readFile').callsFake(
-        async () => '{"sfdxAuthUrl": "force://PlatformCLI::CoffeeAndBacon@su0503.my.salesforce.com"}'
-      );
+      $$.SANDBOX.stub(fs, 'readJson').callsFake(async () => ({
+        sfdxAuthUrl: 'force://PlatformCLI::CoffeeAndBacon@su0503.my.salesforce.com',
+      }));
     })
     .stdout()
     .command(['auth:sfdxurl:store', '-f', 'path/to/key.json', '--json'])
@@ -77,9 +77,9 @@ describe('auth:sfdxurl:store', async () => {
   test
     .do(async () => {
       await prepareStubs({ fileDoesNotExist: true });
-      $$.SANDBOX.stub(fs, 'readFile').callsFake(
-        async () => '{"result": {"sfdxAuthUrl": "force://PlatformCLI::CoffeeAndBacon@su0503.my.salesforce.com"}}'
-      );
+      $$.SANDBOX.stub(fs, 'readJson').callsFake(async () => ({
+        result: { sfdxAuthUrl: 'force://PlatformCLI::CoffeeAndBacon@su0503.my.salesforce.com' },
+      }));
     })
     .stdout()
     .command(['auth:sfdxurl:store', '-f', 'path/to/key.json', '--json'])
