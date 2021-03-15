@@ -262,7 +262,7 @@ OPTIONS
                                                                                     this command invocation
 
 DESCRIPTION
-  Authorize a Salesforce org using an SFDX auth URL stored within a file. The URL must have the format \"%s\" or \"%s\".
+  Authorize a Salesforce org using an SFDX auth URL stored within a file. The URL must have the format "force://<refreshToken>@<instanceUrl>" or "force://<clientId>:<clientSecret>:<refreshToken>@<instanceUrl>".
   You have three options when creating the auth file. The easiest option is to redirect the output of the `sfdx force:org:display --verbose --json` command into a file.
   For example, using an org you have already authorized:
 
