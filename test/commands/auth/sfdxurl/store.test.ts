@@ -10,7 +10,7 @@ import { AuthFields, AuthInfo, fs } from '@salesforce/core';
 import { MockTestOrgData } from '@salesforce/core/lib/testSetup';
 import { StubbedType, stubInterface, stubMethod } from '@salesforce/ts-sinon';
 import { UX } from '@salesforce/command';
-import { parseJson } from '../../../testHelper';
+import { parseJson, parseJsonError } from '../../../testHelper';
 
 interface Options {
   authInfoCreateFails?: boolean;
@@ -92,6 +92,24 @@ describe('auth:sfdxurl:store', async () => {
         expect(response.result.username).to.equal(testData.username);
       }
     );
+
+  test
+    .do(async () => {
+      await prepareStubs({ fileDoesNotExist: true });
+      $$.SANDBOX.stub(fs, 'readJson').callsFake(async () => ({
+        result: { notASfdxAuthUrl: 'force://PlatformCLI::CoffeeAndBacon@su0503.my.salesforce.com' },
+      }));
+    })
+    .stdout()
+    .command(['auth:sfdxurl:store', '-f', 'path/to/key.json', '--json'])
+    .it("should error out when it doesn't find a url in a JSON file", (ctx) => {
+      const response = parseJsonError(ctx.stdout);
+      expect(response.status).to.equal(1);
+      // eslint-disable-next-line no-console
+      expect(response.message).to.equal(
+        'Error getting the auth URL from file path/to/key.json. Please ensure it meets the description shown in the documentation for this command.'
+      );
+    });
 
   test
     .do(async () => prepareStubs())
