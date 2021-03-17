@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.5.0](https://github.com/salesforcecli/plugin-auth/compare/v1.4.10...v1.5.0) (2021-03-17)
+
+
+### Features
+
+* add compatibility between force:org:display output and auth:sfdxurl:store input ([77e3de9](https://github.com/salesforcecli/plugin-auth/commit/77e3de9a3a943a258ac4890e8c712c1f8b61495c))
+
+
+### Bug Fixes
+
+* allow auth:sfdxurl:store to use a json file ([a9f0300](https://github.com/salesforcecli/plugin-auth/commit/a9f0300f5a3d6deef6b5e44bd15cf354cd9ae92c))
+* cleanup code and unit tests ([882014d](https://github.com/salesforcecli/plugin-auth/commit/882014d3fc25dcb020238f6e3acac02e2f59a135))
+* improve error handling ([1cb5def](https://github.com/salesforcecli/plugin-auth/commit/1cb5def51c3cf06e87f2a6029868ebe135f04161))
+* unit test for using json file ([f749fd3](https://github.com/salesforcecli/plugin-auth/commit/f749fd3c7512dfad416270f1053984ac13930a6c))
+* unit tests now run on Windows ([119d49a](https://github.com/salesforcecli/plugin-auth/commit/119d49a0a1be3a9794cefab3cf17c384be62d613))
+* update documentation ([5033f35](https://github.com/salesforcecli/plugin-auth/commit/5033f354de1108cf266f32b9b3b8600aaf634663))
+* whoopsie ([5b6f898](https://github.com/salesforcecli/plugin-auth/commit/5b6f8981ff46af6cb9add70cb6f7bf0b1fc12ad4))
+
 ### [1.4.10](https://github.com/salesforcecli/plugin-auth/compare/v1.4.9...v1.4.10) (2021-03-03)
 
 ### [1.4.9](https://github.com/salesforcecli/plugin-auth/compare/v1.4.8...v1.4.9) (2021-02-23)
