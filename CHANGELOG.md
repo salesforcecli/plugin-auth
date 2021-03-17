@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.5.1](https://github.com/salesforcecli/plugin-auth/compare/v1.5.0...v1.5.1) (2021-03-17)
+
+
+### Bug Fixes
+
+* **sfdxauthurl:** error handling regression ([11535e1](https://github.com/salesforcecli/plugin-auth/commit/11535e19c28888a9fff361bad33d199629cd1c77))
+
 ## [1.5.0](https://github.com/salesforcecli/plugin-auth/compare/v1.4.10...v1.5.0) (2021-03-17)
 
 
