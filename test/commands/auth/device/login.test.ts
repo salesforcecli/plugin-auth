@@ -8,8 +8,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable camelcase */
 
-import * as os from 'os';
-
 import { $$, expect, test } from '@salesforce/command/lib/test';
 import { AuthFields, AuthInfo } from '@salesforce/core';
 import { MockTestOrgData } from '@salesforce/core/lib/testSetup';
@@ -38,7 +36,7 @@ interface Response {
 }
 
 function parseJsonResponse(str: string): [Action, Response] {
-  return str.split(`}${os.EOL}{`).map((p) => {
+  return str.split('}\n{').map((p) => {
     if (p.startsWith('{')) {
       return JSON.parse(`${p}}`) as Action;
     } else {
