@@ -64,7 +64,8 @@
       "noprompt",
       "setalias",
       "setdefaultdevhubusername",
-      "setdefaultusername"
+      "setdefaultusername",
+      "outputurl"
     ]
   }
 ]

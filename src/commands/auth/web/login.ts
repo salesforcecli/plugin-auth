@@ -98,7 +98,7 @@ export default class Login extends SfdxCommand {
   private async executeLoginFlow(oauthConfig: OAuth2Options): Promise<AuthInfo> {
     const oauthServer = await WebOAuthServer.create({ oauthConfig });
     await oauthServer.start();
-    if (this.flags.output) this.ux.log(oauthServer.getAuthorizationUrl());
+    if (this.flags.outputurl) this.ux.log(oauthServer.getAuthorizationUrl());
     else await open(oauthServer.getAuthorizationUrl(), { wait: false });
     return oauthServer.authorizeAndSave();
   }
