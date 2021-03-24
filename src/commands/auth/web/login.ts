@@ -25,7 +25,7 @@ export default class Login extends SfdxCommand {
   public static aliases = ['force:auth:web:login'];
 
   public static readonly flagsConfig: FlagsConfig = {
-    output: flags.boolean({
+    outputurl: flags.boolean({
       char: 'o',
       default: false,
       description: commonMessages.getMessage('outputUrl'),
