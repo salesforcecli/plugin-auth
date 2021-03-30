@@ -10,7 +10,6 @@ workflows:
             branches:
               ignore: main
       - release-management/test-package:
-          name: <<parameters.os>>-unit-tests
           matrix:
             parameters:
               os:
