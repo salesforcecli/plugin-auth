@@ -9,7 +9,7 @@ workflows:
           filters:
             branches:
               ignore: main
-        release-management/test-package:
+      - release-management/test-package:
           name: <<parameters.os>>-unit-tests
           matrix:
             parameters:
@@ -25,16 +25,11 @@ workflows:
               node_version: lts
             - os: windows
               node_version: maintenance
-      - release-management/test-package:
-          name: node-latest
-          node_version: latest
-      - release-management/test-package:
-          name: node-12
       - release-management/release-package:
           sign: true
           github-release: true
           requires:
-            - node-latest
+            - release-management/test-package
           filters:
             branches:
               only: main
