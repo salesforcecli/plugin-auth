@@ -74,8 +74,8 @@
     "commands": "./lib/commands",
     "bin": "sfdx",
     "devPlugins": [
-      "@oclif/plugin-command-snapshot",
       "@oclif/plugin-help",
+      "@oclif/plugin-command-snapshot",
       "@salesforce/plugin-command-reference",
       "@salesforce/plugin-config"
     ],
