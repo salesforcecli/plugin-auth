@@ -86,6 +86,14 @@ export default class Grant extends SfdxCommand {
       privateKeyFile: this.flags.jwtkeyfile as string,
     };
 
+    if (this.flags.instanceurl) {
+      const instanceurl = this.flags.instanceurl as string;
+      if (instanceurl.toString().includes('lightning.force.com')) {
+        this.ux.warn(messages.getMessage('invalidInstanceUrl'));
+        throw new SfdxError(messages.getMessage('invalidInstanceUrl'), 'URL_WARNING');
+      }
+    }
+
     const loginUrl = await Common.resolveLoginUrl(get(this.flags.instanceurl, 'href', null) as Optional<string>);
 
     const oauth2Options = loginUrl ? Object.assign(oauth2OptionsBase, { loginUrl }) : oauth2OptionsBase;

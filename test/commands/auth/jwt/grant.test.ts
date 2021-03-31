@@ -236,6 +236,47 @@ describe('auth:jwt:grant', async () => {
   test
     .do(async () => prepareStubs())
     .stdout()
+    .command([
+      'auth:jwt:grant',
+      '-u',
+      testData.username,
+      '-f',
+      'path/to/key.json',
+      '-r',
+      'https://login.salesforce.com',
+      '-i',
+      '123456',
+      '--json',
+    ])
+    .it('should return auth fields with instance url', (ctx) => {
+      const response = parseJson<AuthFields>(ctx.stdout);
+      expect(response.status).to.equal(0);
+      expect(response.result).to.deep.equal(authFields);
+    });
+
+  test
+    .do(async () => prepareStubs())
+    .stdout()
+    .command([
+      'auth:jwt:grant',
+      '-u',
+      testData.username,
+      '-f',
+      'path/to/key.json',
+      '-r',
+      'https://devhub.lightning.force.com',
+      '-i',
+      '123456',
+      '--json',
+    ])
+    .it('should fail auth with lightning instance url', (ctx) => {
+      const response = parseJson<AuthFields>(ctx.stdout);
+      expect(response.status).to.equal(1);
+    });
+
+  test
+    .do(async () => prepareStubs())
+    .stdout()
     .command(['auth:jwt:grant', '-u', testData.username, '-f', 'path/to/key.json', '--json'])
     .it('should throw an error when client id (-i) is not provided', (ctx) => {
       const response = parseJsonError(ctx.stdout);

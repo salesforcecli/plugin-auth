@@ -7,5 +7,6 @@
   ],
   "username": "authentication username",
   "key": "path to a file containing the private key",
-  "JwtGrantError": "We encountered a JSON web token error, which is likely not an issue with Salesforce CLI. Here’s the error: %s"
+  "JwtGrantError": "We encountered a JSON web token error, which is likely not an issue with Salesforce CLI. Here’s the error: %s",
+  "invalidInstanceUrl": "Invalid instance URL"
 }

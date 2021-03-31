@@ -117,6 +117,14 @@ describe('auth:device:login', async () => {
   test
     .do(async () => prepareStubs())
     .stdout()
+    .command(['auth:device:login', '-r', 'https://devhub.lightning.force.com', '--json'])
+    .it('should fail auth with lightning instance url', (ctx) => {
+      expect(ctx.stdout).to.include('URL_WARNING');
+    });
+
+  test
+    .do(async () => prepareStubs())
+    .stdout()
     .command(['auth:device:login', '-a', 'MyAlias', '--json'])
     .it('should set alias when -a is provided', (ctx) => {
       const [action, response] = parseJsonResponse(ctx.stdout);

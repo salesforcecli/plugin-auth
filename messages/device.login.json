@@ -7,5 +7,6 @@
   ],
   "actionRequired": "Action Required!",
   "enterCode": "Enter %s user code in the verification URL %s",
-  "success": "Login successful for %s. You can now close the browser."
+  "success": "Login successful for %s. You can now close the browser.",
+  "invalidInstanceUrl": "Invalid instance URL"
 }

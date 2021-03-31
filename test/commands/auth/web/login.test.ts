@@ -92,6 +92,22 @@ describe('auth:web:login', () => {
     expect(authInfoStub.setAsDefault.callCount).to.equal(1);
   });
 
+  it('should set the instanceurl', async () => {
+    const login = await createNewLoginCommand({ instanceurl: 'https://gs0-dev-hub.my.salesforce.com' });
+    const result = await login.run();
+    expect(result).to.deep.equal(authFields);
+  });
+
+  it('should fail when instanceurl contains a lightning domain', async () => {
+    const login = await createNewLoginCommand({ instanceurl: 'https://devhub.lightning.force.com' });
+    try {
+      await login.run();
+    } catch (error) {
+      const err = error as SfdxError;
+      expect(err.name).to.equal('URL_WARNING');
+    }
+  });
+
   it('should throw device warning error when in container mode (SFDX_CONTAINER_MODE)', async () => {
     stubMethod($$.SANDBOX, Env.prototype, 'getBoolean').withArgs('SFDX_CONTAINER_MODE').returns(true);
     const login = await createNewLoginCommand();
