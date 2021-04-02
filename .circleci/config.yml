@@ -28,13 +28,13 @@ workflows:
           name: nuts-on-linux
           sfdx_version: latest
           requires:
-            - node-latest
+            - release-management/test-package
       - release-management/test-nut:
           name: nuts-on-windows
           sfdx_version: latest
           os: windows
           requires:
-            - node-latest
+            - release-management/test-package
       - release-management/release-package:
           sign: true
           github-release: true
