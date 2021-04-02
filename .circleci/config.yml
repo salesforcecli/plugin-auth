@@ -19,13 +19,11 @@ workflows:
                 - latest
                 - lts
                 - maintenance
-              exclude:
-                - os: windows
-                  node_version: lts
-                - os: windows
-                  node_version: maintenance
-      - release-management/test-package:
-          name: node-12
+            exclude:
+              - os: windows
+                node_version: lts
+              - os: windows
+                node_version: maintenance
       - release-management/test-nut:
           name: nuts-on-linux
           sfdx_version: latest
