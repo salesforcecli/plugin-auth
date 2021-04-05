@@ -5,8 +5,11 @@
  * For full license text, see LICENSE.txt file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  */
 
-import { AuthInfo, Logger, SfdcUrl, SfdxProject } from '@salesforce/core';
+import { AuthInfo, Logger, SfdcUrl, SfdxProject, Messages, SfdxError } from '@salesforce/core';
 import { getString, isObject, Optional } from '@salesforce/ts-types';
+
+Messages.importMessagesDirectory(__dirname);
+const messages = Messages.loadMessages('@salesforce/plugin-auth', 'messages');
 
 interface Flags {
   setalias?: string;
@@ -39,6 +42,10 @@ export class Common {
       const message: string = (isObject(err) ? Reflect.get(err, 'message') ?? err : err) as string;
       logger.debug(`error occurred while trying to determine loginUrl: ${message}`);
       loginUrl = SfdcUrl.PRODUCTION;
+    }
+    if (loginUrl.includes('lightning.force.com')) {
+      logger.warn(messages.getMessage('invalidInstanceUrl'));
+      throw new SfdxError(messages.getMessage('invalidInstanceUrl'), 'URL_WARNING');
     }
     logger.debug(`loginUrl: ${loginUrl}`);
     return loginUrl;
