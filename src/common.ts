@@ -29,10 +29,14 @@ export class Common {
     }
   }
   public static async resolveLoginUrl(instanceUrl: Optional<string>): Promise<Optional<string>> {
+    const logger = await Logger.child('Common', { tag: 'resolveLoginUrl' });
     if (instanceUrl) {
+      if (instanceUrl.includes('lightning.force.com')) {
+        logger.warn(messages.getMessage('invalidInstanceUrl'));
+        throw new SfdxError(messages.getMessage('invalidInstanceUrl'), 'URL_WARNING');
+      }
       return instanceUrl;
     }
-    const logger = await Logger.child('Common', { tag: 'resolveLoginUrl' });
     let loginUrl: string;
     try {
       const project = await SfdxProject.resolve();

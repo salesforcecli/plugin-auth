@@ -56,7 +56,7 @@ describe('common unit tests', () => {
       const loginUrl = await Common.resolveLoginUrl(undefined);
       expect(loginUrl).to.equal(SfdcUrl.PRODUCTION);
     });
-    it('should throw on lightning login URL', async () => {
+    it('should throw on lightning login URL in sfdcLoginUrl propery', async () => {
       sandbox.stub(SfdxProject.prototype, 'resolveProjectConfig').resolves({
         packageDirectories: [
           {
@@ -69,7 +69,16 @@ describe('common unit tests', () => {
       });
       try {
         await Common.resolveLoginUrl(undefined);
-        expect(1).to.equal('This test is failing because it is expecting an error that is never thrown');
+        sinon.assert.fail('This test is failing because it is expecting an error that is never thrown');
+      } catch (error) {
+        const err = error as SfdxError;
+        expect(err.name).to.equal('URL_WARNING');
+      }
+    });
+    it('should throw on lightning login URL passed in to resolveLoginUrl()', async () => {
+      try {
+        await Common.resolveLoginUrl('https://shanedevhub.lightning.force.com');
+        sinon.assert.fail('This test is failing because it is expecting an error that is never thrown');
       } catch (error) {
         const err = error as SfdxError;
         expect(err.name).to.equal('URL_WARNING');
