@@ -1,6 +1,6 @@
 version: 2.1
 orbs:
-  release-management: salesforce/npm-release-management@dev:alpha
+  release-management: salesforce/npm-release-management@4
 # this is a comment 12345678901234567
 parameters:
   run-auto-workflows:
@@ -35,48 +35,48 @@ parameters:
     type: string
 workflows:
   version: 2
-  # test-and-release:
-  #   when: << pipeline.parameters.run-auto-workflows >>
-  #   jobs:
-  #     - release-management/validate-pr:
-  #         filters:
-  #           branches:
-  #             ignore: main
-  #     - release-management/test-package:
-  #         matrix:
-  #           parameters:
-  #             os:
-  #               - linux
-  #               - windows
-  #             node_version:
-  #               - latest
-  #               - lts
-  #               - maintenance
-  #           exclude:
-  #             - os: windows
-  #               node_version: lts
-  #             - os: windows
-  #               node_version: maintenance
-  #     - release-management/test-nut:
-  #         name: nuts-on-linux
-  #         sfdx_version: latest
-  #         requires:
-  #           - release-management/test-package
-  #     - release-management/test-nut:
-  #         name: nuts-on-windows
-  #         sfdx_version: latest
-  #         os: windows
-  #         requires:
-  #           - release-management/test-package
-  #     - release-management/release-package:
-  #         sign: true
-  #         github-release: true
-  #         requires:
-  #           - release-management/test-package
-  #         filters:
-  #           branches:
-  #             only: main
-  #         context: CLI_CTC
+  test-and-release:
+    when: << pipeline.parameters.run-auto-workflows >>
+    jobs:
+      - release-management/validate-pr:
+          filters:
+            branches:
+              ignore: main
+      - release-management/test-package:
+          matrix:
+            parameters:
+              os:
+                - linux
+                - windows
+              node_version:
+                - latest
+                - lts
+                - maintenance
+            exclude:
+              - os: windows
+                node_version: lts
+              - os: windows
+                node_version: maintenance
+      - release-management/test-nut:
+          name: nuts-on-linux
+          sfdx_version: latest
+          requires:
+            - release-management/test-package
+      - release-management/test-nut:
+          name: nuts-on-windows
+          sfdx_version: latest
+          os: windows
+          requires:
+            - release-management/test-package
+      - release-management/release-package:
+          sign: true
+          github-release: true
+          requires:
+            - release-management/test-package
+          filters:
+            branches:
+              only: main
+          context: CLI_CTC
   test-ts-update:
     jobs:
       - release-management/test-ts-update:
