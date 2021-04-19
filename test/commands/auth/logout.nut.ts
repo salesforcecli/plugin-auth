@@ -18,13 +18,13 @@ describe('auth:logout NUTs', () => {
   let instanceUrl: string;
   let clientId: string;
 
-  before('prepare session and ensure environment variables', () => {
+  before('prepare session and ensure environment variables', async () => {
     username = ensureString(env.getString('TESTKIT_HUB_USERNAME'));
     instanceUrl = ensureString(env.getString('TESTKIT_HUB_INSTANCE'));
     clientId = ensureString(env.getString('TESTKIT_JWT_CLIENT_ID'));
     ensureString(env.getString('TESTKIT_JWT_KEY'));
 
-    testSession = TestSession.create({ authStrategy: 'NONE' });
+    testSession = await TestSession.create({ authStrategy: 'NONE' });
     jwtKey = prepareForJwt(testSession.homeDir);
   });
 
