@@ -29,7 +29,7 @@ parameters:
     default: ''
     type: string
   repo_tag:
-    description: 'The tag of the module repo to checkout, '''' defaults to branch/PR'
+    description: "The tag of the module repo to checkout, '' defaults to branch/PR"
     default: ''
     type: string
 workflows:

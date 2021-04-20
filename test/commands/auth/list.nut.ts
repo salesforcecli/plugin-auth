@@ -15,13 +15,13 @@ describe('auth:list NUTs', () => {
   let testSession: TestSession;
   let username: string;
 
-  before('prepare session and ensure environment variables', () => {
+  before('prepare session and ensure environment variables', async () => {
     const env = new Env();
     ensureString(env.getString('TESTKIT_JWT_KEY'));
     ensureString(env.getString('TESTKIT_JWT_CLIENT_ID'));
     ensureString(env.getString('TESTKIT_HUB_INSTANCE'));
     username = ensureString(env.getString('TESTKIT_HUB_USERNAME'));
-    testSession = TestSession.create({});
+    testSession = await TestSession.create({});
   });
 
   after(async () => {
