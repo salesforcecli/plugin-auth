@@ -1,6 +1,6 @@
 version: 2.1
 orbs:
-  release-management: salesforce/npm-release-management@dev:d76fc07
+  release-management: salesforce/npm-release-management@dev:543fa84
 parameters:
   run-auto-workflows:
     description: >
