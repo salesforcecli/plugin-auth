@@ -65,18 +65,14 @@ workflows:
           sfdx_version: latest
           requires:
             - release-management/test-package
-          context:
-              - dev_hub_default 
-              - $DEFAULT_DEV_HUB
+          context: $DEFAULT_DEV_HUB
       - release-management/test-nut:
           name: nuts-on-windows
           sfdx_version: latest
           os: windows
           requires:
             - release-management/test-package
-          context: 
-              - dev_hub_default 
-              - $DEFAULT_DEV_HUB
+          context: $DEFAULT_DEV_HUB
       - release-management/release-package:
           sign: true
           github-release: true
