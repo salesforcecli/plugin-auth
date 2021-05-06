@@ -56,7 +56,7 @@ describe('common unit tests', () => {
       const loginUrl = await Common.resolveLoginUrl(undefined);
       expect(loginUrl).to.equal(SfdcUrl.PRODUCTION);
     });
-    it('should throw on lightning login URL in sfdcLoginUrl propery', async () => {
+    it('should throw on lightning login URL in sfdcLoginUrl property', async () => {
       sandbox.stub(SfdxProject.prototype, 'resolveProjectConfig').resolves({
         packageDirectories: [
           {
@@ -121,7 +121,7 @@ describe('common unit tests', () => {
       const loginUrl = await Common.resolveLoginUrl(undefined);
       expect(loginUrl).to.equal(INSTANCE_URL_2);
     });
-    it('should return custom login URL 1 if project with property sfdcLoginUrl equal to ciustom url 2', async () => {
+    it('should return custom login URL 1 if project with property sfdcLoginUrl equal to custom url 2', async () => {
       sandbox.stub(SfdxProject.prototype, 'resolveProjectConfig').resolves({
         packageDirectories: [
           {

@@ -4,8 +4,9 @@
  * Licensed under the BSD 3-Clause license.
  * For full license text, see LICENSE.txt file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  */
-
-import { AuthInfo, Logger, SfdcUrl, SfdxProject, Messages, SfdxError } from '@salesforce/core';
+import { basename } from 'path';
+import { QueryResult } from 'jsforce';
+import { AuthInfo, AuthFields, Logger, SfdcUrl, SfdxProject, Messages, Org, SfdxError } from '@salesforce/core';
 import { getString, isObject, Optional } from '@salesforce/ts-types';
 
 Messages.importMessagesDirectory(__dirname);
@@ -53,5 +54,59 @@ export class Common {
     }
     logger.debug(`loginUrl: ${loginUrl}`);
     return loginUrl;
+  }
+
+  public static async identifyPossibleScratchOrgs(fields: AuthFields, orgAuthInfo: AuthInfo): Promise<void> {
+    const logger = await Logger.child('Common', { tag: 'identifyPossibleScratchOrgs' });
+
+    // return if we already know the hub or we know it is a devhub or prod-like
+    if (fields.isDevHub || fields.devHubUsername || fields.loginUrl === 'https://login.salesforce.com') return;
+
+    // there are no hubs to ask, so quit early
+    if (!(await AuthInfo.hasAuthentications())) return;
+    logger.debug('getting devhubs from authfiles');
+
+    // TODO: return if url is not sandbox-like to avoid constantly asking about production orgs
+    // TODO: someday we make this easier by asking the org if it is a scratch org
+
+    const hubAuthInfos = await this.getDevHubAuthInfos();
+    logger.debug(`found ${hubAuthInfos.length} DevHubs`);
+    if (hubAuthInfos.length === 0) return;
+
+    // ask all those orgs if they know this orgId
+    await Promise.all(
+      hubAuthInfos.map(async (hubAuthInfo) => {
+        try {
+          const devHubOrg = await Org.create({ aliasOrUsername: hubAuthInfo.getUsername() });
+          const conn = devHubOrg.getConnection();
+          const data = await conn.query<QueryResult<{ Id: string }>>(
+            `select Id from ScratchOrgInfo where Id = '${orgAuthInfo.getFields().orgId}'`
+          );
+          if (data.totalSize > 0) {
+            // if any return a result
+            logger.debug(`found orgId ${fields.orgId} in devhub ${hubAuthInfo.getUsername()}`);
+            try {
+              await orgAuthInfo.save({ ...orgAuthInfo.getFields(), devHubUsername: hubAuthInfo.getUsername() });
+            } catch (error) {
+              logger.debug('error updating auth file');
+            }
+            logger.debug('updated authfile with devHubUsername');
+          }
+        } catch (error) {
+          logger.error(`Error connecting to query from ${hubAuthInfo.getUsername()}`);
+        }
+      })
+    );
+  }
+
+  public static async getDevHubAuthInfos(): Promise<AuthInfo[]> {
+    return (
+      await Promise.all(
+        (await AuthInfo.listAllAuthFiles())
+          .filter((filename) => filename.match(/^00D.{15}\.json$/g))
+          .map((fileName) => basename(fileName, '.json'))
+          .map((username) => AuthInfo.create({ username }))
+      )
+    ).filter((possibleHub) => possibleHub?.getFields()?.isDevHub);
   }
 }
