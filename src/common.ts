@@ -64,7 +64,7 @@ export class Common {
 
     // there are no hubs to ask, so quit early
     if (!(await AuthInfo.hasAuthentications())) return;
-    logger.debug('getting devhubs from authfiles');
+    logger.debug('getting devHubs from authfiles');
 
     // TODO: return if url is not sandbox-like to avoid constantly asking about production orgs
     // TODO: someday we make this easier by asking the org if it is a scratch org
@@ -103,7 +103,6 @@ export class Common {
     return (
       await Promise.all(
         (await AuthInfo.listAllAuthFiles())
-          .filter((filename) => filename.match(/^00D.{15}\.json$/g))
           .map((fileName) => basename(fileName, '.json'))
           .map((username) => AuthInfo.create({ username }))
       )
