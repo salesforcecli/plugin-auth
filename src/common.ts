@@ -63,14 +63,14 @@ export class Common {
     // there are no hubs to ask, so quit early
     if (!(await AuthInfo.hasAuthentications())) return;
     // eslint-disable-next-line no-console
-    console.log('getting devHubs from authfiles');
+    process.stdout.write('getting devHubs from authfiles');
 
     // TODO: return if url is not sandbox-like to avoid constantly asking about production orgs
     // TODO: someday we make this easier by asking the org if it is a scratch org
 
     const hubAuthInfos = await this.getDevHubAuthInfos();
     // eslint-disable-next-line no-console
-    console.log(`found ${hubAuthInfos.length} DevHubs`);
+    process.stdout.write(`found ${hubAuthInfos.length} DevHubs`);
     if (hubAuthInfos.length === 0) return;
 
     // ask all those orgs if they know this orgId
@@ -85,15 +85,15 @@ export class Common {
           if (data.totalSize > 0) {
             // if any return a result
             // eslint-disable-next-line no-console
-            console.log(`found orgId ${fields.orgId} in devhub ${hubAuthInfo.getUsername()}`);
+            process.stdout.write(`found orgId ${fields.orgId} in devhub ${hubAuthInfo.getUsername()}`);
             try {
               await orgAuthInfo.save({ ...orgAuthInfo.getFields(), devHubUsername: hubAuthInfo.getUsername() });
             } catch (error) {
               // eslint-disable-next-line no-console
-              console.log('error updating auth file');
+              process.stdout.write('error updating auth file');
             }
             // eslint-disable-next-line no-console
-            console.log('updated authfile with devHubUsername');
+            process.stdout.write('updated authfile with devHubUsername');
           }
         } catch (error) {
           // eslint-disable-next-line no-console
