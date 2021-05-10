@@ -1,0 +1,5 @@
+{
+  "description": "Authorize an org using an Salesforce Access Token\nAuthorize a Salesforce org using an access token.",
+  "file": "path to a file containing the sfdx url",
+  "examples": ["sfdx auth:token:set --instanceurl https://login.salesforce.com"]
+}
