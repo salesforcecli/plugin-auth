@@ -57,20 +57,20 @@ export class Common {
   }
 
   public static async identifyPossibleScratchOrgs(fields: AuthFields, orgAuthInfo: AuthInfo): Promise<void> {
-    const logger = await Logger.child('Common', { tag: 'identifyPossibleScratchOrgs' });
-
     // return if we already know the hub or we know it is a devhub or prod-like
     if (fields.isDevHub || fields.devHubUsername || fields.loginUrl === 'https://login.salesforce.com') return;
 
     // there are no hubs to ask, so quit early
     if (!(await AuthInfo.hasAuthentications())) return;
-    logger.debug('getting devHubs from authfiles');
+    // eslint-disable-next-line no-console
+    console.log('getting devHubs from authfiles');
 
     // TODO: return if url is not sandbox-like to avoid constantly asking about production orgs
     // TODO: someday we make this easier by asking the org if it is a scratch org
 
     const hubAuthInfos = await this.getDevHubAuthInfos();
-    logger.debug(`found ${hubAuthInfos.length} DevHubs`);
+    // eslint-disable-next-line no-console
+    console.log(`found ${hubAuthInfos.length} DevHubs`);
     if (hubAuthInfos.length === 0) return;
 
     // ask all those orgs if they know this orgId
@@ -84,16 +84,20 @@ export class Common {
           );
           if (data.totalSize > 0) {
             // if any return a result
-            logger.debug(`found orgId ${fields.orgId} in devhub ${hubAuthInfo.getUsername()}`);
+            // eslint-disable-next-line no-console
+            console.log(`found orgId ${fields.orgId} in devhub ${hubAuthInfo.getUsername()}`);
             try {
               await orgAuthInfo.save({ ...orgAuthInfo.getFields(), devHubUsername: hubAuthInfo.getUsername() });
             } catch (error) {
-              logger.debug('error updating auth file');
+              // eslint-disable-next-line no-console
+              console.log('error updating auth file');
             }
-            logger.debug('updated authfile with devHubUsername');
+            // eslint-disable-next-line no-console
+            console.log('updated authfile with devHubUsername');
           }
         } catch (error) {
-          logger.error(`Error connecting to query from ${hubAuthInfo.getUsername()}`);
+          // eslint-disable-next-line no-console
+          console.error(`Error connecting to query from ${hubAuthInfo.getUsername()}`);
         }
       })
     );
