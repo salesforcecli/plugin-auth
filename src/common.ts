@@ -60,7 +60,7 @@ export class Common {
     const logger = await Logger.child('Common', { tag: 'identifyPossibleScratchOrgs' });
 
     // return if we already know the hub or we know it is a devhub or prod-like
-    if (fields.isDevHub || fields.devHubUsername || fields.loginUrl === 'https://login.salesforce.com') return;
+    if (fields.isDevHub || fields.devHubUsername) return;
 
     // there are no hubs to ask, so quit early
     if (!(await AuthInfo.hasAuthentications())) return;
