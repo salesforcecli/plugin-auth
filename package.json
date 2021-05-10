@@ -93,6 +93,9 @@
           "web": {
             "description": "authorize an org using a web browser"
           },
+          "token": {
+            "description": "authorize an org using an access token"
+          },
           "device": {
             "description": "authorize an org using a device code"
           }

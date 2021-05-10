@@ -53,6 +53,11 @@
     ]
   },
   {
+    "command": "auth:token:set",
+    "plugin": "@salesforce/plugin-auth",
+    "flags": ["instanceurl", "json", "loglevel", "setalias", "setdefaultusername"]
+  },
+  {
     "command": "auth:web:login",
     "plugin": "@salesforce/plugin-auth",
     "flags": [
