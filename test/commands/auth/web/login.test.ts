@@ -40,9 +40,9 @@ describe('auth:web:login', () => {
     });
 
     const login = new Login([], config);
-    // @ts-ignore because protected memeber
+    // @ts-ignore because protected member
     login.ux = uxStub;
-    // @ts-ignore because protected memeber
+    // @ts-ignore because protected member
     login.flags = Object.assign({}, { noprompt: true }, flags);
     return login;
   }
