@@ -29,6 +29,10 @@ describe('auth:sfdxurl:store', async () => {
       getFields: () => authFields,
     });
 
+    $$.SANDBOX.stub(AuthInfo, 'listAllAuthFiles').callsFake(async () => {
+      return [`${authFields.username}.json`];
+    });
+
     if (!options.fileDoesNotExist) {
       $$.SANDBOX.stub(fs, 'readFile').callsFake(
         async () => 'force://PlatformCLI::CoffeeAndBacon@su0503.my.salesforce.com'
@@ -38,9 +42,6 @@ describe('auth:sfdxurl:store', async () => {
     if (options.authInfoCreateFails) {
       $$.SANDBOX.stub(AuthInfo, 'create').throws(new Error('invalid client id'));
     } else if (options.existingAuth) {
-      $$.SANDBOX.stub(AuthInfo, 'listAllAuthFiles').callsFake(async () => {
-        return [`${authFields.username}.json`];
-      });
       stubMethod($$.SANDBOX, AuthInfo, 'create').callsFake(async () => authInfoStub);
     } else {
       stubMethod($$.SANDBOX, AuthInfo, 'create').callsFake(async () => authInfoStub);
