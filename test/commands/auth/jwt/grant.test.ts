@@ -27,6 +27,7 @@ describe('auth:jwt:grant', async () => {
     authInfoStub = stubInterface<AuthInfo>($$.SANDBOX, {
       getFields: () => authFields,
     });
+    stubMethod($$.SANDBOX, AuthInfo, 'hasAuthentications').resolves(true);
 
     if (options.authInfoCreateFails) {
       $$.SANDBOX.stub(AuthInfo, 'create').throws(new Error('invalid client id'));

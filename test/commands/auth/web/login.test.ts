@@ -32,6 +32,7 @@ describe('auth:web:login', () => {
     authInfoStub = stubInterface<AuthInfo>($$.SANDBOX, {
       getFields: () => authFields,
     });
+    stubMethod($$.SANDBOX, AuthInfo, 'hasAuthentications').resolves(true);
     stubMethod($$.SANDBOX, Login.prototype, 'executeLoginFlow').callsFake(async () => {
       return authInfoStub;
     });
