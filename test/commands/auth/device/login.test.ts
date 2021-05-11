@@ -61,7 +61,6 @@ describe('auth:device:login', async () => {
     authFields = await testData.getConfig();
     authInfoStub = stubInterface<AuthInfo>($$.SANDBOX, {
       getFields: () => authFields,
-      hasAuthentication: () => Promise.resolve(true),
     });
 
     stubMethod($$.SANDBOX, DeviceOauthService.prototype, 'requestDeviceLogin').returns(Promise.resolve(mockAction));
@@ -88,6 +87,9 @@ describe('auth:device:login', async () => {
     }
 
     stubMethod($$.SANDBOX, AuthInfo, 'create').callsFake(async () => authInfoStub);
+    $$.SANDBOX.stub(AuthInfo, 'listAllAuthFiles').callsFake(async () => {
+      return [`${authFields.username}.json`];
+    });
   }
 
   test
