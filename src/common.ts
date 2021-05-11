@@ -4,6 +4,8 @@
  * Licensed under the BSD 3-Clause license.
  * For full license text, see LICENSE.txt file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  */
+/* eslint-disable no-console */
+
 import { basename } from 'path';
 import { QueryResult } from 'jsforce';
 import { AuthInfo, AuthFields, Logger, SfdcUrl, SfdxProject, Messages, Org, SfdxError, sfdc } from '@salesforce/core';
@@ -57,11 +59,11 @@ export class Common {
   }
 
   public static async identifyPossibleScratchOrgs(fields: AuthFields, orgAuthInfo: AuthInfo): Promise<void> {
-    const logger = await Logger.child('Common', { tag: 'identifyPossibleScratchOrgs' });
+    // const logger = await Logger.child('Common', { tag: 'identifyPossibleScratchOrgs' });
+    const logger = console;
 
     // return if we already know the hub or we know it is a devhub or prod-like
     if (fields.isDevHub || fields.devHubUsername) return;
-
     // there are no hubs to ask, so quit early
     if (!(await AuthInfo.hasAuthentications())) return;
     logger.debug('getting devHubs from authfiles');
@@ -88,9 +90,9 @@ export class Common {
             try {
               await orgAuthInfo.save({ ...orgAuthInfo.getFields(), devHubUsername: hubAuthInfo.getUsername() });
             } catch (error) {
-              logger.debug('error updating auth file');
+              logger.debug(`error updating auth file for ${orgAuthInfo.getUsername()}: ${error as string}`);
             }
-            logger.debug('updated authfile with devHubUsername');
+            logger.debug(`set ${hubAuthInfo.getUsername()} as devhub for scratch org ${orgAuthInfo.getUsername()}`);
           }
         } catch (error) {
           logger.error(`Error connecting to query from ${hubAuthInfo.getUsername()}`);
