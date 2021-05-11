@@ -53,9 +53,9 @@
     ]
   },
   {
-    "command": "auth:token:set",
+    "command": "auth:accesstoken:store",
     "plugin": "@salesforce/plugin-auth",
-    "flags": ["instanceurl", "json", "loglevel", "setalias", "setdefaultusername"]
+    "flags": ["instanceurl", "accesstokenfile", "json", "loglevel", "noprompt", "setalias", "setdefaultusername"]
   },
   {
     "command": "auth:web:login",
