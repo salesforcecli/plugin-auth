@@ -59,8 +59,7 @@ export class Common {
   }
 
   public static async identifyPossibleScratchOrgs(fields: AuthFields, orgAuthInfo: AuthInfo): Promise<void> {
-    // const logger = await Logger.child('Common', { tag: 'identifyPossibleScratchOrgs' });
-    const logger = console;
+    const logger = await Logger.child('Common', { tag: 'identifyPossibleScratchOrgs' });
 
     // return if we already know the hub or we know it is a devhub or prod-like
     if (fields.isDevHub || fields.devHubUsername) return;
