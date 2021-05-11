@@ -35,6 +35,9 @@ describe('auth:web:login', () => {
     stubMethod($$.SANDBOX, Login.prototype, 'executeLoginFlow').callsFake(async () => {
       return authInfoStub;
     });
+    $$.SANDBOX.stub(AuthInfo, 'listAllAuthFiles').callsFake(async () => {
+      return [`${authFields.username}.json`];
+    });
     uxStub = stubInterface<UX>($$.SANDBOX, {
       prompt: () => promptAnswer,
     });
