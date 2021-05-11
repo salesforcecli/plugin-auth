@@ -87,7 +87,7 @@ describe('auth:device:login', async () => {
     }
 
     stubMethod($$.SANDBOX, AuthInfo, 'create').callsFake(async () => authInfoStub);
-    stubMethod($$.SANDBOX, AuthInfo, 'hasAuthentications').resolves(true);
+    stubMethod($$.SANDBOX, AuthInfo, 'hasAuthentications').returns(Promise.resolve(true));
   }
 
   test
