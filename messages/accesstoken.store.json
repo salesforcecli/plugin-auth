@@ -1,0 +1,12 @@
+{
+  "description": "Authorize an org using an Salesforce Access Token\nAuthorize a Salesforce org using an access token.",
+  "file": "path to a file containing the sfdx url",
+  "examples": [
+    "sfdx auth:accesstoken:store --instanceurl https://login.salesforce.com",
+    "sfdx auth:accesstoken:store --instanceurl https://login.salesforce.com --accesstokenfile ./myaccesstoken.txt"
+  ],
+  "overwriteAuthFileYesNo": "An authorization file exists for user \"%s\". Are you sure you want to save the file?\n\nSave the user (y/n)?",
+  "accessTokenFile": "filepath to a text file that contains the access token",
+  "filesDoesNotExist": "The given access token file, \"%s\", does not exist.",
+  "invalidAccessTokenFormat": "The given access token is not in the correct format\nIt should follow the patter %s."
+}

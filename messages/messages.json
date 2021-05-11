@@ -30,5 +30,6 @@
   "disableMasking": "disable masking of user input (for use with problematic terminals)",
   "clientSecretStdin": "OAuth client secret of personal connected app?",
   "invalidInstanceUrl": "Invalid instance URL. Specify a Salesforce instance URL using the format <domainname>.salesforce.com",
-  "accessTokenStdin": "Access token of user to use for authentication"
+  "accessTokenStdin": "Access token of user to use for authentication",
+  "noPrompt": "do not prompt for confirmation"
 }
