@@ -59,9 +59,9 @@ describe('auth:web:login', () => {
     uxStub = stubInterface<UX>($$.SANDBOX, {});
 
     const login = new Login([], config);
-    // @ts-ignore because protected memeber
+    // @ts-ignore because protected member
     login.ux = uxStub;
-    // @ts-ignore because protected memeber
+    // @ts-ignore because protected member
     login.flags = { noprompt: true };
     return login;
   }
