@@ -93,7 +93,6 @@ describe('auth:device:login', async () => {
   }
 
   test
-    .only()
     .do(async () => prepareStubs())
     .stdout()
     .command(['auth:device:login', '--json'])
