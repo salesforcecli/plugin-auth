@@ -28,7 +28,6 @@ describe('auth:sfdxurl:store', async () => {
     authInfoStub = stubInterface<AuthInfo>($$.SANDBOX, {
       getFields: () => authFields,
     });
-    stubMethod($$.SANDBOX, AuthInfo, 'hasAuthentications').resolves(true);
 
     if (!options.fileDoesNotExist) {
       $$.SANDBOX.stub(fs, 'readFile').callsFake(
