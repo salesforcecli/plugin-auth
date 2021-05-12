@@ -77,7 +77,7 @@ export default class Login extends SfdxCommand {
       const authInfo = await this.executeLoginFlow(oauthConfig);
       await Common.handleSideEffects(authInfo, this.flags);
       const fields = authInfo.getFields(true);
-      await Common.identifyPossibleScratchOrgs(fields, authInfo);
+      await Common.identifyPossibleScratchOrgs(authInfo);
 
       const successMsg = commonMessages.getMessage('authorizeCommandSuccess', [fields.username, fields.orgId]);
       this.ux.log(successMsg);
