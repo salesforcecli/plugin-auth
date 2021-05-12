@@ -4,8 +4,6 @@
  * Licensed under the BSD 3-Clause license.
  * For full license text, see LICENSE.txt file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  */
-/* eslint-disable no-console */
-
 import { basename } from 'path';
 import { QueryResult } from 'jsforce';
 import { AuthInfo, AuthFields, Logger, SfdcUrl, SfdxProject, Messages, Org, SfdxError, sfdc } from '@salesforce/core';
@@ -88,10 +86,10 @@ export class Common {
             logger.debug(`found orgId ${fields.orgId} in devhub ${hubAuthInfo.getUsername()}`);
             try {
               await orgAuthInfo.save({ ...orgAuthInfo.getFields(), devHubUsername: hubAuthInfo.getUsername() });
+              logger.debug(`set ${hubAuthInfo.getUsername()} as devhub for scratch org ${orgAuthInfo.getUsername()}`);
             } catch (error) {
               logger.debug(`error updating auth file for ${orgAuthInfo.getUsername()}`, error);
             }
-            logger.debug(`set ${hubAuthInfo.getUsername()} as devhub for scratch org ${orgAuthInfo.getUsername()}`);
           }
         } catch (error) {
           logger.error(`Error connecting to devhub ${hubAuthInfo.getUsername()}`, error);
