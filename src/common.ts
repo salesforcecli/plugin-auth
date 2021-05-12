@@ -89,12 +89,12 @@ export class Common {
             try {
               await orgAuthInfo.save({ ...orgAuthInfo.getFields(), devHubUsername: hubAuthInfo.getUsername() });
             } catch (error) {
-              logger.debug(`error updating auth file for ${orgAuthInfo.getUsername()}: ${error as string}`);
+              logger.debug(`error updating auth file for ${orgAuthInfo.getUsername()}`, error);
             }
             logger.debug(`set ${hubAuthInfo.getUsername()} as devhub for scratch org ${orgAuthInfo.getUsername()}`);
           }
         } catch (error) {
-          logger.error(`Error connecting to query from ${hubAuthInfo.getUsername()}`);
+          logger.error(`Error connecting to devhub ${hubAuthInfo.getUsername()}`, error);
         }
       })
     );
