@@ -118,7 +118,7 @@ EXAMPLES
   sfdx auth:device:login -r https://test.salesforce.com
 ```
 
-_See code: [src/commands/auth/device/login.ts](https://github.com/salesforcecli/plugin-auth/blob/v1.5.2/src/commands/auth/device/login.ts)_
+_See code: [src/commands/auth/device/login.ts](https://github.com/salesforcecli/plugin-auth/blob/v1.5.3/src/commands/auth/device/login.ts)_
 
 ## `sfdx auth:jwt:grant -u <string> -f <filepath> -i <string> [-r <url>] [-d] [-s] [-a <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -172,7 +172,7 @@ EXAMPLES
   sfdx auth:jwt:grant -u me@acme.org -f <path to jwt key file> -i <OAuth client id> -r https://acme.my.salesforce.com
 ```
 
-_See code: [src/commands/auth/jwt/grant.ts](https://github.com/salesforcecli/plugin-auth/blob/v1.5.2/src/commands/auth/jwt/grant.ts)_
+_See code: [src/commands/auth/jwt/grant.ts](https://github.com/salesforcecli/plugin-auth/blob/v1.5.3/src/commands/auth/jwt/grant.ts)_
 
 ## `sfdx auth:list [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -192,7 +192,7 @@ ALIASES
   $ sfdx force:auth:list
 ```
 
-_See code: [src/commands/auth/list.ts](https://github.com/salesforcecli/plugin-auth/blob/v1.5.2/src/commands/auth/list.ts)_
+_See code: [src/commands/auth/list.ts](https://github.com/salesforcecli/plugin-auth/blob/v1.5.3/src/commands/auth/list.ts)_
 
 ## `sfdx auth:logout [-a] [-p] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -230,7 +230,7 @@ EXAMPLES
   sfdx auth:logout -p
 ```
 
-_See code: [src/commands/auth/logout.ts](https://github.com/salesforcecli/plugin-auth/blob/v1.5.2/src/commands/auth/logout.ts)_
+_See code: [src/commands/auth/logout.ts](https://github.com/salesforcecli/plugin-auth/blob/v1.5.3/src/commands/auth/logout.ts)_
 
 ## `sfdx auth:sfdxurl:store -f <filepath> [-d] [-s] [-a <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -283,7 +283,7 @@ EXAMPLES
   sfdx auth:sfdxurl:store -f <path to sfdxAuthUrl file> -s -a MyDefaultOrg
 ```
 
-_See code: [src/commands/auth/sfdxurl/store.ts](https://github.com/salesforcecli/plugin-auth/blob/v1.5.2/src/commands/auth/sfdxurl/store.ts)_
+_See code: [src/commands/auth/sfdxurl/store.ts](https://github.com/salesforcecli/plugin-auth/blob/v1.5.3/src/commands/auth/sfdxurl/store.ts)_
 
 ## `sfdx auth:web:login [-i <string>] [-r <url>] [-d] [-s] [-a <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -331,5 +331,5 @@ EXAMPLES
   sfdx auth:web:login -r https://test.salesforce.com
 ```
 
-_See code: [src/commands/auth/web/login.ts](https://github.com/salesforcecli/plugin-auth/blob/v1.5.2/src/commands/auth/web/login.ts)_
+_See code: [src/commands/auth/web/login.ts](https://github.com/salesforcecli/plugin-auth/blob/v1.5.3/src/commands/auth/web/login.ts)_
 <!-- commandsstop -->
