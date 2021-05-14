@@ -1,5 +1,19 @@
 [
   {
+    "command": "auth:accesstoken:store",
+    "plugin": "@salesforce/plugin-auth",
+    "flags": [
+      "accesstokenfile",
+      "instanceurl",
+      "json",
+      "loglevel",
+      "noprompt",
+      "setalias",
+      "setdefaultdevhubusername",
+      "setdefaultusername"
+    ]
+  },
+  {
     "command": "auth:device:login",
     "plugin": "@salesforce/plugin-auth",
     "flags": [
@@ -51,11 +65,6 @@
       "setdefaultusername",
       "sfdxurlfile"
     ]
-  },
-  {
-    "command": "auth:accesstoken:store",
-    "plugin": "@salesforce/plugin-auth",
-    "flags": ["instanceurl", "accesstokenfile", "json", "loglevel", "noprompt", "setalias", "setdefaultusername"]
   },
   {
     "command": "auth:web:login",
