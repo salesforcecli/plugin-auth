@@ -81,13 +81,13 @@ export class Common {
           const devHubOrg = await Org.create({ aliasOrUsername: hubAuthInfo.getUsername() });
           const conn = devHubOrg.getConnection();
           const data = await conn.query<QueryResult<{ Id: string }>>(
-            `select Id from ScratchOrgInfo where ScratchOrg = '${sfdc.trimTo15(orgAuthInfo.getFields().orgId)}'`
+            `select Id from ScratchOrgInfo where ScratchOrg = '${sfdc.trimTo15(fields.orgId)}'`
           );
           if (data.totalSize > 0) {
             // if any return a result
             logger.debug(`found orgId ${fields.orgId} in devhub ${hubAuthInfo.getUsername()}`);
             try {
-              await orgAuthInfo.save({ ...orgAuthInfo.getFields(), devHubUsername: hubAuthInfo.getUsername() });
+              await orgAuthInfo.save({ ...fields, devHubUsername: hubAuthInfo.getUsername() });
               logger.debug(`set ${hubAuthInfo.getUsername()} as devhub for scratch org ${orgAuthInfo.getUsername()}`);
             } catch (error) {
               logger.debug(`error updating auth file for ${orgAuthInfo.getUsername()}`, error);
