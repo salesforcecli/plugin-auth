@@ -6,7 +6,7 @@
  */
 import { basename } from 'path';
 import { QueryResult } from 'jsforce';
-import { AuthInfo, Logger, SfdcUrl, SfdxProject, Messages, Org, SfdxError, sfdc } from '@salesforce/core';
+import { AuthInfo, AuthFields, Logger, SfdcUrl, SfdxProject, Messages, Org, SfdxError, sfdc } from '@salesforce/core';
 import { getString, isObject, Optional } from '@salesforce/ts-types';
 
 Messages.importMessagesDirectory(__dirname);
@@ -56,8 +56,7 @@ export class Common {
     return loginUrl;
   }
 
-  public static async identifyPossibleScratchOrgs(orgAuthInfo: AuthInfo): Promise<void> {
-    const fields = orgAuthInfo.getFields();
+  public static async identifyPossibleScratchOrgs(fields: AuthFields, orgAuthInfo: AuthInfo): Promise<void> {
     const logger = await Logger.child('Common', { tag: 'identifyPossibleScratchOrgs' });
 
     // return if we already know the hub or we know it is a devhub or prod-like
