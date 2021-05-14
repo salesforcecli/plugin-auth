@@ -28,6 +28,10 @@ describe('auth:jwt:grant', async () => {
       getFields: () => authFields,
     });
 
+    $$.SANDBOX.stub(AuthInfo, 'listAllAuthFiles').callsFake(async () => {
+      return [`${authFields.username}.json`];
+    });
+
     if (options.authInfoCreateFails) {
       $$.SANDBOX.stub(AuthInfo, 'create').throws(new Error('invalid client id'));
     } else if (options.existingAuth) {
@@ -36,10 +40,6 @@ describe('auth:jwt:grant', async () => {
         .throws(new SfdxError('auth exists', 'AuthInfoOverwriteError'))
         .onSecondCall()
         .callsFake(async () => authInfoStub);
-
-      $$.SANDBOX.stub(AuthInfo, 'listAllAuthFiles').callsFake(async () => {
-        return [`${authFields.username}.json`];
-      });
     } else {
       stubMethod($$.SANDBOX, AuthInfo, 'create').callsFake(async () => authInfoStub);
     }
