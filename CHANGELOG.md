@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.6.0](https://github.com/salesforcecli/plugin-auth/compare/v1.5.4...v1.6.0) (2021-05-14)
+
+
+### Features
+
+* identify scratch orgs if hub is known during auth ([#148](https://github.com/salesforcecli/plugin-auth/issues/148)) ([3bd182a](https://github.com/salesforcecli/plugin-auth/commit/3bd182aeb60ee8c2e5ff3183d5c452b20cf46213))
+
 ### [1.5.4](https://github.com/salesforcecli/plugin-auth/compare/v1.5.3...v1.5.4) (2021-05-10)
 
 ### [1.5.3](https://github.com/salesforcecli/plugin-auth/compare/v1.5.2...v1.5.3) (2021-04-12)
