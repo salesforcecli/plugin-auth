@@ -42,6 +42,10 @@ export default class Store extends SfdxCommand {
       description: messages.getMessage('accessTokenFile'),
       required: false,
     }),
+    setdefaultdevhubusername: flags.boolean({
+      char: 'd',
+      description: commonMessages.getMessage('setDefaultDevHub'),
+    }),
     setdefaultusername: flags.boolean({
       char: 's',
       description: commonMessages.getMessage('setDefaultUsername'),
