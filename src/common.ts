@@ -56,6 +56,8 @@ export class Common {
     return loginUrl;
   }
 
+  // fields property is passed in because the consumers of this method have performed the decrypt.
+  // This is so we don't have to call authInfo.getFields(true) and decrypt again OR accidentally save an
   public static async identifyPossibleScratchOrgs(fields: AuthFields, orgAuthInfo: AuthInfo): Promise<void> {
     const logger = await Logger.child('Common', { tag: 'identifyPossibleScratchOrgs' });
 
