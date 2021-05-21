@@ -6,7 +6,18 @@
  */
 import { basename } from 'path';
 import { QueryResult } from 'jsforce';
-import { AuthInfo, AuthFields, Logger, SfdcUrl, SfdxProject, Messages, Org, SfdxError, sfdc } from '@salesforce/core';
+import {
+  AuthInfo,
+  AuthFields,
+  Logger,
+  SfdcUrl,
+  SfdxProject,
+  ConfigAggregator,
+  Messages,
+  Org,
+  SfdxError,
+  sfdc,
+} from '@salesforce/core';
 import { getString, isObject, Optional } from '@salesforce/ts-types';
 
 Messages.importMessagesDirectory(__dirname);
@@ -18,6 +29,12 @@ interface Flags {
   setdefaultusername?: boolean;
 }
 
+const ensureNotLightning = (url: string): string => {
+  if (url.includes('lightning.force.com')) {
+    throw new SfdxError(messages.getMessage('invalidInstanceUrl'), 'URL_WARNING');
+  }
+  return url;
+};
 export class Common {
   public static async handleSideEffects(authInfo: AuthInfo, flags: Flags): Promise<void> {
     if (flags.setalias) await authInfo.setAlias(flags.setalias);
@@ -31,29 +48,29 @@ export class Common {
   }
   public static async resolveLoginUrl(instanceUrl: Optional<string>): Promise<Optional<string>> {
     const logger = await Logger.child('Common', { tag: 'resolveLoginUrl' });
+
+    // url preference: supplied from command > file > config >
     if (instanceUrl) {
-      if (instanceUrl.includes('lightning.force.com')) {
-        logger.warn(messages.getMessage('invalidInstanceUrl'));
-        throw new SfdxError(messages.getMessage('invalidInstanceUrl'), 'URL_WARNING');
-      }
-      return instanceUrl;
+      return ensureNotLightning(instanceUrl);
     }
-    let loginUrl: string;
+
+    // sfdx-project.json file
+    let loginUrlFromProjectJson: string;
     try {
       const project = await SfdxProject.resolve();
       const projectJson = await project.resolveProjectConfig();
-      loginUrl = getString(projectJson, 'sfdcLoginUrl', SfdcUrl.PRODUCTION);
+      loginUrlFromProjectJson = getString(projectJson, 'sfdcLoginUrl');
+      logger.debug(`loginUrl: ${loginUrlFromProjectJson}`);
     } catch (err) {
       const message: string = (isObject(err) ? Reflect.get(err, 'message') ?? err : err) as string;
-      logger.debug(`error occurred while trying to determine loginUrl: ${message}`);
-      loginUrl = SfdcUrl.PRODUCTION;
+      logger.debug(`error occurred while trying to determine loginUrl from sfdx-project.json: ${message}`);
     }
-    if (loginUrl.includes('lightning.force.com')) {
-      logger.warn(messages.getMessage('invalidInstanceUrl'));
-      throw new SfdxError(messages.getMessage('invalidInstanceUrl'), 'URL_WARNING');
+    if (loginUrlFromProjectJson) {
+      return ensureNotLightning(loginUrlFromProjectJson);
     }
-    logger.debug(`loginUrl: ${loginUrl}`);
-    return loginUrl;
+    // local or global config
+    const urlFromConfig = (await ConfigAggregator.create()).getPropertyValue('instanceUrl') as string;
+    return urlFromConfig ? ensureNotLightning(urlFromConfig) : SfdcUrl.PRODUCTION;
   }
 
   // fields property is passed in because the consumers of this method have performed the decrypt.

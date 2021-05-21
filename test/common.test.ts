@@ -4,7 +4,7 @@
  * Licensed under the BSD 3-Clause license.
  * For full license text, see LICENSE.txt file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  */
-import { SfdcUrl, SfdxProject, SfdxError } from '@salesforce/core';
+import { SfdcUrl, SfdxProject, SfdxError, ConfigAggregator } from '@salesforce/core';
 import sinon = require('sinon');
 import { expect } from '@salesforce/command/lib/test';
 import { restoreContext, testSetup } from '@salesforce/core/lib/testSetup';
@@ -12,6 +12,7 @@ import { Common } from '../src/common';
 
 describe('common unit tests', () => {
   const sandbox = sinon.createSandbox();
+  const LIGHTNING_URL = 'https://shanedevhub.lightning.force.com';
   const $$ = testSetup();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   let projectPath: string;
@@ -56,7 +57,10 @@ describe('common unit tests', () => {
       const loginUrl = await Common.resolveLoginUrl(undefined);
       expect(loginUrl).to.equal(SfdcUrl.PRODUCTION);
     });
-    it('should throw on lightning login URL in sfdcLoginUrl propery', async () => {
+  });
+
+  describe('reject lightning urls', () => {
+    it('should throw on lightning login URL in sfdcLoginUrl property', async () => {
       sandbox.stub(SfdxProject.prototype, 'resolveProjectConfig').resolves({
         packageDirectories: [
           {
@@ -64,7 +68,7 @@ describe('common unit tests', () => {
             default: true,
           },
         ],
-        sfdcLoginUrl: 'https://shanedevhub.lightning.force.com',
+        sfdcLoginUrl: LIGHTNING_URL,
         sourceApiVersion: '50.0',
       });
       try {
@@ -75,9 +79,28 @@ describe('common unit tests', () => {
         expect(err.name).to.equal('URL_WARNING');
       }
     });
+    it('should throw on lightning login url in config', async () => {
+      sandbox.stub(SfdxProject.prototype, 'resolveProjectConfig').resolves({
+        packageDirectories: [
+          {
+            path: 'force-app',
+            default: true,
+          },
+        ],
+        sourceApiVersion: '50.0',
+      });
+      sandbox.stub(ConfigAggregator.prototype, 'getPropertyValue').returns(LIGHTNING_URL);
+      try {
+        await Common.resolveLoginUrl(undefined);
+        sinon.assert.fail('This test is failing because it is expecting an error that is never thrown');
+      } catch (error) {
+        const err = error as SfdxError;
+        expect(err.name).to.equal('URL_WARNING');
+      }
+    });
     it('should throw on lightning login URL passed in to resolveLoginUrl()', async () => {
       try {
-        await Common.resolveLoginUrl('https://shanedevhub.lightning.force.com');
+        await Common.resolveLoginUrl(LIGHTNING_URL);
         sinon.assert.fail('This test is failing because it is expecting an error that is never thrown');
       } catch (error) {
         const err = error as SfdxError;
@@ -85,6 +108,7 @@ describe('common unit tests', () => {
       }
     });
   });
+
   describe('custom login url', () => {
     const INSTANCE_URL_1 = 'https://example.com';
     const INSTANCE_URL_2 = 'https://some.other.com';
@@ -121,7 +145,7 @@ describe('common unit tests', () => {
       const loginUrl = await Common.resolveLoginUrl(undefined);
       expect(loginUrl).to.equal(INSTANCE_URL_2);
     });
-    it('should return custom login URL 1 if project with property sfdcLoginUrl equal to ciustom url 2', async () => {
+    it('should return custom login URL 1 if project with property sfdcLoginUrl equal to custom url 2', async () => {
       sandbox.stub(SfdxProject.prototype, 'resolveProjectConfig').resolves({
         packageDirectories: [
           {
@@ -133,6 +157,35 @@ describe('common unit tests', () => {
         sourceApiVersion: '50.0',
       });
       const loginUrl = await Common.resolveLoginUrl(INSTANCE_URL_1);
+      expect(loginUrl).to.equal(INSTANCE_URL_1);
+    });
+    it('should prioritize login url from sfdx-project.json over login url from config', async () => {
+      sandbox.stub(SfdxProject.prototype, 'resolveProjectConfig').resolves({
+        packageDirectories: [
+          {
+            path: 'force-app',
+            default: true,
+          },
+        ],
+        sfdcLoginUrl: INSTANCE_URL_2,
+        sourceApiVersion: '50.0',
+      });
+      sandbox.stub(ConfigAggregator.prototype, 'getPropertyValue').returns(INSTANCE_URL_1);
+      const loginUrl = await Common.resolveLoginUrl(undefined);
+      expect(loginUrl).to.equal(INSTANCE_URL_2);
+    });
+    it('should return login url from config if not in sfdx-project.json', async () => {
+      sandbox.stub(SfdxProject.prototype, 'resolveProjectConfig').resolves({
+        packageDirectories: [
+          {
+            path: 'force-app',
+            default: true,
+          },
+        ],
+        sourceApiVersion: '50.0',
+      });
+      sandbox.stub(ConfigAggregator.prototype, 'getPropertyValue').returns(INSTANCE_URL_1);
+      const loginUrl = await Common.resolveLoginUrl(undefined);
       expect(loginUrl).to.equal(INSTANCE_URL_1);
     });
   });
