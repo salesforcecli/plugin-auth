@@ -17,10 +17,10 @@ Messages.importMessagesDirectory(__dirname);
 const messages = Messages.loadMessages('@salesforce/plugin-auth', 'accesstoken.store');
 const commonMessages = Messages.loadMessages('@salesforce/plugin-auth', 'messages');
 
-const ACCESS_TOKEN_FORMAT1 = '"<org id>!<accesstoken>"';
+const ACCESS_TOKEN_FORMAT = '"<org id>!<accesstoken>"';
 
 export default class Store extends SfdxCommand {
-  public static readonly description = messages.getMessage('description', [ACCESS_TOKEN_FORMAT1]);
+  public static readonly description = messages.getMessage('description', [ACCESS_TOKEN_FORMAT]);
   public static readonly examples = messages.getMessage('examples').split(os.EOL);
   public static aliases = ['force:auth:accesstoken:store'];
 
@@ -56,11 +56,11 @@ export default class Store extends SfdxCommand {
     const instanceUrl = ensureString(getString(this.flags, 'instanceurl.href'));
     const accessToken = await this.getAccessToken();
     const authInfo = await this.getUserInfo(accessToken, instanceUrl);
-    return await this.storeAuthFromAccessToken(authInfo);
+    return this.storeAuthFromAccessToken(authInfo);
   }
 
   private async getUserInfo(accessToken: string, instanceUrl: string): Promise<AuthInfo> {
-    return await AuthInfo.create({ accessTokenOptions: { accessToken, instanceUrl, loginUrl: instanceUrl } });
+    return AuthInfo.create({ accessTokenOptions: { accessToken, instanceUrl, loginUrl: instanceUrl } });
   }
 
   private async storeAuthFromAccessToken(authInfo: AuthInfo): Promise<AuthFields> {
@@ -102,7 +102,7 @@ export default class Store extends SfdxCommand {
       accessToken = await Prompts.askForAccessToken(this.ux);
     }
     if (!sfdc.matchesAccessToken(accessToken)) {
-      throw new SfdxError(messages.getMessage('invalidAccessTokenFormat', [ACCESS_TOKEN_FORMAT1]));
+      throw new SfdxError(messages.getMessage('invalidAccessTokenFormat', [ACCESS_TOKEN_FORMAT]));
     }
     return accessToken;
   }

@@ -1,10 +1,9 @@
 {
-  "description": "Authorize an org using an Salesforce Access Token\nWhen run interactively, the command prompts you for the access token.\nTo use the command in a CI/CD script, set the SFDX_ACCESS_TOKEN environment variable to the access token.",
+  "description": "authorize an org using a Salesforce access token\nWhen run interactively, the command prompts you for the access token.\nTo use the command in a CI/CD script, set the SFDX_ACCESS_TOKEN environment variable to the access token.",
   "examples": [
     "sfdx auth:accesstoken:store --instanceurl https://login.salesforce.com",
     "sfdx auth:accesstoken:store --instanceurl https://dev-hub.my.salesforce.com",
     "export SFDX_ACCESS_TOKEN=00Dxx0000000000!xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\nsfdx auth:accesstoken:store"
   ],
-  "filesDoesNotExist": "The given access token file, \"%s\", does not exist.",
-  "invalidAccessTokenFormat": "The given access token is not in the correct format\nIt should follow the patter %s."
+  "invalidAccessTokenFormat": "The access token isn't in the correct format.\nIt should follow this pattern: %s."
 }
