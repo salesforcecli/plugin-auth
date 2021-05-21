@@ -45,7 +45,7 @@ export class Prompts {
   }
 
   public static async askOverwriteAuthFile(ux: UX, username: string): Promise<boolean> {
-    const yN = await ux.prompt(messages.getMessage('overwriteAuthFileYesNo', [username]), {
+    const yN = await ux.prompt(messages.getMessage('overwriteAccessTokenAuthUserFile', [username]), {
       type: 'normal',
       default: 'y',
     });

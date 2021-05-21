@@ -98,7 +98,7 @@ describe('auth:accesstoken:store', () => {
       assert(false, 'should throw error');
     } catch (e) {
       const err = e as SfdxError;
-      expect(err.message).to.include('The given access token is not in the correct format');
+      expect(err.message).to.include("The access token isn't in the correct format");
     }
   });
 
