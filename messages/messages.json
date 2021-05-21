@@ -31,5 +31,6 @@
   "clientSecretStdin": "OAuth client secret of personal connected app?",
   "invalidInstanceUrl": "Invalid instance URL. Specify a Salesforce instance URL using the format <domainname>.salesforce.com",
   "accessTokenStdin": "Access token of user to use for authentication",
-  "noPrompt": "do not prompt for confirmation"
+  "noPrompt": "do not prompt for confirmation",
+  "overwriteAuthFileYesNo": "An authorization file exists for user \"%s\". Are you sure you want to save the file?\n\nSave the user (y/n)?"
 }

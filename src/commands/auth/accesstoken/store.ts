@@ -7,8 +7,9 @@
 
 import * as os from 'os';
 import { flags, FlagsConfig, SfdxCommand } from '@salesforce/command';
-import { AuthFields, AuthInfo, AuthInfoConfig, Connection, fs, Messages, sfdc, SfdxError } from '@salesforce/core';
-import { AnyJson, ensureString, getString } from '@salesforce/ts-types';
+import { AuthFields, AuthInfo, AuthInfoConfig, Messages, sfdc, SfdxError } from '@salesforce/core';
+import { ensureString, getString } from '@salesforce/ts-types';
+import { env } from '@salesforce/kit';
 import { Prompts } from '../../../prompts';
 import { Common } from '../../../common';
 
@@ -17,14 +18,6 @@ const messages = Messages.loadMessages('@salesforce/plugin-auth', 'accesstoken.s
 const commonMessages = Messages.loadMessages('@salesforce/plugin-auth', 'messages');
 
 const ACCESS_TOKEN_FORMAT1 = '"<org id>!<accesstoken>"';
-
-/* eslint-disable camelcase */
-type UserInfo = AnyJson & {
-  preferred_username: string;
-  organization_id: string;
-  custom_domain: string;
-};
-/* eslint-enable camelcase */
 
 export default class Store extends SfdxCommand {
   public static readonly description = messages.getMessage('description', [ACCESS_TOKEN_FORMAT1]);
@@ -37,14 +30,10 @@ export default class Store extends SfdxCommand {
       description: commonMessages.getMessage('instanceUrl'),
       required: true,
     }),
-    accesstokenfile: flags.filepath({
-      char: 'f',
-      description: messages.getMessage('accessTokenFile'),
-      required: false,
-    }),
     setdefaultdevhubusername: flags.boolean({
-      char: 'd',
+      char: 's',
       description: commonMessages.getMessage('setDefaultDevHub'),
+      default: false,
     }),
     setdefaultusername: flags.boolean({
       char: 's',
@@ -63,58 +52,33 @@ export default class Store extends SfdxCommand {
     }),
   };
 
-  private static async getUserInfo(accessToken: string, instanceUrl: string): Promise<UserInfo> {
-    // use access token in a request to userinfo to capture the user data
-    const authInfo = await AuthInfo.create({
-      username: accessToken,
-      accessTokenOptions: { loginUrl: instanceUrl, instanceUrl },
-    });
-    authInfo.update({
-      loginUrl: instanceUrl,
-    });
-    const connection = await Connection.create({ connectionOptions: { loginUrl: instanceUrl }, authInfo });
-    await connection.useLatestApiVersion();
-    return (await connection.request('/services/oauth2/userinfo')) as UserInfo;
-  }
-
   public async run(): Promise<AuthFields> {
     const instanceUrl = ensureString(getString(this.flags, 'instanceurl.href'));
     const accessToken = await this.getAccessToken();
-    const userInfo = await Store.getUserInfo(accessToken, instanceUrl);
-    return await this.storeAuthFromAccessToken(userInfo, accessToken, instanceUrl);
+    const authInfo = await this.getUserInfo(accessToken, instanceUrl);
+    return await this.storeAuthFromAccessToken(authInfo);
   }
 
-  private async storeAuthFromAccessToken(
-    userInfo: UserInfo,
-    accessToken: string,
-    instanceUrl: string
-  ): Promise<AuthFields> {
-    if (await this.overwriteAuthInfo(userInfo.preferred_username)) {
-      // create AuthInfo with additional information
-      const authInfoToSave = await AuthInfo.create({
-        username: userInfo.preferred_username,
-        accessTokenOptions: { accessToken, instanceUrl, loginUrl: instanceUrl },
-      });
+  private async getUserInfo(accessToken: string, instanceUrl: string): Promise<AuthInfo> {
+    return await AuthInfo.create({ accessTokenOptions: { accessToken, instanceUrl, loginUrl: instanceUrl } });
+  }
 
-      authInfoToSave.update({
-        orgId: userInfo.organization_id,
-      });
-
-      await authInfoToSave.save();
-      await Common.handleSideEffects(authInfoToSave, this.flags);
-      await Common.identifyPossibleScratchOrgs(authInfoToSave.getFields(true), authInfoToSave);
-
+  private async storeAuthFromAccessToken(authInfo: AuthInfo): Promise<AuthFields> {
+    if (await this.overwriteAuthInfo(authInfo.getUsername())) {
+      await this.saveAuthInfo(authInfo);
       const successMsg = commonMessages.getMessage('authorizeCommandSuccess', [
-        authInfoToSave.getUsername(),
-        authInfoToSave.getFields(true).orgId,
+        authInfo.getUsername(),
+        authInfo.getFields(true).orgId,
       ]);
       this.ux.log(successMsg);
-
-      return authInfoToSave.getFields(true);
-    } else {
-      const existingAuthIno = await AuthInfo.create({ username: userInfo.preferred_username });
-      return existingAuthIno.getFields(true);
     }
+    return authInfo.getFields(true);
+  }
+
+  private async saveAuthInfo(authInfo: AuthInfo): Promise<void> {
+    await authInfo.save();
+    await Common.handleSideEffects(authInfo, this.flags);
+    await Common.identifyPossibleScratchOrgs(authInfo.getFields(true), authInfo);
   }
 
   private async overwriteAuthInfo(username: string): Promise<boolean> {
@@ -124,11 +88,7 @@ export default class Store extends SfdxCommand {
         throwOnNotFound: false,
       });
       if (await authInfoConfig.exists()) {
-        const yN = await this.ux.prompt(messages.getMessage('overwriteAuthFileYesNo', [username]), {
-          type: 'normal',
-          default: 'y',
-        });
-        return yN.toLowerCase().startsWith('y');
+        return Prompts.askOverwriteAuthFile(this.ux, username);
       }
     }
     return true;
@@ -136,11 +96,8 @@ export default class Store extends SfdxCommand {
 
   private async getAccessToken(): Promise<string> {
     let accessToken: string;
-    if (this.flags.accesstokenfile) {
-      if (!fs.existsSync(this.flags.accesstokenfile)) {
-        throw new SfdxError(messages.getMessage('filesDoesNotExist', [this.flags.accesstokenfile]));
-      }
-      accessToken = (await fs.readFile(this.flags.accesstokenfile, 'utf8')).trim();
+    if (env.getString('SFDX_ACCESS_TOKEN')) {
+      accessToken = env.getString('SFDX_ACCESS_TOKEN');
     } else {
       accessToken = await Prompts.askForAccessToken(this.ux);
     }

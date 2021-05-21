@@ -44,6 +44,13 @@ export class Prompts {
     return Prompts.askForHiddenResponse(ux, 'accessTokenStdin', disableMasking);
   }
 
+  public static async askOverwriteAuthFile(ux: UX, username: string): Promise<boolean> {
+    const yN = await ux.prompt(messages.getMessage('overwriteAuthFileYesNo', [username]), {
+      type: 'normal',
+      default: 'y',
+    });
+    return Prompts.answeredYes(yN);
+  }
   private static async askForHiddenResponse(ux: UX, messageKey: string, disableMasking = false): Promise<string> {
     const msg = dimMessage(messages.getMessage(messageKey));
     return ux.prompt(msg, {
