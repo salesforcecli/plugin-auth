@@ -3,7 +3,6 @@
     "command": "auth:accesstoken:store",
     "plugin": "@salesforce/plugin-auth",
     "flags": [
-      "accesstokenfile",
       "instanceurl",
       "json",
       "loglevel",
