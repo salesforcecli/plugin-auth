@@ -3,7 +3,7 @@
   "examples": [
     "sfdx auth:accesstoken:store --instanceurl https://login.salesforce.com",
     "sfdx auth:accesstoken:store --instanceurl https://dev-hub.my.salesforce.com",
-    "export SFDX_ACCESS_TOKEN=00Dxx0000000000!xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\nsfdx auth:accesstoken:store"
+    "export SFDX_ACCESS_TOKEN=00Dxx0000000000!xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\nsfdx auth:accesstoken:store --instanceurl https://dev-hub.my.salesforce.com"
   ],
   "invalidAccessTokenFormat": "The access token isn't in the correct format.\nIt should follow this pattern: %s."
 }
