@@ -574,10 +574,10 @@
     mkdirp "1.0.4"
     sfdx-faye "^1.0.9"
 
-"@salesforce/core@^2.20.11":
-  version "2.20.11"
-  resolved "https://registry.yarnpkg.com/@salesforce/core/-/core-2.20.11.tgz#29aee659be2b85a88827cdfb6cc6a89bfea9b825"
-  integrity sha512-v0wEGse0ws0yMlfuM569q1PhUMCOYvpXFEFvgXPUdE8OQT8h3/+AlIgQU7I9sEyIg9hzN1nl5UAtIyNllPyPXw==
+"@salesforce/core@^2.20.3":
+  version "2.20.10"
+  resolved "https://registry.yarnpkg.com/@salesforce/core/-/core-2.20.10.tgz#b2171043ddaac51b464e8ea3659b4f34ce7bbf73"
+  integrity sha512-ogER5ieNlmHlBt0SfVC0XLHtPtH/WaBAFtsZitHMLV/Zyv0PHwP+5xpSygMmSDzuLZjRooXikH9dFu0z8WEjJw==
   dependencies:
     "@salesforce/bunyan" "^2.0.0"
     "@salesforce/kit" "^1.5.0"
@@ -594,10 +594,10 @@
     mkdirp "1.0.4"
     sfdx-faye "^1.0.9"
 
-"@salesforce/core@^2.20.3":
-  version "2.20.10"
-  resolved "https://registry.yarnpkg.com/@salesforce/core/-/core-2.20.10.tgz#b2171043ddaac51b464e8ea3659b4f34ce7bbf73"
-  integrity sha512-ogER5ieNlmHlBt0SfVC0XLHtPtH/WaBAFtsZitHMLV/Zyv0PHwP+5xpSygMmSDzuLZjRooXikH9dFu0z8WEjJw==
+"@salesforce/core@^2.21.0":
+  version "2.21.0"
+  resolved "https://registry.yarnpkg.com/@salesforce/core/-/core-2.21.0.tgz#1451193683d9c132216e877eb1e9e3427167616b"
+  integrity sha512-abiZewaM89LuMZghvg6uP2TKXsqeBra4uRR6m5hA5C5wuWOufZf4ASx47rgcg1Zj+HK5ZiAO4iysAoOy1mnOyg==
   dependencies:
     "@salesforce/bunyan" "^2.0.0"
     "@salesforce/kit" "^1.5.0"
