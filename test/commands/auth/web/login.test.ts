@@ -16,6 +16,7 @@ import { UX } from '@salesforce/command';
 import { Env } from '@salesforce/kit';
 import { assert } from 'chai';
 import Login from '../../../../src/commands/auth/web/login';
+import { Common } from '../../../../src/common';
 
 describe('auth:web:login', () => {
   const testData = new MockTestOrgData();
@@ -38,6 +39,7 @@ describe('auth:web:login', () => {
     $$.SANDBOX.stub(AuthInfo, 'listAllAuthFiles').callsFake(async () => {
       return [`${authFields.username}.json`];
     });
+    $$.SANDBOX.stub(Common, 'identifyPossibleScratchOrgs').callsFake(async () => {});
     uxStub = stubInterface<UX>($$.SANDBOX, {
       prompt: () => promptAnswer,
     });
