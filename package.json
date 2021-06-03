@@ -6,7 +6,7 @@
   "bugs": "https://github.com/forcedotcom/cli/issues",
   "dependencies": {
     "@oclif/config": "^1.17.0",
-    "@salesforce/command": "3.2.0-beta",
+    "@salesforce/command": "3.2.0-beta-2",
     "@salesforce/core": "2.24.0-beta",
     "@salesforce/kit": "^1.3.3",
     "chalk": "^4.1.0",
