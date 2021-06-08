@@ -93,8 +93,9 @@ describe('auth:logout NUTs', () => {
     });
 
     // we expect the config for defaultusername to be cleared out after the logout
-    const configGet = execCmd<Array<{ key: string }>>('config:get defaultusername --json', { ensureExitCode: 0 })
-      .jsonOutput;
+    const configGet = execCmd<Array<{ key: string }>>('config:get defaultusername --json', {
+      ensureExitCode: 0,
+    }).jsonOutput;
     expect(configGet.result).to.deep.equal([{ key: 'defaultusername' }]);
   });
 });
