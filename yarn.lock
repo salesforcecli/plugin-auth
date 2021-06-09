@@ -500,9 +500,9 @@
     tslib "^1.9.3"
 
 "@oclif/plugin-command-snapshot@^2.1.1":
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/@oclif/plugin-command-snapshot/-/plugin-command-snapshot-2.1.1.tgz#ae35ff08f6e8ed535b63c9e8b5ef7454b37a3e99"
-  integrity sha512-Q59YH9H8q6Zd5ODnxNQYEbPa1NF9XHti32t41h07e+LxiIlV569GzvdHElEaMoQc346sZ1VssPQaDneuwkCTCQ==
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/@oclif/plugin-command-snapshot/-/plugin-command-snapshot-2.1.2.tgz#40a160393e064df6af345daeee15684b63c423a6"
+  integrity sha512-u4PJV5yr2niUGgY5CG0WBRYyMdP2Z23KRU9xlCcphSHDrXxD3XOz0mnITK4i+UdCAe2h72jGnvhSfMLhHzQelw==
   dependencies:
     "@oclif/command" "^1.6.0"
     "@oclif/config" "^1"
