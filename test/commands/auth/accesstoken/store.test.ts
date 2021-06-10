@@ -10,6 +10,7 @@
 import { $$, expect } from '@salesforce/command/lib/test';
 import { IConfig } from '@oclif/config';
 import { AuthFields, AuthInfo, ConfigFile, SfdxError } from '@salesforce/core';
+import { Crypto } from '@salesforce/core/lib/crypto';
 import { StubbedType, stubInterface, stubMethod } from '@salesforce/ts-sinon';
 import { UX } from '@salesforce/command';
 import { assert } from 'chai';
@@ -46,6 +47,7 @@ describe('auth:accesstoken:store', () => {
     const ai = await AuthInfo.create({ username: authFields.username });
     ai.update(
       {
+        accessToken,
         orgId: authFields.orgId,
         instanceUrl: authFields.instanceUrl,
         loginUrl: authFields.loginUrl,
@@ -57,6 +59,7 @@ describe('auth:accesstoken:store', () => {
       getFields: () => authFields,
       save: () => {},
     });
+    stubMethod($$.SANDBOX, Crypto.prototype, 'decrypt').callsFake(() => accessToken);
     stubMethod($$.SANDBOX, ConfigFile.prototype, 'exists').callsFake(async (): Promise<boolean> => authFileExists);
     stubMethod($$.SANDBOX, Store.prototype, 'saveAuthInfo').resolves(async () => userInfo);
     stubMethod($$.SANDBOX, Store.prototype, 'getUserInfo').resolves(ai);
