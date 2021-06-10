@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.6.1](https://github.com/salesforcecli/plugin-auth/compare/v1.6.0...v1.6.1) (2021-05-27)
+
+
+### Bug Fixes
+
+* bump core version ([4ac6ee1](https://github.com/salesforcecli/plugin-auth/commit/4ac6ee11544f3cc5aff4aa8e34fa0b7b5120264c))
+
 ## [1.6.0](https://github.com/salesforcecli/plugin-auth/compare/v1.5.4...v1.6.0) (2021-05-14)
 
 
