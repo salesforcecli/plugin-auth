@@ -36,8 +36,23 @@ export class Prompts {
     }
   }
 
-  public static async askForClientSecret(ux: UX, disableMasking: false): Promise<string> {
-    const msg = dimMessage(messages.getMessage('clientSecretStdin'));
+  public static async askForClientSecret(ux: UX, disableMasking = false): Promise<string> {
+    return Prompts.askForHiddenResponse(ux, 'clientSecretStdin', disableMasking);
+  }
+
+  public static async askForAccessToken(ux: UX, disableMasking = false): Promise<string> {
+    return Prompts.askForHiddenResponse(ux, 'accessTokenStdin', disableMasking);
+  }
+
+  public static async askOverwriteAuthFile(ux: UX, username: string): Promise<boolean> {
+    const yN = await ux.prompt(messages.getMessage('overwriteAccessTokenAuthUserFile', [username]), {
+      type: 'normal',
+      default: 'y',
+    });
+    return Prompts.answeredYes(yN);
+  }
+  private static async askForHiddenResponse(ux: UX, messageKey: string, disableMasking = false): Promise<string> {
+    const msg = dimMessage(messages.getMessage(messageKey));
     return ux.prompt(msg, {
       type: disableMasking ? 'normal' : 'hide',
     });
