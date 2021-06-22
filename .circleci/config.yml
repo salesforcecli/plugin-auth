@@ -1,6 +1,6 @@
 version: 2.1
 orbs:
-  release-management: salesforce/npm-release-management@dev:709e88f
+  release-management: salesforce/npm-release-management@dev:5ed7cdd
 parameters:
   run-auto-workflows:
     description: >
@@ -78,7 +78,7 @@ workflows:
             - release-management/test-package
           filters:
             branches:
-              only: main
+              only: 'phale/releasability'
           context: CLI_CTC
   test-ts-update:
     triggers:
