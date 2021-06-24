@@ -62,12 +62,12 @@ workflows:
                 node_version: maintenance
       - release-management/test-nut:
           name: nuts-on-linux
-          sfdx_version: latest
+          sfdx_version: lts
           requires:
             - release-management/test-package
       - release-management/test-nut:
           name: nuts-on-windows
-          sfdx_version: latest
+          sfdx_version: lts
           os: windows
           requires:
             - release-management/test-package
