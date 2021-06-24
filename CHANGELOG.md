@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.7.0](https://github.com/salesforcecli/plugin-auth/compare/v1.6.1...v1.7.0) (2021-06-23)
+
+
+### Features
+
+* add auth:accesstoken:store command ([#165](https://github.com/salesforcecli/plugin-auth/issues/165)) ([3f7d75a](https://github.com/salesforcecli/plugin-auth/commit/3f7d75a4d1490037610b55c3f49823ed94decbbd)), closes [#152](https://github.com/salesforcecli/plugin-auth/issues/152) [#148](https://github.com/salesforcecli/plugin-auth/issues/148) [#152](https://github.com/salesforcecli/plugin-auth/issues/152) [#152](https://github.com/salesforcecli/plugin-auth/issues/152) [#152](https://github.com/salesforcecli/plugin-auth/issues/152) [#152](https://github.com/salesforcecli/plugin-auth/issues/152)
+
 ### [1.6.1](https://github.com/salesforcecli/plugin-auth/compare/v1.6.0...v1.6.1) (2021-05-27)
 
 ### Bug Fixes
