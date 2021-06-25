@@ -669,11 +669,11 @@
     xunit-file "^1.0.0"
 
 "@salesforce/kit@^1.2.2", "@salesforce/kit@^1.4.5", "@salesforce/kit@^1.5.0", "@salesforce/kit@^1.5.10":
-  version "1.5.13"
-  resolved "https://registry.yarnpkg.com/@salesforce/kit/-/kit-1.5.13.tgz#e7e141e95f3f1586de1448ec54139feed30706bc"
-  integrity sha512-Saq/JyTEbvmfUD/rgCGkYf2mv71Vm0mC8ibH4RUxg1omdPCOPm/YW2ZycQB6pN9mvCyZnCl8VGXjDSGiIv/+gw==
+  version "1.5.14"
+  resolved "https://registry.yarnpkg.com/@salesforce/kit/-/kit-1.5.14.tgz#013853ffc53e10e7add2abfa266372b29fda8317"
+  integrity sha512-vGzNltfWo7wtaDR0Drgf3nAMWsJ5ZheM4LODfFZeorsFk4Xj8J6hPJWuMcYUT07yCenECQalOjT0SU3p77QgYA==
   dependencies:
-    "@salesforce/ts-types" "^1.5.17"
+    "@salesforce/ts-types" "^1.5.13"
     tslib "^2.2.0"
 
 "@salesforce/plugin-command-reference@^1.3.0":
