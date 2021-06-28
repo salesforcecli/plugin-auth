@@ -12,6 +12,7 @@ import { Prompts } from '../../prompts';
 
 Messages.importMessagesDirectory(__dirname);
 const messages = Messages.loadMessages('@salesforce/plugin-auth', 'logout');
+const commonMessages = Messages.loadMessages('@salesforce/plugin-auth', 'messages');
 
 export default class Logout extends SfdxCommand {
   public static readonly description = messages.getMessage('description');
@@ -28,7 +29,7 @@ export default class Logout extends SfdxCommand {
     }),
     noprompt: flags.boolean({
       char: 'p',
-      description: messages.getMessage('noPrompt'),
+      description: commonMessages.getMessage('noPrompt'),
       required: false,
     }),
   };
