@@ -10,7 +10,6 @@ We always recommend using the latest version of these commands bundled with the 
 
 ## Install
 
-
 ```bash
 sfdx plugins:install auth@x.y.z
 ```
@@ -70,12 +69,61 @@ sfdx plugins
 # Commands
 
 <!-- commands -->
+* [`sfdx auth:accesstoken:store -r <url> [-s] [-s] [-a <string>] [-p] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-authaccesstokenstore--r-url--s--s--a-string--p---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
 * [`sfdx auth:device:login [-i <string>] [-r <url>] [-d] [-s] [-a <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-authdevicelogin--i-string--r-url--d--s--a-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
 * [`sfdx auth:jwt:grant -u <string> -f <filepath> -i <string> [-r <url>] [-d] [-s] [-a <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-authjwtgrant--u-string--f-filepath--i-string--r-url--d--s--a-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
 * [`sfdx auth:list [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-authlist---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
 * [`sfdx auth:logout [-a] [-p] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-authlogout--a--p--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
 * [`sfdx auth:sfdxurl:store -f <filepath> [-d] [-s] [-a <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-authsfdxurlstore--f-filepath--d--s--a-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
 * [`sfdx auth:web:login [-i <string>] [-r <url>] [-d] [-s] [-a <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-authweblogin--i-string--r-url--d--s--a-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+
+## `sfdx auth:accesstoken:store -r <url> [-s] [-s] [-a <string>] [-p] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
+
+authorize an org using an existing Salesforce access token
+
+```
+USAGE
+  $ sfdx auth:accesstoken:store -r <url> [-s] [-s] [-a <string>] [-p] [--json] [--loglevel 
+  trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
+
+OPTIONS
+  -a, --setalias=setalias                                                           set an alias for the authenticated
+                                                                                    org
+
+  -p, --noprompt                                                                    do not prompt for confirmation
+
+  -r, --instanceurl=instanceurl                                                     (required) the login URL of the
+                                                                                    instance the org lives on
+
+  -s, --setdefaultdevhubusername                                                    set the authenticated org as the
+                                                                                    default dev hub org for scratch org
+                                                                                    creation
+
+  -s, --setdefaultusername                                                          set the authenticated org as the
+                                                                                    default username that all commands
+                                                                                    run against
+
+  --json                                                                            format output as json
+
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
+                                                                                    this command invocation
+
+DESCRIPTION
+  By default, the command runs interactively and asks you for the access token. If you previously authorized the org, 
+  the command prompts whether you want to overwrite the local file. Specify --noprompt to not be prompted.
+  To use the command in a CI/CD script, set the SFDX_ACCESS_TOKEN environment variable to the access token. Then run the 
+  command with the --noprompt parameter. "<org id>!<accesstoken>"
+
+ALIASES
+  $ sfdx force:auth:accesstoken:store
+
+EXAMPLES
+  sfdx auth:accesstoken:store --instanceurl https://mycompany.my.salesforce.com
+  export SFDX_ACCESS_TOKEN=00Dxx0000000000!xxxxx
+  sfdx auth:accesstoken:store --instanceurl https://dev-hub.my.salesforce.com --noprompt
+```
+
+_See code: [src/commands/auth/accesstoken/store.ts](https://github.com/salesforcecli/plugin-auth/blob/v1.7.0/src/commands/auth/accesstoken/store.ts)_
 
 ## `sfdx auth:device:login [-i <string>] [-r <url>] [-d] [-s] [-a <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -118,7 +166,7 @@ EXAMPLES
   sfdx auth:device:login -r https://test.salesforce.com
 ```
 
-_See code: [src/commands/auth/device/login.ts](https://github.com/salesforcecli/plugin-auth/blob/v1.6.1/src/commands/auth/device/login.ts)_
+_See code: [src/commands/auth/device/login.ts](https://github.com/salesforcecli/plugin-auth/blob/v1.7.0/src/commands/auth/device/login.ts)_
 
 ## `sfdx auth:jwt:grant -u <string> -f <filepath> -i <string> [-r <url>] [-d] [-s] [-a <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -172,7 +220,7 @@ EXAMPLES
   sfdx auth:jwt:grant -u me@acme.org -f <path to jwt key file> -i <OAuth client id> -r https://acme.my.salesforce.com
 ```
 
-_See code: [src/commands/auth/jwt/grant.ts](https://github.com/salesforcecli/plugin-auth/blob/v1.6.1/src/commands/auth/jwt/grant.ts)_
+_See code: [src/commands/auth/jwt/grant.ts](https://github.com/salesforcecli/plugin-auth/blob/v1.7.0/src/commands/auth/jwt/grant.ts)_
 
 ## `sfdx auth:list [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -192,7 +240,7 @@ ALIASES
   $ sfdx force:auth:list
 ```
 
-_See code: [src/commands/auth/list.ts](https://github.com/salesforcecli/plugin-auth/blob/v1.6.1/src/commands/auth/list.ts)_
+_See code: [src/commands/auth/list.ts](https://github.com/salesforcecli/plugin-auth/blob/v1.7.0/src/commands/auth/list.ts)_
 
 ## `sfdx auth:logout [-a] [-p] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -230,7 +278,7 @@ EXAMPLES
   sfdx auth:logout -p
 ```
 
-_See code: [src/commands/auth/logout.ts](https://github.com/salesforcecli/plugin-auth/blob/v1.6.1/src/commands/auth/logout.ts)_
+_See code: [src/commands/auth/logout.ts](https://github.com/salesforcecli/plugin-auth/blob/v1.7.0/src/commands/auth/logout.ts)_
 
 ## `sfdx auth:sfdxurl:store -f <filepath> [-d] [-s] [-a <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -283,7 +331,7 @@ EXAMPLES
   sfdx auth:sfdxurl:store -f <path to sfdxAuthUrl file> -s -a MyDefaultOrg
 ```
 
-_See code: [src/commands/auth/sfdxurl/store.ts](https://github.com/salesforcecli/plugin-auth/blob/v1.6.1/src/commands/auth/sfdxurl/store.ts)_
+_See code: [src/commands/auth/sfdxurl/store.ts](https://github.com/salesforcecli/plugin-auth/blob/v1.7.0/src/commands/auth/sfdxurl/store.ts)_
 
 ## `sfdx auth:web:login [-i <string>] [-r <url>] [-d] [-s] [-a <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
@@ -331,5 +379,5 @@ EXAMPLES
   sfdx auth:web:login -r https://test.salesforce.com
 ```
 
-_See code: [src/commands/auth/web/login.ts](https://github.com/salesforcecli/plugin-auth/blob/v1.6.1/src/commands/auth/web/login.ts)_
+_See code: [src/commands/auth/web/login.ts](https://github.com/salesforcecli/plugin-auth/blob/v1.7.0/src/commands/auth/web/login.ts)_
 <!-- commandsstop -->
