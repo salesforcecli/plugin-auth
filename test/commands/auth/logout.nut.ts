@@ -80,7 +80,7 @@ describe('auth:logout NUTs', () => {
   });
 
   it('should fail if there is no default org and the -u flag is not specified (json)', () => {
-    const json = execCmd<{ name: string }>('auth:logout -p --json', { ensureExitCode: 1 }).jsonOutput;
+    const json = execCmd<{ name: string }>('auth:logout -p --json', { ensureExitCode: 1 }).jsonOutput.result;
     expect(json.name).to.equal('NoOrgFound');
   });
 
