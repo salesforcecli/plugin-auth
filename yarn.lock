@@ -604,10 +604,10 @@
     chalk "^2.4.2"
     cli-ux "^4.9.3"
 
-"@salesforce/core@^2.15.2", "@salesforce/core@^2.2.0", "@salesforce/core@^2.23.4", "@salesforce/core@^2.24.0":
-  version "2.27.0"
-  resolved "https://registry.yarnpkg.com/@salesforce/core/-/core-2.27.0.tgz#47c036a5195839cd0efae4b3f61e551274ff66a0"
-  integrity sha512-T+fAkcSVCWn8OC/hJ5cJT1wWwUYzhQIc8xhKA3K/yLib5Y2WV9goD9D+35oZqikJRkHGiKv2uN9DsR4ip4WwXg==
+"@salesforce/core@^2.2.0", "@salesforce/core@^2.23.4", "@salesforce/core@^2.24.0", "@salesforce/core@^2.27.2":
+  version "2.27.2"
+  resolved "https://registry.yarnpkg.com/@salesforce/core/-/core-2.27.2.tgz#a5933310e3b10ef46ad8129a30190c229fe074ee"
+  integrity sha512-0BeORSY0Zv+9ACNMVZm7eqcT7QH9WtfObHSWyeYnhl1D5iCnZHMyk+AVql8urddNtL5WTquuens62jdYCniVew==
   dependencies:
     "@salesforce/bunyan" "^2.0.0"
     "@salesforce/kit" "^1.5.0"
@@ -694,13 +694,13 @@
     tslib "^1"
 
 "@salesforce/plugin-config@^1.2.5":
-  version "1.2.17"
-  resolved "https://registry.yarnpkg.com/@salesforce/plugin-config/-/plugin-config-1.2.17.tgz#048d7388c671cc192f8523bcb65a4760d89011a8"
-  integrity sha512-bx4I6sYPXngNOqKN3S6opTHVVbFgLC/UELBbWKxH5t7dzlzXRRBBY31WG2Xh8suc0wUdQLI/59EZ67ddoWljeA==
+  version "1.2.24"
+  resolved "https://registry.yarnpkg.com/@salesforce/plugin-config/-/plugin-config-1.2.24.tgz#7d96d3ca0bc71c6ab175679abb4a66d807eb51ab"
+  integrity sha512-e5wmx/OvhYkTFxms+o3nvk0u3a675T5Sq/tDpar8g9pHNegBut01yhuqywqXBd3X8AEV3a26bhghfa8rqaa+zw==
   dependencies:
     "@oclif/config" "^1.17.0"
     "@salesforce/command" "^3.0.5"
-    "@salesforce/core" "^2.15.2"
+    "@salesforce/core" "^2.27.2"
     tslib "^2"
 
 "@salesforce/prettier-config@^0.0.2":
