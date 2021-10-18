@@ -43,6 +43,7 @@ describe('auth:logout NUTs', () => {
       status: 0,
       result: [username],
     });
+    //
 
     const list = execCmd<Authorization[]>('auth:list --json', { ensureExitCode: 0 }).jsonOutput;
     const found = !!list.result.find((r) => r.username === username);
