@@ -82,6 +82,10 @@ sfdx plugins
 authorize an org using an existing Salesforce access token
 
 ```
+authorize an org using an existing Salesforce access token
+By default, the command runs interactively and asks you for the access token. If you previously authorized the org, the command prompts whether you want to overwrite the local file. Specify --noprompt to not be prompted.
+To use the command in a CI/CD script, set the SFDX_ACCESS_TOKEN environment variable to the access token. Then run the command with the --noprompt parameter. "<org id>!<accesstoken>"
+
 USAGE
   $ sfdx auth:accesstoken:store -r <url> [-s] [-s] [-a <string>] [-p] [--json] [--loglevel 
   trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
@@ -123,13 +127,15 @@ EXAMPLES
   sfdx auth:accesstoken:store --instanceurl https://dev-hub.my.salesforce.com --noprompt
 ```
 
-_See code: [src/commands/auth/accesstoken/store.ts](https://github.com/salesforcecli/plugin-auth/blob/v1.7.0/src/commands/auth/accesstoken/store.ts)_
+_See code: [src/commands/auth/accesstoken/store.ts](https://github.com/salesforcecli/plugin-auth/blob/v1.7.2/src/commands/auth/accesstoken/store.ts)_
 
 ## `sfdx auth:device:login [-i <string>] [-r <url>] [-d] [-s] [-a <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 authorize an org using a device code
 
 ```
+authorize an org using a device code
+
 USAGE
   $ sfdx auth:device:login [-i <string>] [-r <url>] [-d] [-s] [-a <string>] [--json] [--loglevel 
   trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
@@ -166,13 +172,17 @@ EXAMPLES
   sfdx auth:device:login -r https://test.salesforce.com
 ```
 
-_See code: [src/commands/auth/device/login.ts](https://github.com/salesforcecli/plugin-auth/blob/v1.7.0/src/commands/auth/device/login.ts)_
+_See code: [src/commands/auth/device/login.ts](https://github.com/salesforcecli/plugin-auth/blob/v1.7.2/src/commands/auth/device/login.ts)_
 
 ## `sfdx auth:jwt:grant -u <string> -f <filepath> -i <string> [-r <url>] [-d] [-s] [-a <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 authorize an org using the JWT flow
 
 ```
+authorize an org using the JWT flow
+Use a certificate associated with your private key that has been uploaded to a personal connected app.
+If you specify an --instanceurl value, this value overrides the sfdcLoginUrl value in your sfdx-project.json file. To specify a My Domain URL, use the format MyDomainName.my.salesforce.com (not MyDomainName.lightning.force.com). To specify a sandbox, set --instanceurl to https://test.salesforce.com.
+
 USAGE
   $ sfdx auth:jwt:grant -u <string> -f <filepath> -i <string> [-r <url>] [-d] [-s] [-a <string>] [--json] [--loglevel 
   trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
@@ -220,13 +230,15 @@ EXAMPLES
   sfdx auth:jwt:grant -u me@acme.org -f <path to jwt key file> -i <OAuth client id> -r https://acme.my.salesforce.com
 ```
 
-_See code: [src/commands/auth/jwt/grant.ts](https://github.com/salesforcecli/plugin-auth/blob/v1.7.0/src/commands/auth/jwt/grant.ts)_
+_See code: [src/commands/auth/jwt/grant.ts](https://github.com/salesforcecli/plugin-auth/blob/v1.7.2/src/commands/auth/jwt/grant.ts)_
 
 ## `sfdx auth:list [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 list auth connection information
 
 ```
+list auth connection information
+
 USAGE
   $ sfdx auth:list [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
@@ -240,13 +252,16 @@ ALIASES
   $ sfdx force:auth:list
 ```
 
-_See code: [src/commands/auth/list.ts](https://github.com/salesforcecli/plugin-auth/blob/v1.7.0/src/commands/auth/list.ts)_
+_See code: [src/commands/auth/list.ts](https://github.com/salesforcecli/plugin-auth/blob/v1.7.2/src/commands/auth/list.ts)_
 
 ## `sfdx auth:logout [-a] [-p] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 log out from authorized orgs
 
 ```
+log out from authorized orgs
+By default, this command logs you out from your default scratch org.
+
 USAGE
   $ sfdx auth:logout [-a] [-p] [-u <string>] [--apiversion <string>] [--json] [--loglevel 
   trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
@@ -278,13 +293,25 @@ EXAMPLES
   sfdx auth:logout -p
 ```
 
-_See code: [src/commands/auth/logout.ts](https://github.com/salesforcecli/plugin-auth/blob/v1.7.0/src/commands/auth/logout.ts)_
+_See code: [src/commands/auth/logout.ts](https://github.com/salesforcecli/plugin-auth/blob/v1.7.2/src/commands/auth/logout.ts)_
 
 ## `sfdx auth:sfdxurl:store -f <filepath> [-d] [-s] [-a <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 Authorize an org using an SFDX auth URL
 
 ```
+Authorize an org using an SFDX auth URL
+Authorize a Salesforce org using an SFDX auth URL stored within a file. The URL must have the format "force://<refreshToken>@<instanceUrl>" or "force://<clientId>:<clientSecret>:<refreshToken>@<instanceUrl>".
+You have three options when creating the auth file. The easiest option is to redirect the output of the `sfdx force:org:display --verbose --json` command into a file.
+For example, using an org you have already authorized:
+
+    $ sfdx force:org:display -u <DevHub> --verbose --json > authFile.json
+    $ sfdx auth:sfdxurl:store -f authFile.json
+
+The resulting JSON file contains the URL in the sfdxAuthUrl property inside of a results object.
+You can also create a JSON file that has a top-level property named sfdxAuthUrl whose value is the auth URL.
+Finally, you can create a normal text file that includes just the URL and nothing else.
+
 USAGE
   $ sfdx auth:sfdxurl:store -f <filepath> [-d] [-s] [-a <string>] [--json] [--loglevel 
   trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
@@ -331,13 +358,16 @@ EXAMPLES
   sfdx auth:sfdxurl:store -f <path to sfdxAuthUrl file> -s -a MyDefaultOrg
 ```
 
-_See code: [src/commands/auth/sfdxurl/store.ts](https://github.com/salesforcecli/plugin-auth/blob/v1.7.0/src/commands/auth/sfdxurl/store.ts)_
+_See code: [src/commands/auth/sfdxurl/store.ts](https://github.com/salesforcecli/plugin-auth/blob/v1.7.2/src/commands/auth/sfdxurl/store.ts)_
 
 ## `sfdx auth:web:login [-i <string>] [-r <url>] [-d] [-s] [-a <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 authorize an org using the web login flow
 
 ```
+authorize an org using the web login flow
+If you specify an --instanceurl value, this value overrides the sfdcLoginUrl value in your sfdx-project.json file. To specify a My Domain URL, use the format MyDomainName.my.salesforce.com (not MyDomainName.lightning.force.com). To log in to a sandbox, set --instanceurl to https://test.salesforce.com.
+
 USAGE
   $ sfdx auth:web:login [-i <string>] [-r <url>] [-d] [-s] [-a <string>] [--json] [--loglevel 
   trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
@@ -379,5 +409,5 @@ EXAMPLES
   sfdx auth:web:login -r https://test.salesforce.com
 ```
 
-_See code: [src/commands/auth/web/login.ts](https://github.com/salesforcecli/plugin-auth/blob/v1.7.0/src/commands/auth/web/login.ts)_
+_See code: [src/commands/auth/web/login.ts](https://github.com/salesforcecli/plugin-auth/blob/v1.7.2/src/commands/auth/web/login.ts)_
 <!-- commandsstop -->
