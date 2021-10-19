@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.7.4](https://github.com/salesforcecli/plugin-auth/compare/v1.7.3...v1.7.4) (2021-10-19)
+
+
+### Bug Fixes
+
+* add missing long command description ([793ccac](https://github.com/salesforcecli/plugin-auth/commit/793ccac8bc5e3ce45ac9b07995bca00b24347eea))
+
 ### [1.7.3](https://github.com/salesforcecli/plugin-auth/compare/v1.7.2...v1.7.3) (2021-10-12)
 
 ### [1.7.2](https://github.com/salesforcecli/plugin-auth/compare/v1.7.1...v1.7.2) (2021-10-05)
