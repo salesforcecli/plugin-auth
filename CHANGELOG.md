@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.7.5](https://github.com/salesforcecli/plugin-auth/compare/v1.7.4...v1.7.5) (2021-10-26)
+
+
+### Bug Fixes
+
+* change column header with OCLIF table method ([c577540](https://github.com/salesforcecli/plugin-auth/commit/c57754059b6cb5a2c85059a3cf0f1f55ce85ac99))
+
 ### [1.7.4](https://github.com/salesforcecli/plugin-auth/compare/v1.7.3...v1.7.4) (2021-10-19)
 
 
