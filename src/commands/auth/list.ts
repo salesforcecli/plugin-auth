@@ -5,7 +5,7 @@
  * For full license text, see LICENSE.txt file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  */
 
-import { FlagsConfig, SfdxCommand } from '@salesforce/command';
+import { FlagsConfig, SfdxCommand, TableOptions } from '@salesforce/command';
 import { AuthInfo, Authorization, Messages } from '@salesforce/core';
 
 Messages.importMessagesDirectory(__dirname);
@@ -20,9 +20,17 @@ export default class List extends SfdxCommand {
     try {
       const auths = await AuthInfo.listAllAuthorizations();
       const hasErrors = auths.filter((auth) => !!auth.error).length > 0;
-      const columns = ['alias', 'username', 'orgId', 'instanceUrl', 'oauthMethod'];
+      const columns: TableOptions = {
+        columns: [
+          { key: 'alias', label: 'ALIAS' },
+          { key: 'username', label: 'USERNAME' },
+          { key: 'orgId', label: 'ORG ID' },
+          { key: 'instanceUrl', label: 'INSTANCE URL' },
+          { key: 'oauthMethod', label: 'AUTH METHOD' },
+        ],
+      };
       if (hasErrors) {
-        columns.push('error');
+        columns.columns.push({ key: 'error', label: 'ERROR' });
       }
       this.ux.styledHeader('authenticated orgs');
       this.ux.table(auths, columns);
