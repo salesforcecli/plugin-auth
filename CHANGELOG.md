@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.7.6](https://github.com/salesforcecli/plugin-auth/compare/v1.7.5...v1.7.6) (2021-11-17)
+
+
+### Bug Fixes
+
+* update sandbox url ([a62a0e3](https://github.com/salesforcecli/plugin-auth/commit/a62a0e3324134d7ea64fdc6a33430c187f9bf8c6))
+* update sandbox URL ([db5d850](https://github.com/salesforcecli/plugin-auth/commit/db5d850f2e212788039d2e41d66d3b4a61190877))
+* update sandbox URL ([b003ca6](https://github.com/salesforcecli/plugin-auth/commit/b003ca6210f5f8c2137be684ef82793c1c7beb62))
+
 ### [1.7.5](https://github.com/salesforcecli/plugin-auth/compare/v1.7.4...v1.7.5) (2021-10-26)
 
 
