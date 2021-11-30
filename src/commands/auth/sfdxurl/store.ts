@@ -16,15 +16,14 @@ Messages.importMessagesDirectory(__dirname);
 const messages = Messages.loadMessages('@salesforce/plugin-auth', 'sfdxurl.store');
 const commonMessages = Messages.loadMessages('@salesforce/plugin-auth', 'messages');
 
-const AUTH_URL_FORMAT1 = 'force://<refreshToken>@<instanceUrl>';
-const AUTH_URL_FORMAT2 = 'force://<clientId>:<clientSecret>:<refreshToken>@<instanceUrl>';
+const AUTH_URL_FORMAT = 'force://<clientId>:<clientSecret>:<refreshToken>@<instanceUrl>';
 
 type AuthJson = AnyJson & {
   result?: AnyJson & { sfdxAuthUrl: string };
   sfdxAuthUrl: string;
 };
 export default class Store extends SfdxCommand {
-  public static readonly description = messages.getMessage('description', [AUTH_URL_FORMAT1, AUTH_URL_FORMAT2]);
+  public static readonly description = messages.getMessage('description', [AUTH_URL_FORMAT]);
   public static readonly examples = messages.getMessage('examples').split(os.EOL);
   public static aliases = ['force:auth:sfdxurl:store'];
 
