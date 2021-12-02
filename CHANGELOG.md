@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.8.0](https://github.com/salesforcecli/plugin-auth/compare/v1.7.7...v1.8.0) (2021-12-02)
+
+### Features
+
+- bump deps ([5c943c8](https://github.com/salesforcecli/plugin-auth/commit/5c943c8129e8e8ce2e937378fd4eda51181de114))
+
 ### [1.7.7](https://github.com/salesforcecli/plugin-auth/compare/v1.7.6...v1.7.7) (2021-11-30)
 
 ### Bug Fixes
