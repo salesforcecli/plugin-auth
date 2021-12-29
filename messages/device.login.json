@@ -3,7 +3,7 @@
   "examples": [
     "sfdx auth:device:login -d -a TestOrg1",
     "sfdx auth:device:login -i <OAuth client id>",
-    "sfdx auth:device:login -r https://test.salesforce.com"
+    "sfdx auth:device:login -r https://MyDomainName--SandboxName.sandbox.my.salesforce.com"
   ],
   "actionRequired": "Action Required!",
   "enterCode": "Enter %s user code in the verification URL %s",
