@@ -7,7 +7,7 @@
 
 import * as os from 'os';
 import { flags, FlagsConfig, SfdxCommand } from '@salesforce/command';
-import { AuthConfigs, AuthRemover, Global, Messages, Mode, SfdxError } from '@salesforce/core';
+import { AuthRemover, Global, Messages, Mode, SfdxError } from '@salesforce/core';
 import { Prompts } from '../../prompts';
 
 Messages.importMessagesDirectory(__dirname);
@@ -41,13 +41,13 @@ export default class Logout extends SfdxCommand {
     }
 
     const remover = await AuthRemover.create();
+    const removeAll = this.shouldFindAllAuths();
 
-    const authConfigs = this.shouldFindAllAuths()
-      ? await remover.findAllAuthConfigs()
-      : await remover.findAuthConfigs(this.flags.targetusername);
+    const usernames: string[] = removeAll
+      ? Object.values(remover.findAllAuths()).map((org) => org.username)
+      : [this.flags.targetusername as string];
 
-    if (await this.shouldRunCommand(authConfigs)) {
-      const usernames = [...authConfigs.keys()];
+    if (await this.shouldRunCommand(usernames)) {
       for (const username of usernames) {
         await remover.removeAuth(username);
       }
@@ -61,9 +61,8 @@ export default class Logout extends SfdxCommand {
     return !!this.flags.all || (!this.flags.targetusername && Global.getEnvironmentMode() === Mode.DEMO);
   }
 
-  private async shouldRunCommand(authConfigs: AuthConfigs): Promise<boolean> {
-    const orgsToDelete = [[...authConfigs.keys()].join(os.EOL)];
-    const message = messages.getMessage('logoutCommandYesNo', orgsToDelete);
+  private async shouldRunCommand(usernames: string[]): Promise<boolean> {
+    const message = messages.getMessage('logoutCommandYesNo', [usernames.join(os.EOL)]);
     return Prompts.shouldRunCommand(this.ux, this.flags.noprompt, message);
   }
 }

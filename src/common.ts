@@ -4,9 +4,19 @@
  * Licensed under the BSD 3-Clause license.
  * For full license text, see LICENSE.txt file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  */
-import { basename } from 'path';
 import { QueryResult } from 'jsforce';
-import { AuthInfo, AuthFields, Logger, SfdcUrl, SfdxProject, Messages, Org, SfdxError, sfdc } from '@salesforce/core';
+import {
+  AuthInfo,
+  AuthFields,
+  Logger,
+  SfdcUrl,
+  SfdxProject,
+  Messages,
+  Org,
+  SfdxError,
+  sfdc,
+  OrgAuthorization,
+} from '@salesforce/core';
 import { getString, isObject, Optional } from '@salesforce/ts-types';
 
 Messages.importMessagesDirectory(__dirname);
@@ -24,8 +34,8 @@ export class Common {
 
     if (flags.setdefaultdevhubusername || flags.setdefaultusername) {
       await authInfo.setAsDefault({
-        defaultUsername: flags.setdefaultusername,
-        defaultDevhubUsername: flags.setdefaultdevhubusername,
+        org: !!flags.setdefaultusername,
+        devHub: !!flags.setdefaultdevhubusername,
       });
     }
   }
@@ -79,35 +89,29 @@ export class Common {
     await Promise.all(
       hubAuthInfos.map(async (hubAuthInfo) => {
         try {
-          const devHubOrg = await Org.create({ aliasOrUsername: hubAuthInfo.getUsername() });
+          const devHubOrg = await Org.create({ aliasOrUsername: hubAuthInfo.username });
           const conn = devHubOrg.getConnection();
           const data = await conn.query<QueryResult<{ Id: string }>>(
             `select Id from ScratchOrgInfo where ScratchOrg = '${sfdc.trimTo15(fields.orgId)}'`
           );
           if (data.totalSize > 0) {
             // if any return a result
-            logger.debug(`found orgId ${fields.orgId} in devhub ${hubAuthInfo.getUsername()}`);
+            logger.debug(`found orgId ${fields.orgId} in devhub ${hubAuthInfo.username}`);
             try {
-              await orgAuthInfo.save({ ...fields, devHubUsername: hubAuthInfo.getUsername() });
-              logger.debug(`set ${hubAuthInfo.getUsername()} as devhub for scratch org ${orgAuthInfo.getUsername()}`);
+              await orgAuthInfo.save({ ...fields, devHubUsername: hubAuthInfo.username });
+              logger.debug(`set ${hubAuthInfo.username} as devhub for scratch org ${orgAuthInfo.getUsername()}`);
             } catch (error) {
               logger.debug(`error updating auth file for ${orgAuthInfo.getUsername()}`, error);
             }
           }
         } catch (error) {
-          logger.error(`Error connecting to devhub ${hubAuthInfo.getUsername()}`, error);
+          logger.error(`Error connecting to devhub ${hubAuthInfo.username}`, error);
         }
       })
     );
   }
 
-  public static async getDevHubAuthInfos(): Promise<AuthInfo[]> {
-    return (
-      await Promise.all(
-        (await AuthInfo.listAllAuthFiles())
-          .map((fileName) => basename(fileName, '.json'))
-          .map((username) => AuthInfo.create({ username }))
-      )
-    ).filter((possibleHub) => possibleHub?.getFields()?.isDevHub);
+  public static async getDevHubAuthInfos(): Promise<OrgAuthorization[]> {
+    return await AuthInfo.listAllAuthorizations((possibleHub) => possibleHub.isDevHub);
   }
 }

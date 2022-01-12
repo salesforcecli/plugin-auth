@@ -72,8 +72,7 @@ export default class Grant extends SfdxCommand {
       result = authInfo.getFields(true);
       await Common.identifyPossibleScratchOrgs(result, authInfo);
     } catch (err) {
-      const msg = getString(err, 'message');
-      throw SfdxError.create('@salesforce/plugin-auth', 'jwt.grant', 'JwtGrantError', [msg]);
+      throw new SfdxError(getString(err, 'message'));
     }
 
     const successMsg = commonMessages.getMessage('authorizeCommandSuccess', [result.username, result.orgId]);
@@ -82,20 +81,20 @@ export default class Grant extends SfdxCommand {
   }
 
   private async initAuthInfo(): Promise<AuthInfo> {
-    const oauth2OptionsBase = {
+    const OAuth2ConfigBase = {
       clientId: this.flags.clientid as string,
       privateKeyFile: this.flags.jwtkeyfile as string,
     };
 
     const loginUrl = await Common.resolveLoginUrl(get(this.flags.instanceurl, 'href', null) as Optional<string>);
 
-    const oauth2Options = loginUrl ? Object.assign(oauth2OptionsBase, { loginUrl }) : oauth2OptionsBase;
+    const OAuth2Config = loginUrl ? Object.assign(OAuth2ConfigBase, { loginUrl }) : OAuth2ConfigBase;
 
     let authInfo: AuthInfo;
     try {
       authInfo = await AuthInfo.create({
         username: this.flags.username as string,
-        oauth2Options,
+        oauth2Options: OAuth2Config,
       });
     } catch (error) {
       const err = error as SfdxError;
@@ -105,7 +104,7 @@ export default class Grant extends SfdxCommand {
         await remover.removeAuth(this.flags.username);
         authInfo = await AuthInfo.create({
           username: this.flags.username as string,
-          oauth2Options,
+          oauth2Options: OAuth2Config,
         });
       } else {
         throw err;

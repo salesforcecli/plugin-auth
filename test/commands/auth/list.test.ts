@@ -6,7 +6,7 @@
  */
 
 import { $$, expect, test } from '@salesforce/command/lib/test';
-import { Aliases, AuthInfo, AuthInfoConfig, Authorization } from '@salesforce/core';
+import { AuthInfo, OrgAuthorization } from '@salesforce/core';
 import { MockTestOrgData } from '@salesforce/core/lib/testSetup';
 import { StubbedType, stubInterface, stubMethod } from '@salesforce/ts-sinon';
 import { parseJson } from '../../testHelper';
@@ -14,7 +14,6 @@ import { parseJson } from '../../testHelper';
 describe('auth:list', async () => {
   const testData = new MockTestOrgData();
   let authInfoStub: StubbedType<AuthInfo>;
-  let authInfoConfigStub: StubbedType<AuthInfoConfig>;
 
   async function prepareStubs(forceFailure = false) {
     const authFields = await testData.getConfig();
@@ -25,7 +24,9 @@ describe('auth:list', async () => {
       isOauth: () => false,
     });
 
-    $$.SANDBOX.stub(AuthInfo, 'listAllAuthFiles').callsFake(async () => [authFields.username] as string[]);
+    $$.SANDBOX.stub(AuthInfo, 'listAllAuthorizations').callsFake(
+      async () => [{ username: authFields.username }] as OrgAuthorization[]
+    );
 
     if (forceFailure) {
       stubMethod($$.SANDBOX, AuthInfo, 'create').callsFake(async () => {
@@ -35,12 +36,12 @@ describe('auth:list', async () => {
       stubMethod($$.SANDBOX, AuthInfo, 'create').callsFake(async () => authInfoStub);
     }
 
-    stubMethod($$.SANDBOX, Aliases.prototype, 'getKeysByValue').returns(['TestAlias']);
-
-    authInfoConfigStub = stubInterface<AuthInfoConfig>($$.SANDBOX, {
-      getContents: () => authFields,
-    });
-    stubMethod($$.SANDBOX, AuthInfoConfig, 'create').callsFake(async () => authInfoConfigStub);
+    // stubMethod($$.SANDBOX, Aliases.prototype, 'getKeysByValue').returns(['TestAlias']);
+    //
+    // authInfoConfigStub = stubInterface<AuthInfoConfig>($$.SANDBOX, {
+    //   getContents: () => authFields,
+    // });
+    // stubMethod($$.SANDBOX, AuthInfoConfig, 'create').callsFake(async () => authInfoConfigStub);
   }
 
   test
@@ -48,8 +49,8 @@ describe('auth:list', async () => {
     .stdout()
     .command(['auth:list', '--json'])
     .it('should show auth files', (ctx) => {
-      const auths = parseJson<Authorization[]>(ctx.stdout).result;
-      expect(auths[0].alias).to.equal('TestAlias');
+      const auths: OrgAuthorization[] = parseJson<OrgAuthorization[]>(ctx.stdout).result;
+      expect(auths[0].aliases[0]).to.equal('TestAlias');
       expect(auths[0].username).to.equal(testData.username);
       expect(auths[0].instanceUrl).to.equal(testData.instanceUrl);
       expect(auths[0].orgId).to.equal(testData.orgId);
@@ -61,8 +62,8 @@ describe('auth:list', async () => {
     .stdout()
     .command(['auth:list', '--json'])
     .it('should show files with auth errors', (ctx) => {
-      const auths = parseJson<Authorization[]>(ctx.stdout).result;
-      expect(auths[0].alias).to.equal('TestAlias');
+      const auths: OrgAuthorization[] = parseJson<OrgAuthorization[]>(ctx.stdout).result;
+      expect(auths[0].aliases).to.equal('TestAlias');
       expect(auths[0].username).to.equal(testData.username);
       expect(auths[0].instanceUrl).to.equal(testData.instanceUrl);
       expect(auths[0].orgId).to.equal(testData.orgId);

@@ -9,7 +9,7 @@ import * as os from 'os';
 import * as open from 'open';
 
 import { flags, FlagsConfig, SfdxCommand } from '@salesforce/command';
-import { AuthFields, AuthInfo, Logger, Messages, OAuth2Options, SfdxError, WebOAuthServer } from '@salesforce/core';
+import { AuthFields, AuthInfo, Logger, Messages, OAuth2Config, SfdxError, WebOAuthServer } from '@salesforce/core';
 import { Env } from '@salesforce/kit';
 import { get, Optional } from '@salesforce/ts-types';
 import { Prompts } from '../../../prompts';
@@ -64,7 +64,7 @@ export default class Login extends SfdxCommand {
 
     if (await Prompts.shouldExitCommand(this.ux, this.flags.noprompt)) return {};
 
-    const oauthConfig: OAuth2Options = {
+    const oauthConfig: OAuth2Config = {
       loginUrl: await Common.resolveLoginUrl(get(this.flags.instanceurl, 'href', null) as Optional<string>),
       clientId: this.flags.clientid as string,
     };
@@ -92,7 +92,7 @@ export default class Login extends SfdxCommand {
     }
   }
 
-  private async executeLoginFlow(oauthConfig: OAuth2Options): Promise<AuthInfo> {
+  private async executeLoginFlow(oauthConfig: OAuth2Config): Promise<AuthInfo> {
     const oauthServer = await WebOAuthServer.create({ oauthConfig });
     await oauthServer.start();
     await open(oauthServer.getAuthorizationUrl(), { wait: false });

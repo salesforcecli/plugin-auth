@@ -7,7 +7,7 @@
 
 import * as os from 'os';
 import { flags, FlagsConfig, SfdxCommand } from '@salesforce/command';
-import { AuthFields, AuthInfo, AuthInfoConfig, Messages, sfdc, SfdxError } from '@salesforce/core';
+import { AuthFields, AuthInfo, GlobalInfo, Messages, sfdc, SfdxError } from '@salesforce/core';
 import { ensureString, getString } from '@salesforce/ts-types';
 import { env } from '@salesforce/kit';
 import { Prompts } from '../../../prompts';
@@ -83,11 +83,8 @@ export default class Store extends SfdxCommand {
 
   private async overwriteAuthInfo(username: string): Promise<boolean> {
     if (!this.flags.noprompt) {
-      const authInfoConfig = await AuthInfoConfig.create({
-        ...AuthInfoConfig.getOptions(username),
-        throwOnNotFound: false,
-      });
-      if (await authInfoConfig.exists()) {
+      const globalInfo = await GlobalInfo.getInstance();
+      if (globalInfo.orgs.get(username)) {
         return Prompts.askOverwriteAuthFile(this.ux, username);
       }
     }

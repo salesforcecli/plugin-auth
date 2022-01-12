@@ -68,9 +68,9 @@ export default class Store extends SfdxCommand {
       );
     }
 
-    const oauth2Options = AuthInfo.parseSfdxAuthUrl(sfdxAuthUrl);
+    const OAuth2Config = AuthInfo.parseSfdxAuthUrl(sfdxAuthUrl);
 
-    const authInfo = await AuthInfo.create({ oauth2Options });
+    const authInfo = await AuthInfo.create({ oauth2Options: OAuth2Config });
     await authInfo.save();
 
     await Common.handleSideEffects(authInfo, this.flags);
