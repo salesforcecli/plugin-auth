@@ -15,6 +15,7 @@ import { DeviceOauthService } from '@salesforce/core';
 import { DeviceCodeResponse } from '@salesforce/core/lib/deviceOauthService';
 import { UX } from '@salesforce/command';
 import { SinonStub } from 'sinon';
+import { OrgAuthorization } from '@salesforce/core/lib/org/authInfo';
 import { parseJson } from '../../../testHelper';
 
 interface Options {
@@ -87,9 +88,11 @@ describe('auth:device:login', async () => {
     }
 
     stubMethod($$.SANDBOX, AuthInfo, 'create').callsFake(async () => authInfoStub);
-    $$.SANDBOX.stub(AuthInfo, 'listAllAuthFiles').callsFake(async () => {
-      return [`${authFields.username}.json`];
-    });
+    $$.SANDBOX.stub(AuthInfo, 'listAllAuthorizations').callsFake(
+      async (orgAuthFilter?: (orgAuth: OrgAuthorization) => boolean) => {
+        return [{ username: authFields.username }] as OrgAuthorization[];
+      }
+    );
   }
 
   test

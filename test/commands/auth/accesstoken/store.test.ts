@@ -10,7 +10,7 @@
 import { $$, expect } from '@salesforce/command/lib/test';
 import { IConfig } from '@oclif/config';
 import { AuthFields, AuthInfo, ConfigFile, SfdxError } from '@salesforce/core';
-import { Crypto } from '@salesforce/core/lib/crypto';
+import { Crypto } from '@salesforce/core/lib/crypto/crypto';
 import { StubbedType, stubInterface, stubMethod } from '@salesforce/ts-sinon';
 import { UX } from '@salesforce/command';
 import { assert } from 'chai';
@@ -45,16 +45,13 @@ describe('auth:accesstoken:store', () => {
       username: 'foo@baz.org',
     };
     const ai = await AuthInfo.create({ username: authFields.username });
-    ai.update(
-      {
-        accessToken,
-        orgId: authFields.orgId,
-        instanceUrl: authFields.instanceUrl,
-        loginUrl: authFields.loginUrl,
-        username: authFields.username,
-      },
-      false
-    );
+    ai.update({
+      accessToken,
+      orgId: authFields.orgId,
+      instanceUrl: authFields.instanceUrl,
+      loginUrl: authFields.loginUrl,
+      username: authFields.username,
+    });
     stubInterface<AuthInfo>($$.SANDBOX, {
       getFields: () => authFields,
       save: () => {},

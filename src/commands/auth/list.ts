@@ -6,7 +6,7 @@
  */
 
 import { FlagsConfig, SfdxCommand, TableOptions } from '@salesforce/command';
-import { AuthInfo, Authorization, Messages } from '@salesforce/core';
+import { AuthInfo, OrgAuthorization, Messages } from '@salesforce/core';
 
 Messages.importMessagesDirectory(__dirname);
 const messages = Messages.loadMessages('@salesforce/plugin-auth', 'list');
@@ -16,13 +16,13 @@ export default class List extends SfdxCommand {
   public static aliases = ['force:auth:list'];
 
   public static readonly flagsConfig: FlagsConfig = {};
-  public async run(): Promise<Authorization[]> {
+  public async run(): Promise<OrgAuthorization[]> {
     try {
       const auths = await AuthInfo.listAllAuthorizations();
       const hasErrors = auths.filter((auth) => !!auth.error).length > 0;
       const columns: TableOptions = {
         columns: [
-          { key: 'alias', label: 'ALIAS' },
+          { key: 'aliases', label: 'ALIASES' },
           { key: 'username', label: 'USERNAME' },
           { key: 'orgId', label: 'ORG ID' },
           { key: 'instanceUrl', label: 'INSTANCE URL' },

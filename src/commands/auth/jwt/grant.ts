@@ -73,7 +73,7 @@ export default class Grant extends SfdxCommand {
       await Common.identifyPossibleScratchOrgs(result, authInfo);
     } catch (err) {
       const msg = getString(err, 'message');
-      throw SfdxError.create('@salesforce/plugin-auth', 'jwt.grant', 'JwtGrantError', [msg]);
+      throw new SfdxError(msg);
     }
 
     const successMsg = commonMessages.getMessage('authorizeCommandSuccess', [result.username, result.orgId]);

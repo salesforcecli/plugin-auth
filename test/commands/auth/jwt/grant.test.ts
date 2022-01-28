@@ -10,6 +10,7 @@ import { AuthFields, AuthInfo, SfdxError } from '@salesforce/core';
 import { MockTestOrgData } from '@salesforce/core/lib/testSetup';
 import { StubbedType, stubInterface, stubMethod } from '@salesforce/ts-sinon';
 import { UX } from '@salesforce/command';
+import { OrgAuthorization } from '@salesforce/core/lib/org/authInfo';
 import { parseJson, parseJsonError } from '../../../testHelper';
 
 interface Options {
@@ -28,9 +29,11 @@ describe('auth:jwt:grant', async () => {
       getFields: () => authFields,
     });
 
-    $$.SANDBOX.stub(AuthInfo, 'listAllAuthFiles').callsFake(async () => {
-      return [`${authFields.username}.json`];
-    });
+    $$.SANDBOX.stub(AuthInfo, 'listAllAuthorizations').callsFake(
+      async (orgAuthFilter?: (orgAuth: OrgAuthorization) => boolean) => {
+        return [{ username: authFields.username }] as OrgAuthorization[];
+      }
+    );
 
     if (options.authInfoCreateFails) {
       $$.SANDBOX.stub(AuthInfo, 'create').throws(new Error('invalid client id'));
@@ -101,8 +104,8 @@ describe('auth:jwt:grant', async () => {
       expect(authInfoStub.setAsDefault.callCount).to.equal(1);
       expect(authInfoStub.setAsDefault.args[0]).to.deep.equal([
         {
-          defaultDevhubUsername: undefined,
-          defaultUsername: true,
+          devHub: undefined,
+          org: true,
         },
       ]);
     });
@@ -119,8 +122,8 @@ describe('auth:jwt:grant', async () => {
       expect(authInfoStub.setAsDefault.callCount).to.equal(1);
       expect(authInfoStub.setAsDefault.args[0]).to.deep.equal([
         {
-          defaultDevhubUsername: undefined,
-          defaultUsername: true,
+          devHub: undefined,
+          org: true,
         },
       ]);
     });
@@ -149,8 +152,8 @@ describe('auth:jwt:grant', async () => {
       expect(authInfoStub.setAsDefault.callCount).to.equal(1);
       expect(authInfoStub.setAsDefault.args[0]).to.deep.equal([
         {
-          defaultDevhubUsername: true,
-          defaultUsername: undefined,
+          devHub: true,
+          org: undefined,
         },
       ]);
     });
@@ -167,8 +170,8 @@ describe('auth:jwt:grant', async () => {
       expect(authInfoStub.setAsDefault.callCount).to.equal(1);
       expect(authInfoStub.setAsDefault.args[0]).to.deep.equal([
         {
-          defaultDevhubUsername: true,
-          defaultUsername: undefined,
+          devHub: true,
+          org: undefined,
         },
       ]);
     });
@@ -196,8 +199,8 @@ describe('auth:jwt:grant', async () => {
       expect(authInfoStub.setAsDefault.callCount).to.equal(1);
       expect(authInfoStub.setAsDefault.args[0]).to.deep.equal([
         {
-          defaultDevhubUsername: true,
-          defaultUsername: true,
+          devHub: true,
+          org: true,
         },
       ]);
     });
@@ -227,8 +230,8 @@ describe('auth:jwt:grant', async () => {
       expect(authInfoStub.setAsDefault.callCount).to.equal(1);
       expect(authInfoStub.setAsDefault.args[0]).to.deep.equal([
         {
-          defaultDevhubUsername: true,
-          defaultUsername: true,
+          devHub: true,
+          org: true,
         },
       ]);
     });
@@ -250,7 +253,7 @@ describe('auth:jwt:grant', async () => {
     .it('should throw an error when client id is invalid', (ctx) => {
       const response = parseJsonError(ctx.stdout);
       expect(response.status).to.equal(1);
-      expect(response.message).to.include('We encountered a JSON web token error');
+      expect(response.message).to.include('invalid client id');
     });
 
   test

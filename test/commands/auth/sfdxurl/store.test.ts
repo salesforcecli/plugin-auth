@@ -10,6 +10,7 @@ import { AuthFields, AuthInfo, fs } from '@salesforce/core';
 import { MockTestOrgData } from '@salesforce/core/lib/testSetup';
 import { StubbedType, stubInterface, stubMethod } from '@salesforce/ts-sinon';
 import { UX } from '@salesforce/command';
+import { OrgAuthorization } from '@salesforce/core/lib/org/authInfo';
 import { parseJson, parseJsonError } from '../../../testHelper';
 
 interface Options {
@@ -29,9 +30,11 @@ describe('auth:sfdxurl:store', async () => {
       getFields: () => authFields,
     });
 
-    $$.SANDBOX.stub(AuthInfo, 'listAllAuthFiles').callsFake(async () => {
-      return [`${authFields.username}.json`];
-    });
+    $$.SANDBOX.stub(AuthInfo, 'listAllAuthorizations').callsFake(
+      async (orgAuthFilter?: (orgAuth: OrgAuthorization) => boolean) => {
+        return [{ username: authFields.username }] as OrgAuthorization[];
+      }
+    );
 
     if (!options.fileDoesNotExist) {
       $$.SANDBOX.stub(fs, 'readFile').callsFake(
@@ -135,8 +138,8 @@ describe('auth:sfdxurl:store', async () => {
       expect(authInfoStub.setAsDefault.callCount).to.equal(1);
       expect(authInfoStub.setAsDefault.args[0]).to.deep.equal([
         {
-          defaultDevhubUsername: undefined,
-          defaultUsername: true,
+          devHub: undefined,
+          org: true,
         },
       ]);
     });
@@ -153,8 +156,8 @@ describe('auth:sfdxurl:store', async () => {
       expect(authInfoStub.setAsDefault.callCount).to.equal(1);
       expect(authInfoStub.setAsDefault.args[0]).to.deep.equal([
         {
-          defaultDevhubUsername: undefined,
-          defaultUsername: true,
+          devHub: undefined,
+          org: true,
         },
       ]);
     });
@@ -171,8 +174,8 @@ describe('auth:sfdxurl:store', async () => {
       expect(authInfoStub.setAsDefault.callCount).to.equal(1);
       expect(authInfoStub.setAsDefault.args[0]).to.deep.equal([
         {
-          defaultDevhubUsername: true,
-          defaultUsername: undefined,
+          devHub: true,
+          org: undefined,
         },
       ]);
     });
@@ -189,8 +192,8 @@ describe('auth:sfdxurl:store', async () => {
       expect(authInfoStub.setAsDefault.callCount).to.equal(1);
       expect(authInfoStub.setAsDefault.args[0]).to.deep.equal([
         {
-          defaultDevhubUsername: true,
-          defaultUsername: undefined,
+          devHub: true,
+          org: undefined,
         },
       ]);
     });
@@ -206,8 +209,8 @@ describe('auth:sfdxurl:store', async () => {
       expect(authInfoStub.setAsDefault.callCount).to.equal(1);
       expect(authInfoStub.setAsDefault.args[0]).to.deep.equal([
         {
-          defaultDevhubUsername: true,
-          defaultUsername: true,
+          devHub: true,
+          org: true,
         },
       ]);
     });
@@ -224,8 +227,8 @@ describe('auth:sfdxurl:store', async () => {
       expect(authInfoStub.setAsDefault.callCount).to.equal(1);
       expect(authInfoStub.setAsDefault.args[0]).to.deep.equal([
         {
-          defaultDevhubUsername: true,
-          defaultUsername: true,
+          devHub: true,
+          org: true,
         },
       ]);
     });

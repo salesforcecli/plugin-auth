@@ -8,18 +8,18 @@
 import { $$, expect, test } from '@salesforce/command/lib/test';
 import { UX } from '@salesforce/command/lib/ux';
 import {
-  Aliases,
-  AuthInfo,
-  AuthInfoConfig,
-  Config,
-  ConfigAggregator,
+  // AuthInfo,
+  // Config,
+  // ConfigAggregator,
   ConfigContents,
-  ConfigInfo,
+  // ConfigInfo,
   Global,
   Mode,
+  // SfdxPropertyKeys,
 } from '@salesforce/core';
 import { MockTestOrgData } from '@salesforce/core/lib/testSetup';
-import { StubbedType, stubInterface, stubMethod } from '@salesforce/ts-sinon';
+// import { StubbedType, stubInterface, stubMethod } from '@salesforce/ts-sinon';
+// import { OrgAuthorization } from '@salesforce/core/lib/org/authInfo';
 import { parseJson, parseJsonError } from '../../testHelper';
 
 interface Options {
@@ -36,96 +36,85 @@ interface Options {
 describe('auth:logout', () => {
   const testData = new MockTestOrgData();
   const spies = new Map<string, sinon.SinonSpy>();
-  let authInfoConfigStub: StubbedType<AuthInfoConfig>;
 
   afterEach(() => spies.clear());
 
   async function prepareStubs(options: Options = {}): Promise<ConfigContents> {
     const authInfo = await testData.getConfig();
-
-    $$.SANDBOX.stub(AuthInfo, 'listAllAuthFiles').callsFake(async () => {
-      if (options.authFiles) {
-        return [`${authInfo.username as string}.json`].concat(options.authFiles);
-      } else {
-        return [`${authInfo.username as string}.json`];
-      }
-    });
-
-    if (options.defaultUsername && !options.defaultDevhubUsername) {
-      $$.SANDBOX.stub(ConfigAggregator.prototype, 'getInfo')
-        .withArgs(Config.DEFAULT_USERNAME)
-        .returns({ value: options.defaultUsername } as ConfigInfo);
-      $$.SANDBOX.stub(Config.prototype, 'getKeysByValue')
-        .withArgs(options.defaultUsername)
-        .returns([Config.DEFAULT_USERNAME]);
-    }
-
-    if (!options.defaultUsername && options.defaultDevhubUsername) {
-      $$.SANDBOX.stub(ConfigAggregator.prototype, 'getInfo')
-        .withArgs(Config.DEFAULT_DEV_HUB_USERNAME)
-        .returns({ value: options.defaultDevhubUsername } as ConfigInfo);
-      $$.SANDBOX.stub(Config.prototype, 'getKeysByValue')
-        .withArgs(options.defaultDevhubUsername)
-        .returns([Config.DEFAULT_DEV_HUB_USERNAME]);
-    }
-
-    if (options.defaultUsername && options.defaultDevhubUsername) {
-      $$.SANDBOX.stub(ConfigAggregator.prototype, 'getInfo')
-        .withArgs(Config.DEFAULT_DEV_HUB_USERNAME)
-        .returns({ value: options.defaultDevhubUsername } as ConfigInfo)
-        .withArgs(Config.DEFAULT_USERNAME)
-        .returns({ value: options.defaultUsername } as ConfigInfo);
-
-      if (options.defaultUsername === options.defaultDevhubUsername) {
-        $$.SANDBOX.stub(Config.prototype, 'getKeysByValue')
-          .withArgs(options.defaultUsername)
-          .returns([Config.DEFAULT_DEV_HUB_USERNAME, Config.DEFAULT_USERNAME]);
-      } else {
-        $$.SANDBOX.stub(Config.prototype, 'getKeysByValue')
-          .withArgs(options.defaultUsername)
-          .returns([Config.DEFAULT_DEV_HUB_USERNAME])
-          .withArgs(options.defaultUsername)
-          .returns([Config.DEFAULT_USERNAME]);
-      }
-    }
-
-    authInfoConfigStub = stubInterface<AuthInfoConfig>($$.SANDBOX, {
-      getContents: () => authInfo,
-      exists: async () => !options.authInfoConfigDoesNotExist,
-    });
-
-    if (options.authInfoConfigFails) {
-      stubMethod($$.SANDBOX, AuthInfoConfig, 'create').throws(new Error('failed to read file'));
-    } else {
-      stubMethod($$.SANDBOX, AuthInfoConfig, 'create').callsFake(async () => authInfoConfigStub);
-    }
-
-    if (options.aliases) {
-      $$.setConfigStubContents('Aliases', {
-        contents: { orgs: options.aliases },
-      });
-
-      const aliasesByValue = new Map<string, string>();
-      Object.keys(options.aliases).forEach((key) => {
-        if (options.aliases && options.aliases[key]) {
-          aliasesByValue.set(options.aliases[key], key);
-        }
-      });
-
-      stubMethod($$.SANDBOX, Aliases.prototype, 'getKeysByValue').callsFake((username: string) => {
-        const values = aliasesByValue.get(username);
-        return values ? [values] : [];
-      });
-
-      stubMethod($$.SANDBOX, Aliases.prototype, 'get').callsFake((username: string) => {
-        return options.aliases ? options.aliases[username] : null;
-      });
-    }
-
-    spies.set('aliasesUnset', $$.SANDBOX.spy(Aliases.prototype, 'unset'));
-    spies.set('configUnset', $$.SANDBOX.spy(Config.prototype, 'unset'));
-    spies.set('authInfoClearCache', $$.SANDBOX.spy(AuthInfo, 'clearCache'));
-
+    //
+    // $$.SANDBOX.stub(AuthInfo, 'listAllAuthorizations').callsFake(async () => {
+    //   if (options.authFiles) {
+    //     return [{ username: authInfo.username }] as OrgAuthorization[];
+    //     // return [`${authInfo.username}.json`].concat(options.authFiles);
+    //   } else {
+    //     return [{ username: authInfo.username }] as OrgAuthorization[];
+    //   }
+    // });
+    //
+    // if (options.defaultUsername && !options.defaultDevhubUsername) {
+    //   $$.SANDBOX.stub(ConfigAggregator.prototype, 'getInfo')
+    //     .withArgs(SfdxPropertyKeys.DEFAULT_USERNAME)
+    //     .returns({ value: options.defaultUsername } as ConfigInfo);
+    //   $$.SANDBOX.stub(Config.prototype, 'getKeysByValue')
+    //     .withArgs(options.defaultUsername)
+    //     .returns([SfdxPropertyKeys.DEFAULT_USERNAME]);
+    // }
+    //
+    // if (!options.defaultUsername && options.defaultDevhubUsername) {
+    //   $$.SANDBOX.stub(ConfigAggregator.prototype, 'getInfo')
+    //     .withArgs(SfdxPropertyKeys.DEFAULT_DEV_HUB_USERNAME)
+    //     .returns({ value: options.defaultDevhubUsername } as ConfigInfo);
+    //   $$.SANDBOX.stub(Config.prototype, 'getKeysByValue')
+    //     .withArgs(options.defaultDevhubUsername)
+    //     .returns([SfdxPropertyKeys.DEFAULT_DEV_HUB_USERNAME]);
+    // }
+    //
+    // if (options.defaultUsername && options.defaultDevhubUsername) {
+    //   $$.SANDBOX.stub(ConfigAggregator.prototype, 'getInfo')
+    //     .withArgs(SfdxPropertyKeys.DEFAULT_DEV_HUB_USERNAME)
+    //     .returns({ value: options.defaultDevhubUsername } as ConfigInfo)
+    //     .withArgs(SfdxPropertyKeys.DEFAULT_USERNAME)
+    //     .returns({ value: options.defaultUsername } as ConfigInfo);
+    //
+    //   if (options.defaultUsername === options.defaultDevhubUsername) {
+    //     $$.SANDBOX.stub(Config.prototype, 'getKeysByValue')
+    //       .withArgs(options.defaultUsername)
+    //       .returns([SfdxPropertyKeys.DEFAULT_DEV_HUB_USERNAME, SfdxPropertyKeys.DEFAULT_USERNAME]);
+    //   } else {
+    //     $$.SANDBOX.stub(Config.prototype, 'getKeysByValue')
+    //       .withArgs(options.defaultUsername)
+    //       .returns([SfdxPropertyKeys.DEFAULT_DEV_HUB_USERNAME])
+    //       .withArgs(options.defaultUsername)
+    //       .returns([SfdxPropertyKeys.DEFAULT_USERNAME]);
+    //   }
+    // }
+    //
+    // if (options.aliases) {
+    //   $$.setConfigStubContents('Aliases', {
+    //     contents: { orgs: options.aliases },
+    //   });
+    //
+    //   const aliasesByValue = new Map<string, string>();
+    //   Object.keys(options.aliases).forEach((key) => {
+    //     if (options.aliases && options.aliases[key]) {
+    //       aliasesByValue.set(options.aliases[key], key);
+    //     }
+    //   });
+    //
+    //   stubMethod($$.SANDBOX, Aliases.prototype, 'getKeysByValue').callsFake((username: string) => {
+    //     const values = aliasesByValue.get(username);
+    //     return values ? [values] : [];
+    //   });
+    //
+    //   stubMethod($$.SANDBOX, Aliases.prototype, 'get').callsFake((username: string) => {
+    //     return options.aliases ? options.aliases[username] : null;
+    //   });
+    // }
+    //
+    // spies.set('aliasesUnset', $$.SANDBOX.spy(Aliases.prototype, 'unset'));
+    // spies.set('configUnset', $$.SANDBOX.spy(Config.prototype, 'unset'));
+    // spies.set('authInfoClearCache', $$.SANDBOX.spy(AuthInfo, 'clearCache'));
+    //
     return authInfo;
   }
 
@@ -161,7 +150,6 @@ describe('auth:logout', () => {
 
       expect(spies.get('authInfoClearCache').callCount).to.equal(1);
       expect(spies.get('authInfoClearCache').args[0]).to.deep.equal([testData.username]);
-      expect(authInfoConfigStub.unlink.callCount).to.equal(1);
       expect(spies.get('aliasesUnset').callCount).to.equal(1);
       expect(spies.get('aliasesUnset').args[0]).to.deep.equal(['TestAlias']);
     });
@@ -182,7 +170,6 @@ describe('auth:logout', () => {
 
       expect(spies.get('authInfoClearCache').callCount).to.equal(1);
       expect(spies.get('authInfoClearCache').args[0]).to.deep.equal([testData.username]);
-      expect(authInfoConfigStub.unlink.callCount).to.equal(1);
       expect(spies.get('aliasesUnset').callCount).to.equal(1);
       expect(spies.get('aliasesUnset').args[0]).to.deep.equal(['TestAlias']);
     });
@@ -207,7 +194,6 @@ describe('auth:logout', () => {
       expect(response.result).to.deep.equal([testData.username, 'SomeOtherUser@coffee.com', 'helloworld@foobar.com']);
 
       expect(spies.get('authInfoClearCache').callCount).to.equal(3);
-      expect(authInfoConfigStub.unlink.callCount).to.equal(3);
       expect(spies.get('aliasesUnset').callCount).to.equal(3);
       expect(spies.get('aliasesUnset').args).to.deep.equal([['TestAlias'], ['TestAlias1'], ['TestAlias2']]);
     });
@@ -234,7 +220,6 @@ describe('auth:logout', () => {
       expect(response.result).to.deep.equal([testData.username, 'SomeOtherUser@coffee.com', 'helloworld@foobar.com']);
 
       expect(spies.get('authInfoClearCache').callCount).to.equal(3);
-      expect(authInfoConfigStub.unlink.callCount).to.equal(3);
       expect(spies.get('aliasesUnset').callCount).to.equal(3);
     });
 
@@ -292,7 +277,6 @@ describe('auth:logout', () => {
       expect(response.result).to.deep.equal([]);
 
       expect(spies.get('authInfoClearCache').callCount).to.equal(0);
-      expect(authInfoConfigStub.unlink.callCount).to.equal(0);
       expect(spies.get('aliasesUnset').callCount).to.equal(0);
     });
 
@@ -358,7 +342,6 @@ describe('auth:logout', () => {
       expect(response.result).to.deep.equal([testData.username]);
 
       expect(spies.get('authInfoClearCache').callCount).to.equal(1);
-      expect(authInfoConfigStub.unlink.callCount).to.equal(0);
       expect(spies.get('aliasesUnset').callCount).to.equal(1);
       expect(spies.get('configUnset').callCount).to.equal(0);
     });
