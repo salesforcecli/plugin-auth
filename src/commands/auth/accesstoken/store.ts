@@ -31,7 +31,7 @@ export default class Store extends SfdxCommand {
       required: true,
     }),
     setdefaultdevhubusername: flags.boolean({
-      char: 's',
+      char: 'd',
       description: commonMessages.getMessage('setDefaultDevHub'),
       default: false,
     }),
