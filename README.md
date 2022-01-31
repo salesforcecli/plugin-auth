@@ -70,7 +70,7 @@ sfdx plugins
 
 <!-- commands -->
 
-- [`sfdx auth:accesstoken:store -r <url> [-s] [-s] [-a <string>] [-p] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-authaccesstokenstore--r-url--s--s--a-string--p---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
+- [`sfdx auth:accesstoken:store -r <url> [-d] [-s] [-a <string>] [-p] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-authaccesstokenstore--r-url--d--s--a-string--p---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
 - [`sfdx auth:device:login [-i <string>] [-r <url>] [-d] [-s] [-a <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-authdevicelogin--i-string--r-url--d--s--a-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
 - [`sfdx auth:jwt:grant -u <string> -f <filepath> -i <string> [-r <url>] [-d] [-s] [-a <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-authjwtgrant--u-string--f-filepath--i-string--r-url--d--s--a-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
 - [`sfdx auth:list [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-authlist---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
@@ -78,7 +78,7 @@ sfdx plugins
 - [`sfdx auth:sfdxurl:store -f <filepath> [-d] [-s] [-a <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-authsfdxurlstore--f-filepath--d--s--a-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
 - [`sfdx auth:web:login [-i <string>] [-r <url>] [-d] [-s] [-a <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-authweblogin--i-string--r-url--d--s--a-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
 
-## `sfdx auth:accesstoken:store -r <url> [-s] [-s] [-a <string>] [-p] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
+## `sfdx auth:accesstoken:store -r <url> [-d] [-s] [-a <string>] [-p] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
 
 authorize an org using an existing Salesforce access token
 
@@ -88,21 +88,21 @@ By default, the command runs interactively and asks you for the access token. If
 To use the command in a CI/CD script, set the SFDX_ACCESS_TOKEN environment variable to the access token. Then run the command with the --noprompt parameter. "<org id>!<accesstoken>"
 
 USAGE
-  $ sfdx auth:accesstoken:store -r <url> [-s] [-s] [-a <string>] [-p] [--json] [--loglevel
+  $ sfdx auth:accesstoken:store -r <url> [-d] [-s] [-a <string>] [-p] [--json] [--loglevel
   trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
 
 OPTIONS
   -a, --setalias=setalias                                                           set an alias for the authenticated
                                                                                     org
 
+  -d, --setdefaultdevhubusername                                                    set the authenticated org as the
+                                                                                    default dev hub org for scratch org
+                                                                                    creation
+
   -p, --noprompt                                                                    do not prompt for confirmation
 
   -r, --instanceurl=instanceurl                                                     (required) the login URL of the
                                                                                     instance the org lives on
-
-  -s, --setdefaultdevhubusername                                                    set the authenticated org as the
-                                                                                    default dev hub org for scratch org
-                                                                                    creation
 
   -s, --setdefaultusername                                                          set the authenticated org as the
                                                                                     default username that all commands
