@@ -9,8 +9,7 @@
 
 import { $$, expect } from '@salesforce/command/lib/test';
 import { IConfig } from '@oclif/config';
-import { AuthFields, AuthInfo, ConfigFile, SfError } from '@salesforce/core';
-import { Crypto } from '@salesforce/core/lib/crypto';
+import { AuthFields, AuthInfo, GlobalInfo, SfError } from '@salesforce/core';
 import { StubbedType, stubInterface, stubMethod } from '@salesforce/ts-sinon';
 import { UX } from '@salesforce/command';
 import { assert } from 'chai';
@@ -44,28 +43,30 @@ describe('auth:accesstoken:store', () => {
       orgId: '00D000000000000',
       username: 'foo@baz.org',
     };
-    const ai = await AuthInfo.create({ username: authFields.username });
-    ai.update(
-      {
-        accessToken,
-        orgId: authFields.orgId,
-        instanceUrl: authFields.instanceUrl,
-        loginUrl: authFields.loginUrl,
-        username: authFields.username,
-      },
-      false
-    );
+
     stubInterface<AuthInfo>($$.SANDBOX, {
       getFields: () => authFields,
       save: () => {},
     });
-    stubMethod($$.SANDBOX, Crypto.prototype, 'decrypt').callsFake(() => accessToken);
-    stubMethod($$.SANDBOX, ConfigFile.prototype, 'exists').callsFake(async (): Promise<boolean> => authFileExists);
+
+    stubMethod($$.SANDBOX, GlobalInfo, 'create').resolves({
+      orgs: {
+        has: () => authFileExists,
+      },
+    });
     stubMethod($$.SANDBOX, Store.prototype, 'saveAuthInfo').resolves(async () => userInfo);
-    stubMethod($$.SANDBOX, Store.prototype, 'getUserInfo').resolves(ai);
+    stubMethod($$.SANDBOX, AuthInfo.prototype, 'getFields').returns({
+      accessToken,
+      orgId: authFields.orgId,
+      instanceUrl: authFields.instanceUrl,
+      loginUrl: authFields.loginUrl,
+      username: authFields.username,
+    });
+    stubMethod($$.SANDBOX, Store.prototype, 'getUserInfo').resolves(AuthInfo.prototype);
     if (useSfdxAccessTokenEnvVar) {
       stubMethod($$.SANDBOX, Env.prototype, 'getString').callsFake(() => accessToken);
     }
+    // @ts-ignore
     const store = new Store([], config);
     uxStub = stubInterface<UX>($$.SANDBOX, {
       prompt: () => promptAnswer,

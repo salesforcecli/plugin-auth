@@ -8,7 +8,7 @@
 /* eslint-disable camelcase */
 
 import { $$, expect, test } from '@salesforce/command/lib/test';
-import { AuthFields, AuthInfo } from '@salesforce/core';
+import { AuthFields, AuthInfo, OrgAuthorization } from '@salesforce/core';
 import { MockTestOrgData } from '@salesforce/core/lib/testSetup';
 import { StubbedType, stubInterface, stubMethod } from '@salesforce/ts-sinon';
 import { DeviceOauthService } from '@salesforce/core';
@@ -87,8 +87,8 @@ describe('auth:device:login', async () => {
     }
 
     stubMethod($$.SANDBOX, AuthInfo, 'create').callsFake(async () => authInfoStub);
-    $$.SANDBOX.stub(AuthInfo, 'listAllAuthFiles').callsFake(async () => {
-      return [`${authFields.username}.json`];
+    $$.SANDBOX.stub(AuthInfo, 'listAllAuthorizations').callsFake(async () => {
+      return [{ [authFields.username]: {} }] as OrgAuthorization[];
     });
   }
 

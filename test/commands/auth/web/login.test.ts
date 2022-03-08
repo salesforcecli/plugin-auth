@@ -35,11 +35,12 @@ describe('auth:web:login', () => {
     stubMethod($$.SANDBOX, Login.prototype, 'executeLoginFlow').callsFake(async () => {
       return authInfoStub;
     });
-    $$.SANDBOX.stub(AuthInfo, 'listAllAuthFiles').callsFake(async () => []);
+    $$.SANDBOX.stub(AuthInfo, 'listAllAuthorizations').callsFake(async () => []);
     uxStub = stubInterface<UX>($$.SANDBOX, {
       prompt: () => promptAnswer,
     });
 
+    // @ts-ignore
     const login = new Login([], config);
     // @ts-ignore because protected member
     login.ux = uxStub;
@@ -58,6 +59,7 @@ describe('auth:web:login', () => {
     });
     uxStub = stubInterface<UX>($$.SANDBOX, {});
 
+    // @ts-ignore
     const login = new Login([], config);
     // @ts-ignore because protected member
     login.ux = uxStub;

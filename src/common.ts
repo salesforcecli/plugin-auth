@@ -6,7 +6,7 @@
  */
 import { basename } from 'path';
 import { QueryResult } from 'jsforce';
-import { AuthInfo, AuthFields, Logger, SfdcUrl, SfdxProject, Messages, Org, SfError, sfdc } from '@salesforce/core';
+import { AuthInfo, AuthFields, Logger, SfdcUrl, SfProject, Messages, Org, SfError, sfdc } from '@salesforce/core';
 import { getString, isObject, Optional } from '@salesforce/ts-types';
 
 Messages.importMessagesDirectory(__dirname);
@@ -40,7 +40,7 @@ export class Common {
     }
     let loginUrl: string;
     try {
-      const project = await SfdxProject.resolve();
+      const project = await SfProject.resolve();
       const projectJson = await project.resolveProjectConfig();
       loginUrl = getString(projectJson, 'sfdcLoginUrl', SfdcUrl.PRODUCTION);
     } catch (err) {

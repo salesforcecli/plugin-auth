@@ -7,7 +7,7 @@
 
 import * as os from 'os';
 import { flags, FlagsConfig, SfdxCommand } from '@salesforce/command';
-import { AuthRemover, Global, Messages, Mode, SfError } from '@salesforce/core';
+import { AuthRemover, ConfigAggregator, Global, Messages, Mode, SfdxPropertyKeys, SfError } from '@salesforce/core';
 import { Prompts } from '../../prompts';
 
 Messages.importMessagesDirectory(__dirname);
@@ -36,18 +36,21 @@ export default class Logout extends SfdxCommand {
 
   public async run(): Promise<string[]> {
     if (this.flags.targetusername && this.flags.all) {
-      const err = new SfError(messages.getMessage('specifiedBothUserAndAllError'), 'SpecifiedBothUserAndAllError');
-      return Promise.reject(err);
+      throw new SfError(messages.getMessage('specifiedBothUserAndAllError'), 'SpecifiedBothUserAndAllError');
     }
 
     const remover = await AuthRemover.create();
+    const config = ConfigAggregator.getInstance();
 
-    const authConfigs = this.shouldFindAllAuths()
+    const targetUsername = this.flags.targetusername
+      ? (this.flags.targetusername as string)
+      : (config.getInfo(SfdxPropertyKeys.DEFAULT_USERNAME).value as string);
+
+    const usernames = this.shouldFindAllAuths()
       ? Object.keys(remover.findAllAuths())
-      : (await remover.findAuth(this.flags.targetusername)).username;
+      : [(await remover.findAuth(targetUsername)).username];
 
-    if (await this.shouldRunCommand(authConfigs)) {
-      const usernames = [...authConfigs];
+    if (await this.shouldRunCommand(usernames)) {
       for (const username of usernames) {
         await remover.removeAuth(username);
       }
@@ -61,7 +64,7 @@ export default class Logout extends SfdxCommand {
     return !!this.flags.all || (!this.flags.targetusername && Global.getEnvironmentMode() === Mode.DEMO);
   }
 
-  private async shouldRunCommand(usernames: string[] | string): Promise<boolean> {
+  private async shouldRunCommand(usernames: string[]): Promise<boolean> {
     const orgsToDelete = [[...usernames].join(os.EOL)];
     const message = messages.getMessage('logoutCommandYesNo', orgsToDelete);
     return Prompts.shouldRunCommand(this.ux, this.flags.noprompt, message);
