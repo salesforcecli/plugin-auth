@@ -7,7 +7,7 @@
 
 import * as os from 'os';
 import { flags, FlagsConfig, SfdxCommand } from '@salesforce/command';
-import { AuthFields, AuthInfo, AuthRemover, Messages, SfdxError } from '@salesforce/core';
+import { AuthFields, AuthInfo, AuthRemover, Messages, SfError } from '@salesforce/core';
 import { get, getString, Optional } from '@salesforce/ts-types';
 import { Prompts } from '../../../prompts';
 import { Common } from '../../../common';
@@ -73,7 +73,7 @@ export default class Grant extends SfdxCommand {
       await Common.identifyPossibleScratchOrgs(result, authInfo);
     } catch (err) {
       const msg = getString(err, 'message');
-      throw SfdxError.create('@salesforce/plugin-auth', 'jwt.grant', 'JwtGrantError', [msg]);
+      throw messages.createError('JwtGrantError', [msg]);
     }
 
     const successMsg = commonMessages.getMessage('authorizeCommandSuccess', [result.username, result.orgId]);
@@ -98,7 +98,7 @@ export default class Grant extends SfdxCommand {
         oauth2Options,
       });
     } catch (error) {
-      const err = error as SfdxError;
+      const err = error as SfError;
       if (err.name === 'AuthInfoOverwriteError') {
         this.logger.debug('Auth file already exists. Removing and starting fresh.');
         const remover = await AuthRemover.create();

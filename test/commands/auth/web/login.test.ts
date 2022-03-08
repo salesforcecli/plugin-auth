@@ -9,7 +9,7 @@
 
 import { $$, expect } from '@salesforce/command/lib/test';
 import { IConfig } from '@oclif/config';
-import { AuthFields, AuthInfo, Mode, Global, SfdxError } from '@salesforce/core';
+import { AuthFields, AuthInfo, Mode, Global, SfError } from '@salesforce/core';
 import { MockTestOrgData } from '@salesforce/core/lib/testSetup';
 import { StubbedType, stubInterface, stubMethod } from '@salesforce/ts-sinon';
 import { UX } from '@salesforce/command';
@@ -54,7 +54,7 @@ describe('auth:web:login', () => {
       getFields: () => authFields,
     });
     stubMethod($$.SANDBOX, Login.prototype, 'executeLoginFlow').throws(() => {
-      return new SfdxError('error!', errorName);
+      return new SfError('error!', errorName);
     });
     uxStub = stubInterface<UX>($$.SANDBOX, {});
 
@@ -99,7 +99,7 @@ describe('auth:web:login', () => {
     try {
       await login.run();
     } catch (error) {
-      const err = error as SfdxError;
+      const err = error as SfError;
       expect(err.name).to.equal('DEVICE_WARNING');
     }
   });
@@ -132,7 +132,7 @@ describe('auth:web:login', () => {
       await login.run();
       assert(false, 'should throw error');
     } catch (e) {
-      const err = e as SfdxError;
+      const err = e as SfError;
       expect(err.message).to.include('Invalid client credentials');
     }
   });
@@ -143,7 +143,7 @@ describe('auth:web:login', () => {
       await login.run();
       assert(false, 'should throw error');
     } catch (e) {
-      const err = e as SfdxError;
+      const err = e as SfError;
       expect(err.message).to.include('error!');
     }
   });

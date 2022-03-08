@@ -9,7 +9,7 @@
 
 import { $$, expect } from '@salesforce/command/lib/test';
 import { IConfig } from '@oclif/config';
-import { AuthFields, AuthInfo, ConfigFile, SfdxError } from '@salesforce/core';
+import { AuthFields, AuthInfo, ConfigFile, SfError } from '@salesforce/core';
 import { Crypto } from '@salesforce/core/lib/crypto';
 import { StubbedType, stubInterface, stubMethod } from '@salesforce/ts-sinon';
 import { UX } from '@salesforce/command';
@@ -100,7 +100,7 @@ describe('auth:accesstoken:store', () => {
       await store.run();
       assert(false, 'should throw error');
     } catch (e) {
-      const err = e as SfdxError;
+      const err = e as SfError;
       expect(err.message).to.include("The access token isn't in the correct format");
     }
   });

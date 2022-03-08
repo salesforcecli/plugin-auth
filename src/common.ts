@@ -6,7 +6,7 @@
  */
 import { basename } from 'path';
 import { QueryResult } from 'jsforce';
-import { AuthInfo, AuthFields, Logger, SfdcUrl, SfdxProject, Messages, Org, SfdxError, sfdc } from '@salesforce/core';
+import { AuthInfo, AuthFields, Logger, SfdcUrl, SfdxProject, Messages, Org, SfError, sfdc } from '@salesforce/core';
 import { getString, isObject, Optional } from '@salesforce/ts-types';
 
 Messages.importMessagesDirectory(__dirname);
@@ -24,8 +24,8 @@ export class Common {
 
     if (flags.setdefaultdevhubusername || flags.setdefaultusername) {
       await authInfo.setAsDefault({
-        defaultUsername: flags.setdefaultusername,
-        defaultDevhubUsername: flags.setdefaultdevhubusername,
+        org: flags.setdefaultusername,
+        devHub: flags.setdefaultdevhubusername,
       });
     }
   }
@@ -34,7 +34,7 @@ export class Common {
     if (instanceUrl) {
       if (instanceUrl.includes('lightning.force.com')) {
         logger.warn(messages.getMessage('invalidInstanceUrl'));
-        throw new SfdxError(messages.getMessage('invalidInstanceUrl'), 'URL_WARNING');
+        throw new SfError(messages.getMessage('invalidInstanceUrl'), 'URL_WARNING');
       }
       return instanceUrl;
     }
@@ -50,7 +50,7 @@ export class Common {
     }
     if (loginUrl.includes('lightning.force.com')) {
       logger.warn(messages.getMessage('invalidInstanceUrl'));
-      throw new SfdxError(messages.getMessage('invalidInstanceUrl'), 'URL_WARNING');
+      throw new SfError(messages.getMessage('invalidInstanceUrl'), 'URL_WARNING');
     }
     logger.debug(`loginUrl: ${loginUrl}`);
     return loginUrl;
@@ -104,8 +104,8 @@ export class Common {
   public static async getDevHubAuthInfos(): Promise<AuthInfo[]> {
     return (
       await Promise.all(
-        (await AuthInfo.listAllAuthFiles())
-          .map((fileName) => basename(fileName, '.json'))
+        (await AuthInfo.listAllAuthorizations())
+          .map((org) => basename(org.username, '.json'))
           .map((username) => AuthInfo.create({ username }))
       )
     ).filter((possibleHub) => possibleHub?.getFields()?.isDevHub);

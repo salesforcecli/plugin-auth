@@ -4,7 +4,7 @@
  * Licensed under the BSD 3-Clause license.
  * For full license text, see LICENSE.txt file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  */
-import { SfdcUrl, SfdxProject, SfdxError } from '@salesforce/core';
+import { SfdcUrl, SfdxProject, SfError } from '@salesforce/core';
 import sinon = require('sinon');
 import { expect } from '@salesforce/command/lib/test';
 import { restoreContext, testSetup } from '@salesforce/core/lib/testSetup';
@@ -71,7 +71,7 @@ describe('common unit tests', () => {
         await Common.resolveLoginUrl(undefined);
         sinon.assert.fail('This test is failing because it is expecting an error that is never thrown');
       } catch (error) {
-        const err = error as SfdxError;
+        const err = error as SfError;
         expect(err.name).to.equal('URL_WARNING');
       }
     });
@@ -80,7 +80,7 @@ describe('common unit tests', () => {
         await Common.resolveLoginUrl('https://shanedevhub.lightning.force.com');
         sinon.assert.fail('This test is failing because it is expecting an error that is never thrown');
       } catch (error) {
-        const err = error as SfdxError;
+        const err = error as SfError;
         expect(err.name).to.equal('URL_WARNING');
       }
     });

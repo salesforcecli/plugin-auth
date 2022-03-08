@@ -6,7 +6,7 @@
  */
 
 import { $$, expect, test } from '@salesforce/command/lib/test';
-import { AuthFields, AuthInfo, SfdxError } from '@salesforce/core';
+import { AuthFields, AuthInfo, SfError } from '@salesforce/core';
 import { MockTestOrgData } from '@salesforce/core/lib/testSetup';
 import { StubbedType, stubInterface, stubMethod } from '@salesforce/ts-sinon';
 import { UX } from '@salesforce/command';
@@ -37,7 +37,7 @@ describe('auth:jwt:grant', async () => {
     } else if (options.existingAuth) {
       stubMethod($$.SANDBOX, AuthInfo, 'create')
         .onFirstCall()
-        .throws(new SfdxError('auth exists', 'AuthInfoOverwriteError'))
+        .throws(new SfError('auth exists', 'AuthInfoOverwriteError'))
         .onSecondCall()
         .callsFake(async () => authInfoStub);
     } else {

@@ -6,8 +6,10 @@
  */
 
 import * as os from 'os';
+import { readFile } from 'fs/promises';
+import { readJson } from 'fs-extra';
 import { flags, FlagsConfig, SfdxCommand } from '@salesforce/command';
-import { AuthFields, AuthInfo, fs, Messages } from '@salesforce/core';
+import { AuthFields, AuthInfo, Messages } from '@salesforce/core';
 import { AnyJson } from '@salesforce/ts-types';
 import { Prompts } from '../../../prompts';
 import { Common } from '../../../common';
@@ -60,7 +62,7 @@ export default class Store extends SfdxCommand {
 
     const sfdxAuthUrl = authFile.endsWith('.json')
       ? await this.getUrlFromJson(authFile)
-      : await fs.readFile(authFile, 'utf8');
+      : await readFile(authFile, 'utf8');
 
     if (!sfdxAuthUrl) {
       throw new Error(
@@ -84,7 +86,7 @@ export default class Store extends SfdxCommand {
   }
 
   private async getUrlFromJson(authFile: string): Promise<string> {
-    const authFileJson = (await fs.readJson(authFile)) as AuthJson;
+    const authFileJson = (await readJson(authFile)) as AuthJson;
     return authFileJson.result?.sfdxAuthUrl || authFileJson.sfdxAuthUrl;
   }
 }
