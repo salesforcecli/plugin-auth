@@ -4,7 +4,6 @@
  * Licensed under the BSD 3-Clause license.
  * For full license text, see LICENSE.txt file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  */
-import { basename } from 'path';
 import { QueryResult } from 'jsforce';
 import { AuthInfo, AuthFields, Logger, SfdcUrl, SfProject, Messages, Org, SfError, sfdc } from '@salesforce/core';
 import { getString, isObject, Optional } from '@salesforce/ts-types';
@@ -105,7 +104,7 @@ export class Common {
     return (
       await Promise.all(
         (await AuthInfo.listAllAuthorizations())
-          .map((org) => basename(org.username, '.json'))
+          .map((org) => org.username)
           .map((username) => AuthInfo.create({ username }))
       )
     ).filter((possibleHub) => possibleHub?.getFields()?.isDevHub);

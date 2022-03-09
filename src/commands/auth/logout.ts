@@ -5,9 +5,11 @@
  * For full license text, see LICENSE.txt file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  */
 
+import * as fs from 'fs';
 import * as os from 'os';
+import { join } from 'path';
 import { flags, FlagsConfig, SfdxCommand } from '@salesforce/command';
-import { AuthRemover, ConfigAggregator, Global, Messages, Mode, SfdxPropertyKeys, SfError } from '@salesforce/core';
+import { AuthRemover, ConfigAggregator, Global, Messages, Mode, OrgConfigProperties, SfError } from '@salesforce/core';
 import { Prompts } from '../../prompts';
 
 Messages.importMessagesDirectory(__dirname);
@@ -40,19 +42,39 @@ export default class Logout extends SfdxCommand {
     }
 
     const remover = await AuthRemover.create();
-    const config = ConfigAggregator.getInstance();
+    let usernames: string[];
+    let usingSfdxFolder = false;
+
+    const ca = ConfigAggregator.getInstance();
 
     const targetUsername = this.flags.targetusername
       ? (this.flags.targetusername as string)
-      : (config.getInfo(SfdxPropertyKeys.DEFAULT_USERNAME).value as string);
+      : (ca.getInfo(OrgConfigProperties.TARGET_ORG).value as string);
 
-    const usernames = this.shouldFindAllAuths()
-      ? Object.keys(remover.findAllAuths())
-      : [(await remover.findAuth(targetUsername)).username];
+    try {
+      usernames = this.shouldFindAllAuths()
+        ? Object.keys(remover.findAllAuths())
+        : [(await remover.findAuth(targetUsername)).username];
+    } catch (e) {
+      if ((e as SfError).name === 'NamedOrgNotFound') {
+        // try looking in the old ~/.sfdx folder
+        // TODO: Can be removed once everything is in the `~/.sf` folder
+        if (fs.existsSync(join('~', '.sfdx', `${targetUsername}.json`))) {
+          usingSfdxFolder = true;
+          usernames = [targetUsername];
+        }
+      } else {
+        throw e;
+      }
+    }
 
     if (await this.shouldRunCommand(usernames)) {
       for (const username of usernames) {
-        await remover.removeAuth(username);
+        if (usingSfdxFolder) {
+          await fs.promises.rm(join('~', '.sfdx', `${targetUsername}.json`));
+        } else {
+          await remover.removeAuth(username);
+        }
       }
       this.ux.log(messages.getMessage('logoutOrgCommandSuccess', [usernames.join(os.EOL)]));
       return usernames;
