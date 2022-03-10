@@ -55,7 +55,7 @@ describe('auth:logout', () => {
     .it('should throw error when both -a and -u are specified', (ctx) => {
       const response = parseJsonError(ctx.stdout);
       expect(response.status).to.equal(1);
-      expect(response.name).to.equal('SpecifiedBothUserAndAllError');
+      expect(response.name).to.equal('SpecifiedBothUserAndAll');
     });
 
   test
