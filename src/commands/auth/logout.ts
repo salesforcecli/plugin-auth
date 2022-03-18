@@ -8,8 +8,8 @@
 import * as fs from 'fs';
 import * as os from 'os';
 import { join } from 'path';
-import { flags, FlagsConfig, SfdxCommand } from '@salesforce/command';
 import { AuthRemover, ConfigAggregator, Global, Messages, Mode, OrgConfigProperties, SfError } from '@salesforce/core';
+import { flags, FlagsConfig, SfdxCommand } from '@salesforce/command';
 import { Prompts } from '../../prompts';
 
 Messages.importMessagesDirectory(__dirname);
@@ -64,6 +64,9 @@ export default class Logout extends SfdxCommand {
           usernames = [targetUsername];
         }
       } else {
+        // can't type e as Error. catch(e) requires e as unknown or any
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        e.name = 'NoOrgFound';
         throw e;
       }
     }
