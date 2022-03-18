@@ -8,7 +8,7 @@ import { execCmd, TestSession, prepareForJwt } from '@salesforce/cli-plugins-tes
 import { expect } from 'chai';
 import { Env } from '@salesforce/kit';
 import { ensureString, getString } from '@salesforce/ts-types';
-import { AuthFields, AuthInfo } from '@salesforce/core';
+import { AuthFields } from '@salesforce/core';
 import { expectAccessTokenToExist, expectOrgIdToExist, expectUrlToExist } from '../../../testHelper';
 
 let testSession: TestSession;
@@ -27,14 +27,13 @@ describe('auth:accesstoken:store NUTs', () => {
     ensureString(env.getString('TESTKIT_JWT_KEY'));
     testSession = await TestSession.create({ authStrategy: 'NONE' });
     const jwtKeyFilePath = prepareForJwt(testSession.homeDir);
-    execCmd(
+    const res = execCmd<{ accessToken: string }>(
       `auth:jwt:grant -f ${jwtKeyFilePath} -i ${clientId} -u ${username} --setdefaultdevhubusername --instanceurl ${instanceUrl} --json`,
       {
         ensureExitCode: 0,
       }
     );
-    const authInfo = await AuthInfo.create({ username });
-    accessToken = authInfo.getFields(true).accessToken;
+    accessToken = res.jsonOutput.result.accessToken;
     env.setString('SFDX_ACCESS_TOKEN', accessToken);
     execCmd(`auth:logout -p -u ${username}`, { ensureExitCode: 0 });
   });
