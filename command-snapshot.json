@@ -10,7 +10,8 @@
       "setalias",
       "setdefaultdevhubusername",
       "setdefaultusername"
-    ]
+    ],
+    "alias": ["force:auth:accesstoken:store"]
   },
   {
     "command": "auth:device:login",
@@ -24,7 +25,8 @@
       "setalias",
       "setdefaultdevhubusername",
       "setdefaultusername"
-    ]
+    ],
+    "alias": ["force:auth:device:login"]
   },
   {
     "command": "auth:jwt:grant",
@@ -40,17 +42,20 @@
       "setdefaultdevhubusername",
       "setdefaultusername",
       "username"
-    ]
+    ],
+    "alias": ["force:auth:jwt:grant"]
   },
   {
     "command": "auth:list",
     "plugin": "@salesforce/plugin-auth",
-    "flags": ["json", "loglevel"]
+    "flags": ["json", "loglevel"],
+    "alias": ["force:auth:list"]
   },
   {
     "command": "auth:logout",
     "plugin": "@salesforce/plugin-auth",
-    "flags": ["all", "apiversion", "json", "loglevel", "noprompt", "targetusername"]
+    "flags": ["all", "apiversion", "json", "loglevel", "noprompt", "targetusername"],
+    "alias": ["force:auth:logout"]
   },
   {
     "command": "auth:sfdxurl:store",
@@ -63,7 +68,8 @@
       "setdefaultdevhubusername",
       "setdefaultusername",
       "sfdxurlfile"
-    ]
+    ],
+    "alias": ["force:auth:sfdxurl:store"]
   },
   {
     "command": "auth:web:login",
@@ -78,6 +84,7 @@
       "setalias",
       "setdefaultdevhubusername",
       "setdefaultusername"
-    ]
+    ],
+    "alias": ["force:auth:web:login"]
   }
 ]
