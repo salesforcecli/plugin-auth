@@ -22,6 +22,9 @@ export class Common {
     if (flags.setalias) await authInfo.setAlias(flags.setalias);
 
     if (flags.setdefaultdevhubusername || flags.setdefaultusername) {
+      if (flags.setdefaultdevhubusername) {
+        await authInfo.save({ isDevHub: true });
+      }
       await authInfo.setAsDefault({
         org: flags.setdefaultusername,
         devHub: flags.setdefaultdevhubusername,
