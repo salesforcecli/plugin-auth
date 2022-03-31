@@ -45,8 +45,8 @@ describe('auth:list', async () => {
     .stdout()
     .command(['auth:list', '--json'])
     .it('should show auth files', (ctx) => {
-      const auths = parseJson<OrgAuthorization[]>(ctx.stdout).result;
-      expect(auths[0].aliases).to.deep.equal(['TestAlias']);
+      const auths = parseJson<Array<OrgAuthorization & { alias: string }>>(ctx.stdout).result;
+      expect(auths[0].alias).to.deep.equal('TestAlias');
       expect(auths[0].username).to.equal(testData.username);
       expect(auths[0].instanceUrl).to.equal(testData.instanceUrl);
       expect(auths[0].orgId).to.equal(testData.orgId);
@@ -58,8 +58,8 @@ describe('auth:list', async () => {
     .stdout()
     .command(['auth:list', '--json'])
     .it('should show files with auth errors', (ctx) => {
-      const auths = parseJson<OrgAuthorization[]>(ctx.stdout).result;
-      expect(auths[0].aliases).to.deep.equal(['TestAlias']);
+      const auths = parseJson<Array<OrgAuthorization & { alias: string }>>(ctx.stdout).result;
+      expect(auths[0].alias).to.deep.equal('TestAlias');
       expect(auths[0].username).to.equal(testData.username);
       expect(auths[0].instanceUrl).to.equal(testData.instanceUrl);
       expect(auths[0].orgId).to.equal(testData.orgId);

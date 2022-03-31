@@ -847,10 +847,10 @@
     chalk "^2.4.2"
     cli-ux "^4.9.3"
 
-"@salesforce/command@^5.0.1":
-  version "5.0.1"
-  resolved "https://registry.yarnpkg.com/@salesforce/command/-/command-5.0.1.tgz#4a994691f8b81edcc7c2944d62fa74cacae0fddb"
-  integrity sha512-9RnFF6qaJQ5rmOego5Ib+JP3Ph+dD4Kq7yqxvv90BpLxDmPSUl6ru+ntDZS/rivcOUgh9XaeIBRE35Z23xOp/w==
+"@salesforce/command@^5.0.3":
+  version "5.0.3"
+  resolved "https://registry.yarnpkg.com/@salesforce/command/-/command-5.0.3.tgz#ca41ae3de0f692818a1e4066c50dfe74065ef371"
+  integrity sha512-eNoeWuSUrsU7DG0t3CU3DnHUVIis7FKxQZeYCVwtV7BZ//aN1rUA/uC4EaRYhiAY5g5kHPY2lY/9BNadVNcRKQ==
   dependencies:
     "@oclif/core" "^1.5.2"
     "@oclif/plugin-help" "^5.1.11"

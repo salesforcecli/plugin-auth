@@ -78,6 +78,8 @@ export default class Store extends SfdxCommand {
     await Common.handleSideEffects(authInfo, this.flags);
 
     const result = authInfo.getFields(true);
+    // ensure the clientSecret field... even if it is empty
+    result.clientSecret = result.clientSecret ?? '';
     await Common.identifyPossibleScratchOrgs(result, authInfo);
 
     const successMsg = commonMessages.getMessage('authorizeCommandSuccess', [result.username, result.orgId]);
