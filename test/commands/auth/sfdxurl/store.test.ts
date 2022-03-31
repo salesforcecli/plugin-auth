@@ -27,6 +27,7 @@ describe('auth:sfdxurl:store', async () => {
 
   async function prepareStubs(options: Options = {}) {
     authFields = await testData.getConfig();
+    delete authFields.isDevHub;
     authInfoStub = stubInterface<AuthInfo>($$.SANDBOX, {
       getFields: () => authFields,
     });
