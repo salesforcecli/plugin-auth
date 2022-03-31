@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.8.2](https://github.com/salesforcecli/plugin-auth/compare/v1.8.1...v1.8.2) (2022-03-30)
+
+### Bug Fixes
+
+- set isDevHub when --setdefaultdevhubusername is passed ([#375](https://github.com/salesforcecli/plugin-auth/issues/375)) ([811f464](https://github.com/salesforcecli/plugin-auth/commit/811f464d2bf16f18798bd4f515c3229f998d4384))
+
 ### [1.8.1](https://github.com/salesforcecli/plugin-auth/compare/v1.8.0...v1.8.1) (2022-01-31)
 
 ### Bug Fixes
