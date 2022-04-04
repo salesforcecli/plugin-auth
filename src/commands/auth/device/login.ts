@@ -8,7 +8,7 @@
 import * as os from 'os';
 import { flags, FlagsConfig, SfdxCommand } from '@salesforce/command';
 import { OAuth2Config } from 'jsforce';
-import { AuthFields, DeviceOauthService, Messages } from '@salesforce/core';
+import { AuthFields, AuthInfo, DeviceOauthService, Messages } from '@salesforce/core';
 import { get, Optional } from '@salesforce/ts-types';
 import { Prompts } from '../../../prompts';
 import { Common } from '../../../common';
@@ -77,7 +77,7 @@ export default class Login extends SfdxCommand {
       const authInfo = await deviceOauthService.authorizeAndSave(approval);
       await Common.handleSideEffects(authInfo, this.flags);
       const fields = authInfo.getFields(true);
-      await Common.identifyPossibleScratchOrgs(fields, authInfo);
+      await AuthInfo.identifyPossibleScratchOrgs(fields, authInfo);
       const successMsg = messages.getMessage('success', [fields.username]);
       this.ux.log(successMsg);
       return fields;

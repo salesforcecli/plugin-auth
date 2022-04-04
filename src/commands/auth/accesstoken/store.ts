@@ -78,7 +78,7 @@ export default class Store extends SfdxCommand {
   private async saveAuthInfo(authInfo: AuthInfo): Promise<void> {
     await authInfo.save();
     await Common.handleSideEffects(authInfo, this.flags);
-    await Common.identifyPossibleScratchOrgs(authInfo.getFields(true), authInfo);
+    await AuthInfo.identifyPossibleScratchOrgs(authInfo.getFields(true), authInfo);
   }
 
   private async overwriteAuthInfo(username: string): Promise<boolean> {

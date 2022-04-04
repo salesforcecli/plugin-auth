@@ -80,7 +80,7 @@ export default class Store extends SfdxCommand {
     const result = authInfo.getFields(true);
     // ensure the clientSecret field... even if it is empty
     result.clientSecret = result.clientSecret ?? '';
-    await Common.identifyPossibleScratchOrgs(result, authInfo);
+    await AuthInfo.identifyPossibleScratchOrgs(result, authInfo);
 
     const successMsg = commonMessages.getMessage('authorizeCommandSuccess', [result.username, result.orgId]);
     this.ux.log(successMsg);
