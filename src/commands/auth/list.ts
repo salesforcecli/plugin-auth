@@ -20,10 +20,13 @@ export default class List extends SfdxCommand {
   public async run(): Promise<OrgAuthorization[]> {
     try {
       const auths = await AuthInfo.listAllAuthorizations();
-      auths.map((auth) => {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore core3 moved to aliases as a string[], revert to alias as a string
-        auth.alias = auth.aliases[0] || '';
+      auths.map((auth: OrgAuthorization & { alias: string }) => {
+        // core3 moved to aliases as a string[], revert to alias as a string
+        auth.alias = auth.aliases.join(',');
+        // to prevent 'undefined' entries in the table only delete auth.alias if it's json output
+        // matches the previous behavior where alias was only present when it was defined
+        if (auth.alias === '' && this.flags.json) delete auth.alias;
+
         delete auth.aliases;
       });
       const hasErrors = auths.filter((auth) => !!auth.error).length > 0;

@@ -7,7 +7,7 @@
   "main": "lib/index.js",
   "dependencies": {
     "@oclif/core": "^1.5.2",
-    "@salesforce/command": "^5.0.3",
+    "@salesforce/command": "^5.0.4",
     "@salesforce/core": "^3.12.1",
     "@salesforce/kit": "^1.5.17",
     "chalk": "^4.1.2",
