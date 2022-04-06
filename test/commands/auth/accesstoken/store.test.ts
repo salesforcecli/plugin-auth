@@ -49,7 +49,7 @@ describe('auth:accesstoken:store', () => {
       save: () => {},
     });
 
-    stubMethod($$.SANDBOX, GlobalInfo, 'create').resolves({
+    stubMethod($$.SANDBOX, GlobalInfo, 'getInstance').resolves({
       orgs: {
         has: () => authFileExists,
       },

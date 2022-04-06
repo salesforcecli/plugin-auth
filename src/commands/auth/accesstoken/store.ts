@@ -83,7 +83,7 @@ export default class Store extends SfdxCommand {
 
   private async overwriteAuthInfo(username: string): Promise<boolean> {
     if (!this.flags.noprompt) {
-      const info = await GlobalInfo.create();
+      const info = await GlobalInfo.getInstance();
       if (info.orgs.has(username)) {
         return Prompts.askOverwriteAuthFile(this.ux, username);
       }
