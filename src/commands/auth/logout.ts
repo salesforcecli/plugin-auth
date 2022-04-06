@@ -45,10 +45,17 @@ export default class Logout extends SfdxCommand {
     const targetUsername = this.flags.targetusername
       ? (this.flags.targetusername as string)
       : (ca.getInfo(OrgConfigProperties.TARGET_ORG).value as string);
-
-    const usernames = this.shouldFindAllAuths()
-      ? Object.keys(remover.findAllAuths())
-      : [(await remover.findAuth(targetUsername)).username];
+    let usernames: string[];
+    try {
+      usernames = this.shouldFindAllAuths()
+        ? Object.keys(remover.findAllAuths())
+        : [(await remover.findAuth(targetUsername)).username];
+    } catch (e) {
+      // keep the error name the same for SFDX
+      const err = e as Error;
+      err.name = 'NoOrgFound';
+      throw SfError.wrap(err);
+    }
 
     if (await this.shouldRunCommand(usernames)) {
       for (const username of usernames) {
