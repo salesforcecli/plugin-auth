@@ -6,8 +6,8 @@
  */
 
 import * as os from 'os';
+import { AuthRemover, ConfigAggregator, Global, Messages, Mode, OrgConfigProperties, SfError } from '@salesforce/core';
 import { flags, FlagsConfig, SfdxCommand } from '@salesforce/command';
-import { AuthConfigs, AuthRemover, Global, Messages, Mode, SfdxError } from '@salesforce/core';
 import { Prompts } from '../../prompts';
 
 Messages.importMessagesDirectory(__dirname);
@@ -36,33 +36,44 @@ export default class Logout extends SfdxCommand {
 
   public async run(): Promise<string[]> {
     if (this.flags.targetusername && this.flags.all) {
-      const err = new SfdxError(messages.getMessage('specifiedBothUserAndAllError'), 'SpecifiedBothUserAndAllError');
-      return Promise.reject(err);
+      throw new SfError(messages.getMessage('specifiedBothUserAndAllError'), 'SpecifiedBothUserAndAllError');
     }
 
     const remover = await AuthRemover.create();
+    const ca = ConfigAggregator.getInstance();
 
-    const authConfigs = this.shouldFindAllAuths()
-      ? await remover.findAllAuthConfigs()
-      : await remover.findAuthConfigs(this.flags.targetusername);
+    const targetUsername = this.flags.targetusername
+      ? (this.flags.targetusername as string)
+      : (ca.getInfo(OrgConfigProperties.TARGET_ORG).value as string);
+    let usernames: string[];
+    try {
+      usernames = this.shouldFindAllAuths()
+        ? Object.keys(remover.findAllAuths())
+        : [(await remover.findAuth(targetUsername)).username];
+    } catch (e) {
+      // keep the error name the same for SFDX
+      const err = e as Error;
+      err.name = 'NoOrgFound';
+      throw SfError.wrap(err);
+    }
 
-    if (await this.shouldRunCommand(authConfigs)) {
-      const usernames = [...authConfigs.keys()];
+    if (await this.shouldRunCommand(usernames)) {
       for (const username of usernames) {
         await remover.removeAuth(username);
       }
       this.ux.log(messages.getMessage('logoutOrgCommandSuccess', [usernames.join(os.EOL)]));
       return usernames;
+    } else {
+      return [];
     }
-    return [];
   }
 
   private shouldFindAllAuths(): boolean {
     return !!this.flags.all || (!this.flags.targetusername && Global.getEnvironmentMode() === Mode.DEMO);
   }
 
-  private async shouldRunCommand(authConfigs: AuthConfigs): Promise<boolean> {
-    const orgsToDelete = [[...authConfigs.keys()].join(os.EOL)];
+  private async shouldRunCommand(usernames: string[]): Promise<boolean> {
+    const orgsToDelete = [usernames.join(os.EOL)];
     const message = messages.getMessage('logoutCommandYesNo', orgsToDelete);
     return Prompts.shouldRunCommand(this.ux, this.flags.noprompt, message);
   }

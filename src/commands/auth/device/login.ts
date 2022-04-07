@@ -6,9 +6,9 @@
  */
 
 import * as os from 'os';
-
 import { flags, FlagsConfig, SfdxCommand } from '@salesforce/command';
-import { AuthFields, DeviceOauthService, Messages, OAuth2Options } from '@salesforce/core';
+import { OAuth2Config } from 'jsforce';
+import { AuthFields, AuthInfo, DeviceOauthService, Messages } from '@salesforce/core';
 import { get, Optional } from '@salesforce/ts-types';
 import { Prompts } from '../../../prompts';
 import { Common } from '../../../common';
@@ -52,7 +52,7 @@ export default class Login extends SfdxCommand {
   public async run(): Promise<AuthFields> {
     if (await Prompts.shouldExitCommand(this.ux, this.flags.noprompt)) return {};
 
-    const oauthConfig: OAuth2Options = {
+    const oauthConfig: OAuth2Config = {
       loginUrl: await Common.resolveLoginUrl(get(this.flags.instanceurl, 'href', null) as Optional<string>),
       clientId: this.flags.clientid as string,
     };
@@ -75,9 +75,13 @@ export default class Login extends SfdxCommand {
     const approval = await deviceOauthService.awaitDeviceApproval(loginData);
     if (approval) {
       const authInfo = await deviceOauthService.authorizeAndSave(approval);
-      await Common.handleSideEffects(authInfo, this.flags);
+      await authInfo.handleAliasAndDefaultSettings({
+        alias: this.flags.setalias as string,
+        setDefault: this.flags.setdefaultusername as boolean,
+        setDefaultDevHub: this.flags.setdefaultdevhubusername as boolean,
+      });
       const fields = authInfo.getFields(true);
-      await Common.identifyPossibleScratchOrgs(fields, authInfo);
+      await AuthInfo.identifyPossibleScratchOrgs(fields, authInfo);
       const successMsg = messages.getMessage('success', [fields.username]);
       this.ux.log(successMsg);
       return fields;

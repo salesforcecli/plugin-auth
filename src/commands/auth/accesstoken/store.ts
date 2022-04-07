@@ -7,11 +7,10 @@
 
 import * as os from 'os';
 import { flags, FlagsConfig, SfdxCommand } from '@salesforce/command';
-import { AuthFields, AuthInfo, AuthInfoConfig, Messages, sfdc, SfdxError } from '@salesforce/core';
+import { AuthFields, AuthInfo, GlobalInfo, Messages, sfdc, SfError } from '@salesforce/core';
 import { ensureString, getString } from '@salesforce/ts-types';
 import { env } from '@salesforce/kit';
 import { Prompts } from '../../../prompts';
-import { Common } from '../../../common';
 
 Messages.importMessagesDirectory(__dirname);
 const messages = Messages.loadMessages('@salesforce/plugin-auth', 'accesstoken.store');
@@ -77,17 +76,25 @@ export default class Store extends SfdxCommand {
 
   private async saveAuthInfo(authInfo: AuthInfo): Promise<void> {
     await authInfo.save();
-    await Common.handleSideEffects(authInfo, this.flags);
-    await Common.identifyPossibleScratchOrgs(authInfo.getFields(true), authInfo);
+    await authInfo.handleAliasAndDefaultSettings({
+      alias: this.flags.setalias as string,
+      setDefault: this.flags.setdefaultusername as boolean,
+      setDefaultDevHub: this.flags.setdefaultdevhubusername as boolean,
+    });
+    await AuthInfo.identifyPossibleScratchOrgs(authInfo.getFields(true), authInfo);
   }
 
   private async overwriteAuthInfo(username: string): Promise<boolean> {
     if (!this.flags.noprompt) {
-      const authInfoConfig = await AuthInfoConfig.create({
-        ...AuthInfoConfig.getOptions(username),
-        throwOnNotFound: false,
-      });
-      if (await authInfoConfig.exists()) {
+      /**
+       * This must remain a `GlobalInfo.create()` call
+       * the AuthInfo.create call in this.getUserInfo will persist the new auth information to GlobalInfo in memory,
+       * so if we call GlobalInfo.getInstance it already has that user stored in memory, so when we ask info.orgs.has(username)
+       * it has that username in memory, but it hasn't been saved to the file yet - which is what we really want. If this
+       * is changed to GlobalInfo.getInstance, it will prompt the user to override an existing file, which doesn't exist yet
+       */
+      const info = await GlobalInfo.create();
+      if (info.orgs.has(username)) {
         return Prompts.askOverwriteAuthFile(this.ux, username);
       }
     }
@@ -102,7 +109,7 @@ export default class Store extends SfdxCommand {
       accessToken = await Prompts.askForAccessToken(this.ux);
     }
     if (!sfdc.matchesAccessToken(accessToken)) {
-      throw new SfdxError(messages.getMessage('invalidAccessTokenFormat', [ACCESS_TOKEN_FORMAT]));
+      throw new SfError(messages.getMessage('invalidAccessTokenFormat', [ACCESS_TOKEN_FORMAT]));
     }
     return accessToken;
   }

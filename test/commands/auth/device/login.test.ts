@@ -8,7 +8,7 @@
 /* eslint-disable camelcase */
 
 import { $$, expect, test } from '@salesforce/command/lib/test';
-import { AuthFields, AuthInfo } from '@salesforce/core';
+import { AuthFields, AuthInfo, OrgAuthorization } from '@salesforce/core';
 import { MockTestOrgData } from '@salesforce/core/lib/testSetup';
 import { StubbedType, stubInterface, stubMethod } from '@salesforce/ts-sinon';
 import { DeviceOauthService } from '@salesforce/core';
@@ -59,6 +59,8 @@ describe('auth:device:login', async () => {
 
   async function prepareStubs(options: Options = {}) {
     authFields = await testData.getConfig();
+    delete authFields.isDevHub;
+
     authInfoStub = stubInterface<AuthInfo>($$.SANDBOX, {
       getFields: () => authFields,
     });
@@ -87,8 +89,8 @@ describe('auth:device:login', async () => {
     }
 
     stubMethod($$.SANDBOX, AuthInfo, 'create').callsFake(async () => authInfoStub);
-    $$.SANDBOX.stub(AuthInfo, 'listAllAuthFiles').callsFake(async () => {
-      return [`${authFields.username}.json`];
+    $$.SANDBOX.stub(AuthInfo, 'listAllAuthorizations').callsFake(async () => {
+      return [{ [authFields.username]: {} }] as OrgAuthorization[];
     });
   }
 
@@ -126,7 +128,7 @@ describe('auth:device:login', async () => {
       expect(response.status).to.equal(0);
       expect(response.result).to.deep.equal(authFields);
       expect(response.result.username).to.equal(testData.username);
-      expect(authInfoStub.setAlias.callCount).to.equal(1);
+      expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
     });
 
   test
@@ -139,7 +141,7 @@ describe('auth:device:login', async () => {
       expect(response.status).to.equal(0);
       expect(response.result).to.deep.equal(authFields);
       expect(response.result.username).to.equal(testData.username);
-      expect(authInfoStub.setAsDefault.callCount).to.equal(1);
+      expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
     });
 
   test
@@ -152,7 +154,7 @@ describe('auth:device:login', async () => {
       expect(response.status).to.equal(0);
       expect(response.result).to.deep.equal(authFields);
       expect(response.result.username).to.equal(testData.username);
-      expect(authInfoStub.setAsDefault.callCount).to.equal(1);
+      expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
     });
 
   test

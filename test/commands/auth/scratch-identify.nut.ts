@@ -10,7 +10,8 @@ import { expect } from 'chai';
 import { execCmd, TestSession } from '@salesforce/cli-plugins-testkit';
 import { Env } from '@salesforce/kit';
 import { AnyJson, ensureString, getString, isArray } from '@salesforce/ts-types';
-import { AuthFields, Authorization, fs } from '@salesforce/core';
+import { AuthFields, OrgAuthorization } from '@salesforce/core';
+import { readJson } from 'fs-extra';
 
 describe('verify discovery/id of scratch org', () => {
   let testSession: TestSession;
@@ -48,7 +49,7 @@ describe('verify discovery/id of scratch org', () => {
   });
 
   it('should have the scratch org in auth files', () => {
-    const list = execCmd<Authorization[]>('auth:list --json', { ensureExitCode: 0 }).jsonOutput;
+    const list = execCmd<OrgAuthorization[]>('auth:list --json', { ensureExitCode: 0 }).jsonOutput;
     const found = !!list.result.find((r) => r.username === orgUsername);
     expect(found).to.be.true;
   });
@@ -58,7 +59,7 @@ describe('verify discovery/id of scratch org', () => {
   });
 
   it('should NOT have the scratch org in auth files', () => {
-    const list = execCmd<Authorization[]>('auth:list --json', { ensureExitCode: 0 }).jsonOutput;
+    const list = execCmd<OrgAuthorization[]>('auth:list --json', { ensureExitCode: 0 }).jsonOutput;
     const found = !!list.result.find((r) => r.username === orgUsername);
     expect(found).to.be.false;
   });
@@ -75,7 +76,7 @@ describe('verify discovery/id of scratch org', () => {
   });
 
   it('should have the devhubUsername in the auth file', async () => {
-    const fileContents = (await fs.readJson(path.join(testSession.homeDir, '.sfdx', `${orgUsername}.json`))) as {
+    const fileContents = (await readJson(path.join(testSession.homeDir, '.sfdx', `${orgUsername}.json`))) as {
       devHubUsername: string;
     };
     expect(fileContents.devHubUsername).to.equal(hubUsername);

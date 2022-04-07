@@ -7,19 +7,8 @@
 
 import { $$, expect, test } from '@salesforce/command/lib/test';
 import { UX } from '@salesforce/command/lib/ux';
-import {
-  Aliases,
-  AuthInfo,
-  AuthInfoConfig,
-  Config,
-  ConfigAggregator,
-  ConfigContents,
-  ConfigInfo,
-  Global,
-  Mode,
-} from '@salesforce/core';
+import { AuthRemover, ConfigContents, Global, Mode, SfOrg, SfOrgs } from '@salesforce/core';
 import { MockTestOrgData } from '@salesforce/core/lib/testSetup';
-import { StubbedType, stubInterface, stubMethod } from '@salesforce/ts-sinon';
 import { parseJson, parseJsonError } from '../../testHelper';
 
 interface Options {
@@ -35,106 +24,30 @@ interface Options {
 
 describe('auth:logout', () => {
   const testData = new MockTestOrgData();
-  const spies = new Map<string, sinon.SinonSpy>();
-  let authInfoConfigStub: StubbedType<AuthInfoConfig>;
 
-  afterEach(() => spies.clear());
+  let authRemoverSpy: sinon.SinonSpy;
 
   async function prepareStubs(options: Options = {}): Promise<ConfigContents> {
     const authInfo = await testData.getConfig();
 
-    $$.SANDBOX.stub(AuthInfo, 'listAllAuthFiles').callsFake(async () => {
-      if (options.authFiles) {
-        return [`${authInfo.username as string}.json`].concat(options.authFiles);
-      } else {
-        return [`${authInfo.username as string}.json`];
-      }
-    });
+    authRemoverSpy = $$.SANDBOX.spy(AuthRemover.prototype, 'removeAuth');
 
-    if (options.defaultUsername && !options.defaultDevhubUsername) {
-      $$.SANDBOX.stub(ConfigAggregator.prototype, 'getInfo')
-        .withArgs(Config.DEFAULT_USERNAME)
-        .returns({ value: options.defaultUsername } as ConfigInfo);
-      $$.SANDBOX.stub(Config.prototype, 'getKeysByValue')
-        .withArgs(options.defaultUsername)
-        .returns([Config.DEFAULT_USERNAME]);
-    }
-
-    if (!options.defaultUsername && options.defaultDevhubUsername) {
-      $$.SANDBOX.stub(ConfigAggregator.prototype, 'getInfo')
-        .withArgs(Config.DEFAULT_DEV_HUB_USERNAME)
-        .returns({ value: options.defaultDevhubUsername } as ConfigInfo);
-      $$.SANDBOX.stub(Config.prototype, 'getKeysByValue')
-        .withArgs(options.defaultDevhubUsername)
-        .returns([Config.DEFAULT_DEV_HUB_USERNAME]);
-    }
-
-    if (options.defaultUsername && options.defaultDevhubUsername) {
-      $$.SANDBOX.stub(ConfigAggregator.prototype, 'getInfo')
-        .withArgs(Config.DEFAULT_DEV_HUB_USERNAME)
-        .returns({ value: options.defaultDevhubUsername } as ConfigInfo)
-        .withArgs(Config.DEFAULT_USERNAME)
-        .returns({ value: options.defaultUsername } as ConfigInfo);
-
-      if (options.defaultUsername === options.defaultDevhubUsername) {
-        $$.SANDBOX.stub(Config.prototype, 'getKeysByValue')
-          .withArgs(options.defaultUsername)
-          .returns([Config.DEFAULT_DEV_HUB_USERNAME, Config.DEFAULT_USERNAME]);
-      } else {
-        $$.SANDBOX.stub(Config.prototype, 'getKeysByValue')
-          .withArgs(options.defaultUsername)
-          .returns([Config.DEFAULT_DEV_HUB_USERNAME])
-          .withArgs(options.defaultUsername)
-          .returns([Config.DEFAULT_USERNAME]);
-      }
-    }
-
-    authInfoConfigStub = stubInterface<AuthInfoConfig>($$.SANDBOX, {
-      getContents: () => authInfo,
-      exists: async () => !options.authInfoConfigDoesNotExist,
-    });
-
-    if (options.authInfoConfigFails) {
-      stubMethod($$.SANDBOX, AuthInfoConfig, 'create').throws(new Error('failed to read file'));
+    if (options.defaultUsername) {
+      $$.SANDBOX.stub(AuthRemover.prototype, 'findAuth').resolves({
+        username: testData.username,
+      } as SfOrg);
     } else {
-      stubMethod($$.SANDBOX, AuthInfoConfig, 'create').callsFake(async () => authInfoConfigStub);
+      $$.SANDBOX.stub(AuthRemover.prototype, 'findAuth').throws('NoOrgFound');
     }
 
-    if (options.aliases) {
-      $$.setConfigStubContents('Aliases', {
-        contents: { orgs: options.aliases },
-      });
-
-      const aliasesByValue = new Map<string, string>();
-      Object.keys(options.aliases).forEach((key) => {
-        if (options.aliases && options.aliases[key]) {
-          aliasesByValue.set(options.aliases[key], key);
-        }
-      });
-
-      stubMethod($$.SANDBOX, Aliases.prototype, 'getKeysByValue').callsFake((username: string) => {
-        const values = aliasesByValue.get(username);
-        return values ? [values] : [];
-      });
-
-      stubMethod($$.SANDBOX, Aliases.prototype, 'get').callsFake((username: string) => {
-        return options.aliases ? options.aliases[username] : null;
-      });
-    }
-
-    spies.set('aliasesUnset', $$.SANDBOX.spy(Aliases.prototype, 'unset'));
-    spies.set('configUnset', $$.SANDBOX.spy(Config.prototype, 'unset'));
-    spies.set('authInfoClearCache', $$.SANDBOX.spy(AuthInfo, 'clearCache'));
+    $$.SANDBOX.stub(AuthRemover.prototype, 'findAllAuths').returns(options.aliases as unknown as SfOrgs);
 
     return authInfo;
   }
 
   test
     .do(async () => {
-      await prepareStubs({
-        defaultUsername: testData.username,
-        aliases: { TestAlias: testData.username },
-      });
+      await prepareStubs();
     })
     .stdout()
     .stderr()
@@ -142,36 +55,28 @@ describe('auth:logout', () => {
     .it('should throw error when both -a and -u are specified', (ctx) => {
       const response = parseJsonError(ctx.stdout);
       expect(response.status).to.equal(1);
-      expect(response.name).to.equal('SpecifiedBothUserAndAllError');
+      expect(response.name).to.equal('SpecifiedBothUserAndAll');
     });
 
   test
     .do(async () => {
-      await prepareStubs({
-        defaultUsername: testData.username,
-        aliases: { TestAlias: testData.username },
-      });
+      await prepareStubs({ defaultUsername: testData.username });
     })
     .stdout()
     .command(['auth:logout', '-p', '--json'])
     .it('should remove defaultusername when neither -a nor -u are specified', (ctx) => {
       const response = parseJson<string[]>(ctx.stdout);
+
+      // eslint-disable-next-line no-console
+      console.log('res', response);
       expect(response.status).to.equal(0);
       expect(response.result).to.deep.equal([testData.username]);
-
-      expect(spies.get('authInfoClearCache').callCount).to.equal(1);
-      expect(spies.get('authInfoClearCache').args[0]).to.deep.equal([testData.username]);
-      expect(authInfoConfigStub.unlink.callCount).to.equal(1);
-      expect(spies.get('aliasesUnset').callCount).to.equal(1);
-      expect(spies.get('aliasesUnset').args[0]).to.deep.equal(['TestAlias']);
+      expect(authRemoverSpy.callCount).to.equal(1);
     });
 
   test
     .do(async () => {
-      await prepareStubs({
-        defaultUsername: 'SomeOtherUser@coffee.com',
-        aliases: { TestAlias: testData.username },
-      });
+      await prepareStubs({ defaultUsername: testData.username });
     })
     .stdout()
     .command(['auth:logout', '-p', '-u', testData.username, '--json'])
@@ -179,23 +84,16 @@ describe('auth:logout', () => {
       const response = parseJson<string[]>(ctx.stdout);
       expect(response.status).to.equal(0);
       expect(response.result).to.deep.equal([testData.username]);
-
-      expect(spies.get('authInfoClearCache').callCount).to.equal(1);
-      expect(spies.get('authInfoClearCache').args[0]).to.deep.equal([testData.username]);
-      expect(authInfoConfigStub.unlink.callCount).to.equal(1);
-      expect(spies.get('aliasesUnset').callCount).to.equal(1);
-      expect(spies.get('aliasesUnset').args[0]).to.deep.equal(['TestAlias']);
+      expect(authRemoverSpy.callCount).to.equal(1);
     });
 
   test
     .do(async () => {
       await prepareStubs({
-        authFiles: ['SomeOtherUser@coffee.com.json', 'helloworld@foobar.com.json'],
-        defaultUsername: 'SomeOtherUser@coffee.com',
         aliases: {
-          TestAlias: testData.username,
-          TestAlias1: 'SomeOtherUser@coffee.com',
-          TestAlias2: 'helloworld@foobar.com',
+          [testData.username]: 'TestAlias',
+          'SomeOtherUser@coffee.com': 'TestAlias1',
+          'helloworld@foobar.com': 'TestAlias2',
         },
       });
     })
@@ -205,22 +103,17 @@ describe('auth:logout', () => {
       const response = parseJson<string[]>(ctx.stdout);
       expect(response.status).to.equal(0);
       expect(response.result).to.deep.equal([testData.username, 'SomeOtherUser@coffee.com', 'helloworld@foobar.com']);
-
-      expect(spies.get('authInfoClearCache').callCount).to.equal(3);
-      expect(authInfoConfigStub.unlink.callCount).to.equal(3);
-      expect(spies.get('aliasesUnset').callCount).to.equal(3);
-      expect(spies.get('aliasesUnset').args).to.deep.equal([['TestAlias'], ['TestAlias1'], ['TestAlias2']]);
+      expect(authRemoverSpy.callCount).to.equal(3);
     });
 
   test
     .do(async () => {
       await prepareStubs({
-        authFiles: ['SomeOtherUser@coffee.com.json', 'helloworld@foobar.com.json'],
         defaultUsername: 'SomeOtherUser@coffee.com',
         aliases: {
-          TestAlias: testData.username,
-          TestAlias1: 'SomeOtherUser@coffee.com',
-          TestAlias2: 'helloworld@foobar.com',
+          [testData.username]: 'TestAlias',
+          'SomeOtherUser@coffee.com': 'TestAlias1',
+          'helloworld@foobar.com': 'TestAlias2',
         },
       });
 
@@ -232,10 +125,7 @@ describe('auth:logout', () => {
       const response = parseJson<string[]>(ctx.stdout);
       expect(response.status).to.equal(0);
       expect(response.result).to.deep.equal([testData.username, 'SomeOtherUser@coffee.com', 'helloworld@foobar.com']);
-
-      expect(spies.get('authInfoClearCache').callCount).to.equal(3);
-      expect(authInfoConfigStub.unlink.callCount).to.equal(3);
-      expect(spies.get('aliasesUnset').callCount).to.equal(3);
+      expect(authRemoverSpy.callCount).to.equal(3);
     });
 
   test
@@ -249,6 +139,7 @@ describe('auth:logout', () => {
       const response = parseJsonError(ctx.stdout);
       expect(response.status).to.equal(1);
       expect(response.name).to.equal('NoOrgFound');
+      expect(authRemoverSpy.callCount).to.equal(0);
     });
 
   test
@@ -266,23 +157,11 @@ describe('auth:logout', () => {
 
   test
     .do(async () => {
-      await prepareStubs({ authInfoConfigFails: true });
-    })
-    .stdout()
-    .command(['auth:logout', '-p', '-u', testData.username, '--json'])
-    .it('should do nothing if it fails to create AuthInfoConfig', (ctx) => {
-      const response = parseJson<string[]>(ctx.stdout);
-      expect(response.status).to.equal(0);
-      expect(response.result).to.deep.equal([]);
-    });
-
-  test
-    .do(async () => {
       await prepareStubs({
         defaultUsername: 'SomeOtherUser@coffee.com',
         aliases: { TestAlias: testData.username },
       });
-      $$.SANDBOX.stub(UX.prototype, 'prompt').returns(Promise.resolve('no'));
+      $$.SANDBOX.stub(UX.prototype, 'prompt').resolves('no');
     })
     .stdout()
     .command(['auth:logout', '-u', testData.username, '--json'])
@@ -290,10 +169,6 @@ describe('auth:logout', () => {
       const response = parseJson<string[]>(ctx.stdout);
       expect(response.status).to.equal(0);
       expect(response.result).to.deep.equal([]);
-
-      expect(spies.get('authInfoClearCache').callCount).to.equal(0);
-      expect(authInfoConfigStub.unlink.callCount).to.equal(0);
-      expect(spies.get('aliasesUnset').callCount).to.equal(0);
     });
 
   test
@@ -356,10 +231,5 @@ describe('auth:logout', () => {
       const response = parseJson<string[]>(ctx.stdout);
       expect(response.status).to.equal(0);
       expect(response.result).to.deep.equal([testData.username]);
-
-      expect(spies.get('authInfoClearCache').callCount).to.equal(1);
-      expect(authInfoConfigStub.unlink.callCount).to.equal(0);
-      expect(spies.get('aliasesUnset').callCount).to.equal(1);
-      expect(spies.get('configUnset').callCount).to.equal(0);
     });
 });

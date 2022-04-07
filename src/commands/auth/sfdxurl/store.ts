@@ -6,11 +6,12 @@
  */
 
 import * as os from 'os';
+import { readFile } from 'fs/promises';
+import { readJson } from 'fs-extra';
 import { flags, FlagsConfig, SfdxCommand } from '@salesforce/command';
-import { AuthFields, AuthInfo, fs, Messages } from '@salesforce/core';
+import { AuthFields, AuthInfo, Messages } from '@salesforce/core';
 import { AnyJson } from '@salesforce/ts-types';
 import { Prompts } from '../../../prompts';
-import { Common } from '../../../common';
 
 Messages.importMessagesDirectory(__dirname);
 const messages = Messages.loadMessages('@salesforce/plugin-auth', 'sfdxurl.store');
@@ -60,7 +61,7 @@ export default class Store extends SfdxCommand {
 
     const sfdxAuthUrl = authFile.endsWith('.json')
       ? await this.getUrlFromJson(authFile)
-      : await fs.readFile(authFile, 'utf8');
+      : await readFile(authFile, 'utf8');
 
     if (!sfdxAuthUrl) {
       throw new Error(
@@ -73,10 +74,16 @@ export default class Store extends SfdxCommand {
     const authInfo = await AuthInfo.create({ oauth2Options });
     await authInfo.save();
 
-    await Common.handleSideEffects(authInfo, this.flags);
+    await authInfo.handleAliasAndDefaultSettings({
+      alias: this.flags.setalias as string,
+      setDefault: this.flags.setdefaultusername as boolean,
+      setDefaultDevHub: this.flags.setdefaultdevhubusername as boolean,
+    });
 
     const result = authInfo.getFields(true);
-    await Common.identifyPossibleScratchOrgs(result, authInfo);
+    // ensure the clientSecret field... even if it is empty
+    result.clientSecret = result.clientSecret ?? '';
+    await AuthInfo.identifyPossibleScratchOrgs(result, authInfo);
 
     const successMsg = commonMessages.getMessage('authorizeCommandSuccess', [result.username, result.orgId]);
     this.ux.log(successMsg);
@@ -84,7 +91,7 @@ export default class Store extends SfdxCommand {
   }
 
   private async getUrlFromJson(authFile: string): Promise<string> {
-    const authFileJson = (await fs.readJson(authFile)) as AuthJson;
+    const authFileJson = (await readJson(authFile)) as AuthJson;
     return authFileJson.result?.sfdxAuthUrl || authFileJson.sfdxAuthUrl;
   }
 }

@@ -9,7 +9,8 @@ import * as os from 'os';
 import * as open from 'open';
 
 import { flags, FlagsConfig, SfdxCommand } from '@salesforce/command';
-import { AuthFields, AuthInfo, Logger, Messages, OAuth2Options, SfdxError, WebOAuthServer } from '@salesforce/core';
+import { OAuth2Config } from 'jsforce';
+import { AuthFields, AuthInfo, Logger, Messages, SfError, WebOAuthServer } from '@salesforce/core';
 import { Env } from '@salesforce/kit';
 import { get, Optional } from '@salesforce/ts-types';
 import { Prompts } from '../../../prompts';
@@ -59,12 +60,12 @@ export default class Login extends SfdxCommand {
 
   public async run(): Promise<AuthFields> {
     if (this.isSFDXContainerMode()) {
-      throw new SfdxError(messages.getMessage('deviceWarning'), 'DEVICE_WARNING');
+      throw new SfError(messages.getMessage('deviceWarning'), 'DEVICE_WARNING');
     }
 
     if (await Prompts.shouldExitCommand(this.ux, this.flags.noprompt)) return {};
 
-    const oauthConfig: OAuth2Options = {
+    const oauthConfig: OAuth2Config = {
       loginUrl: await Common.resolveLoginUrl(get(this.flags.instanceurl, 'href', null) as Optional<string>),
       clientId: this.flags.clientid as string,
     };
@@ -75,9 +76,13 @@ export default class Login extends SfdxCommand {
 
     try {
       const authInfo = await this.executeLoginFlow(oauthConfig);
-      await Common.handleSideEffects(authInfo, this.flags);
+      await authInfo.handleAliasAndDefaultSettings({
+        alias: this.flags.setalias as string,
+        setDefault: this.flags.setdefaultusername as boolean,
+        setDefaultDevHub: this.flags.setdefaultdevhubusername as boolean,
+      });
       const fields = authInfo.getFields(true);
-      await Common.identifyPossibleScratchOrgs(fields, authInfo);
+      await AuthInfo.identifyPossibleScratchOrgs(fields, authInfo);
 
       const successMsg = commonMessages.getMessage('authorizeCommandSuccess', [fields.username, fields.orgId]);
       this.ux.log(successMsg);
@@ -86,13 +91,13 @@ export default class Login extends SfdxCommand {
       const error = err as Error;
       Logger.childFromRoot('auth').debug(error);
       if (error.name === 'AuthCodeExchangeError') {
-        throw new SfdxError(messages.getMessage('invalidClientId', [error.message]));
+        throw new SfError(messages.getMessage('invalidClientId', [error.message]));
       }
       throw error;
     }
   }
 
-  private async executeLoginFlow(oauthConfig: OAuth2Options): Promise<AuthInfo> {
+  private async executeLoginFlow(oauthConfig: OAuth2Config): Promise<AuthInfo> {
     const oauthServer = await WebOAuthServer.create({ oauthConfig });
     await oauthServer.start();
     await open(oauthServer.getAuthorizationUrl(), { wait: false });

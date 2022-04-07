@@ -6,7 +6,7 @@
  */
 
 import { $$, expect, test } from '@salesforce/command/lib/test';
-import { AuthFields, AuthInfo, SfdxError } from '@salesforce/core';
+import { AuthFields, AuthInfo, OrgAuthorization, SfError } from '@salesforce/core';
 import { MockTestOrgData } from '@salesforce/core/lib/testSetup';
 import { StubbedType, stubInterface, stubMethod } from '@salesforce/ts-sinon';
 import { UX } from '@salesforce/command';
@@ -24,12 +24,14 @@ describe('auth:jwt:grant', async () => {
 
   async function prepareStubs(options: Options = {}) {
     authFields = await testData.getConfig();
+    delete authFields.isDevHub;
+
     authInfoStub = stubInterface<AuthInfo>($$.SANDBOX, {
       getFields: () => authFields,
     });
 
-    $$.SANDBOX.stub(AuthInfo, 'listAllAuthFiles').callsFake(async () => {
-      return [`${authFields.username}.json`];
+    $$.SANDBOX.stub(AuthInfo, 'listAllAuthorizations').callsFake(async () => {
+      return [{ [authFields.username]: {} }] as OrgAuthorization[];
     });
 
     if (options.authInfoCreateFails) {
@@ -37,7 +39,7 @@ describe('auth:jwt:grant', async () => {
     } else if (options.existingAuth) {
       stubMethod($$.SANDBOX, AuthInfo, 'create')
         .onFirstCall()
-        .throws(new SfdxError('auth exists', 'AuthInfoOverwriteError'))
+        .throws(new SfError('auth exists', 'AuthInfoOverwriteError'))
         .onSecondCall()
         .callsFake(async () => authInfoStub);
     } else {
@@ -74,7 +76,7 @@ describe('auth:jwt:grant', async () => {
       const response = parseJson<AuthFields>(ctx.stdout);
       expect(response.status).to.equal(0);
       expect(response.result).to.deep.equal(authFields);
-      expect(authInfoStub.setAlias.callCount).to.equal(1);
+      expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
     });
 
   test
@@ -97,12 +99,12 @@ describe('auth:jwt:grant', async () => {
       const response = parseJson<AuthFields>(ctx.stdout);
       expect(response.status).to.equal(0);
       expect(response.result).to.deep.equal(authFields);
-      expect(authInfoStub.setAlias.args[0]).to.deep.equal(['MyAlias']);
-      expect(authInfoStub.setAsDefault.callCount).to.equal(1);
-      expect(authInfoStub.setAsDefault.args[0]).to.deep.equal([
+      expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
+      expect(authInfoStub.handleAliasAndDefaultSettings.args[0]).to.deep.equal([
         {
-          defaultDevhubUsername: undefined,
-          defaultUsername: true,
+          alias: 'MyAlias',
+          setDefaultDevHub: undefined,
+          setDefault: true,
         },
       ]);
     });
@@ -115,12 +117,12 @@ describe('auth:jwt:grant', async () => {
       const response = parseJson<AuthFields>(ctx.stdout);
       expect(response.status).to.equal(0);
       expect(response.result).to.deep.equal(authFields);
-      expect(authInfoStub.setAlias.callCount).to.equal(0);
-      expect(authInfoStub.setAsDefault.callCount).to.equal(1);
-      expect(authInfoStub.setAsDefault.args[0]).to.deep.equal([
+      expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
+      expect(authInfoStub.handleAliasAndDefaultSettings.args[0]).to.deep.equal([
         {
-          defaultDevhubUsername: undefined,
-          defaultUsername: true,
+          alias: undefined,
+          setDefaultDevHub: undefined,
+          setDefault: true,
         },
       ]);
     });
@@ -145,12 +147,12 @@ describe('auth:jwt:grant', async () => {
       const response = parseJson<AuthFields>(ctx.stdout);
       expect(response.status).to.equal(0);
       expect(response.result).to.deep.equal(authFields);
-      expect(authInfoStub.setAlias.args[0]).to.deep.equal(['MyAlias']);
-      expect(authInfoStub.setAsDefault.callCount).to.equal(1);
-      expect(authInfoStub.setAsDefault.args[0]).to.deep.equal([
+      expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
+      expect(authInfoStub.handleAliasAndDefaultSettings.args[0]).to.deep.equal([
         {
-          defaultDevhubUsername: true,
-          defaultUsername: undefined,
+          alias: 'MyAlias',
+          setDefaultDevHub: true,
+          setDefault: undefined,
         },
       ]);
     });
@@ -163,12 +165,12 @@ describe('auth:jwt:grant', async () => {
       const response = parseJson<AuthFields>(ctx.stdout);
       expect(response.status).to.equal(0);
       expect(response.result).to.deep.equal(authFields);
-      expect(authInfoStub.setAlias.callCount).to.equal(0);
-      expect(authInfoStub.setAsDefault.callCount).to.equal(1);
-      expect(authInfoStub.setAsDefault.args[0]).to.deep.equal([
+      expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
+      expect(authInfoStub.handleAliasAndDefaultSettings.args[0]).to.deep.equal([
         {
-          defaultDevhubUsername: true,
-          defaultUsername: undefined,
+          alias: undefined,
+          setDefaultDevHub: true,
+          setDefault: undefined,
         },
       ]);
     });
@@ -193,11 +195,12 @@ describe('auth:jwt:grant', async () => {
       expect(response.status).to.equal(0);
       expect(response.result).to.deep.equal(authFields);
       expect(authInfoStub.setAlias.callCount).to.equal(0);
-      expect(authInfoStub.setAsDefault.callCount).to.equal(1);
-      expect(authInfoStub.setAsDefault.args[0]).to.deep.equal([
+      expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
+      expect(authInfoStub.handleAliasAndDefaultSettings.args[0]).to.deep.equal([
         {
-          defaultDevhubUsername: true,
-          defaultUsername: true,
+          alias: undefined,
+          setDefaultDevHub: true,
+          setDefault: true,
         },
       ]);
     });
@@ -223,12 +226,12 @@ describe('auth:jwt:grant', async () => {
       const response = parseJson<AuthFields>(ctx.stdout);
       expect(response.status).to.equal(0);
       expect(response.result).to.deep.equal(authFields);
-      expect(authInfoStub.setAlias.args[0]).to.deep.equal(['MyAlias']);
-      expect(authInfoStub.setAsDefault.callCount).to.equal(1);
-      expect(authInfoStub.setAsDefault.args[0]).to.deep.equal([
+      expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
+      expect(authInfoStub.handleAliasAndDefaultSettings.args[0]).to.deep.equal([
         {
-          defaultDevhubUsername: true,
-          defaultUsername: true,
+          alias: 'MyAlias',
+          setDefaultDevHub: true,
+          setDefault: true,
         },
       ]);
     });

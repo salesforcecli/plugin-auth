@@ -9,7 +9,7 @@
 
 import { $$, expect } from '@salesforce/command/lib/test';
 import { IConfig } from '@oclif/config';
-import { AuthFields, AuthInfo, Mode, Global, SfdxError } from '@salesforce/core';
+import { AuthFields, AuthInfo, Mode, Global, SfError } from '@salesforce/core';
 import { MockTestOrgData } from '@salesforce/core/lib/testSetup';
 import { StubbedType, stubInterface, stubMethod } from '@salesforce/ts-sinon';
 import { UX } from '@salesforce/command';
@@ -35,11 +35,12 @@ describe('auth:web:login', () => {
     stubMethod($$.SANDBOX, Login.prototype, 'executeLoginFlow').callsFake(async () => {
       return authInfoStub;
     });
-    $$.SANDBOX.stub(AuthInfo, 'listAllAuthFiles').callsFake(async () => []);
+    $$.SANDBOX.stub(AuthInfo, 'listAllAuthorizations').callsFake(async () => []);
     uxStub = stubInterface<UX>($$.SANDBOX, {
       prompt: () => promptAnswer,
     });
 
+    // @ts-ignore
     const login = new Login([], config);
     // @ts-ignore because protected member
     login.ux = uxStub;
@@ -54,10 +55,11 @@ describe('auth:web:login', () => {
       getFields: () => authFields,
     });
     stubMethod($$.SANDBOX, Login.prototype, 'executeLoginFlow').throws(() => {
-      return new SfdxError('error!', errorName);
+      return new SfError('error!', errorName);
     });
     uxStub = stubInterface<UX>($$.SANDBOX, {});
 
+    // @ts-ignore
     const login = new Login([], config);
     // @ts-ignore because protected member
     login.ux = uxStub;
@@ -76,21 +78,27 @@ describe('auth:web:login', () => {
     const login = await createNewLoginCommand({ setalias: 'MyAlias' });
     const result = await login.run();
     expect(result).to.deep.equal(authFields);
-    expect(authInfoStub.setAlias.args[0]).to.deep.equal(['MyAlias']);
+    expect(authInfoStub.handleAliasAndDefaultSettings.args[0]).to.deep.equal([
+      {
+        alias: 'MyAlias',
+        setDefaultDevHub: undefined,
+        setDefault: undefined,
+      },
+    ]);
   });
 
   it('should set defaultusername', async () => {
     const login = await createNewLoginCommand({ setdefaultusername: true });
     const result = await login.run();
     expect(result).to.deep.equal(authFields);
-    expect(authInfoStub.setAsDefault.callCount).to.equal(1);
+    expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
   });
 
   it('should set defaultdevhubusername', async () => {
     const login = await createNewLoginCommand({ setdefaultdevhubusername: true });
     const result = await login.run();
     expect(result).to.deep.equal(authFields);
-    expect(authInfoStub.setAsDefault.callCount).to.equal(1);
+    expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
   });
 
   it('should throw device warning error when in container mode (SFDX_CONTAINER_MODE)', async () => {
@@ -99,7 +107,7 @@ describe('auth:web:login', () => {
     try {
       await login.run();
     } catch (error) {
-      const err = error as SfdxError;
+      const err = error as SfError;
       expect(err.name).to.equal('DEVICE_WARNING');
     }
   });
@@ -132,7 +140,7 @@ describe('auth:web:login', () => {
       await login.run();
       assert(false, 'should throw error');
     } catch (e) {
-      const err = e as SfdxError;
+      const err = e as SfError;
       expect(err.message).to.include('Invalid client credentials');
     }
   });
@@ -143,7 +151,7 @@ describe('auth:web:login', () => {
       await login.run();
       assert(false, 'should throw error');
     } catch (e) {
-      const err = e as SfdxError;
+      const err = e as SfError;
       expect(err.message).to.include('error!');
     }
   });
