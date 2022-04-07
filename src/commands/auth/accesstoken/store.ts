@@ -86,7 +86,14 @@ export default class Store extends SfdxCommand {
 
   private async overwriteAuthInfo(username: string): Promise<boolean> {
     if (!this.flags.noprompt) {
-      const info = await GlobalInfo.getInstance();
+      /**
+       * This must remain a `GlobalInfo.create()` call
+       * the AuthInfo.create call in this.getUserInfo will persist the new auth information to GlobalInfo in memory,
+       * so if we call GlobalInfo.getInstance it already has that user stored in memory, so when we ask info.orgs.has(username)
+       * it has that username in memory, but it hasn't been saved to the file yet - which is what we really want. If this
+       * is changed to GlobalInfo.getInstance, it will prompt the user to override an existing file, which doesn't exist yet
+       */
+      const info = await GlobalInfo.create();
       if (info.orgs.has(username)) {
         return Prompts.askOverwriteAuthFile(this.ux, username);
       }
