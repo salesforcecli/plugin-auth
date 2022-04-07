@@ -16,7 +16,7 @@
     "tslib": "^2"
   },
   "devDependencies": {
-    "@oclif/dev-cli": "^1",
+    "oclif": "^2.6.3",
     "@oclif/plugin-command-snapshot": "^3",
     "@salesforce/cli-plugins-testkit": "^1.4.10",
     "@salesforce/dev-config": "^3.0.1",
@@ -131,7 +131,7 @@
     "test:command-reference": "./bin/run commandreference:generate --erroronwarnings",
     "test:deprecation-policy": "./bin/run snapshot:compare",
     "test:nuts": "nyc mocha \"**/*.nut.ts\" --slow 4500 --timeout 600000 --parallel",
-    "version": "oclif-dev readme"
+    "version": "oclif readme"
   },
   "publishConfig": {
     "access": "public"
