@@ -68,7 +68,11 @@ export default class Grant extends SfdxCommand {
 
     try {
       const authInfo = await this.initAuthInfo();
-      await Common.handleSideEffects(authInfo, this.flags);
+      await authInfo.handleAliasAndDefaultSettings({
+        alias: this.flags.setalias as string,
+        setDefault: this.flags.setdefaultusername as boolean,
+        setDefaultDevHub: this.flags.setdefaultdevhubusername as boolean,
+      });
       result = authInfo.getFields(true);
       await AuthInfo.identifyPossibleScratchOrgs(result, authInfo);
     } catch (err) {

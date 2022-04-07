@@ -11,7 +11,6 @@ import { AuthFields, AuthInfo, GlobalInfo, Messages, sfdc, SfError } from '@sale
 import { ensureString, getString } from '@salesforce/ts-types';
 import { env } from '@salesforce/kit';
 import { Prompts } from '../../../prompts';
-import { Common } from '../../../common';
 
 Messages.importMessagesDirectory(__dirname);
 const messages = Messages.loadMessages('@salesforce/plugin-auth', 'accesstoken.store');
@@ -77,7 +76,11 @@ export default class Store extends SfdxCommand {
 
   private async saveAuthInfo(authInfo: AuthInfo): Promise<void> {
     await authInfo.save();
-    await Common.handleSideEffects(authInfo, this.flags);
+    await authInfo.handleAliasAndDefaultSettings({
+      alias: this.flags.setalias as string,
+      setDefault: this.flags.setdefaultusername as boolean,
+      setDefaultDevHub: this.flags.setdefaultdevhubusername as boolean,
+    });
     await AuthInfo.identifyPossibleScratchOrgs(authInfo.getFields(true), authInfo);
   }
 

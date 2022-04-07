@@ -78,21 +78,27 @@ describe('auth:web:login', () => {
     const login = await createNewLoginCommand({ setalias: 'MyAlias' });
     const result = await login.run();
     expect(result).to.deep.equal(authFields);
-    expect(authInfoStub.setAlias.args[0]).to.deep.equal(['MyAlias']);
+    expect(authInfoStub.handleAliasAndDefaultSettings.args[0]).to.deep.equal([
+      {
+        alias: 'MyAlias',
+        setDefaultDevHub: undefined,
+        setDefault: undefined,
+      },
+    ]);
   });
 
   it('should set defaultusername', async () => {
     const login = await createNewLoginCommand({ setdefaultusername: true });
     const result = await login.run();
     expect(result).to.deep.equal(authFields);
-    expect(authInfoStub.setAsDefault.callCount).to.equal(1);
+    expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
   });
 
   it('should set defaultdevhubusername', async () => {
     const login = await createNewLoginCommand({ setdefaultdevhubusername: true });
     const result = await login.run();
     expect(result).to.deep.equal(authFields);
-    expect(authInfoStub.setAsDefault.callCount).to.equal(1);
+    expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
   });
 
   it('should throw device warning error when in container mode (SFDX_CONTAINER_MODE)', async () => {

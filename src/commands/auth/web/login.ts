@@ -76,7 +76,11 @@ export default class Login extends SfdxCommand {
 
     try {
       const authInfo = await this.executeLoginFlow(oauthConfig);
-      await Common.handleSideEffects(authInfo, this.flags);
+      await authInfo.handleAliasAndDefaultSettings({
+        alias: this.flags.setalias as string,
+        setDefault: this.flags.setdefaultusername as boolean,
+        setDefaultDevHub: this.flags.setdefaultdevhubusername as boolean,
+      });
       const fields = authInfo.getFields(true);
       await AuthInfo.identifyPossibleScratchOrgs(fields, authInfo);
 

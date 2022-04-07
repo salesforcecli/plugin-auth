@@ -4,32 +4,13 @@
  * Licensed under the BSD 3-Clause license.
  * For full license text, see LICENSE.txt file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  */
-import { AuthInfo, Logger, SfdcUrl, SfProject, Messages, SfError } from '@salesforce/core';
+import { Logger, SfdcUrl, SfProject, Messages, SfError } from '@salesforce/core';
 import { getString, isObject, Optional } from '@salesforce/ts-types';
 
 Messages.importMessagesDirectory(__dirname);
 const messages = Messages.loadMessages('@salesforce/plugin-auth', 'messages');
 
-interface Flags {
-  setalias?: string;
-  setdefaultdevhubusername?: boolean;
-  setdefaultusername?: boolean;
-}
-
 export class Common {
-  public static async handleSideEffects(authInfo: AuthInfo, flags: Flags): Promise<void> {
-    if (flags.setalias) await authInfo.setAlias(flags.setalias);
-
-    if (flags.setdefaultdevhubusername || flags.setdefaultusername) {
-      if (flags.setdefaultdevhubusername) {
-        await authInfo.save({ isDevHub: true });
-      }
-      await authInfo.setAsDefault({
-        org: flags.setdefaultusername,
-        devHub: flags.setdefaultdevhubusername,
-      });
-    }
-  }
   public static async resolveLoginUrl(instanceUrl: Optional<string>): Promise<Optional<string>> {
     const logger = await Logger.child('Common', { tag: 'resolveLoginUrl' });
     if (instanceUrl) {

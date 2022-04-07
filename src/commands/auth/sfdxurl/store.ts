@@ -12,7 +12,6 @@ import { flags, FlagsConfig, SfdxCommand } from '@salesforce/command';
 import { AuthFields, AuthInfo, Messages } from '@salesforce/core';
 import { AnyJson } from '@salesforce/ts-types';
 import { Prompts } from '../../../prompts';
-import { Common } from '../../../common';
 
 Messages.importMessagesDirectory(__dirname);
 const messages = Messages.loadMessages('@salesforce/plugin-auth', 'sfdxurl.store');
@@ -75,7 +74,11 @@ export default class Store extends SfdxCommand {
     const authInfo = await AuthInfo.create({ oauth2Options });
     await authInfo.save();
 
-    await Common.handleSideEffects(authInfo, this.flags);
+    await authInfo.handleAliasAndDefaultSettings({
+      alias: this.flags.setalias as string,
+      setDefault: this.flags.setdefaultusername as boolean,
+      setDefaultDevHub: this.flags.setdefaultdevhubusername as boolean,
+    });
 
     const result = authInfo.getFields(true);
     // ensure the clientSecret field... even if it is empty

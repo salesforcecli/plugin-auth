@@ -121,7 +121,7 @@ describe('auth:sfdxurl:store', async () => {
       const response = parseJson<AuthFields>(ctx.stdout);
       expect(response.status).to.equal(0);
       expect(response.result).to.deep.equal(authFields);
-      expect(authInfoStub.setAlias.callCount).to.equal(1);
+      expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
     });
 
   test
@@ -132,12 +132,12 @@ describe('auth:sfdxurl:store', async () => {
       const response = parseJson<AuthFields>(ctx.stdout);
       expect(response.status).to.equal(0);
       expect(response.result).to.deep.equal(authFields);
-      expect(authInfoStub.setAlias.args[0]).to.deep.equal(['MyAlias']);
-      expect(authInfoStub.setAsDefault.callCount).to.equal(1);
-      expect(authInfoStub.setAsDefault.args[0]).to.deep.equal([
+      expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
+      expect(authInfoStub.handleAliasAndDefaultSettings.args[0]).to.deep.equal([
         {
-          devHub: undefined,
-          org: true,
+          alias: 'MyAlias',
+          setDefaultDevHub: undefined,
+          setDefault: true,
         },
       ]);
     });
@@ -151,11 +151,12 @@ describe('auth:sfdxurl:store', async () => {
       expect(response.status).to.equal(0);
       expect(response.result).to.deep.equal(authFields);
       expect(authInfoStub.setAlias.callCount).to.equal(0);
-      expect(authInfoStub.setAsDefault.callCount).to.equal(1);
-      expect(authInfoStub.setAsDefault.args[0]).to.deep.equal([
+      expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
+      expect(authInfoStub.handleAliasAndDefaultSettings.args[0]).to.deep.equal([
         {
-          devHub: undefined,
-          org: true,
+          alias: undefined,
+          setDefaultDevHub: undefined,
+          setDefault: true,
         },
       ]);
     });
@@ -168,12 +169,12 @@ describe('auth:sfdxurl:store', async () => {
       const response = parseJson<AuthFields>(ctx.stdout);
       expect(response.status).to.equal(0);
       expect(response.result).to.deep.equal(authFields);
-      expect(authInfoStub.setAlias.args[0]).to.deep.equal(['MyAlias']);
-      expect(authInfoStub.setAsDefault.callCount).to.equal(1);
-      expect(authInfoStub.setAsDefault.args[0]).to.deep.equal([
+      expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
+      expect(authInfoStub.handleAliasAndDefaultSettings.args[0]).to.deep.equal([
         {
-          devHub: true,
-          org: undefined,
+          alias: 'MyAlias',
+          setDefaultDevHub: true,
+          setDefault: undefined,
         },
       ]);
     });
@@ -186,12 +187,12 @@ describe('auth:sfdxurl:store', async () => {
       const response = parseJson<AuthFields>(ctx.stdout);
       expect(response.status).to.equal(0);
       expect(response.result).to.deep.equal(authFields);
-      expect(authInfoStub.setAlias.callCount).to.equal(0);
-      expect(authInfoStub.setAsDefault.callCount).to.equal(1);
-      expect(authInfoStub.setAsDefault.args[0]).to.deep.equal([
+      expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
+      expect(authInfoStub.handleAliasAndDefaultSettings.args[0]).to.deep.equal([
         {
-          devHub: true,
-          org: undefined,
+          alias: undefined,
+          setDefaultDevHub: true,
+          setDefault: undefined,
         },
       ]);
     });
@@ -203,12 +204,12 @@ describe('auth:sfdxurl:store', async () => {
       const response = parseJson<AuthFields>(ctx.stdout);
       expect(response.status).to.equal(0);
       expect(response.result).to.deep.equal(authFields);
-      expect(authInfoStub.setAlias.callCount).to.equal(0);
-      expect(authInfoStub.setAsDefault.callCount).to.equal(1);
-      expect(authInfoStub.setAsDefault.args[0]).to.deep.equal([
+      expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
+      expect(authInfoStub.handleAliasAndDefaultSettings.args[0]).to.deep.equal([
         {
-          devHub: true,
-          org: true,
+          alias: undefined,
+          setDefaultDevHub: true,
+          setDefault: true,
         },
       ]);
     });
@@ -221,12 +222,12 @@ describe('auth:sfdxurl:store', async () => {
       const response = parseJson<AuthFields>(ctx.stdout);
       expect(response.status).to.equal(0);
       expect(response.result).to.deep.equal(authFields);
-      expect(authInfoStub.setAlias.args[0]).to.deep.equal(['MyAlias']);
-      expect(authInfoStub.setAsDefault.callCount).to.equal(1);
-      expect(authInfoStub.setAsDefault.args[0]).to.deep.equal([
+      expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
+      expect(authInfoStub.handleAliasAndDefaultSettings.args[0]).to.deep.equal([
         {
-          devHub: true,
-          org: true,
+          alias: 'MyAlias',
+          setDefaultDevHub: true,
+          setDefault: true,
         },
       ]);
     });

@@ -128,7 +128,7 @@ describe('auth:device:login', async () => {
       expect(response.status).to.equal(0);
       expect(response.result).to.deep.equal(authFields);
       expect(response.result.username).to.equal(testData.username);
-      expect(authInfoStub.setAlias.callCount).to.equal(1);
+      expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
     });
 
   test
@@ -141,7 +141,7 @@ describe('auth:device:login', async () => {
       expect(response.status).to.equal(0);
       expect(response.result).to.deep.equal(authFields);
       expect(response.result.username).to.equal(testData.username);
-      expect(authInfoStub.setAsDefault.callCount).to.equal(1);
+      expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
     });
 
   test
@@ -154,7 +154,7 @@ describe('auth:device:login', async () => {
       expect(response.status).to.equal(0);
       expect(response.result).to.deep.equal(authFields);
       expect(response.result.username).to.equal(testData.username);
-      expect(authInfoStub.setAsDefault.callCount).to.equal(1);
+      expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
     });
 
   test
