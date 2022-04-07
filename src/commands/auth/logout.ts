@@ -73,7 +73,7 @@ export default class Logout extends SfdxCommand {
   }
 
   private async shouldRunCommand(usernames: string[]): Promise<boolean> {
-    const orgsToDelete = [...usernames.join(os.EOL)];
+    const orgsToDelete = [usernames.join(os.EOL)];
     const message = messages.getMessage('logoutCommandYesNo', orgsToDelete);
     return Prompts.shouldRunCommand(this.ux, this.flags.noprompt, message);
   }
