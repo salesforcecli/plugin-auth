@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.0.0](https://github.com/salesforcecli/plugin-auth/compare/v1.8.2...v2.0.0) (2022-04-11)
+
+### Bug Fixes
+
+- building with core3 command5 ([f69c752](https://github.com/salesforcecli/plugin-auth/commit/f69c752a27739433736a837bd61602daf4240dd1))
+- use node 14 explicitly ([#386](https://github.com/salesforcecli/plugin-auth/issues/386)) ([c1ca07d](https://github.com/salesforcecli/plugin-auth/commit/c1ca07de356a035c428b268a2897e8254b28ca8f))
+- use node lts ([#385](https://github.com/salesforcecli/plugin-auth/issues/385)) ([1b4c903](https://github.com/salesforcecli/plugin-auth/commit/1b4c90336af70ad0e9b4464ea171399a6705436d))
+- use oclif not @oclif/dev-cli ([#384](https://github.com/salesforcecli/plugin-auth/issues/384)) ([6ff0a1d](https://github.com/salesforcecli/plugin-auth/commit/6ff0a1d8fdb16c5fd738d47b30d9ef780c0faaed))
+
 ### [1.8.2](https://github.com/salesforcecli/plugin-auth/compare/v1.8.1...v1.8.2) (2022-03-30)
 
 ### Bug Fixes
