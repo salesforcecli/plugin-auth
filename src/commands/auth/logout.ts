@@ -6,7 +6,7 @@
  */
 
 import * as os from 'os';
-import { AuthRemover, ConfigAggregator, Global, Messages, Mode, OrgConfigProperties, SfError } from '@salesforce/core';
+import { AuthRemover, Global, Messages, Mode, OrgConfigProperties, SfError } from '@salesforce/core';
 import { flags, FlagsConfig, SfdxCommand } from '@salesforce/command';
 import { Prompts } from '../../prompts';
 
@@ -40,11 +40,10 @@ export default class Logout extends SfdxCommand {
     }
 
     const remover = await AuthRemover.create();
-    const ca = ConfigAggregator.getInstance();
 
     const targetUsername = this.flags.targetusername
       ? (this.flags.targetusername as string)
-      : (ca.getInfo(OrgConfigProperties.TARGET_ORG).value as string);
+      : (this.configAggregator.getInfo(OrgConfigProperties.TARGET_ORG).value as string);
     let usernames: string[];
     try {
       usernames = this.shouldFindAllAuths()
