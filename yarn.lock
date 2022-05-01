@@ -826,7 +826,7 @@
     widest-line "^3.1.0"
     wrap-ansi "^7.0.0"
 
-"@oclif/core@^1.5.1", "@oclif/core@^1.5.2":
+"@oclif/core@^1.5.2":
   version "1.5.2"
   resolved "https://registry.yarnpkg.com/@oclif/core/-/core-1.5.2.tgz#23800fe249283815fdd6f441d75cf862683ab58e"
   integrity sha512-K2PtU9KyZuBhmpNxFN7vG2AbQtc4ndxDTuu+pa4iK3NtTUPiXReItVj9PKqKIOGMTN+KqiEMknSl1JGa1Fab2g==
@@ -1210,37 +1210,11 @@
     semver "^7.3.5"
     ts-retry-promise "^0.6.0"
 
-"@salesforce/core@^3.13.0":
+"@salesforce/core@^3.13.0", "@salesforce/core@^3.7.9":
   version "3.13.0"
   resolved "https://registry.yarnpkg.com/@salesforce/core/-/core-3.13.0.tgz#7288858dc0734ef50332606e9f3d0633eef54f1f"
   integrity sha512-ZhjcF3VN8etF/R6M+x6tnI2fDB7gkdUH/tQNjf1plmXyqRiyJ4gcTK4c6RRcemP/SMRme7qt9nqlGxJk6N4v5A==
   dependencies:
-    "@salesforce/bunyan" "^2.0.0"
-    "@salesforce/kit" "^1.5.34"
-    "@salesforce/schemas" "^1.1.0"
-    "@salesforce/ts-types" "^1.5.20"
-    "@types/graceful-fs" "^4.1.5"
-    "@types/mkdirp" "^1.0.2"
-    "@types/semver" "^7.3.9"
-    archiver "^5.3.0"
-    change-case "^4.1.2"
-    debug "^3.2.7"
-    faye "^1.4.0"
-    form-data "^4.0.0"
-    graceful-fs "^4.2.9"
-    js2xmlparser "^4.0.1"
-    jsen "0.6.6"
-    jsforce "2.0.0-beta.7"
-    jsonwebtoken "8.5.1"
-    mkdirp "1.0.4"
-    ts-retry-promise "^0.6.0"
-
-"@salesforce/core@^3.7.9":
-  version "3.7.9"
-  resolved "https://registry.yarnpkg.com/@salesforce/core/-/core-3.7.9.tgz#bcef443046e8680bf80c31a3d0a0740e1d83314e"
-  integrity sha512-yR+0DKWH55T/tU1y55VVFm9s5B8eMIZdVXch/b1FeFfEpycF/tYbbUcsSyV+oo8xEsJ6lxNj+P9m41izoWh2Sw==
-  dependencies:
-    "@oclif/core" "^1.5.1"
     "@salesforce/bunyan" "^2.0.0"
     "@salesforce/kit" "^1.5.34"
     "@salesforce/schemas" "^1.1.0"
@@ -1331,9 +1305,9 @@
     tslib "^1"
 
 "@salesforce/plugin-config@^1.2.5":
-  version "1.3.24"
-  resolved "https://registry.yarnpkg.com/@salesforce/plugin-config/-/plugin-config-1.3.24.tgz#1d1e0199cec29d26063b2888993ddb13811e7879"
-  integrity sha512-zOxQL8ZYIrNhVLIPXLl934YUFHzyyCkMuBxY3nWkOZ6m1otxUEyXAAWyqIVR1xVMIXymAlq/Xs2ZSjLVfTjZIA==
+  version "1.3.30"
+  resolved "https://registry.yarnpkg.com/@salesforce/plugin-config/-/plugin-config-1.3.30.tgz#2268c776811d1ee847546ae62f2fb6f3810c46f8"
+  integrity sha512-eIp/T9Y8+u2EGwqJtmwZbcX8+vqcXSw4uLma1ym3pbGjH42WlL7GnRACc4av9BDHrsWC2ILC5juSYV3ldonrJA==
   dependencies:
     "@oclif/config" "^1.18.1"
     "@salesforce/command" "^4.2.0"
