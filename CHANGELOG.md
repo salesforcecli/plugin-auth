@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.0.3](https://github.com/salesforcecli/plugin-auth/compare/v2.0.2...v2.0.3) (2022-05-20)
+
+### Bug Fixes
+
+- add prompt to example in messages ([dbbb69e](https://github.com/salesforcecli/plugin-auth/commit/dbbb69e9540796c051847203c7398c1731ba40e2))
+- add prompt to examples ([a7ddc31](https://github.com/salesforcecli/plugin-auth/commit/a7ddc31a8567d0a0064125a4b3966c6564702333))
+- add prompt to examples ([753ee39](https://github.com/salesforcecli/plugin-auth/commit/753ee39c9548b6e8a25380021fde0a2e3ab6f811))
+- add prompt to examples ([db042db](https://github.com/salesforcecli/plugin-auth/commit/db042db69126f428fcd06cbf4c150d89052d8379))
+- add prompt to examples ([4110039](https://github.com/salesforcecli/plugin-auth/commit/41100398c99d67970145f9ff8907000ca5a60b7d))
+- add prompt to examples ([75c41bd](https://github.com/salesforcecli/plugin-auth/commit/75c41bde49f707708865bdb320d8e6c7281b3239))
+
 ### [2.0.2](https://github.com/salesforcecli/plugin-auth/compare/v2.0.1...v2.0.2) (2022-04-21)
 
 ### Bug Fixes
