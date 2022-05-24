@@ -65,12 +65,12 @@ describe('auth:logout NUTs', () => {
     const configGetUsername = execCmd<Array<{ key: string }>>('config:get defaultusername --json', {
       ensureExitCode: 0,
     }).jsonOutput;
-    expect(configGetUsername.result).to.deep.equal([{ key: 'defaultusername' }]);
+    expect(configGetUsername.result[0].key).to.equal('defaultusername');
 
     const configGetDevhub = execCmd<Array<{ key: string }>>('config:get defaultdevhubusername --json', {
       ensureExitCode: 0,
     }).jsonOutput;
-    expect(configGetDevhub.result).to.deep.equal([{ key: 'defaultdevhubusername' }]);
+    expect(configGetDevhub.result[0].key).to.equal('defaultdevhubusername');
   });
 
   it('should remove the org specified by the -u flag (human readable)', () => {
@@ -96,6 +96,6 @@ describe('auth:logout NUTs', () => {
     const configGet = execCmd<Array<{ key: string }>>('config:get defaultusername --json', {
       ensureExitCode: 0,
     }).jsonOutput;
-    expect(configGet.result).to.deep.equal([{ key: 'defaultusername' }]);
+    expect(configGet.result[0].key).to.equal('defaultusername');
   });
 });
