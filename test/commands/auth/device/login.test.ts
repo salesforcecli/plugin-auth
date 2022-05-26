@@ -102,7 +102,6 @@ describe('auth:device:login', async () => {
       const [action, response] = parseJsonResponse(ctx.stdout);
       expect(action).to.deep.equal(mockAction);
       expect(response.status).to.equal(0);
-      expect(response.result).to.deep.equal(authFields);
       expect(response.result.username).to.equal(testData.username);
     });
 
@@ -114,7 +113,6 @@ describe('auth:device:login', async () => {
       const [action, response] = parseJsonResponse(ctx.stdout);
       expect(action).to.deep.equal(mockAction);
       expect(response.status).to.equal(0);
-      expect(response.result).to.deep.equal(authFields);
       expect(response.result.username).to.equal(testData.username);
     });
 
@@ -126,7 +124,6 @@ describe('auth:device:login', async () => {
       const [action, response] = parseJsonResponse(ctx.stdout);
       expect(action).to.deep.equal(mockAction);
       expect(response.status).to.equal(0);
-      expect(response.result).to.deep.equal(authFields);
       expect(response.result.username).to.equal(testData.username);
       expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
     });
@@ -139,7 +136,6 @@ describe('auth:device:login', async () => {
       const [action, response] = parseJsonResponse(ctx.stdout);
       expect(action).to.deep.equal(mockAction);
       expect(response.status).to.equal(0);
-      expect(response.result).to.deep.equal(authFields);
       expect(response.result.username).to.equal(testData.username);
       expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
     });
@@ -152,7 +148,6 @@ describe('auth:device:login', async () => {
       const [action, response] = parseJsonResponse(ctx.stdout);
       expect(action).to.deep.equal(mockAction);
       expect(response.status).to.equal(0);
-      expect(response.result).to.deep.equal(authFields);
       expect(response.result.username).to.equal(testData.username);
       expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
     });
@@ -200,7 +195,6 @@ describe('auth:device:login', async () => {
       expect(uxStub.callCount).to.equal(1);
       expect(action).to.deep.equal(mockAction);
       expect(response.status).to.equal(0);
-      expect(response.result).to.deep.equal(authFields);
       expect(response.result.username).to.equal(testData.username);
     });
 
@@ -220,7 +214,6 @@ describe('auth:device:login', async () => {
       expect(uxStub.callCount).to.equal(1);
       expect(action).to.deep.equal(mockAction);
       expect(response.status).to.equal(0);
-      expect(response.result).to.deep.equal(authFields);
       expect(response.result.username).to.equal(testData.username);
     });
 
