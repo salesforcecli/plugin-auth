@@ -54,7 +54,6 @@ describe('auth:jwt:grant', async () => {
     .it('should return auth fields', (ctx) => {
       const response = parseJson<AuthFields>(ctx.stdout);
       expect(response.status).to.equal(0);
-      expect(response.result).to.deep.equal(authFields);
     });
 
   test
@@ -75,7 +74,6 @@ describe('auth:jwt:grant', async () => {
     .it('should set alias when -a is provided', (ctx) => {
       const response = parseJson<AuthFields>(ctx.stdout);
       expect(response.status).to.equal(0);
-      expect(response.result).to.deep.equal(authFields);
       expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
     });
 
@@ -98,7 +96,6 @@ describe('auth:jwt:grant', async () => {
     .it('should set defaultusername to alias when -s and -a are provided', (ctx) => {
       const response = parseJson<AuthFields>(ctx.stdout);
       expect(response.status).to.equal(0);
-      expect(response.result).to.deep.equal(authFields);
       expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
       expect(authInfoStub.handleAliasAndDefaultSettings.args[0]).to.deep.equal([
         {
@@ -116,7 +113,6 @@ describe('auth:jwt:grant', async () => {
     .it('should set defaultusername to username when -s is provided', (ctx) => {
       const response = parseJson<AuthFields>(ctx.stdout);
       expect(response.status).to.equal(0);
-      expect(response.result).to.deep.equal(authFields);
       expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
       expect(authInfoStub.handleAliasAndDefaultSettings.args[0]).to.deep.equal([
         {
@@ -146,7 +142,6 @@ describe('auth:jwt:grant', async () => {
     .it('should set defaultdevhubusername to alias when -d and -a are provided', (ctx) => {
       const response = parseJson<AuthFields>(ctx.stdout);
       expect(response.status).to.equal(0);
-      expect(response.result).to.deep.equal(authFields);
       expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
       expect(authInfoStub.handleAliasAndDefaultSettings.args[0]).to.deep.equal([
         {
@@ -164,7 +159,6 @@ describe('auth:jwt:grant', async () => {
     .it('should set defaultdevhubusername to username when -d is provided', (ctx) => {
       const response = parseJson<AuthFields>(ctx.stdout);
       expect(response.status).to.equal(0);
-      expect(response.result).to.deep.equal(authFields);
       expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
       expect(authInfoStub.handleAliasAndDefaultSettings.args[0]).to.deep.equal([
         {
@@ -193,7 +187,6 @@ describe('auth:jwt:grant', async () => {
     .it('should set defaultusername and defaultdevhubusername to username when -d and -s are provided', (ctx) => {
       const response = parseJson<AuthFields>(ctx.stdout);
       expect(response.status).to.equal(0);
-      expect(response.result).to.deep.equal(authFields);
       expect(authInfoStub.setAlias.callCount).to.equal(0);
       expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
       expect(authInfoStub.handleAliasAndDefaultSettings.args[0]).to.deep.equal([
@@ -225,7 +218,6 @@ describe('auth:jwt:grant', async () => {
     .it('should set defaultusername and defaultdevhubusername to alias when -a, -d, and -s are provided', (ctx) => {
       const response = parseJson<AuthFields>(ctx.stdout);
       expect(response.status).to.equal(0);
-      expect(response.result).to.deep.equal(authFields);
       expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
       expect(authInfoStub.handleAliasAndDefaultSettings.args[0]).to.deep.equal([
         {
@@ -273,7 +265,6 @@ describe('auth:jwt:grant', async () => {
     .it('should not throw an error when the authorization already exists', (ctx) => {
       const response = parseJson<AuthFields>(ctx.stdout);
       expect(response.status).to.equal(0);
-      expect(response.result).to.deep.equal(authFields);
     });
 
   test
@@ -290,7 +281,6 @@ describe('auth:jwt:grant', async () => {
     .it('should auth when in demo mode (SFDX_ENV=demo) and prompt is answered with yes', (ctx) => {
       const response = parseJson<AuthFields>(ctx.stdout);
       expect(response.status).to.equal(0);
-      expect(response.result).to.deep.equal(authFields);
       expect(authInfoStub.save.callCount).to.equal(1);
     });
 
@@ -325,7 +315,6 @@ describe('auth:jwt:grant', async () => {
     .it('should ignore prompt when in demo mode (SFDX_ENV=demo) and -p is provided', (ctx) => {
       const response = parseJson<AuthFields>(ctx.stdout);
       expect(response.status).to.equal(0);
-      expect(response.result).to.deep.equal(authFields);
       expect(authInfoStub.save.callCount).to.equal(1);
     });
 });
