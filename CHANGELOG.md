@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.1.0](https://github.com/salesforcecli/plugin-auth/compare/v2.0.3...v2.1.0) (2022-06-02)
+
+### Features
+
+- bin/dev ([fc7d619](https://github.com/salesforcecli/plugin-auth/commit/fc7d61937284b3f45c41275a5238220822630e04))
+- bump core to get jwt audience features ([66993ed](https://github.com/salesforcecli/plugin-auth/commit/66993ed9cab690417abbe73356c551a0712c6521))
+
 ### [2.0.3](https://github.com/salesforcecli/plugin-auth/compare/v2.0.2...v2.0.3) (2022-05-20)
 
 ### Bug Fixes
