@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.2.0](https://github.com/salesforcecli/plugin-auth/compare/v2.1.0...v2.2.0) (2022-06-22)
+
+### Features
+
+- use StateAggregator ([ab99136](https://github.com/salesforcecli/plugin-auth/commit/ab9913631550c01e5f7748eea3ab31814f523ff9))
+
 ## [2.1.0](https://github.com/salesforcecli/plugin-auth/compare/v2.0.3...v2.1.0) (2022-06-02)
 
 ### Features
