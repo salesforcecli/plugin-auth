@@ -9,7 +9,7 @@
 
 import { $$, expect } from '@salesforce/command/lib/test';
 import { IConfig } from '@oclif/config';
-import { AuthFields, AuthInfo, GlobalInfo, SfError } from '@salesforce/core';
+import { AuthFields, AuthInfo, SfError, StateAggregator } from '@salesforce/core';
 import { StubbedType, stubInterface, stubMethod } from '@salesforce/ts-sinon';
 import { UX } from '@salesforce/command';
 import { assert } from 'chai';
@@ -49,9 +49,9 @@ describe('auth:accesstoken:store', () => {
       save: () => {},
     });
 
-    stubMethod($$.SANDBOX, GlobalInfo, 'create').resolves({
+    stubMethod($$.SANDBOX, StateAggregator, 'getInstance').resolves({
       orgs: {
-        has: () => authFileExists,
+        exists: () => Promise.resolve(authFileExists),
       },
     });
     stubMethod($$.SANDBOX, Store.prototype, 'saveAuthInfo').resolves(async () => userInfo);

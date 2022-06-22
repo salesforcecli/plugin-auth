@@ -1098,10 +1098,10 @@
     semver "^7.3.5"
     ts-retry-promise "^0.6.0"
 
-"@salesforce/core@^3.15.5", "@salesforce/core@^3.19.0":
-  version "3.19.1"
-  resolved "https://registry.yarnpkg.com/@salesforce/core/-/core-3.19.1.tgz#bd154d2676a7ab320b4b3596e5bb61635c52a3fe"
-  integrity sha512-f2Up1N9dVFv4vEKxK97CrPu6IoYl56IynH6kv07/ZO/f4F6JTxpa27e88ZDmPiZw5eBzURhCWCYqpwk5ev0YBg==
+"@salesforce/core@^3.15.5":
+  version "3.19.0"
+  resolved "https://registry.yarnpkg.com/@salesforce/core/-/core-3.19.0.tgz#e238b07190623dc4e1ca1888c1185f5bfa2d383e"
+  integrity sha512-64bz7cvfEkJz1JCMlf3W1CaWShoaINzfkrT6BQxtb5AdjZm5rs8Lmg3q6hie4hhWo3VVSvPOdnWEPpMJCdJ4/w==
   dependencies:
     "@salesforce/bunyan" "^2.0.0"
     "@salesforce/kit" "^1.5.41"
@@ -1123,10 +1123,10 @@
     mkdirp "1.0.4"
     ts-retry-promise "^0.6.0"
 
-"@salesforce/core@^3.19.2":
-  version "3.19.2"
-  resolved "https://registry.yarnpkg.com/@salesforce/core/-/core-3.19.2.tgz#45b55fec4425ec9a447aba682a0add084c8ba73a"
-  integrity sha512-uz2ehET9zz8WJj9Gicui3zxSN34TsmjgxrP22XCdQS7/GNhye1SlV8a6ayyQLqJbYlANrPFAs1RhF6LV1mPokg==
+"@salesforce/core@^3.19.0", "@salesforce/core@^3.19.3":
+  version "3.19.3"
+  resolved "https://registry.npmjs.org/@salesforce/core/-/core-3.19.3.tgz#5a84dc41b7509fc9ddef88a9f9a0ea5c277eef03"
+  integrity sha512-xKPXgwT82T6FcdZm/lEKn0/QPuf6mzZajz+8yZxX5bmLksNWkgWDYr2RBb47LoF3+vbEnMM8V6MedCNmT10o6Q==
   dependencies:
     "@salesforce/bunyan" "^2.0.0"
     "@salesforce/kit" "^1.5.41"

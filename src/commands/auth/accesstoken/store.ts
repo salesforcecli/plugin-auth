@@ -7,7 +7,7 @@
 
 import * as os from 'os';
 import { flags, FlagsConfig, SfdxCommand } from '@salesforce/command';
-import { AuthFields, AuthInfo, GlobalInfo, Messages, sfdc, SfError } from '@salesforce/core';
+import { AuthFields, AuthInfo, Messages, sfdc, SfError, StateAggregator } from '@salesforce/core';
 import { ensureString, getString } from '@salesforce/ts-types';
 import { env } from '@salesforce/kit';
 import { Prompts } from '../../../prompts';
@@ -86,15 +86,8 @@ export default class Store extends SfdxCommand {
 
   private async overwriteAuthInfo(username: string): Promise<boolean> {
     if (!this.flags.noprompt) {
-      /**
-       * This must remain a `GlobalInfo.create()` call
-       * the AuthInfo.create call in this.getUserInfo will persist the new auth information to GlobalInfo in memory,
-       * so if we call GlobalInfo.getInstance it already has that user stored in memory, so when we ask info.orgs.has(username)
-       * it has that username in memory, but it hasn't been saved to the file yet - which is what we really want. If this
-       * is changed to GlobalInfo.getInstance, it will prompt the user to override an existing file, which doesn't exist yet
-       */
-      const info = await GlobalInfo.create();
-      if (info.orgs.has(username)) {
+      const stateAggregator = await StateAggregator.getInstance();
+      if (await stateAggregator.orgs.exists(username)) {
         return Prompts.askOverwriteAuthFile(this.ux, username);
       }
     }

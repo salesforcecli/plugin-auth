@@ -7,7 +7,7 @@
 
 import { $$, expect, test } from '@salesforce/command/lib/test';
 import { UX } from '@salesforce/command/lib/ux';
-import { AuthRemover, ConfigContents, Global, Mode, SfOrg, SfOrgs } from '@salesforce/core';
+import { AuthFields, AuthRemover, ConfigContents, Global, Mode } from '@salesforce/core';
 import { MockTestOrgData } from '@salesforce/core/lib/testSetup';
 import { parseJson, parseJsonError } from '../../testHelper';
 
@@ -35,12 +35,12 @@ describe('auth:logout', () => {
     if (options.defaultUsername) {
       $$.SANDBOX.stub(AuthRemover.prototype, 'findAuth').resolves({
         username: testData.username,
-      } as SfOrg);
+      } as AuthFields);
     } else {
       $$.SANDBOX.stub(AuthRemover.prototype, 'findAuth').throws('NoOrgFound');
     }
 
-    $$.SANDBOX.stub(AuthRemover.prototype, 'findAllAuths').returns(options.aliases as unknown as SfOrgs);
+    $$.SANDBOX.stub(AuthRemover.prototype, 'findAllAuths').returns(options.aliases as Record<string, AuthFields>);
 
     return authInfo;
   }
