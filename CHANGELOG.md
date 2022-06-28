@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.2.2](https://github.com/salesforcecli/plugin-auth/compare/v2.2.1...v2.2.2) (2022-06-28)
+
+### Bug Fixes
+
+- bump deps to parking orbited versions ([cfc6a11](https://github.com/salesforcecli/plugin-auth/commit/cfc6a1139b55c03ac680dccd3c1da628a962658b))
+
 ### [2.2.1](https://github.com/salesforcecli/plugin-auth/compare/v2.2.0...v2.2.1) (2022-06-28)
 
 ### Bug Fixes
