@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.2.1](https://github.com/salesforcecli/plugin-auth/compare/v2.2.0...v2.2.1) (2022-06-28)
+
+### Bug Fixes
+
+- remove jsforce types (part of parking orbit work) ([#427](https://github.com/salesforcecli/plugin-auth/issues/427)) ([2a7da09](https://github.com/salesforcecli/plugin-auth/commit/2a7da09d62e5e92eb90d57a5f17ac79fa588a22b))
+
 ## [2.2.0](https://github.com/salesforcecli/plugin-auth/compare/v2.1.0...v2.2.0) (2022-06-22)
 
 ### Features
