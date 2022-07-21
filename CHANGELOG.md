@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.2.3](https://github.com/salesforcecli/plugin-auth/compare/v2.2.2...v2.2.3) (2022-07-21)
+
+### Bug Fixes
+
+- bump sfdx-core ([e611476](https://github.com/salesforcecli/plugin-auth/commit/e6114761b36b27126aae1ebc3a414602ba858990))
+
 ### [2.2.2](https://github.com/salesforcecli/plugin-auth/compare/v2.2.1...v2.2.2) (2022-06-28)
 
 ### Bug Fixes
