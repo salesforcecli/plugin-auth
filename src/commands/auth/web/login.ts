@@ -59,11 +59,11 @@ export default class Login extends SfdxCommand {
   };
 
   public async run(): Promise<AuthFields> {
-    if (this.isSFDXContainerMode()) {
+    if (isSFDXContainerMode()) {
       throw new SfError(messages.getMessage('deviceWarning'), 'DEVICE_WARNING');
     }
 
-    if (await Prompts.shouldExitCommand(this.ux, this.flags.noprompt)) return {};
+    if (await Prompts.shouldExitCommand(this.ux, this.flags.noprompt as boolean)) return {};
 
     const oauthConfig: OAuth2Config = {
       loginUrl: await Common.resolveLoginUrl(get(this.flags.instanceurl, 'href', null) as Optional<string>),
@@ -71,7 +71,7 @@ export default class Login extends SfdxCommand {
     };
 
     if (this.flags.clientid) {
-      oauthConfig.clientSecret = await Prompts.askForClientSecret(this.ux, this.flags.disablemasking);
+      oauthConfig.clientSecret = await Prompts.askForClientSecret(this.ux, this.flags.disablemasking as boolean);
     }
 
     try {
@@ -97,15 +97,17 @@ export default class Login extends SfdxCommand {
     }
   }
 
+  // leave it because it's stubbed in the test
+  // eslint-disable-next-line class-methods-use-this
   private async executeLoginFlow(oauthConfig: OAuth2Config): Promise<AuthInfo> {
     const oauthServer = await WebOAuthServer.create({ oauthConfig });
     await oauthServer.start();
     await open(oauthServer.getAuthorizationUrl(), { wait: false });
     return oauthServer.authorizeAndSave();
   }
-
-  private isSFDXContainerMode(): boolean {
-    const env = new Env();
-    return env.getBoolean('SFDX_CONTAINER_MODE');
-  }
 }
+
+const isSFDXContainerMode = (): boolean => {
+  const env = new Env();
+  return env.getBoolean('SFDX_CONTAINER_MODE');
+};

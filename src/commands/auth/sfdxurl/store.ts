@@ -55,13 +55,11 @@ export default class Store extends SfdxCommand {
   };
 
   public async run(): Promise<AuthFields> {
-    if (await Prompts.shouldExitCommand(this.ux, this.flags.noprompt)) return {};
+    if (await Prompts.shouldExitCommand(this.ux, this.flags.noprompt as boolean)) return {};
 
     const authFile = this.flags.sfdxurlfile as string;
 
-    const sfdxAuthUrl = authFile.endsWith('.json')
-      ? await this.getUrlFromJson(authFile)
-      : await readFile(authFile, 'utf8');
+    const sfdxAuthUrl = authFile.endsWith('.json') ? await getUrlFromJson(authFile) : await readFile(authFile, 'utf8');
 
     if (!sfdxAuthUrl) {
       throw new Error(
@@ -89,9 +87,9 @@ export default class Store extends SfdxCommand {
     this.ux.log(successMsg);
     return result;
   }
-
-  private async getUrlFromJson(authFile: string): Promise<string> {
-    const authFileJson = (await readJson(authFile)) as AuthJson;
-    return authFileJson.result?.sfdxAuthUrl || authFileJson.sfdxAuthUrl;
-  }
 }
+
+const getUrlFromJson = async (authFile: string): Promise<string> => {
+  const authFileJson = (await readJson(authFile)) as AuthJson;
+  return authFileJson.result?.sfdxAuthUrl ?? authFileJson.sfdxAuthUrl;
+};
