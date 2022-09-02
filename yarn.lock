@@ -1123,9 +1123,9 @@
     tslib "^2"
 
 "@salesforce/plugin-config@^1.2.5":
-  version "1.4.15"
-  resolved "https://registry.yarnpkg.com/@salesforce/plugin-config/-/plugin-config-1.4.15.tgz#55d1484bedfd482ef571ed9e323f0e4fb02bcbbc"
-  integrity sha512-k6kyRGyfHecn35491B6cjFRfZgF2UarCtRlvShLsQWJQsWO//MDmYZ2OiVtSuihFmA0Amv8QINJGiOWS2M1fzw==
+  version "1.4.17"
+  resolved "https://registry.yarnpkg.com/@salesforce/plugin-config/-/plugin-config-1.4.17.tgz#b000bf09a0bea531c6ab165ec2d79d5a90b498fb"
+  integrity sha512-jTKZEiBUW2kZRgLynLcZCnsumzzoyzwX8XX2zxe+GDbtDFI8N1WitBSUOIi1FUThITtkx4ep3acrP4XCYQZx/w==
   dependencies:
     "@oclif/core" "^1.7.0"
     "@oclif/test" "^2.1.0"
