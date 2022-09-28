@@ -9,7 +9,7 @@ import { expect } from 'chai';
 
 import { execCmd, TestSession } from '@salesforce/cli-plugins-testkit';
 import { Env } from '@salesforce/kit';
-import { AnyJson, ensureString, getString, isArray } from '@salesforce/ts-types';
+import { ensureString } from '@salesforce/ts-types';
 import { AuthFields, OrgAuthorization } from '@salesforce/core';
 import { readJson } from 'fs-extra';
 
@@ -28,18 +28,19 @@ describe('verify discovery/id of scratch org', () => {
     hubUsername = ensureString(env.getString('TESTKIT_HUB_USERNAME'));
     testSession = await TestSession.create({
       project: { name: 'ScratchIDProject' },
-      setupCommands: [
-        `sfdx force:org:create -d 1 -s -f ${path.join('config', 'project-scratch-def.json')} --json`,
-        'sfdx force:org:display --json',
+      scratchOrgs: [
+        {
+          executable: 'sfdx',
+          duration: 1,
+          setDefault: true,
+          config: path.join('config', 'project-scratch-def.json'),
+        },
       ],
     });
-    if (isArray<AnyJson>(testSession.setup)) {
-      orgUsername = getString(testSession.setup[0], 'result.username');
-      orgInstanceUrl = getString(testSession.setup[1], 'result.instanceUrl', 'https://test.salesforce.com').replace(
-        '.com/',
-        '.com'
-      );
-    }
+
+    orgUsername = [...testSession.orgs.keys()][0];
+    orgInstanceUrl = testSession.orgs.get(orgUsername).instanceUrl;
+
     // we'll need this path for testing
     jwtKey = path.join(testSession.homeDir, 'jwtKey');
   });
