@@ -25,7 +25,7 @@ describe('auth:accesstoken:store NUTs', () => {
     instanceUrl = ensureString(env.getString('TESTKIT_HUB_INSTANCE'));
     clientId = ensureString(env.getString('TESTKIT_JWT_CLIENT_ID'));
     ensureString(env.getString('TESTKIT_JWT_KEY'));
-    testSession = await TestSession.create({ authStrategy: 'NONE' });
+    testSession = await TestSession.create();
     const jwtKeyFilePath = prepareForJwt(testSession.homeDir);
     const res = execCmd<{ accessToken: string }>(
       `auth:jwt:grant -f ${jwtKeyFilePath} -i ${clientId} -u ${username} --setdefaultdevhubusername --instanceurl ${instanceUrl} --json`,

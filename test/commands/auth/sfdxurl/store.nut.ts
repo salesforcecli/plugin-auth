@@ -26,7 +26,7 @@ describe('auth:sfdxurl:store NUTs', () => {
   before('prepare session and ensure environment variables', async () => {
     ensureString(env.getString('TESTKIT_AUTH_URL'));
     username = ensureString(env.getString('TESTKIT_HUB_USERNAME'));
-    testSession = await TestSession.create({ authStrategy: 'NONE' });
+    testSession = await TestSession.create();
     authUrl = prepareForAuthUrl(testSession.homeDir);
   });
 
