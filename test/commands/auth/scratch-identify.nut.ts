@@ -39,7 +39,10 @@ describe('verify discovery/id of scratch org', () => {
     });
 
     orgUsername = [...testSession.orgs.keys()][0];
-    orgInstanceUrl = testSession.orgs.get(orgUsername).instanceUrl;
+    orgInstanceUrl = (testSession.orgs.get(orgUsername).instanceUrl ?? 'https://test.salesforce.com').replace(
+      '.com/',
+      '.com'
+    );
 
     // we'll need this path for testing
     jwtKey = path.join(testSession.homeDir, 'jwtKey');
