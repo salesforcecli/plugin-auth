@@ -27,7 +27,7 @@ describe('auth:jwt:grant NUTs', () => {
     clientId = ensureString(env.getString('TESTKIT_JWT_CLIENT_ID'));
     ensureString(env.getString('TESTKIT_JWT_KEY'));
 
-    testSession = await TestSession.create({ authStrategy: 'NONE' });
+    testSession = await TestSession.create();
     jwtKey = prepareForJwt(testSession.homeDir);
   });
 
