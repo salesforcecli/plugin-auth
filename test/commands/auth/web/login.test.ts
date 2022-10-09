@@ -32,9 +32,7 @@ describe('auth:web:login', () => {
     authInfoStub = stubInterface<AuthInfo>($$.SANDBOX, {
       getFields: () => authFields,
     });
-    stubMethod($$.SANDBOX, Login.prototype, 'executeLoginFlow').callsFake(async () => {
-      return authInfoStub;
-    });
+    stubMethod($$.SANDBOX, Login.prototype, 'executeLoginFlow').callsFake(async () => authInfoStub);
     $$.SANDBOX.stub(AuthInfo, 'listAllAuthorizations').callsFake(async () => []);
     uxStub = stubInterface<UX>($$.SANDBOX, {
       prompt: () => promptAnswer,
@@ -54,9 +52,7 @@ describe('auth:web:login', () => {
     authInfoStub = stubInterface<AuthInfo>($$.SANDBOX, {
       getFields: () => authFields,
     });
-    stubMethod($$.SANDBOX, Login.prototype, 'executeLoginFlow').throws(() => {
-      return new SfError('error!', errorName);
-    });
+    stubMethod($$.SANDBOX, Login.prototype, 'executeLoginFlow').throws(() => new SfError('error!', errorName));
     uxStub = stubInterface<UX>($$.SANDBOX, {});
 
     // @ts-ignore

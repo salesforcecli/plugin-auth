@@ -30,9 +30,7 @@ describe('auth:jwt:grant', async () => {
       getFields: () => authFields,
     });
 
-    $$.SANDBOX.stub(AuthInfo, 'listAllAuthorizations').callsFake(async () => {
-      return [{ [authFields.username]: {} }] as OrgAuthorization[];
-    });
+    $$.SANDBOX.stub(AuthInfo, 'listAllAuthorizations').callsFake(async () => [{ [authFields.username]: {} }] as OrgAuthorization[]);
 
     if (options.authInfoCreateFails) {
       $$.SANDBOX.stub(AuthInfo, 'create').throws(new Error('invalid client id'));

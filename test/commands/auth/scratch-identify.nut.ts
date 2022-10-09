@@ -68,7 +68,7 @@ describe('verify discovery/id of scratch org', () => {
     expect(found).to.be.false;
   });
 
-  it('should login to the org via jwt grant', async function () {
+  it('should login to the org via jwt grant', async () => {
     const env = new Env();
     const command = `auth:jwt:grant -f ${jwtKey} --username ${orgUsername} --clientid ${env.getString(
       'TESTKIT_JWT_CLIENT_ID'

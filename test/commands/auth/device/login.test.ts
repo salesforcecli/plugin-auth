@@ -74,8 +74,7 @@ describe('auth:device:login', async () => {
     if (options.approvalTimesout) {
       stubMethod($$.SANDBOX, DeviceOauthService.prototype, 'pollForDeviceApproval').throws('polling timeout');
     } else {
-      stubMethod($$.SANDBOX, DeviceOauthService.prototype, 'pollForDeviceApproval').callsFake(async () => {
-        return {
+      stubMethod($$.SANDBOX, DeviceOauthService.prototype, 'pollForDeviceApproval').callsFake(async () => ({
           access_token: '1234',
           refresh_token: '1234',
           signature: '1234',
@@ -84,14 +83,11 @@ describe('auth:device:login', async () => {
           id: '1234',
           token_type: '1234',
           issued_at: '1234',
-        };
-      });
+        }));
     }
 
     stubMethod($$.SANDBOX, AuthInfo, 'create').callsFake(async () => authInfoStub);
-    $$.SANDBOX.stub(AuthInfo, 'listAllAuthorizations').callsFake(async () => {
-      return [{ [authFields.username]: {} }] as OrgAuthorization[];
-    });
+    $$.SANDBOX.stub(AuthInfo, 'listAllAuthorizations').callsFake(async () => [{ [authFields.username]: {} }] as OrgAuthorization[]);
   }
 
   test
