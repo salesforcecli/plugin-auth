@@ -50,7 +50,7 @@ export default class Login extends SfdxCommand {
   };
 
   public async run(): Promise<AuthFields> {
-    if (await Prompts.shouldExitCommand(this.ux, this.flags.noprompt as boolean)) return {};
+    if (await Prompts.shouldExitCommand(this.ux, false)) return {};
 
     const oauthConfig: OAuth2Config = {
       loginUrl: await Common.resolveLoginUrl(get(this.flags.instanceurl, 'href', null) as Optional<string>),
