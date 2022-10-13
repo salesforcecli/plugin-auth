@@ -64,7 +64,7 @@ export default class Grant extends SfdxCommand {
   public async run(): Promise<AuthFields> {
     let result: AuthFields = {};
 
-    if (await Prompts.shouldExitCommand(this.ux, this.flags.noprompt as boolean)) return {};
+    if (await Prompts.shouldExitCommand(this.ux, Boolean(this.flags.noprompt))) return {};
 
     try {
       const authInfo = await this.initAuthInfo();

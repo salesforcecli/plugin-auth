@@ -71,7 +71,7 @@ export default class Login extends SfdxCommand {
     };
 
     if (this.flags.clientid) {
-      oauthConfig.clientSecret = await Prompts.askForClientSecret(this.ux, this.flags.disablemasking as boolean);
+      oauthConfig.clientSecret = await Prompts.askForClientSecret(this.ux, Boolean(this.flags.disablemasking));
     }
 
     try {
