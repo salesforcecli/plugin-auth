@@ -58,6 +58,8 @@ export default class Store extends SfdxCommand {
     return this.storeAuthFromAccessToken(authInfo);
   }
 
+  // because stubbed on the test (instead of stubbing in core)
+  // eslint-disable-next-line class-methods-use-this
   private async getUserInfo(accessToken: string, instanceUrl: string): Promise<AuthInfo> {
     return AuthInfo.create({ accessTokenOptions: { accessToken, instanceUrl, loginUrl: instanceUrl } });
   }

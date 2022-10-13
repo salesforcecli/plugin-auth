@@ -32,9 +32,9 @@ describe('auth:sfdxurl:store', async () => {
       getFields: () => authFields,
     });
 
-    $$.SANDBOX.stub(AuthInfo, 'listAllAuthorizations').callsFake(async () => {
-      return [{ [authFields.username]: {} }] as OrgAuthorization[];
-    });
+    $$.SANDBOX.stub(AuthInfo, 'listAllAuthorizations').callsFake(
+      async () => [{ [authFields.username]: {} }] as OrgAuthorization[]
+    );
 
     if (!options.fileDoesNotExist) {
       $$.SANDBOX.stub(fs, 'readFile').resolves('force://PlatformCLI::CoffeeAndBacon@su0503.my.salesforce.com');

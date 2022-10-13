@@ -58,6 +58,8 @@ export default class Logout extends SfdxCommand {
 
     if (await this.shouldRunCommand(usernames)) {
       for (const username of usernames) {
+        // run sequentially to avoid configFile concurrency issues
+        // eslint-disable-next-line no-await-in-loop
         await remover.removeAuth(username);
       }
       this.ux.log(messages.getMessage('logoutOrgCommandSuccess', [usernames.join(os.EOL)]));
@@ -74,6 +76,6 @@ export default class Logout extends SfdxCommand {
   private async shouldRunCommand(usernames: string[]): Promise<boolean> {
     const orgsToDelete = [usernames.join(os.EOL)];
     const message = messages.getMessage('logoutCommandYesNo', orgsToDelete);
-    return Prompts.shouldRunCommand(this.ux, this.flags.noprompt, message);
+    return Prompts.shouldRunCommand(this.ux, Boolean(this.flags.noprompt), message);
   }
 }

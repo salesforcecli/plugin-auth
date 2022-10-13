@@ -64,7 +64,7 @@ export default class Grant extends SfdxCommand {
   public async run(): Promise<AuthFields> {
     let result: AuthFields = {};
 
-    if (await Prompts.shouldExitCommand(this.ux, this.flags.noprompt)) return {};
+    if (await Prompts.shouldExitCommand(this.ux, Boolean(this.flags.noprompt))) return {};
 
     try {
       const authInfo = await this.initAuthInfo();
@@ -106,7 +106,7 @@ export default class Grant extends SfdxCommand {
       if (err.name === 'AuthInfoOverwriteError') {
         this.logger.debug('Auth file already exists. Removing and starting fresh.');
         const remover = await AuthRemover.create();
-        await remover.removeAuth(this.flags.username);
+        await remover.removeAuth(this.flags.username as string);
         authInfo = await AuthInfo.create({
           username: this.flags.username as string,
           oauth2Options,
