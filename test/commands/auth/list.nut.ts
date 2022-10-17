@@ -21,7 +21,9 @@ describe('auth:list NUTs', () => {
     ensureString(env.getString('TESTKIT_JWT_CLIENT_ID'));
     ensureString(env.getString('TESTKIT_HUB_INSTANCE'));
     username = ensureString(env.getString('TESTKIT_HUB_USERNAME'));
-    testSession = await TestSession.create({});
+    testSession = await TestSession.create({
+      devhubAuthStrategy: 'AUTO',
+    });
   });
 
   after(async () => {

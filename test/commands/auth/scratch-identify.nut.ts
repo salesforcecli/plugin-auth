@@ -27,6 +27,7 @@ describe('verify discovery/id of scratch org', () => {
     ensureString(env.getString('TESTKIT_HUB_INSTANCE'));
     hubUsername = ensureString(env.getString('TESTKIT_HUB_USERNAME'));
     testSession = await TestSession.create({
+      devhubAuthStrategy: 'AUTO',
       project: { name: 'ScratchIDProject' },
       scratchOrgs: [
         {
