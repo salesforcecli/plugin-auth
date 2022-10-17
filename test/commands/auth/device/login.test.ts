@@ -8,7 +8,7 @@
 /* eslint-disable camelcase */
 
 import { $$, expect, test } from '@salesforce/command/lib/test';
-import { AuthFields, AuthInfo, OrgAuthorization } from '@salesforce/core';
+import { AuthFields, AuthInfo, Global, Mode, OrgAuthorization } from '@salesforce/core';
 import { MockTestOrgData } from '@salesforce/core/lib/testSetup';
 import { StubbedType, stubInterface, stubMethod } from '@salesforce/ts-sinon';
 import { DeviceOauthService } from '@salesforce/core';
@@ -199,11 +199,8 @@ describe('auth:device:login', async () => {
   test
     .do(async () => {
       await prepareStubs();
-      process.env['SFDX_ENV'] = 'demo';
-      uxStub = stubMethod($$.SANDBOX, UX.prototype, 'prompt').returns(Promise.resolve('yes'));
-    })
-    .finally(() => {
-      delete process.env['SFDX_ENV'];
+      $$.SANDBOX.stub(Global, 'getEnvironmentMode').returns(Mode.DEMO);
+      uxStub = stubMethod($$.SANDBOX, UX.prototype, 'prompt').resolves('yes');
     })
     .stdout()
     .command(['auth:device:login', '--json'])
@@ -218,8 +215,8 @@ describe('auth:device:login', async () => {
   test
     .do(async () => {
       await prepareStubs();
-      process.env['SFDX_ENV'] = 'demo';
-      uxStub = stubMethod($$.SANDBOX, UX.prototype, 'prompt').returns(Promise.resolve('NO'));
+      $$.SANDBOX.stub(Global, 'getEnvironmentMode').returns(Mode.DEMO);
+      uxStub = stubMethod($$.SANDBOX, UX.prototype, 'prompt').resolves('NO');
     })
     .finally(() => {
       delete process.env['SFDX_ENV'];
