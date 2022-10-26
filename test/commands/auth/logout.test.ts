@@ -47,7 +47,7 @@ describe('auth:logout', () => {
 
   test
     .do(async () => {
-      await prepareStubs();
+      await prepareStubs({ defaultUsername: testData.username });
     })
     .stdout()
     .stderr()
