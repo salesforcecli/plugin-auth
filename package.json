@@ -28,7 +28,7 @@
     "@types/graceful-fs": "^4.1.5",
     "@types/mkdirp": "^1.0.1",
     "@typescript-eslint/eslint-plugin": "^5.40.1",
-    "@typescript-eslint/parser": "^5.40.1",
+    "@typescript-eslint/parser": "^5.41.0",
     "chai": "^4.2.0",
     "eslint": "^8.26.0",
     "eslint-config-prettier": "^8.5.0",
