@@ -1,6 +1,6 @@
 # plugin-auth
 
-[![NPM](https://img.shields.io/npm/v/@salesforce/plugin-auth.svg?label=@salesforce/plugin-auth)](https://www.npmjs.com/package/@salesforce/plugin-auth) [![CircleCI](https://circleci.com/gh/salesforcecli/plugin-auth/tree/main.svg?style=shield)](https://circleci.com/gh/salesforcecli/plugin-auth/tree/main) [![Downloads/week](https://img.shields.io/npm/dw/@salesforce/plugin-auth.svg)](https://npmjs.org/package/@salesforce/plugin-auth) [![License](https://img.shields.io/badge/License-BSD%203--Clause-brightgreen.svg)](https://raw.githubusercontent.com/salesforcecli/plugin-auth/main/LICENSE.txt)
+[![NPM](https://img.shields.io/npm/v/@salesforce/plugin-auth.svg?label=@salesforce/plugin-auth)](https://www.npmjs.com/package/@salesforce/plugin-auth) [![Downloads/week](https://img.shields.io/npm/dw/@salesforce/plugin-auth.svg)](https://npmjs.org/package/@salesforce/plugin-auth) [![License](https://img.shields.io/badge/License-BSD%203--Clause-brightgreen.svg)](https://raw.githubusercontent.com/salesforcecli/plugin-auth/main/LICENSE.txt)
 
 Auth commands for Salesforce CLI
 
