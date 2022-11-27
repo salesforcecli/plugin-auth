@@ -993,13 +993,13 @@
     mv "~2"
     safe-json-stringify "~1"
 
-"@salesforce/cli-plugins-testkit@^3.2.6":
-  version "3.2.6"
-  resolved "https://registry.yarnpkg.com/@salesforce/cli-plugins-testkit/-/cli-plugins-testkit-3.2.6.tgz#d589b10761d152a9da27d08597b75868ae439147"
-  integrity sha512-QArJlV4sbgn/93RY1YoGjZGr91lPXGMkD+uZHrh/4MZA8okO7fgRzgD7QApkIHgq+jJhFmKE8asp6kkdNdVOuA==
+"@salesforce/cli-plugins-testkit@^3.2.10":
+  version "3.2.10"
+  resolved "https://registry.yarnpkg.com/@salesforce/cli-plugins-testkit/-/cli-plugins-testkit-3.2.10.tgz#79fb3e0704205680ac080606310219ebeb73f9ed"
+  integrity sha512-I+Z4rKikV6Boq2jptbm0yEUGm+qvP4ZHD4eOnMNJQXZTQDZxu+kZ+2hijsAmxy5s6cZ41EVg14L45mUKGCnYGw==
   dependencies:
-    "@salesforce/core" "^3.31.17"
-    "@salesforce/kit" "^1.7.1"
+    "@salesforce/core" "^3.32.2"
+    "@salesforce/kit" "^1.8.0"
     "@salesforce/ts-types" "^1.5.21"
     "@types/shelljs" "^0.8.11"
     archiver "^5.2.0"
@@ -1020,10 +1020,10 @@
     "@salesforce/ts-types" "^1.7.1"
     chalk "^2.4.2"
 
-"@salesforce/core@^3.15.5", "@salesforce/core@^3.19.2", "@salesforce/core@^3.31.17", "@salesforce/core@^3.32.1", "@salesforce/core@^3.8.0":
-  version "3.32.1"
-  resolved "https://registry.yarnpkg.com/@salesforce/core/-/core-3.32.1.tgz#1a338a1985c58c1be819f99c6b33b24b32817cbe"
-  integrity sha512-hVcweKGy1CS3t0duS+0jxGVou5ZoQMXRZPQmcz1FyW31Oef5U07rhs3wTrwJqhCPHL817R/gm5V9wSRNcYdDtA==
+"@salesforce/core@^3.15.5", "@salesforce/core@^3.19.2", "@salesforce/core@^3.32.1", "@salesforce/core@^3.32.2", "@salesforce/core@^3.8.0":
+  version "3.32.2"
+  resolved "https://registry.yarnpkg.com/@salesforce/core/-/core-3.32.2.tgz#ea4f9cb4df59b77517aafaafbf188a654d2b25d9"
+  integrity sha512-KQCserM6EWx4NQUzNMh34XXPUR5wV0IEItMg1kCrEhUq9FyXtW2KQWYgrTHeyAIYl9a0bUgcj6VDba1ADSsVYA==
   dependencies:
     "@salesforce/bunyan" "^2.0.0"
     "@salesforce/kit" "^1.8.0"
@@ -1087,7 +1087,7 @@
     typedoc-plugin-missing-exports "0.23.0"
     typescript "^4.1.3"
 
-"@salesforce/kit@^1.5.17", "@salesforce/kit@^1.5.41", "@salesforce/kit@^1.7.0", "@salesforce/kit@^1.7.1", "@salesforce/kit@^1.8.0":
+"@salesforce/kit@^1.5.17", "@salesforce/kit@^1.5.41", "@salesforce/kit@^1.7.0", "@salesforce/kit@^1.8.0":
   version "1.8.0"
   resolved "https://registry.yarnpkg.com/@salesforce/kit/-/kit-1.8.0.tgz#d5b8d83d5b0b866cb76840dc7a18e115589d86a0"
   integrity sha512-Pr9CWAIzVYKZRWvM76lyhEtF3CPmVdIfgbqRD7KT/YZdbLstX3KHYBxCyx3TyWZr5qROv96n+jRIBiIFI9LGGw==
