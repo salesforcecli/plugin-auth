@@ -108,9 +108,14 @@ export default class Login extends SfdxCommand {
     const oauthServer = await WebOAuthServer.create({ oauthConfig });
     await oauthServer.start();
     const openOptions = this.flags.browser
-      ? { app: { name: open.apps[this.flags.browser as string] as open.AppName }, wait: false }
-      : { wait: false };
-    await open(oauthServer.getAuthorizationUrl(), openOptions);
+            ? { app: { name: open.apps[this.flags.browser as string] as open.AppName }, wait: true, allowNonzeroExitCode: true }
+            : { wait: false };
+        try {
+            await open(oauthServer.getAuthorizationUrl(), openOptions);
+        }
+        catch (err) {
+            throw new SfError(`Failed to open browser: ${this.flags.browser as string}`, 'Browser open error', [`Check to see that ${this.flags.browser as string} is installed`], 1);
+        }
     return oauthServer.authorizeAndSave();
   }
 }
