@@ -83,7 +83,8 @@
       "noprompt",
       "setalias",
       "setdefaultdevhubusername",
-      "setdefaultusername"
+      "setdefaultusername",
+      "browser"
     ],
     "alias": ["force:auth:web:login"]
   }

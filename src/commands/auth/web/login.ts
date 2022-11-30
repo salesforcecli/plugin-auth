@@ -26,6 +26,11 @@ export default class Login extends SfdxCommand {
   public static aliases = ['force:auth:web:login'];
 
   public static readonly flagsConfig: FlagsConfig = {
+    browser: flags.enum({
+      char: 'b',
+      description: messages.getMessage('browser'),
+      options: ['chrome', 'edge', 'firefox'], // These are ones supported by "open" package
+    }),
     clientid: flags.string({
       char: 'i',
       description: commonMessages.getMessage('clientId'),
@@ -102,7 +107,10 @@ export default class Login extends SfdxCommand {
   private async executeLoginFlow(oauthConfig: OAuth2Config): Promise<AuthInfo> {
     const oauthServer = await WebOAuthServer.create({ oauthConfig });
     await oauthServer.start();
-    await open(oauthServer.getAuthorizationUrl(), { wait: false });
+    const openOptions = this.flags.browser
+      ? { app: { name: open.apps[this.flags.browser as string] as open.AppName }, wait: false }
+      : { wait: false };
+    await open(oauthServer.getAuthorizationUrl(), openOptions);
     return oauthServer.authorizeAndSave();
   }
 }
