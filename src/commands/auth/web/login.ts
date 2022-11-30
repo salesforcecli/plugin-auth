@@ -26,11 +26,10 @@ export default class Login extends SfdxCommand {
   public static aliases = ['force:auth:web:login'];
 
   public static readonly flagsConfig: FlagsConfig = {
-    browser: flags.string({
+    browser: flags.enum({
       char: 'b',
       description: messages.getMessage('browser'),
       options: ['chrome', 'edge', 'firefox'], // These are ones supported by "open" package
-      exclusive: ['urlonly'],
     }),
     clientid: flags.string({
       char: 'i',

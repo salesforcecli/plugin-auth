@@ -4,7 +4,7 @@
     "$ sfdx auth:web:login -a TestOrg1",
     "$ sfdx auth:web:login -i <OAuth client id>",
     "$ sfdx auth:web:login -r https://MyDomainName--SandboxName.sandbox.my.salesforce.com",
-    "sfdx auth:web:login -a TestOrg1 -b firefox"
+    "$ sfdx auth:web:login -a TestOrg1 -b firefox"
   ],
   "browser": "browser where the org opens",
   "deviceWarning": "auth:web:login doesn't work when authorizing to a headless environment. Use auth:device:login instead.",
