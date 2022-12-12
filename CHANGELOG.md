@@ -1,3 +1,12 @@
+## [2.3.3](https://github.com/salesforcecli/plugin-auth/compare/2.3.2...2.3.3) (2022-12-12)
+
+
+### Bug Fixes
+
+* **list:** empty list when no authed orgs are found ([#552](https://github.com/salesforcecli/plugin-auth/issues/552)) ([b510c11](https://github.com/salesforcecli/plugin-auth/commit/b510c11db7032c92c8dc085996dad0d786c7eb93))
+
+
+
 ## [2.3.2](https://github.com/salesforcecli/plugin-auth/compare/2.3.1...2.3.2) (2022-12-10)
 
 
