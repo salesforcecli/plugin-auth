@@ -20,6 +20,10 @@ export default class List extends SfdxCommand {
   public async run(): Promise<OrgAuthorization[]> {
     try {
       const auths = await AuthInfo.listAllAuthorizations();
+      if (auths.length === 0) {
+        this.ux.log(messages.getMessage('noResultsFound'));
+        return [];
+      }
       auths.map((auth: OrgAuthorization & { alias: string }) => {
         // core3 moved to aliases as a string[], revert to alias as a string
         auth.alias = auth.aliases.join(',');
