@@ -30,7 +30,7 @@
     "@types/mkdirp": "^1.0.1",
     "@typescript-eslint/eslint-plugin": "^5.45.0",
     "@typescript-eslint/parser": "^5.45.0",
-    "chai": "^4.2.0",
+    "chai": "^4.3.7",
     "eslint": "^8.30.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-config-salesforce": "^1.1.0",
