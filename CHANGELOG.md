@@ -1,3 +1,12 @@
+## [2.3.10](https://github.com/salesforcecli/plugin-auth/compare/2.3.9...2.3.10) (2023-01-07)
+
+
+### Bug Fixes
+
+* **deps:** bump json5 from 1.0.1 to 1.0.2 ([507bf1f](https://github.com/salesforcecli/plugin-auth/commit/507bf1fde84e3d4273309cfb575a2b5ad29595bf))
+
+
+
 ## [2.3.9](https://github.com/salesforcecli/plugin-auth/compare/2.3.8...2.3.9) (2023-01-07)
 
 
