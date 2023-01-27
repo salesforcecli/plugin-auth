@@ -10,8 +10,9 @@ import { expect } from 'chai';
 import { execCmd, TestSession } from '@salesforce/cli-plugins-testkit';
 import { Env } from '@salesforce/kit';
 import { ensureString } from '@salesforce/ts-types';
-import { AuthFields, OrgAuthorization } from '@salesforce/core';
+import { AuthFields } from '@salesforce/core';
 import { readJson } from 'fs-extra';
+import { AuthListResults } from '../../../lib/commands/auth/list';
 
 describe('verify discovery/id of scratch org', () => {
   let testSession: TestSession;
@@ -40,7 +41,7 @@ describe('verify discovery/id of scratch org', () => {
     });
 
     orgUsername = [...testSession.orgs.keys()][0];
-    orgInstanceUrl = (testSession.orgs.get(orgUsername).instanceUrl ?? 'https://test.salesforce.com').replace(
+    orgInstanceUrl = (testSession.orgs.get(orgUsername)?.instanceUrl ?? 'https://test.salesforce.com').replace(
       '.com/',
       '.com'
     );
@@ -54,8 +55,9 @@ describe('verify discovery/id of scratch org', () => {
   });
 
   it('should have the scratch org in auth files', () => {
-    const list = execCmd<OrgAuthorization[]>('auth:list --json', { ensureExitCode: 0 }).jsonOutput;
-    const found = !!list.result.find((r) => r.username === orgUsername);
+    const list = execCmd<AuthListResults>('auth:list --json', { ensureExitCode: 0 }).jsonOutput
+      ?.result as AuthListResults;
+    const found = !!list.find((r) => r.username === orgUsername);
     expect(found).to.be.true;
   });
 
@@ -64,8 +66,9 @@ describe('verify discovery/id of scratch org', () => {
   });
 
   it('should NOT have the scratch org in auth files', () => {
-    const list = execCmd<OrgAuthorization[]>('auth:list --json', { ensureExitCode: 0 }).jsonOutput;
-    const found = !!list.result.find((r) => r.username === orgUsername);
+    const list = execCmd<AuthListResults>('auth:list --json', { ensureExitCode: 0 }).jsonOutput
+      ?.result as AuthListResults;
+    const found = !!list.find((r) => r.username === orgUsername);
     expect(found).to.be.false;
   });
 
@@ -76,8 +79,8 @@ describe('verify discovery/id of scratch org', () => {
     )} -r ${orgInstanceUrl} --json`;
     const output = execCmd<AuthFields>(command, {
       ensureExitCode: 0,
-    }).jsonOutput.result;
-    expect(output.username).to.equal(orgUsername);
+    }).jsonOutput?.result;
+    expect(output?.username).to.equal(orgUsername);
   });
 
   it('should have the devhubUsername in the auth file', async () => {

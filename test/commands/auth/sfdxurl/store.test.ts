@@ -33,7 +33,7 @@ describe('auth:sfdxurl:store', async () => {
     });
 
     $$.SANDBOX.stub(AuthInfo, 'listAllAuthorizations').callsFake(
-      async () => [{ [authFields.username]: {} }] as OrgAuthorization[]
+      async () => [{ [authFields.username ?? '']: {} }] as OrgAuthorization[]
     );
 
     if (!options.fileDoesNotExist) {

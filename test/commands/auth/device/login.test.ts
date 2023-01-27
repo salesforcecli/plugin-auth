@@ -88,7 +88,7 @@ describe('auth:device:login', async () => {
 
     stubMethod($$.SANDBOX, AuthInfo, 'create').callsFake(async () => authInfoStub);
     $$.SANDBOX.stub(AuthInfo, 'listAllAuthorizations').callsFake(
-      async () => [{ [authFields.username]: {} }] as OrgAuthorization[]
+      async () => [{ [authFields.username ?? '']: {} }] as OrgAuthorization[]
     );
   }
 

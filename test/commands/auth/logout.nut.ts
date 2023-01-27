@@ -9,6 +9,7 @@ import { expect } from 'chai';
 import { Env } from '@salesforce/kit';
 import { ensureString, getString } from '@salesforce/ts-types';
 import { OrgAuthorization } from '@salesforce/core';
+import { AuthListResults } from '../../../src/commands/auth/list';
 
 describe('auth:logout NUTs', () => {
   const env = new Env();
@@ -44,8 +45,9 @@ describe('auth:logout NUTs', () => {
       result: [username],
     });
 
-    const list = execCmd<OrgAuthorization[]>('auth:list --json', { ensureExitCode: 0 }).jsonOutput;
-    const found = !!list.result.find((r) => r.username === username);
+    const list = execCmd<AuthListResults>('auth:list --json', { ensureExitCode: 0 }).jsonOutput
+      ?.result as AuthListResults;
+    const found = !!list.find((r) => r.username === username);
     expect(found).to.be.false;
   });
 
@@ -58,19 +60,20 @@ describe('auth:logout NUTs', () => {
       result: [username],
     });
 
-    const list = execCmd<OrgAuthorization[]>('auth:list --json', { ensureExitCode: 0 }).jsonOutput;
-    const found = !!list.result.find((r) => r.username === username);
+    const list = execCmd<AuthListResults>('auth:list --json', { ensureExitCode: 0 }).jsonOutput
+      ?.result as OrgAuthorization[];
+    const found = !!list.find((r) => r.username === username);
     expect(found).to.be.false;
 
     const configGetUsername = execCmd<Array<{ key: string }>>('config:get defaultusername --json', {
       ensureExitCode: 0,
-    }).jsonOutput;
-    expect(configGetUsername.result[0].key).to.equal('defaultusername');
+    }).jsonOutput?.result as Array<{ key: string }>;
+    expect(configGetUsername[0].key).to.equal('defaultusername');
 
     const configGetDevhub = execCmd<Array<{ key: string }>>('config:get defaultdevhubusername --json', {
       ensureExitCode: 0,
-    }).jsonOutput;
-    expect(configGetDevhub.result[0].key).to.equal('defaultdevhubusername');
+    }).jsonOutput?.result as Array<{ key: string }>;
+    expect(configGetDevhub[0].key).to.equal('defaultdevhubusername');
   });
 
   it('should remove the org specified by the -u flag (human readable)', () => {
@@ -80,7 +83,9 @@ describe('auth:logout NUTs', () => {
   });
 
   it('should fail if there is no default org and the -u flag is not specified (json)', () => {
-    const json = execCmd<{ name: string }>('auth:logout -p --json', { ensureExitCode: 1 }).jsonOutput;
+    const json = execCmd<{ name: string }>('auth:logout -p --json', { ensureExitCode: 1 }).jsonOutput?.result as {
+      name: string;
+    };
     expect(json.name).to.equal('NoOrgFound');
   });
 
@@ -95,7 +100,7 @@ describe('auth:logout NUTs', () => {
     // we expect the config for defaultusername to be cleared out after the logout
     const configGet = execCmd<Array<{ key: string }>>('config:get defaultusername --json', {
       ensureExitCode: 0,
-    }).jsonOutput;
-    expect(configGet.result[0].key).to.equal('defaultusername');
+    }).jsonOutput?.result as Array<{ key: string }>;
+    expect(configGet[0].key).to.equal('defaultusername');
   });
 });

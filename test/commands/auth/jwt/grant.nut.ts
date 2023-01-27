@@ -41,13 +41,13 @@ describe('auth:jwt:grant NUTs', () => {
 
   it('should authorize an org using jwt (json)', () => {
     const command = `auth:jwt:grant -d -u ${username} -i ${clientId} -f ${jwtKey} -r ${instanceUrl} --json`;
-    const json = execCmd<AuthFields>(command, { ensureExitCode: 0 }).jsonOutput;
-    expectAccessTokenToExist(json.result);
-    expectOrgIdToExist(json.result);
-    expectUrlToExist(json.result, 'instanceUrl');
-    expectUrlToExist(json.result, 'loginUrl');
-    expect(json.result.privateKey).to.equal(path.join(testSession.homeDir, 'jwtKey'));
-    expect(json.result.username).to.equal(username);
+    const json = execCmd<AuthFields>(command, { ensureExitCode: 0 }).jsonOutput?.result as AuthFields;
+    expectAccessTokenToExist(json);
+    expectOrgIdToExist(json);
+    expectUrlToExist(json, 'instanceUrl');
+    expectUrlToExist(json, 'loginUrl');
+    expect(json.privateKey).to.equal(path.join(testSession.homeDir, 'jwtKey'));
+    expect(json.username).to.equal(username);
   });
 
   it('should authorize an org using jwt (human readable)', () => {
