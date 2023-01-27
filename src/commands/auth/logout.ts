@@ -7,8 +7,9 @@
 
 import * as os from 'os';
 import { AuthRemover, Global, Messages, Mode, OrgConfigProperties, SfError } from '@salesforce/core';
-import { flags, FlagsConfig, SfdxCommand } from '@salesforce/command';
-import { Prompts } from '../../prompts';
+import { Flags, optionalOrgFlagWithDeprecations } from '@salesforce/sf-plugins-core';
+import { Interfaces } from '@oclif/core';
+import { AuthBaseCommand } from '../../prompts';
 
 Messages.importMessagesDirectory(__dirname);
 const messages = Messages.loadMessages('@salesforce/plugin-auth', 'logout');
@@ -16,41 +17,50 @@ const commonMessages = Messages.loadMessages('@salesforce/plugin-auth', 'message
 
 export type AuthLogoutResults = string[];
 
-export default class Logout extends SfdxCommand {
+export default class Logout extends AuthBaseCommand<AuthLogoutResults> {
+  public static readonly summary = messages.getMessage('description');
   public static readonly description = messages.getMessage('description');
-  public static readonly examples = messages.getMessage('examples').split(os.EOL);
-  public static readonly supportsUsername = true;
+  public static readonly examples = messages.getMessages('examples');
+
+  public static readonly deprecateAliases = true;
   public static aliases = ['force:auth:logout'];
 
-  public static readonly flagsConfig: FlagsConfig = {
-    all: flags.boolean({
+  public static readonly flags = {
+    'target-org': optionalOrgFlagWithDeprecations,
+    all: Flags.boolean({
       char: 'a',
-      description: messages.getMessage('all'),
-      longDescription: messages.getMessage('allLong'),
+      summary: messages.getMessage('all'),
+      description: messages.getMessage('allLong'),
       required: false,
+      exclusive: ['target-org'],
     }),
-    noprompt: flags.boolean({
+    'no-prompt': Flags.boolean({
       char: 'p',
-      description: commonMessages.getMessage('noPrompt'),
+      summary: commonMessages.getMessage('noPrompt'),
       required: false,
+      deprecateAliases: true,
+      aliases: ['noprompt'],
     }),
   };
 
+  private flags: Interfaces.InferredFlags<typeof Logout.flags>;
+
   public async run(): Promise<AuthLogoutResults> {
-    if (this.flags.targetusername && this.flags.all) {
-      throw new SfError(messages.getMessage('specifiedBothUserAndAllError'), 'SpecifiedBothUserAndAllError');
-    }
+    const { flags } = await this.parse(Logout);
+    this.flags = flags;
 
     const remover = await AuthRemover.create();
 
-    const targetUsername = this.flags.targetusername
-      ? (this.flags.targetusername as string)
+    const targetUsername = flags.targetusername
+      ? (flags.targetusername as string)
       : (this.configAggregator.getInfo(OrgConfigProperties.TARGET_ORG).value as string);
-    let usernames: string[];
+    let usernames: AuthLogoutResults;
     try {
-      usernames = this.shouldFindAllAuths()
-        ? Object.keys(remover.findAllAuths())
-        : [(await remover.findAuth(targetUsername)).username];
+      usernames = (
+        this.shouldFindAllAuths()
+          ? Object.keys(remover.findAllAuths())
+          : [(await remover.findAuth(targetUsername)).username]
+      ).filter((username) => username) as AuthLogoutResults;
     } catch (e) {
       // keep the error name the same for SFDX
       const err = e as Error;
@@ -58,13 +68,13 @@ export default class Logout extends SfdxCommand {
       throw SfError.wrap(err);
     }
 
-    if (await this.shouldRunCommand(usernames)) {
+    if (await this.shouldRunLogoutCommand(usernames)) {
       for (const username of usernames) {
         // run sequentially to avoid configFile concurrency issues
         // eslint-disable-next-line no-await-in-loop
         await remover.removeAuth(username);
       }
-      this.ux.log(messages.getMessage('logoutOrgCommandSuccess', [usernames.join(os.EOL)]));
+      this.log(messages.getMessage('logoutOrgCommandSuccess', [usernames.join(os.EOL)]));
       return usernames;
     } else {
       return [];
@@ -72,12 +82,16 @@ export default class Logout extends SfdxCommand {
   }
 
   private shouldFindAllAuths(): boolean {
-    return !!this.flags.all || (!this.flags.targetusername && Global.getEnvironmentMode() === Mode.DEMO);
+    return !!this.flags.all || (!this.flags['target-org'] && Global.getEnvironmentMode() === Mode.DEMO);
   }
 
-  private async shouldRunCommand(usernames: string[]): Promise<boolean> {
-    const orgsToDelete = [usernames.join(os.EOL)];
+  private async shouldRunLogoutCommand(usernames: Array<string | undefined>): Promise<boolean> {
+    const orgsToDelete = [usernames.filter((username) => username).join(os.EOL)];
+    if (orgsToDelete.length === 0) {
+      this.log(messages.getMessage('logoutOrgCommandNoOrgsFound'));
+      return false;
+    }
     const message = messages.getMessage('logoutCommandYesNo', orgsToDelete);
-    return Prompts.shouldRunCommand(this.ux, Boolean(this.flags.noprompt), message);
+    return this.shouldRunCommand(this.flags['no-prompt'], message);
   }
 }

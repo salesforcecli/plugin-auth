@@ -5,8 +5,8 @@
  * For full license text, see LICENSE.txt file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  */
 import { Messages, Global, Mode } from '@salesforce/core';
-import { UX } from '@salesforce/command';
 import * as chalk from 'chalk';
+import { SfCommand } from '@salesforce/sf-plugins-core';
 
 Messages.importMessagesDirectory(__dirname);
 const messages = Messages.loadMessages('@salesforce/plugin-auth', 'messages');
@@ -15,54 +15,55 @@ function dimMessage(message: string): string {
   return chalk.dim(message);
 }
 
-export class Prompts {
-  public static async shouldExitCommand(ux: UX, noPrompt?: boolean, message?: string): Promise<boolean> {
+export abstract class AuthBaseCommand<T> extends SfCommand<T> {
+  protected static answeredYes(answer: boolean): boolean {
+    return answer;
+  }
+
+  protected static answeredNo(answer: boolean): boolean {
+    return !answer;
+  }
+
+  protected async askForHiddenResponse(messageKey: string, disableMasking = false): Promise<string> {
+    const msg = dimMessage(messages.getMessage(messageKey));
+    const hidden: { response: string } = await this.prompt({
+      message: msg,
+      type: disableMasking ? 'input' : 'password',
+      name: 'response',
+    });
+    return hidden.response;
+  }
+
+  protected async shouldExitCommand(noPrompt?: boolean, message?: string): Promise<boolean> {
     if (noPrompt || Global.getEnvironmentMode() !== Mode.DEMO) {
       return false;
     } else {
-      const msg = dimMessage(message || messages.getMessage('warnAuth'));
-      const answer = await ux.prompt(msg);
-      return Prompts.answeredNo(answer);
+      const msg = dimMessage(message ?? messages.getMessage('warnAuth'));
+      const answer = await this.confirm(msg);
+      return AuthBaseCommand.answeredNo(answer);
     }
   }
 
-  public static async shouldRunCommand(ux: UX, noPrompt?: boolean, message?: string): Promise<boolean> {
+  protected async shouldRunCommand(noPrompt?: boolean, message?: string): Promise<boolean> {
     if (noPrompt || Global.getEnvironmentMode() === Mode.DEMO) {
       return true;
     } else {
-      const msg = dimMessage(message || messages.getMessage('warnAuth'));
-      const answer = await ux.prompt(msg);
-      return Prompts.answeredYes(answer);
+      const msg = dimMessage(message ?? messages.getMessage('warnAuth'));
+      const answer = await this.confirm(msg);
+      return AuthBaseCommand.answeredYes(answer);
     }
   }
 
-  public static async askForClientSecret(ux: UX, disableMasking = false): Promise<string> {
-    return Prompts.askForHiddenResponse(ux, 'clientSecretStdin', disableMasking);
+  protected async askForClientSecret(disableMasking = false): Promise<string> {
+    return this.askForHiddenResponse('clientSecretStdin', disableMasking);
   }
 
-  public static async askForAccessToken(ux: UX, disableMasking = false): Promise<string> {
-    return Prompts.askForHiddenResponse(ux, 'accessTokenStdin', disableMasking);
+  protected async askForAccessToken(disableMasking = false): Promise<string> {
+    return this.askForHiddenResponse('accessTokenStdin', disableMasking);
   }
 
-  public static async askOverwriteAuthFile(ux: UX, username: string): Promise<boolean> {
-    const yN = await ux.prompt(messages.getMessage('overwriteAccessTokenAuthUserFile', [username]), {
-      type: 'normal',
-      default: 'y',
-    });
-    return Prompts.answeredYes(yN);
-  }
-  private static async askForHiddenResponse(ux: UX, messageKey: string, disableMasking = false): Promise<string> {
-    const msg = dimMessage(messages.getMessage(messageKey));
-    return ux.prompt(msg, {
-      type: disableMasking ? 'normal' : 'hide',
-    });
-  }
-
-  private static answeredYes(answer: string): boolean {
-    return ['YES', 'Y'].includes(answer.toUpperCase());
-  }
-
-  private static answeredNo(answer: string): boolean {
-    return !['YES', 'Y'].includes(answer.toUpperCase());
+  protected async askOverwriteAuthFile(username: string): Promise<boolean> {
+    const yN = await this.confirm(messages.getMessage('overwriteAccessTokenAuthUserFile', [username]));
+    return AuthBaseCommand.answeredYes(yN);
   }
 }

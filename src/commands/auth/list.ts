@@ -5,37 +5,35 @@
  * For full license text, see LICENSE.txt file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  */
 
-import { FlagsConfig, SfdxCommand } from '@salesforce/command';
-import { AuthInfo, OrgAuthorization, Messages } from '@salesforce/core';
-import { ux } from '@oclif/core';
+import { SfCommand } from '@salesforce/sf-plugins-core';
+import { AuthInfo, Messages, OrgAuthorization } from '@salesforce/core';
 
 export type AuthListResults = OrgAuthorization[];
 Messages.importMessagesDirectory(__dirname);
 const messages = Messages.loadMessages('@salesforce/plugin-auth', 'list');
 
-export default class List extends SfdxCommand {
+export default class List extends SfCommand<AuthListResults> {
+  public static readonly summary = messages.getMessage('description');
   public static readonly description = messages.getMessage('description');
+  public static readonly examples = messages.getMessages('examples');
+  public static readonly deprecateAliases = true;
   public static aliases = ['force:auth:list'];
 
-  public static readonly flagsConfig: FlagsConfig = {};
   public async run(): Promise<AuthListResults> {
     try {
       const auths = await AuthInfo.listAllAuthorizations();
       if (auths.length === 0) {
-        this.ux.log(messages.getMessage('noResultsFound'));
+        this.log(messages.getMessage('noResultsFound'));
         return [];
       }
       auths.map((auth: OrgAuthorization & { alias: string }) => {
         // core3 moved to aliases as a string[], revert to alias as a string
-        auth.alias = auth.aliases.join(',');
-        // to prevent 'undefined' entries in the table only delete auth.alias if it's json output
-        // matches the previous behavior where alias was only present when it was defined
-        if (auth.alias === '' && this.flags.json) delete auth.alias;
+        auth.alias = auth.aliases ? auth.aliases.join(',') : '';
 
         delete auth.aliases;
       });
       const hasErrors = auths.filter((auth) => !!auth.error).length > 0;
-      let columns: ux.Table.table.Columns<Record<string, unknown>> = {
+      let columns = {
         alias: { header: 'ALIAS' },
         username: { header: 'USERNAME' },
         orgId: { header: 'ORG ID' },
@@ -45,11 +43,11 @@ export default class List extends SfdxCommand {
       if (hasErrors) {
         columns = { ...columns, ...{ error: { header: 'ERROR' } } };
       }
-      this.ux.styledHeader('authenticated orgs');
-      this.ux.table(auths, columns);
+      this.styledHeader('authenticated orgs');
+      this.table(auths, columns);
       return auths;
     } catch (err) {
-      this.ux.log(messages.getMessage('noResultsFound'));
+      this.log(messages.getMessage('noResultsFound'));
       return [];
     }
   }
