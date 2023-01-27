@@ -14,6 +14,8 @@ Messages.importMessagesDirectory(__dirname);
 const messages = Messages.loadMessages('@salesforce/plugin-auth', 'logout');
 const commonMessages = Messages.loadMessages('@salesforce/plugin-auth', 'messages');
 
+export type AuthLogoutResults = string[];
+
 export default class Logout extends SfdxCommand {
   public static readonly description = messages.getMessage('description');
   public static readonly examples = messages.getMessage('examples').split(os.EOL);
@@ -34,7 +36,7 @@ export default class Logout extends SfdxCommand {
     }),
   };
 
-  public async run(): Promise<string[]> {
+  public async run(): Promise<AuthLogoutResults> {
     if (this.flags.targetusername && this.flags.all) {
       throw new SfError(messages.getMessage('specifiedBothUserAndAllError'), 'SpecifiedBothUserAndAllError');
     }

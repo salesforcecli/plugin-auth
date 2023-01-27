@@ -9,6 +9,7 @@ import { FlagsConfig, SfdxCommand } from '@salesforce/command';
 import { AuthInfo, OrgAuthorization, Messages } from '@salesforce/core';
 import { ux } from '@oclif/core';
 
+export type AuthListResults = OrgAuthorization[];
 Messages.importMessagesDirectory(__dirname);
 const messages = Messages.loadMessages('@salesforce/plugin-auth', 'list');
 
@@ -17,7 +18,7 @@ export default class List extends SfdxCommand {
   public static aliases = ['force:auth:list'];
 
   public static readonly flagsConfig: FlagsConfig = {};
-  public async run(): Promise<OrgAuthorization[]> {
+  public async run(): Promise<AuthListResults> {
     try {
       const auths = await AuthInfo.listAllAuthorizations();
       if (auths.length === 0) {
