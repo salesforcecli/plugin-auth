@@ -993,14 +993,14 @@
     mv "~2"
     safe-json-stringify "~1"
 
-"@salesforce/cli-plugins-testkit@^3.2.10":
-  version "3.2.10"
-  resolved "https://registry.yarnpkg.com/@salesforce/cli-plugins-testkit/-/cli-plugins-testkit-3.2.10.tgz#79fb3e0704205680ac080606310219ebeb73f9ed"
-  integrity sha512-I+Z4rKikV6Boq2jptbm0yEUGm+qvP4ZHD4eOnMNJQXZTQDZxu+kZ+2hijsAmxy5s6cZ41EVg14L45mUKGCnYGw==
+"@salesforce/cli-plugins-testkit@^3.2.18":
+  version "3.2.18"
+  resolved "https://registry.yarnpkg.com/@salesforce/cli-plugins-testkit/-/cli-plugins-testkit-3.2.18.tgz#6c2857cef50a0035205a4150c6d609f36e3b0fae"
+  integrity sha512-tfm1lYPYcOsx9+ELUx+b9ZbAD5mOIhtvGjqpG3/NG1jeghLNPjbDDX6bL1ottw/+mYBVymIrj1krhKxOUpqJCw==
   dependencies:
-    "@salesforce/core" "^3.32.2"
+    "@salesforce/core" "^3.32.12"
     "@salesforce/kit" "^1.8.0"
-    "@salesforce/ts-types" "^1.5.21"
+    "@salesforce/ts-types" "^1.7.2"
     "@types/shelljs" "^0.8.11"
     archiver "^5.2.0"
     debug "^4.3.1"
@@ -1020,7 +1020,7 @@
     "@salesforce/ts-types" "^1.7.1"
     chalk "^2.4.2"
 
-"@salesforce/core@^3.15.5", "@salesforce/core@^3.19.2", "@salesforce/core@^3.32.12", "@salesforce/core@^3.32.2", "@salesforce/core@^3.8.0":
+"@salesforce/core@^3.15.5", "@salesforce/core@^3.19.2", "@salesforce/core@^3.32.12", "@salesforce/core@^3.8.0":
   version "3.32.12"
   resolved "https://registry.yarnpkg.com/@salesforce/core/-/core-3.32.12.tgz#853cc5b6a5f95d4896b2d34a40a6042ef9aa6d2c"
   integrity sha512-27rqSiQWul7b/OkJs19FYDv2M/S4oI4efiGv+6sR7UWv7D7CG1P+0XpgLS3d9xRYF30h98n6VQr4W2a+BWFRvA==
@@ -1154,10 +1154,10 @@
     sinon "^5.1.1"
     tslib "^2.2.0"
 
-"@salesforce/ts-types@^1.5.20", "@salesforce/ts-types@^1.5.21", "@salesforce/ts-types@^1.7.1":
-  version "1.7.1"
-  resolved "https://registry.yarnpkg.com/@salesforce/ts-types/-/ts-types-1.7.1.tgz#86b0d0c3bfd5c9b1752662a019a3d2f3bc8ff118"
-  integrity sha512-jwZb8fYxbOmEckoJTxG2+5ZEJNJOFxmRJ/FioPnSu4IMFzpK3QbyujfqpHwLfPKHq0xlKRMx+F8QAVVKI/PA4w==
+"@salesforce/ts-types@^1.5.20", "@salesforce/ts-types@^1.5.21", "@salesforce/ts-types@^1.7.1", "@salesforce/ts-types@^1.7.2":
+  version "1.7.2"
+  resolved "https://registry.yarnpkg.com/@salesforce/ts-types/-/ts-types-1.7.2.tgz#ab40399d291c7eca57efc9890daf2fa2632197ec"
+  integrity sha512-eCpWKEb03UCKBJ6Svp0Vwcwt+fG6BQbopO4x5wt6CYeT8Rjt0dbDQicZPmVL59j2qyt3Q4Y4EYsxXUGZmdfvDw==
   dependencies:
     tslib "^2.4.1"
 
