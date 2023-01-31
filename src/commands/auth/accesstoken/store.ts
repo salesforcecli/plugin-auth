@@ -19,8 +19,8 @@ const commonMessages = Messages.loadMessages('@salesforce/plugin-auth', 'message
 const ACCESS_TOKEN_FORMAT = '"<org id>!<accesstoken>"';
 
 export default class Store extends AuthBaseCommand<AuthFields> {
-  public static readonly summary = messages.getMessage('description', [ACCESS_TOKEN_FORMAT]);
-  public static readonly description = messages.getMessage('description', [ACCESS_TOKEN_FORMAT]);
+  public static readonly summary = messages.getMessage('summary');
+  public static readonly description = messages.getMessage('description');
   public static readonly examples = messages.getMessages('examples');
   public static readonly deprecateAliases = true;
   public static aliases = ['force:auth:accesstoken:store'];

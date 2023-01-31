@@ -18,7 +18,7 @@ const commonMessages = Messages.loadMessages('@salesforce/plugin-auth', 'message
 export type AuthLogoutResults = string[];
 
 export default class Logout extends AuthBaseCommand<AuthLogoutResults> {
-  public static readonly summary = messages.getMessage('description');
+  public static readonly summary = messages.getMessage('summary');
   public static readonly description = messages.getMessage('description');
   public static readonly examples = messages.getMessages('examples');
 

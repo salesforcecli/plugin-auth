@@ -23,7 +23,7 @@ type AuthJson = AnyJson & {
   sfdxAuthUrl: string;
 };
 export default class Store extends AuthBaseCommand<AuthFields> {
-  public static readonly summary = messages.getMessage('description', [AUTH_URL_FORMAT]);
+  public static readonly summary = messages.getMessage('summary');
   public static readonly description = messages.getMessage('description', [AUTH_URL_FORMAT]);
   public static readonly examples = messages.getMessages('examples');
   public static aliases = ['force:auth:sfdxurl:store'];

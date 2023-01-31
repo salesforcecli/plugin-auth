@@ -17,7 +17,7 @@ const messages = Messages.loadMessages('@salesforce/plugin-auth', 'device.login'
 const commonMessages = Messages.loadMessages('@salesforce/plugin-auth', 'messages');
 
 export default class Login extends AuthBaseCommand<AuthFields> {
-  public static readonly summary = messages.getMessage('description');
+  public static readonly summary = messages.getMessage('summary');
   public static readonly description = messages.getMessage('description');
   public static readonly examples = messages.getMessages('examples');
   public static aliases = ['force:auth:device:login'];
@@ -81,7 +81,7 @@ export default class Login extends AuthBaseCommand<AuthFields> {
       this.styledJSON(loginData);
     } else {
       this.styledHeader(messages.getMessage('actionRequired'));
-      this.log(messages.getMessage('enterCode'), loginData.user_code, loginData.verification_uri);
+      this.log(messages.getMessage('enterCode', [loginData.user_code, loginData.verification_uri]));
       this.log();
     }
 
