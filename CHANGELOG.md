@@ -1,3 +1,12 @@
+# [2.4.0](https://github.com/salesforcecli/plugin-auth/compare/2.3.14...2.4.0) (2023-01-31)
+
+
+### Features
+
+* use latest oclif/core ([#603](https://github.com/salesforcecli/plugin-auth/issues/603)) ([55031c8](https://github.com/salesforcecli/plugin-auth/commit/55031c87d8a6ce0bd719fc053ee9d223a7b35f5d))
+
+
+
 ## [2.3.14](https://github.com/salesforcecli/plugin-auth/compare/2.3.13...2.3.14) (2023-01-28)
 
 
