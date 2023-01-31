@@ -7,7 +7,7 @@
 
 import { FlagsConfig, SfdxCommand } from '@salesforce/command';
 import { AuthInfo, OrgAuthorization, Messages } from '@salesforce/core';
-import { CliUx } from '@oclif/core';
+import { ux } from '@oclif/core';
 
 Messages.importMessagesDirectory(__dirname);
 const messages = Messages.loadMessages('@salesforce/plugin-auth', 'list');
@@ -34,7 +34,7 @@ export default class List extends SfdxCommand {
         delete auth.aliases;
       });
       const hasErrors = auths.filter((auth) => !!auth.error).length > 0;
-      let columns: CliUx.Table.table.Columns<Record<string, unknown>> = {
+      let columns: ux.Table.table.Columns<Record<string, unknown>> = {
         alias: { header: 'ALIAS' },
         username: { header: 'USERNAME' },
         orgId: { header: 'ORG ID' },
