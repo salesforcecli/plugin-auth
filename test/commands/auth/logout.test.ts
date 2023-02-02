@@ -50,7 +50,7 @@ describe('auth:logout', () => {
     return authInfo;
   }
 
-  it('should throw error when both -a and -u are specified', async () => {
+  it('should throw error when both -a and -o are specified', async () => {
     await prepareStubs();
     const logout = new Logout(['-a', '-u', testOrg1.username, '--json'], {} as Config);
     try {
@@ -62,7 +62,7 @@ describe('auth:logout', () => {
     }
   });
 
-  it('should remove target-org when neither -a nor -u are specified', async () => {
+  it('should remove target-org when neither -a nor -o are specified', async () => {
     await prepareStubs({ 'target-org': testOrg1.username });
     const logout = new Logout(['-p', '--json'], {} as Config);
     const response = await logout.run();
@@ -108,7 +108,7 @@ describe('auth:logout', () => {
     }
   });
 
-  it('should throw error if no defaultusername and targetusername does not exist', async () => {
+  it('should throw error if no target-org and targetusername does not exist', async () => {
     await prepareStubs();
     const logout = new Logout(['-p', '-u', 'foobar@org.com', '--json'], {} as Config);
     try {
@@ -139,31 +139,31 @@ describe('auth:logout', () => {
     await prepareStubs({
       'target-org': 'TestAlias',
       'target-dev-hub': 'TestAlias',
-      aliases: { TestAlias: testOrg1.username }
+      aliases: { TestAlias: testOrg1.username },
     });
     const logout = new Logout(['-p', '--json'], {} as Config);
     const response = await logout.run();
     expect(response).to.deep.equal([testOrg1.username]);
   });
 
-  it('should remove auth when defaultusername is alias', async () => {
+  it('should remove auth when target-org is alias', async () => {
     await prepareStubs({
       'target-org': 'TestAlias',
-      aliases: { TestAlias: testOrg1.username }
+      aliases: { TestAlias: testOrg1.username },
     });
     const logout = new Logout(['-p', '--json'], {} as Config);
     const response = await logout.run();
     expect(response).to.deep.equal([testOrg1.username]);
   });
 
-    it('should not fail when the auth file does not exist', async () => {
-      await prepareStubs({
-        'target-org': testOrg2.username,
-        aliases: { TestAlias: testOrg1.username },
-        authInfoConfigDoesNotExist: true,
-      });
-      const logout = new Logout(['-p', '-u', testOrg1.username, '--json'], {} as Config);
-      const response = await logout.run();
-      expect(response).to.deep.equal([testOrg1.username]);
+  it('should not fail when the auth file does not exist', async () => {
+    await prepareStubs({
+      'target-org': testOrg2.username,
+      aliases: { TestAlias: testOrg1.username },
+      authInfoConfigDoesNotExist: true,
     });
+    const logout = new Logout(['-p', '-u', testOrg1.username, '--json'], {} as Config);
+    const response = await logout.run();
+    expect(response).to.deep.equal([testOrg1.username]);
+  });
 });

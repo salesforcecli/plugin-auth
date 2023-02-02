@@ -35,7 +35,7 @@ describe('auth:sfdxurl:store NUTs', () => {
   });
 
   afterEach(() => {
-    execCmd(`auth:logout -p -u ${username}`, { ensureExitCode: 0 });
+    execCmd(`auth:logout -p -o ${username}`, { ensureExitCode: 0 });
   });
 
   it('should authorize an org using sfdxurl (json)', () => {

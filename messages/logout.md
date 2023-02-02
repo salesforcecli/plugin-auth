@@ -9,11 +9,11 @@ By default, this command logs you out from your default scratch org.
 
 # examples
 
-- $ sfdx auth:logout -u me@my.org
+- $ <%= config.bin %> <%= command.id %> -o me@my.org
 
-- $ sfdx auth:logout -a
+- $ <%= config.bin %> <%= command.id %> -a
 
-- $ sfdx auth:logout -p
+- $ <%= config.bin %> <%= command.id %> -p
 
 # all
 

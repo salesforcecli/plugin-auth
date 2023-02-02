@@ -36,11 +36,11 @@ describe('auth:jwt:grant NUTs', () => {
   });
 
   afterEach(() => {
-    execCmd(`auth:logout -p -u ${username}`, { ensureExitCode: 0 });
+    execCmd(`auth:logout -p -o ${username}`, { ensureExitCode: 0 });
   });
 
   it('should authorize an org using jwt (json)', () => {
-    const command = `auth:jwt:grant -d -u ${username} -i ${clientId} -f ${jwtKey} -r ${instanceUrl} --json`;
+    const command = `auth:jwt:grant -d -o ${username} -i ${clientId} -f ${jwtKey} -r ${instanceUrl} --json`;
     const json = execCmd<AuthFields>(command, { ensureExitCode: 0 }).jsonOutput?.result as AuthFields;
     expectAccessTokenToExist(json);
     expectOrgIdToExist(json);
@@ -51,7 +51,7 @@ describe('auth:jwt:grant NUTs', () => {
   });
 
   it('should authorize an org using jwt (human readable)', () => {
-    const command = `auth:jwt:grant -d -u ${username} -i ${clientId} -f ${jwtKey} -r ${instanceUrl}`;
+    const command = `auth:jwt:grant -d -o ${username} -i ${clientId} -f ${jwtKey} -r ${instanceUrl}`;
     const result = execCmd(command, { ensureExitCode: 0 });
     const output = getString(result, 'shellOutput.stdout');
     expect(output).to.include(`Successfully authorized ${username} with org ID`);

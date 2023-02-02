@@ -9,11 +9,11 @@ You must open a browser, navigate to the verification URL, and enter the code. L
 
 # examples
 
-- $ sfdx auth:device:login -d -a TestOrg1
+- $ <%= config.bin %> <%= command.id %> -d -a TestOrg1
 
-- $ sfdx auth:device:login -i <OAuth client id>
+- $ <%= config.bin %> <%= command.id %> -i <OAuth client id>
 
-- $ sfdx auth:device:login -r https://MyDomainName--SandboxName.sandbox.my.salesforce.com
+- $ <%= config.bin %> <%= command.id %> -r https://MyDomainName--SandboxName.sandbox.my.salesforce.com
 
 # actionRequired
 

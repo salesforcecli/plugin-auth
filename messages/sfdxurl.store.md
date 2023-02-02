@@ -7,12 +7,12 @@ authorize an org using an SFDX auth URL stored within a file
 authorize an org using an SFDX auth URL stored within a file
 The SFDX auth URL must have the format "%s". NOTE: The SFDX auth URL uses the "force" protocol, and not "http" or "https". Also, the "instanceUrl" inside the SFDX auth URL doesn't include the protocol ("https://").
 
-You have three options when creating the auth file. The easiest option is to redirect the output of the `sfdx force:org:display --verbose --json` command into a file. For example, using an org you have already authorized:
+You have three options when creating the auth file. The easiest option is to redirect the output of the `sfdx org:display --verbose --json` command into a file. For example, using an org you have already authorized:
 
-    $ sfdx force:org:display -u <OrgUsername> --verbose --json > authFile.json
-    $ sfdx auth:sfdxurl:store -f authFile.json
+    $ <%= config.bin %> <%= command.id %> org:display -o <OrgUsername> --verbose --json > authFile.json
+    $ <%= config.bin %> <%= command.id %> -f authFile.json
 
-The resulting JSON file contains the URL in the sfdxAuthUrl property inside of a results object. NOTE: The `force:org:display --verbose` command displays the refresh token only for orgs authorized with the web server flow, and not the JWT bearer flow. 
+The resulting JSON file contains the URL in the sfdxAuthUrl property inside of a results object. NOTE: The `org:display --verbose` command displays the refresh token only for orgs authorized with the web server flow, and not the JWT bearer flow.
 
 You can also create a JSON file that has a top-level property named sfdxAuthUrl whose value is the auth URL. Finally, you can create a normal text file that includes just the URL and nothing else.
 
@@ -22,6 +22,6 @@ path to a file containing the sfdx url
 
 # examples
 
-- $ sfdx auth:sfdxurl:store -f <path to sfdxAuthUrl file>
+- $ <%= config.bin %> <%= command.id %> -f <path to sfdxAuthUrl file>
 
-- $ sfdx auth:sfdxurl:store -f <path to sfdxAuthUrl file> -s -a MyDefaultOrg
+- $ <%= config.bin %> <%= command.id %> -f <path to sfdxAuthUrl file> -s -a MyDefaultOrg
