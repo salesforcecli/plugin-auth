@@ -17,7 +17,6 @@ function dimMessage(message: string): string {
 }
 
 export abstract class AuthBaseCommand<T> extends SfCommand<T> {
-
   public constructor(argv: string[], config: Config) {
     super(argv, config);
   }
@@ -44,7 +43,7 @@ export abstract class AuthBaseCommand<T> extends SfCommand<T> {
     if (noPrompt || Global.getEnvironmentMode() !== Mode.DEMO) {
       return false;
     } else {
-      const msg = dimMessage(message ?? messages.getMessage('warnAuth'));
+      const msg = dimMessage(message ?? messages.getMessage('warnAuth', [this.config.bin]));
       const answer = await this.confirm(msg);
       return AuthBaseCommand.answeredNo(answer);
     }
@@ -54,7 +53,7 @@ export abstract class AuthBaseCommand<T> extends SfCommand<T> {
     if (noPrompt || Global.getEnvironmentMode() === Mode.DEMO) {
       return true;
     } else {
-      const msg = dimMessage(message ?? messages.getMessage('warnAuth'));
+      const msg = dimMessage(message ?? messages.getMessage('warnAuth', [this.config.bin]));
       const answer = await this.confirm(msg);
       return AuthBaseCommand.answeredYes(answer);
     }

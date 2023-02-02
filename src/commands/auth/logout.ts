@@ -91,7 +91,12 @@ export default class Logout extends AuthBaseCommand<AuthLogoutResults> {
       this.log(messages.getMessage('logoutOrgCommandNoOrgsFound'));
       return false;
     }
-    const message = messages.getMessage('logoutCommandYesNo', orgsToDelete);
+    const message = messages.getMessage('logoutCommandYesNo', [
+      orgsToDelete.join(os.EOL),
+      this.config.bin,
+      this.config.bin,
+      this.config.bin,
+    ]);
     return this.shouldRunCommand(this.flags['no-prompt'], message);
   }
 

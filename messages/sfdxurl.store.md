@@ -7,7 +7,7 @@ authorize an org using an SFDX auth URL stored within a file
 authorize an org using an SFDX auth URL stored within a file
 The SFDX auth URL must have the format "%s". NOTE: The SFDX auth URL uses the "force" protocol, and not "http" or "https". Also, the "instanceUrl" inside the SFDX auth URL doesn't include the protocol ("https://").
 
-You have three options when creating the auth file. The easiest option is to redirect the output of the `sfdx org:display --verbose --json` command into a file. For example, using an org you have already authorized:
+You have three options when creating the auth file. The easiest option is to redirect the output of the `<%= config.bin %> org:display --verbose --json` command into a file. For example, using an org you have already authorized:
 
     $ <%= config.bin %> <%= command.id %> org:display -o <OrgUsername> --verbose --json > authFile.json
     $ <%= config.bin %> <%= command.id %> -f authFile.json
