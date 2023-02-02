@@ -24,11 +24,11 @@ export default class Grant extends AuthBaseCommand<AuthFields> {
 
   public static readonly flags = {
     'user-name': Flags.string({
-      char: 'u',
+      char: 'o',
       summary: messages.getMessage('username'),
       required: true,
       deprecateAliases: true,
-      aliases: ['username'],
+      aliases: ['username', 'u'],
     }),
     'jwt-key-file': Flags.file({
       char: 'f',

@@ -42,6 +42,7 @@ describe('auth:logout NUTs', () => {
     expect(json).to.deep.equal({
       status: 0,
       result: [username],
+      warnings: [],
     });
 
     const list = execCmd<AuthListResults>('auth:list --json', { ensureExitCode: 0 }).jsonOutput
@@ -57,6 +58,7 @@ describe('auth:logout NUTs', () => {
     expect(json).to.deep.equal({
       status: 0,
       result: [username],
+      warnings: [],
     });
 
     const list = execCmd<AuthListResults>('auth:list --json', { ensureExitCode: 0 }).jsonOutput
@@ -82,10 +84,8 @@ describe('auth:logout NUTs', () => {
   });
 
   it('should fail if there is no default org and the -o flag is not specified (json)', () => {
-    const json = execCmd<{ name: string }>('auth:logout -p --json', { ensureExitCode: 1 }).jsonOutput?.result as {
-      name: string;
-    };
-    expect(json.name).to.equal('NoOrgFound');
+    const json = execCmd<{ name: string }>('auth:logout -p --json', { ensureExitCode: 1 }).jsonOutput;
+    expect(json?.name).to.equal('NoOrgFound');
   });
 
   it('should remove the default username if the -o flag is not specified (json)', () => {
@@ -94,6 +94,7 @@ describe('auth:logout NUTs', () => {
     expect(json).to.deep.equal({
       status: 0,
       result: [username],
+      warnings: [],
     });
 
     // we expect the config for target-org to be cleared out after the logout
