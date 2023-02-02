@@ -13,7 +13,7 @@ import { AuthFields, AuthInfo, Logger, Messages, SfError, WebOAuthServer } from 
 import { Env } from '@salesforce/kit';
 import { get, Optional } from '@salesforce/ts-types';
 import { Interfaces } from '@oclif/core';
-import { AuthBaseCommand } from '../../../prompts';
+import { AuthBaseCommand } from '../../../authBaseCommand';
 import { Common } from '../../../common';
 
 Messages.importMessagesDirectory(__dirname);
@@ -102,7 +102,7 @@ export default class Login extends AuthBaseCommand<AuthFields> {
     try {
       const authInfo = await this.executeLoginFlow(oauthConfig);
       await authInfo.handleAliasAndDefaultSettings({
-        alias: flags.setalias as string,
+        alias: flags.alias,
         setDefault: flags['set-default'],
         setDefaultDevHub: flags['set-default-dev-hub'],
       });

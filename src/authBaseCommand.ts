@@ -7,6 +7,7 @@
 import { Messages, Global, Mode } from '@salesforce/core';
 import * as chalk from 'chalk';
 import { SfCommand } from '@salesforce/sf-plugins-core';
+import { Config } from '@oclif/core';
 
 Messages.importMessagesDirectory(__dirname);
 const messages = Messages.loadMessages('@salesforce/plugin-auth', 'messages');
@@ -16,6 +17,11 @@ function dimMessage(message: string): string {
 }
 
 export abstract class AuthBaseCommand<T> extends SfCommand<T> {
+
+  public constructor(argv: string[], config: Config) {
+    super(argv, config);
+  }
+
   protected static answeredYes(answer: boolean): boolean {
     return answer;
   }

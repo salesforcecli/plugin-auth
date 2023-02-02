@@ -9,7 +9,7 @@ import { OAuth2Config } from 'jsforce';
 import { AuthFields, AuthInfo, DeviceOauthService, Messages } from '@salesforce/core';
 import { get, Optional } from '@salesforce/ts-types';
 import { Flags } from '@salesforce/sf-plugins-core';
-import { AuthBaseCommand } from '../../../prompts';
+import { AuthBaseCommand } from '../../../authBaseCommand';
 import { Common } from '../../../common';
 
 Messages.importMessagesDirectory(__dirname);
@@ -89,7 +89,7 @@ export default class Login extends AuthBaseCommand<AuthFields> {
     if (approval) {
       const authInfo = await deviceOauthService.authorizeAndSave(approval);
       await authInfo.handleAliasAndDefaultSettings({
-        alias: flags.setalias as string,
+        alias: flags.alias as string,
         setDefault: flags['set-default'],
         setDefaultDevHub: flags['set-default-dev-hub'],
       });

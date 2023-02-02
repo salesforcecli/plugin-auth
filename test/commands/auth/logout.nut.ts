@@ -8,7 +8,6 @@ import { execCmd, TestSession, prepareForJwt } from '@salesforce/cli-plugins-tes
 import { expect } from 'chai';
 import { Env } from '@salesforce/kit';
 import { ensureString, getString } from '@salesforce/ts-types';
-import { OrgAuthorization } from '@salesforce/core';
 import { AuthListResults } from '../../../src/commands/auth/list';
 
 describe('auth:logout NUTs', () => {
@@ -61,7 +60,7 @@ describe('auth:logout NUTs', () => {
     });
 
     const list = execCmd<AuthListResults>('auth:list --json', { ensureExitCode: 0 }).jsonOutput
-      ?.result as OrgAuthorization[];
+      ?.result as AuthListResults;
     const found = !!list.find((r) => r.username === username);
     expect(found).to.be.false;
 

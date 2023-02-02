@@ -6,10 +6,10 @@
  */
 
 import * as os from 'os';
-import { AuthRemover, Global, Messages, Mode, OrgConfigProperties, SfError } from '@salesforce/core';
+import { AuthInfo, AuthRemover, ConfigAggregator, Global, Messages, Mode, SfError } from '@salesforce/core';
 import { Flags, optionalOrgFlagWithDeprecations } from '@salesforce/sf-plugins-core';
 import { Interfaces } from '@oclif/core';
-import { AuthBaseCommand } from '../../prompts';
+import { AuthBaseCommand } from '../../authBaseCommand';
 
 Messages.importMessagesDirectory(__dirname);
 const messages = Messages.loadMessages('@salesforce/plugin-auth', 'logout');
@@ -48,18 +48,18 @@ export default class Logout extends AuthBaseCommand<AuthLogoutResults> {
   public async run(): Promise<AuthLogoutResults> {
     const { flags } = await this.parse(Logout);
     this.flags = flags;
-
+    this.configAggregator = await ConfigAggregator.create();
     const remover = await AuthRemover.create();
 
-    const targetUsername = flags.targetusername
-      ? (flags.targetusername as string)
-      : (this.configAggregator.getInfo(OrgConfigProperties.TARGET_ORG).value as string);
+    // verify that the org exists - this is necessary given AuthRemover's behavior
+    await this.resolveTargetOrg();
+
     let usernames: AuthLogoutResults;
     try {
       usernames = (
         this.shouldFindAllAuths()
           ? Object.keys(remover.findAllAuths())
-          : [(await remover.findAuth(targetUsername)).username]
+          : [(await remover.findAuth(flags['target-org']?.getUsername())).username]
       ).filter((username) => username) as AuthLogoutResults;
     } catch (e) {
       // keep the error name the same for SFDX
@@ -93,5 +93,11 @@ export default class Logout extends AuthBaseCommand<AuthLogoutResults> {
     }
     const message = messages.getMessage('logoutCommandYesNo', orgsToDelete);
     return this.shouldRunCommand(this.flags['no-prompt'], message);
+  }
+
+  private async resolveTargetOrg(): Promise<void> {
+    if (this.flags['target-org']) {
+      await AuthInfo.create({ username: this.flags['target-org'].getUsername() });
+    }
   }
 }

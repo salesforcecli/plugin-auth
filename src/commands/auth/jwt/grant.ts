@@ -9,7 +9,7 @@ import { Flags } from '@salesforce/sf-plugins-core';
 import { AuthFields, AuthInfo, AuthRemover, Logger, Messages, SfError } from '@salesforce/core';
 import { get, getString, Optional } from '@salesforce/ts-types';
 import { Interfaces } from '@oclif/core';
-import { AuthBaseCommand } from '../../../prompts';
+import { AuthBaseCommand } from '../../../authBaseCommand';
 import { Common } from '../../../common';
 
 Messages.importMessagesDirectory(__dirname);
@@ -90,7 +90,7 @@ export default class Grant extends AuthBaseCommand<AuthFields> {
     try {
       const authInfo = await this.initAuthInfo();
       await authInfo.handleAliasAndDefaultSettings({
-        alias: flags.setalias as string,
+        alias: flags.alias as string,
         setDefault: flags['set-default'],
         setDefaultDevHub: flags['set-default-dev-hub'],
       });

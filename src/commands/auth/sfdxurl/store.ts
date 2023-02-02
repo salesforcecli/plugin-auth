@@ -6,11 +6,11 @@
  */
 
 import { readFile } from 'fs/promises';
-import { readJson } from 'fs-extra';
 import { Flags } from '@salesforce/sf-plugins-core';
 import { AuthFields, AuthInfo, Messages } from '@salesforce/core';
 import { AnyJson } from '@salesforce/ts-types';
-import { AuthBaseCommand } from '../../../prompts';
+import { parseJson } from '@salesforce/kit';
+import { AuthBaseCommand } from '../../../authBaseCommand';
 
 Messages.importMessagesDirectory(__dirname);
 const messages = Messages.loadMessages('@salesforce/plugin-auth', 'sfdxurl.store');
@@ -84,7 +84,7 @@ export default class Store extends AuthBaseCommand<AuthFields> {
     await authInfo.save();
 
     await authInfo.handleAliasAndDefaultSettings({
-      alias: flags.setalias as string,
+      alias: flags.alias as string,
       setDefault: flags['set-default'],
       setDefaultDevHub: flags['set-default-dev-hub'],
     });
@@ -101,6 +101,7 @@ export default class Store extends AuthBaseCommand<AuthFields> {
 }
 
 const getUrlFromJson = async (authFile: string): Promise<string> => {
-  const authFileJson = (await readJson(authFile)) as AuthJson;
+  const jsonContents = await readFile(authFile, 'utf8');
+  const authFileJson = parseJson(jsonContents) as AuthJson;
   return authFileJson.result?.sfdxAuthUrl ?? authFileJson.sfdxAuthUrl;
 };

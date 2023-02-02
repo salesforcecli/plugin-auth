@@ -32,10 +32,6 @@ Important: You need a password to reauthorize scratch orgs. By default, scratch 
 
 Log out (y/n)?
 
-# specifiedBothUserAndAllError
-
-Specify either --targetusername or --all.
-
 # logoutOrgCommandSuccess
 
 Successfully logged out of orgs: %s

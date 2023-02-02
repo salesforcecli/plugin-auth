@@ -10,7 +10,7 @@ import { AuthFields, AuthInfo, Messages, sfdc, SfError, StateAggregator } from '
 import { ensureString, getString } from '@salesforce/ts-types';
 import { env } from '@salesforce/kit';
 import { Interfaces } from '@oclif/core';
-import { AuthBaseCommand } from '../../../prompts';
+import { AuthBaseCommand } from '../../../authBaseCommand';
 
 Messages.importMessagesDirectory(__dirname);
 const messages = Messages.loadMessages('@salesforce/plugin-auth', 'accesstoken.store');

@@ -7,8 +7,8 @@
 
 import { SfCommand } from '@salesforce/sf-plugins-core';
 import { AuthInfo, Messages, OrgAuthorization } from '@salesforce/core';
-
-export type AuthListResults = OrgAuthorization[];
+type AuthListResult = Omit<OrgAuthorization, 'aliases'> & { alias: string };
+export type AuthListResults = AuthListResult[];
 Messages.importMessagesDirectory(__dirname);
 const messages = Messages.loadMessages('@salesforce/plugin-auth', 'list');
 
@@ -26,11 +26,12 @@ export default class List extends SfCommand<AuthListResults> {
         this.log(messages.getMessage('noResultsFound'));
         return [];
       }
-      auths.map((auth: OrgAuthorization & { alias: string }) => {
+      const mappedAuths = auths.map((auth: OrgAuthorization & { alias: string }) => {
         // core3 moved to aliases as a string[], revert to alias as a string
         auth.alias = auth.aliases ? auth.aliases.join(',') : '';
 
         delete auth.aliases;
+        return auth;
       });
       const hasErrors = auths.filter((auth) => !!auth.error).length > 0;
       let columns = {
@@ -44,8 +45,8 @@ export default class List extends SfCommand<AuthListResults> {
         columns = { ...columns, ...{ error: { header: 'ERROR' } } };
       }
       this.styledHeader('authenticated orgs');
-      this.table(auths, columns);
-      return auths;
+      this.table(mappedAuths, columns);
+      return mappedAuths;
     } catch (err) {
       this.log(messages.getMessage('noResultsFound'));
       return [];

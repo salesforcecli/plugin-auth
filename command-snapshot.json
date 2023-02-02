@@ -1,91 +1,107 @@
 [
-  {
-    "command": "auth:accesstoken:store",
-    "plugin": "@salesforce/plugin-auth",
-    "flags": [
-      "instanceurl",
-      "json",
-      "loglevel",
-      "noprompt",
-      "setalias",
-      "setdefaultdevhubusername",
-      "setdefaultusername"
-    ],
-    "alias": ["force:auth:accesstoken:store"]
-  },
-  {
-    "command": "auth:device:login",
-    "plugin": "@salesforce/plugin-auth",
-    "flags": [
-      "clientid",
-      "disablemasking",
-      "instanceurl",
-      "json",
-      "loglevel",
-      "setalias",
-      "setdefaultdevhubusername",
-      "setdefaultusername"
-    ],
-    "alias": ["force:auth:device:login"]
-  },
-  {
-    "command": "auth:jwt:grant",
-    "plugin": "@salesforce/plugin-auth",
-    "flags": [
-      "clientid",
-      "instanceurl",
-      "json",
-      "jwtkeyfile",
-      "loglevel",
-      "noprompt",
-      "setalias",
-      "setdefaultdevhubusername",
-      "setdefaultusername",
-      "username"
-    ],
-    "alias": ["force:auth:jwt:grant"]
-  },
-  {
-    "command": "auth:list",
-    "plugin": "@salesforce/plugin-auth",
-    "flags": ["json", "loglevel"],
-    "alias": ["force:auth:list"]
-  },
-  {
-    "command": "auth:logout",
-    "plugin": "@salesforce/plugin-auth",
-    "flags": ["all", "apiversion", "json", "loglevel", "noprompt", "targetusername"],
-    "alias": ["force:auth:logout"]
-  },
-  {
-    "command": "auth:sfdxurl:store",
-    "plugin": "@salesforce/plugin-auth",
-    "flags": [
-      "json",
-      "loglevel",
-      "noprompt",
-      "setalias",
-      "setdefaultdevhubusername",
-      "setdefaultusername",
-      "sfdxurlfile"
-    ],
-    "alias": ["force:auth:sfdxurl:store"]
-  },
-  {
-    "command": "auth:web:login",
-    "plugin": "@salesforce/plugin-auth",
-    "flags": [
-      "clientid",
-      "disablemasking",
-      "instanceurl",
-      "json",
-      "loglevel",
-      "noprompt",
-      "setalias",
-      "setdefaultdevhubusername",
-      "setdefaultusername",
-      "browser"
-    ],
-    "alias": ["force:auth:web:login"]
-  }
+    {
+        "command": "auth:accesstoken:store",
+        "plugin": "@salesforce/plugin-auth",
+        "flags": [
+            "alias",
+            "instance-url",
+            "json",
+            "no-prompt",
+            "set-default",
+            "set-default-dev-hub"
+        ],
+        "alias": [
+            "force:auth:accesstoken:store"
+        ]
+    },
+    {
+        "command": "auth:device:login",
+        "plugin": "@salesforce/plugin-auth",
+        "flags": [
+            "alias",
+            "client-id",
+            "disable-masking",
+            "instance-url",
+            "json",
+            "set-default",
+            "set-default-dev-hub"
+        ],
+        "alias": [
+            "force:auth:device:login"
+        ]
+    },
+    {
+        "command": "auth:jwt:grant",
+        "plugin": "@salesforce/plugin-auth",
+        "flags": [
+            "alias",
+            "client-id",
+            "instance-url",
+            "json",
+            "jwt-key-file",
+            "no-prompt",
+            "set-default",
+            "set-default-dev-hub",
+            "user-name"
+        ],
+        "alias": [
+            "force:auth:jwt:grant"
+        ]
+    },
+    {
+        "command": "auth:list",
+        "plugin": "@salesforce/plugin-auth",
+        "flags": [
+            "json"
+        ],
+        "alias": [
+            "force:auth:list"
+        ]
+    },
+    {
+        "command": "auth:logout",
+        "plugin": "@salesforce/plugin-auth",
+        "flags": [
+            "all",
+            "json",
+            "no-prompt",
+            "target-org"
+        ],
+        "alias": [
+            "force:auth:logout"
+        ]
+    },
+    {
+        "command": "auth:sfdxurl:store",
+        "plugin": "@salesforce/plugin-auth",
+        "flags": [
+            "alias",
+            "json",
+            "no-prompt",
+            "set-default",
+            "set-default-dev-hub",
+            "sfdx-url-file"
+        ],
+        "alias": [
+            "force:auth:sfdxurl:store"
+        ]
+    },
+    {
+        "command": "auth:web:login",
+        "plugin": "@salesforce/plugin-auth",
+        "flags": [
+            "alias",
+            "browser",
+            "client-id",
+            "disable-masking",
+            "instance-url",
+            "json",
+            "no-prompt",
+            "set-default",
+            "set-default-dev-hub"
+        ],
+        "alias": [
+            "force:auth:web:login"
+        ]
+    }
 ]
