@@ -5,7 +5,7 @@
  * For full license text, see LICENSE.txt file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  */
 
-import { Flags } from '@salesforce/sf-plugins-core';
+import { Flags, loglevel } from '@salesforce/sf-plugins-core';
 import { AuthFields, AuthInfo, AuthRemover, Logger, Messages, SfError } from '@salesforce/core';
 import { get, getString, Optional } from '@salesforce/ts-types';
 import { Interfaces } from '@oclif/core';
@@ -76,6 +76,7 @@ export default class Grant extends AuthBaseCommand<AuthFields> {
       deprecateAliases: true,
       aliases: ['noprompt'],
     }),
+    loglevel,
   };
   private flags: Interfaces.InferredFlags<typeof Grant.flags>;
   private logger = Logger.childFromRoot(this.constructor.name);
@@ -102,7 +103,7 @@ export default class Grant extends AuthBaseCommand<AuthFields> {
     }
 
     const successMsg = commonMessages.getMessage('authorizeCommandSuccess', [result.username, result.orgId]);
-    this.log(successMsg);
+    this.logSuccess(successMsg);
     return result;
   }
 

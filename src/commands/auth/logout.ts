@@ -7,8 +7,9 @@
 
 import * as os from 'os';
 import { AuthInfo, AuthRemover, ConfigAggregator, Global, Messages, Mode, SfError } from '@salesforce/core';
-import { Flags, optionalOrgFlagWithDeprecations } from '@salesforce/sf-plugins-core';
+import { Flags, loglevel, optionalOrgFlagWithDeprecations } from '@salesforce/sf-plugins-core';
 import { Interfaces } from '@oclif/core';
+import { isString } from '@salesforce/ts-types';
 import { AuthBaseCommand } from '../../authBaseCommand';
 
 Messages.importMessagesDirectory(__dirname);
@@ -41,6 +42,7 @@ export default class Logout extends AuthBaseCommand<AuthLogoutResults> {
       deprecateAliases: true,
       aliases: ['noprompt'],
     }),
+    loglevel,
   };
 
   private flags: Interfaces.InferredFlags<typeof Logout.flags>;
@@ -74,7 +76,7 @@ export default class Logout extends AuthBaseCommand<AuthLogoutResults> {
         // eslint-disable-next-line no-await-in-loop
         await remover.removeAuth(username);
       }
-      this.log(messages.getMessage('logoutOrgCommandSuccess', [usernames.join(os.EOL)]));
+      this.logSuccess(messages.getMessage('logoutOrgCommandSuccess', [usernames.join(os.EOL)]));
       return usernames;
     } else {
       return [];
@@ -86,7 +88,7 @@ export default class Logout extends AuthBaseCommand<AuthLogoutResults> {
   }
 
   private async shouldRunLogoutCommand(usernames: Array<string | undefined>): Promise<boolean> {
-    const orgsToDelete = [usernames.filter((username) => username).join(os.EOL)];
+    const orgsToDelete = usernames.filter(isString);
     if (orgsToDelete.length === 0) {
       this.log(messages.getMessage('logoutOrgCommandNoOrgsFound'));
       return false;

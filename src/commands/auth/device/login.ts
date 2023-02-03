@@ -8,7 +8,8 @@
 import { OAuth2Config } from 'jsforce';
 import { AuthFields, AuthInfo, DeviceOauthService, Messages } from '@salesforce/core';
 import { get, Optional } from '@salesforce/ts-types';
-import { Flags } from '@salesforce/sf-plugins-core';
+import { Flags, loglevel } from '@salesforce/sf-plugins-core';
+import { DeviceCodeResponse } from '@salesforce/core/lib/deviceOauthService';
 import { AuthBaseCommand } from '../../../authBaseCommand';
 import { Common } from '../../../common';
 
@@ -16,7 +17,9 @@ Messages.importMessagesDirectory(__dirname);
 const messages = Messages.loadMessages('@salesforce/plugin-auth', 'device.login');
 const commonMessages = Messages.loadMessages('@salesforce/plugin-auth', 'messages');
 
-export default class Login extends AuthBaseCommand<AuthFields> {
+export type DeviceLoginResult = (AuthFields & DeviceCodeResponse) | Record<string, never>;
+
+export default class Login extends AuthBaseCommand<DeviceLoginResult> {
   public static readonly summary = messages.getMessage('summary');
   public static readonly description = messages.getMessage('description');
   public static readonly examples = messages.getMessages('examples');
@@ -59,9 +62,10 @@ export default class Login extends AuthBaseCommand<AuthFields> {
       deprecateAliases: true,
       aliases: ['disablemasking'],
     }),
+    loglevel,
   };
 
-  public async run(): Promise<AuthFields> {
+  public async run(): Promise<DeviceLoginResult> {
     const { flags } = await this.parse(Login);
     if (await this.shouldExitCommand(false)) return {};
 
@@ -77,13 +81,9 @@ export default class Login extends AuthBaseCommand<AuthFields> {
     const deviceOauthService = await DeviceOauthService.create(oauthConfig);
     const loginData = await deviceOauthService.requestDeviceLogin();
 
-    if (flags.json) {
-      this.styledJSON(loginData);
-    } else {
-      this.styledHeader(messages.getMessage('actionRequired'));
-      this.log(messages.getMessage('enterCode', [loginData.user_code, loginData.verification_uri]));
-      this.log();
-    }
+    this.styledHeader(messages.getMessage('actionRequired'));
+    this.log(messages.getMessage('enterCode', [loginData.user_code, loginData.verification_uri]));
+    this.log();
 
     const approval = await deviceOauthService.awaitDeviceApproval(loginData);
     if (approval) {
@@ -96,8 +96,8 @@ export default class Login extends AuthBaseCommand<AuthFields> {
       const fields = authInfo.getFields(true);
       await AuthInfo.identifyPossibleScratchOrgs(fields, authInfo);
       const successMsg = messages.getMessage('success', [fields.username]);
-      this.log(successMsg);
-      return fields;
+      this.logSuccess(successMsg);
+      return { ...fields, ...loginData };
     } else {
       return {};
     }

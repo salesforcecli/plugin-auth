@@ -1,79 +1,3 @@
-# HelpDefaults
-
-If not supplied, the apiversion, template, and outputdir use default values.
-
-# HelpOutputDirRelative
-
-The outputdir can be an absolute path or relative to the current working directory.
-
-# HelpOutputDirRelativeLightning
-
-If you don’t specify an outputdir, we create a subfolder in your current working directory with the name of your bundle. For example, if the current working directory is force-app and your Lightning bundle is called myBundle, we create force-app/myBundle/ to store the files in the bundle.
-
-# HelpExamplesTitle
-
-Examples:
-
-# OutputDirFlagDescription
-
-folder for saving the created files
-
-# OutputDirFlagLongDescription
-
-The directory to store the newly created files. The location can be an absolute path or relative to the current working directory. The default is the current directory.
-
-# TemplateFlagDescription
-
-template to use for file creation
-
-# TemplateFlagLongDescription
-
-The template to use to create the file. Supplied parameter values or default values are filled into a copy of the template.
-
-# TargetDirOutput
-
-target dir = %s
-
-# App
-
-app
-
-# Event
-
-event
-
-# Interface
-
-interface
-
-# Test
-
-test
-
-# Component
-
-component
-
-# Page
-
-page
-
-# AlphaNumericNameError
-
-Name must contain only alphanumeric characters.
-
-# NameMustStartWithLetterError
-
-Name must start with a letter.
-
-# EndWithUnderscoreError
-
-Name can't end with an underscore.
-
-# DoubleUnderscoreError
-
-Name can't contain 2 consecutive underscores.
-
 # clientId
 
 OAuth client ID (sometimes called the consumer key)
@@ -97,10 +21,6 @@ the login URL of the instance the org lives on
 # authorizeCommandSuccess
 
 Successfully authorized %s with org ID %s
-
-# authorizeCommandCloseBrowser
-
-You may now close the browser
 
 # warnAuth
 
@@ -131,12 +51,6 @@ Access token of user to use for authentication
 # noPrompt
 
 do not prompt for confirmation
-
-# overwriteAuthFileYesNo
-
-An authorization file exists for user "%s". Are you sure you want to save the file?
-
-Save the user (y/n)?
 
 # overwriteAccessTokenAuthUserFile
 

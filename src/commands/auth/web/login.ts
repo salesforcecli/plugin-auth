@@ -7,7 +7,7 @@
 
 import * as open from 'open';
 
-import { Flags } from '@salesforce/sf-plugins-core';
+import { Flags, loglevel } from '@salesforce/sf-plugins-core';
 import { OAuth2Config } from 'jsforce';
 import { AuthFields, AuthInfo, Logger, Messages, SfError, WebOAuthServer } from '@salesforce/core';
 import { Env } from '@salesforce/kit';
@@ -77,6 +77,7 @@ export default class Login extends AuthBaseCommand<AuthFields> {
       deprecateAliases: true,
       aliases: ['noprompt'],
     }),
+    loglevel,
   };
 
   private flags: Interfaces.InferredFlags<typeof Login.flags>;
@@ -110,7 +111,7 @@ export default class Login extends AuthBaseCommand<AuthFields> {
       await AuthInfo.identifyPossibleScratchOrgs(fields, authInfo);
 
       const successMsg = commonMessages.getMessage('authorizeCommandSuccess', [fields.username, fields.orgId]);
-      this.log(successMsg);
+      this.logSuccess(successMsg);
       return fields;
     } catch (err) {
       const error = err as Error;

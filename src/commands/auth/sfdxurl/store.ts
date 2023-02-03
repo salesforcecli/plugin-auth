@@ -6,7 +6,7 @@
  */
 
 import { readFile } from 'fs/promises';
-import { Flags } from '@salesforce/sf-plugins-core';
+import { Flags, loglevel } from '@salesforce/sf-plugins-core';
 import { AuthFields, AuthInfo, Messages } from '@salesforce/core';
 import { AnyJson } from '@salesforce/ts-types';
 import { parseJson } from '@salesforce/kit';
@@ -62,6 +62,7 @@ export default class Store extends AuthBaseCommand<AuthFields> {
       deprecateAliases: true,
       aliases: ['noprompt'],
     }),
+    loglevel,
   };
 
   public async run(): Promise<AuthFields> {
@@ -95,7 +96,7 @@ export default class Store extends AuthBaseCommand<AuthFields> {
     await AuthInfo.identifyPossibleScratchOrgs(result, authInfo);
 
     const successMsg = commonMessages.getMessage('authorizeCommandSuccess', [result.username, result.orgId]);
-    this.log(successMsg);
+    this.logSuccess(successMsg);
     return result;
   }
 }

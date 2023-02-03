@@ -5,7 +5,7 @@
  * For full license text, see LICENSE.txt file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  */
 
-import { Flags } from '@salesforce/sf-plugins-core';
+import { Flags, loglevel } from '@salesforce/sf-plugins-core';
 import { AuthFields, AuthInfo, Messages, sfdc, SfError, StateAggregator } from '@salesforce/core';
 import { ensureString, getString } from '@salesforce/ts-types';
 import { env } from '@salesforce/kit';
@@ -61,13 +61,13 @@ export default class Store extends AuthBaseCommand<AuthFields> {
       deprecateAliases: true,
       aliases: ['noprompt'],
     }),
+    loglevel,
   };
 
   private flags: Interfaces.InferredFlags<typeof Store.flags>;
 
   public async run(): Promise<AuthFields> {
     const { flags } = await this.parse(Store);
-    this.flags = flags;
     this.flags = flags;
     const instanceUrl = ensureString(getString(flags, 'instance-url.href'));
     const accessToken = await this.getAccessToken();
@@ -88,7 +88,7 @@ export default class Store extends AuthBaseCommand<AuthFields> {
         authInfo.getUsername(),
         authInfo.getFields(true).orgId,
       ]);
-      this.log(successMsg);
+      this.logSuccess(successMsg);
     }
     return authInfo.getFields(true);
   }

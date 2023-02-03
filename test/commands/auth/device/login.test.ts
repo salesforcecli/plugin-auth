@@ -21,30 +21,7 @@ interface Options {
   approvalFails?: boolean;
 }
 
-// interface Action {
-//   device_code: string;
-//   interval: number;
-//   user_code: string;
-//   verification_uri: string;
-// }
-//
-// interface Response {
-//   status: number;
-//   result: Record<string, unknown>;
-// }
-
-// function parseJsonResponse(str: string): [Action, Response] {
-//   return str.split('}\n{').map((p) => {
-//     if (p.startsWith('{')) {
-//       return JSON.parse(`${p}}`) as Action;
-//     } else {
-//       return JSON.parse(`{${p}`) as Response;
-//     }
-//   }) as [Action, Response];
-// }
-
 describe('auth:device:login', async () => {
-
   const $$ = new TestContext();
 
   const testData = new MockTestOrgData();
@@ -52,7 +29,7 @@ describe('auth:device:login', async () => {
     device_code: '1234',
     interval: 5000,
     user_code: '1234',
-    verification_uri: 'https://login.salesforce.com'
+    verification_uri: 'https://login.salesforce.com',
   };
 
   let authFields: AuthFields;
@@ -63,7 +40,7 @@ describe('auth:device:login', async () => {
     delete authFields.isDevHub;
 
     authInfoStub = stubInterface<AuthInfo>($$.SANDBOX, {
-      getFields: () => authFields
+      getFields: () => authFields,
     });
 
     stubMethod($$.SANDBOX, DeviceOauthService.prototype, 'requestDeviceLogin').returns(Promise.resolve(mockAction));
@@ -83,7 +60,7 @@ describe('auth:device:login', async () => {
         instance_url: 'https://login.salesforce.com',
         id: '1234',
         token_type: '1234',
-        issued_at: '1234'
+        issued_at: '1234',
       }));
     }
 
@@ -129,13 +106,15 @@ describe('auth:device:login', async () => {
     expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
   });
 
-  // not sure how to handle this
-  // it('show required action in human readable output', async () => {
-  //   await prepareStubs();
-  //   await prepareStubs();
-  //   const login = new Login([], {} as Config);
-  //   await login.run();
-  // });
+  it('show required action in human readable output', async () => {
+    await prepareStubs();
+    const styledHeaderSpy = $$.SANDBOX.spy(SfCommand.prototype, 'styledHeader');
+    const logSpy = $$.SANDBOX.spy(SfCommand.prototype, 'log');
+    const login = new Login([], {} as Config);
+    await login.run();
+    expect(styledHeaderSpy.calledOnce).to.be.true;
+    expect(logSpy.callCount).to.be.greaterThan(0);
+  });
 
   it('should gracefully handle approval timeout', async () => {
     await prepareStubs({ approvalTimesout: true });

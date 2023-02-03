@@ -27,23 +27,23 @@ describe('auth:list', async () => {
   it('should show auth files', async () => {
     await prepareStubs();
     const list = new List(['--json'], {} as Config);
-    const auths = await list.run();
-    expect(auths[0].alias).to.deep.equal(testData.aliases?.join(',') ?? '');
-    expect(auths[0].username).to.equal(testData.username);
-    expect(auths[0].instanceUrl).to.equal(testData.instanceUrl);
-    expect(auths[0].orgId).to.equal(testData.orgId);
-    expect(auths[0].oauthMethod).to.equal('web');
+    const [auths] = await list.run();
+    expect(auths.alias).to.deep.equal(testData.aliases?.join(',') ?? '');
+    expect(auths.username).to.equal(testData.username);
+    expect(auths.instanceUrl).to.equal(testData.instanceUrl);
+    expect(auths.orgId).to.equal(testData.orgId);
+    expect(auths.oauthMethod).to.equal('web');
   });
 
   it('should show files with auth errors', async () => {
     await prepareStubs(true);
     const list = new List(['--json'], {} as Config);
-    const auths = await list.run();
-    expect(auths[0].alias).to.deep.equal(testData.aliases?.join(',') ?? '');
-    expect(auths[0].username).to.equal(testData.username);
-    expect(auths[0].instanceUrl).to.equal(testData.instanceUrl);
-    expect(auths[0].orgId).to.equal(testData.orgId);
-    expect(auths[0].oauthMethod).to.equal('unknown');
-    expect(auths[0].error).to.equal('decrypt error');
+    const [auths] = await list.run();
+    expect(auths.alias).to.deep.equal(testData.aliases?.join(',') ?? '');
+    expect(auths.username).to.equal(testData.username);
+    expect(auths.instanceUrl).to.equal(testData.instanceUrl);
+    expect(auths.orgId).to.equal(testData.orgId);
+    expect(auths.oauthMethod).to.equal('unknown');
+    expect(auths.error).to.equal('decrypt error');
   });
 });

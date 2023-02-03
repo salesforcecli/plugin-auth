@@ -21,14 +21,6 @@ export abstract class AuthBaseCommand<T> extends SfCommand<T> {
     super(argv, config);
   }
 
-  protected static answeredYes(answer: boolean): boolean {
-    return answer;
-  }
-
-  protected static answeredNo(answer: boolean): boolean {
-    return !answer;
-  }
-
   protected async askForHiddenResponse(messageKey: string, disableMasking = false): Promise<string> {
     const msg = dimMessage(messages.getMessage(messageKey));
     const hidden: { response: string } = await this.prompt({
@@ -45,7 +37,7 @@ export abstract class AuthBaseCommand<T> extends SfCommand<T> {
     } else {
       const msg = dimMessage(message ?? messages.getMessage('warnAuth', [this.config.bin]));
       const answer = await this.confirm(msg);
-      return AuthBaseCommand.answeredNo(answer);
+      return !answer;
     }
   }
 
@@ -55,7 +47,7 @@ export abstract class AuthBaseCommand<T> extends SfCommand<T> {
     } else {
       const msg = dimMessage(message ?? messages.getMessage('warnAuth', [this.config.bin]));
       const answer = await this.confirm(msg);
-      return AuthBaseCommand.answeredYes(answer);
+      return answer;
     }
   }
 
@@ -69,6 +61,6 @@ export abstract class AuthBaseCommand<T> extends SfCommand<T> {
 
   protected async askOverwriteAuthFile(username: string): Promise<boolean> {
     const yN = await this.confirm(messages.getMessage('overwriteAccessTokenAuthUserFile', [username]));
-    return AuthBaseCommand.answeredYes(yN);
+    return yN;
   }
 }
