@@ -1,3 +1,12 @@
+## [2.4.1](https://github.com/salesforcecli/plugin-auth/compare/2.4.0...2.4.1) (2023-02-04)
+
+
+### Bug Fixes
+
+* **deps:** bump http-cache-semantics from 4.1.0 to 4.1.1 ([e2a58ea](https://github.com/salesforcecli/plugin-auth/commit/e2a58ea7748d43b6a8c78a712643f9731d7ee6e8))
+
+
+
 # [2.4.0](https://github.com/salesforcecli/plugin-auth/compare/2.3.14...2.4.0) (2023-01-31)
 
 
