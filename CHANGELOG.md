@@ -1,3 +1,12 @@
+## [2.4.2](https://github.com/salesforcecli/plugin-auth/compare/2.4.1...2.4.2) (2023-02-05)
+
+
+### Bug Fixes
+
+* **deps:** bump @salesforce/command from 5.2.42 to 5.2.43 ([7d88dc8](https://github.com/salesforcecli/plugin-auth/commit/7d88dc86ccc0cad3701cb77396a5ef3aafb3fc63))
+
+
+
 ## [2.4.1](https://github.com/salesforcecli/plugin-auth/compare/2.4.0...2.4.1) (2023-02-04)
 
 
