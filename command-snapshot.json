@@ -33,14 +33,14 @@
       "no-prompt",
       "set-default",
       "set-default-dev-hub",
-      "user-name"
+      "username"
     ],
     "alias": ["force:auth:jwt:grant"]
   },
   {
     "command": "auth:list",
     "plugin": "@salesforce/plugin-auth",
-    "flags": ["json"],
+    "flags": ["json", "loglevel"],
     "alias": ["force:auth:list"]
   },
   {

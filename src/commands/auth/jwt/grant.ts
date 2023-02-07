@@ -7,7 +7,7 @@
 
 import { Flags, loglevel } from '@salesforce/sf-plugins-core';
 import { AuthFields, AuthInfo, AuthRemover, Logger, Messages, SfError } from '@salesforce/core';
-import { get, getString, Optional } from '@salesforce/ts-types';
+import { getString } from '@salesforce/ts-types';
 import { Interfaces } from '@oclif/core';
 import { AuthBaseCommand } from '../../../authBaseCommand';
 import { Common } from '../../../common';
@@ -23,12 +23,12 @@ export default class Grant extends AuthBaseCommand<AuthFields> {
   public static aliases = ['force:auth:jwt:grant'];
 
   public static readonly flags = {
-    'user-name': Flags.string({
+    username: Flags.string({
       char: 'o',
       summary: messages.getMessage('username'),
       required: true,
       deprecateAliases: true,
-      aliases: ['username', 'u'],
+      aliases: ['u'],
     }),
     'jwt-key-file': Flags.file({
       char: 'f',
@@ -113,14 +113,14 @@ export default class Grant extends AuthBaseCommand<AuthFields> {
       privateKeyFile: this.flags['jwt-key-file'],
     };
 
-    const loginUrl = await Common.resolveLoginUrl(get(this.flags['instance-url'], 'href', null) as Optional<string>);
+    const loginUrl = await Common.resolveLoginUrl(this.flags['instance-url']?.href);
 
     const oauth2Options = loginUrl ? Object.assign(oauth2OptionsBase, { loginUrl }) : oauth2OptionsBase;
 
     let authInfo: AuthInfo;
     try {
       authInfo = await AuthInfo.create({
-        username: this.flags['user-name'],
+        username: this.flags.username,
         oauth2Options,
       });
     } catch (error) {
@@ -128,9 +128,9 @@ export default class Grant extends AuthBaseCommand<AuthFields> {
       if (err.name === 'AuthInfoOverwriteError') {
         this.logger.debug('Auth file already exists. Removing and starting fresh.');
         const remover = await AuthRemover.create();
-        await remover.removeAuth(this.flags['user-name']);
+        await remover.removeAuth(this.flags.username);
         authInfo = await AuthInfo.create({
-          username: this.flags['user-name'],
+          username: this.flags.username,
           oauth2Options,
         });
       } else {

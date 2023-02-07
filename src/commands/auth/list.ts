@@ -5,7 +5,7 @@
  * For full license text, see LICENSE.txt file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  */
 
-import { SfCommand } from '@salesforce/sf-plugins-core';
+import { loglevel, SfCommand } from '@salesforce/sf-plugins-core';
 import { AuthInfo, Messages, OrgAuthorization } from '@salesforce/core';
 type AuthListResult = Omit<OrgAuthorization, 'aliases'> & { alias: string };
 export type AuthListResults = AuthListResult[];
@@ -18,6 +18,10 @@ export default class List extends SfCommand<AuthListResults> {
   public static readonly examples = messages.getMessages('examples');
   public static readonly deprecateAliases = true;
   public static aliases = ['force:auth:list'];
+
+  public static readonly flags = {
+    loglevel,
+  };
 
   public async run(): Promise<AuthListResults> {
     try {
