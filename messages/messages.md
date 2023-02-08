@@ -26,7 +26,7 @@ Successfully authorized %s with org ID %s
 
 Logging in to a business or production org is not recommended on a demo or shared machine. Please run "%s auth:logout --target-org <your username> --no-prompt" when finished using this org, which is similar to logging out of the org in the browser.
 
-Do you want to authorize this org for use with the Salesforce CLI (y/n)?
+Do you want to authorize this org for use with the Salesforce CLI?
 
 # noPromptAuth
 
@@ -55,4 +55,4 @@ do not prompt for confirmation
 # overwriteAccessTokenAuthUserFile
 
 A file already exists for user "%s", which is associated with the access token you provided.
-Are you sure you want to overwrite the existing file? (y/n)?
+Are you sure you want to overwrite the existing file?

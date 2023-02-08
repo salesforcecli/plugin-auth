@@ -24,6 +24,7 @@ export default class List extends SfCommand<AuthListResults> {
   };
 
   public async run(): Promise<AuthListResults> {
+    await this.parse(List);
     try {
       const auths = await AuthInfo.listAllAuthorizations();
       if (auths.length === 0) {

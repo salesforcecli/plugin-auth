@@ -6,8 +6,8 @@
  */
 
 import * as os from 'os';
-import { AuthInfo, AuthRemover, ConfigAggregator, Global, Messages, Mode, SfError } from '@salesforce/core';
-import { Flags, loglevel, optionalOrgFlagWithDeprecations } from '@salesforce/sf-plugins-core';
+import { AuthRemover, ConfigAggregator, Global, Messages, Mode, OrgConfigProperties, SfError } from '@salesforce/core';
+import { Flags, loglevel } from '@salesforce/sf-plugins-core';
 import { Interfaces } from '@oclif/core';
 import { isString } from '@salesforce/ts-types';
 import { AuthBaseCommand } from '../../authBaseCommand';
@@ -27,7 +27,13 @@ export default class Logout extends AuthBaseCommand<AuthLogoutResults> {
   public static aliases = ['force:auth:logout'];
 
   public static readonly flags = {
-    'target-org': optionalOrgFlagWithDeprecations,
+    // taking control over target-org vs using a org flag from sf-plugins-core to guarantee
+    // idempotency of the command
+    'target-org': Flags.string({
+      summary: messages.getMessage('flags.target-org.summary'),
+      char: 'o',
+      aliases: ['targetusername', 'u'],
+    }),
     all: Flags.boolean({
       char: 'a',
       summary: messages.getMessage('all'),
@@ -53,15 +59,14 @@ export default class Logout extends AuthBaseCommand<AuthLogoutResults> {
     this.configAggregator = await ConfigAggregator.create();
     const remover = await AuthRemover.create();
 
-    // verify that the org exists - this is necessary given AuthRemover's behavior
-    await this.resolveTargetOrg();
-
     let usernames: AuthLogoutResults;
     try {
+      const targetUsername =
+        this.flags['target-org'] ?? (this.configAggregator.getInfo(OrgConfigProperties.TARGET_ORG).value as string);
       usernames = (
         this.shouldFindAllAuths()
           ? Object.keys(remover.findAllAuths())
-          : [(await remover.findAuth(flags['target-org']?.getUsername())).username]
+          : [(await remover.findAuth(targetUsername))?.username ?? targetUsername]
       ).filter((username) => username) as AuthLogoutResults;
     } catch (e) {
       // keep the error name the same for SFDX
@@ -100,11 +105,5 @@ export default class Logout extends AuthBaseCommand<AuthLogoutResults> {
       this.config.bin,
     ]);
     return this.shouldRunCommand(this.flags['no-prompt'], message);
-  }
-
-  private async resolveTargetOrg(): Promise<void> {
-    if (this.flags['target-org']) {
-      await AuthInfo.create({ username: this.flags['target-org'].getUsername() });
-    }
   }
 }

@@ -25,8 +25,9 @@ export abstract class AuthBaseCommand<T> extends SfCommand<T> {
     const msg = dimMessage(messages.getMessage(messageKey));
     const hidden: { response: string } = await this.prompt({
       message: msg,
-      type: disableMasking ? 'input' : 'password',
+      type: 'input',
       name: 'response',
+      transformer: (input: string) => (disableMasking ? input : '*'.repeat(input.length)),
     });
     return hidden.response;
   }

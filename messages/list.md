@@ -1,6 +1,6 @@
 # summary
 
-list auth connection information
+List auth connection information
 
 # description
 
@@ -13,4 +13,3 @@ list auth connection information
 # noResultsFound
 
 No results found
-

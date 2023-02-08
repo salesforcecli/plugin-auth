@@ -108,18 +108,6 @@ describe('auth:logout', () => {
     }
   });
 
-  it('should throw error if no target-org and targetusername does not exist', async () => {
-    await prepareStubs();
-    const logout = new Logout(['-p', '-u', 'foobar@org.com', '--json'], {} as Config);
-    try {
-      const response = await logout.run();
-      expect.fail(`should have thrown error. Response: ${JSON.stringify(response)}`);
-    } catch (e) {
-      expect((e as Error).name).to.equal('NoOrgFound');
-      expect(authRemoverSpy.callCount).to.equal(0);
-    }
-  });
-
   it('should do nothing when prompt is answered with no', async () => {
     await prepareStubs();
     $$.SANDBOX.stub(SfCommand.prototype, 'confirm').resolves(false);
