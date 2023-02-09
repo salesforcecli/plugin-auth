@@ -105,6 +105,6 @@ export default class Logout extends AuthBaseCommand<AuthLogoutResults> {
       this.config.bin,
       this.config.bin,
     ]);
-    return this.shouldRunCommand(this.flags['no-prompt'], message);
+    return this.shouldRunCommand(this.flags['no-prompt'], message, false);
   }
 }
