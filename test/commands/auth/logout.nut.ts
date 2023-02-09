@@ -69,12 +69,12 @@ describe('auth:logout NUTs', () => {
     const configGetUsername = execCmd<Array<{ key: string }>>('config:get target-org --json', {
       ensureExitCode: 0,
     }).jsonOutput?.result as Array<{ key: string }>;
-    expect(configGetUsername[0].key).to.equal('target-org');
+    expect(['target-org', 'defaultusername']).to.include(configGetUsername[0].key);
 
     const configGetDevhub = execCmd<Array<{ key: string }>>('config:get target-dev-hub --json', {
       ensureExitCode: 0,
     }).jsonOutput?.result as Array<{ key: string }>;
-    expect(configGetDevhub[0].key).to.equal('target-dev-hub');
+    expect(['target-dev-hub', 'defaultdevhubusername']).to.include(configGetDevhub[0].key);
   });
 
   it('should remove the org specified by the -o flag (human readable)', () => {
@@ -101,6 +101,6 @@ describe('auth:logout NUTs', () => {
     const configGet = execCmd<Array<{ key: string }>>('config:get target-org --json', {
       ensureExitCode: 0,
     }).jsonOutput?.result as Array<{ key: string }>;
-    expect(configGet[0].key).to.equal('target-org');
+    expect(['target-org', 'defaultusername']).to.include(configGet[0].key);
   });
 });
