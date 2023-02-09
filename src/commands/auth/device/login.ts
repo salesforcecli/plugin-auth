@@ -10,6 +10,7 @@ import { AuthFields, AuthInfo, DeviceOauthService, Messages } from '@salesforce/
 import { get, Optional } from '@salesforce/ts-types';
 import { Flags, loglevel } from '@salesforce/sf-plugins-core';
 import { DeviceCodeResponse } from '@salesforce/core/lib/deviceOauthService';
+import { ux } from '@oclif/core';
 import { AuthBaseCommand } from '../../../authBaseCommand';
 import { Common } from '../../../common';
 
@@ -81,9 +82,13 @@ export default class Login extends AuthBaseCommand<DeviceLoginResult> {
     const deviceOauthService = await DeviceOauthService.create(oauthConfig);
     const loginData = await deviceOauthService.requestDeviceLogin();
 
-    this.styledHeader(messages.getMessage('actionRequired'));
-    this.log(messages.getMessage('enterCode', [loginData.user_code, loginData.verification_uri]));
-    this.log();
+    if (this.jsonEnabled()) {
+      ux.log(JSON.stringify(loginData, null, 2));
+    } else {
+      this.styledHeader(messages.getMessage('actionRequired'));
+      this.log(messages.getMessage('enterCode', [loginData.user_code, loginData.verification_uri]));
+      this.log();
+    }
 
     const approval = await deviceOauthService.awaitDeviceApproval(loginData);
     if (approval) {
