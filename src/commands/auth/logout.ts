@@ -33,6 +33,7 @@ export default class Logout extends AuthBaseCommand<AuthLogoutResults> {
       summary: messages.getMessage('flags.target-org.summary'),
       char: 'o',
       aliases: ['targetusername', 'u'],
+      deprecateAliases: true,
     }),
     all: Flags.boolean({
       char: 'a',
