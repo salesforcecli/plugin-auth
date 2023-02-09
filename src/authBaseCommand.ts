@@ -42,12 +42,12 @@ export abstract class AuthBaseCommand<T> extends SfCommand<T> {
     }
   }
 
-  protected async shouldRunCommand(noPrompt?: boolean, message?: string): Promise<boolean> {
+  protected async shouldRunCommand(noPrompt?: boolean, message?: string, defaultAnswer = true): Promise<boolean> {
     if (noPrompt || Global.getEnvironmentMode() === Mode.DEMO) {
       return true;
     } else {
       const msg = dimMessage(message ?? messages.getMessage('warnAuth', [this.config.bin]));
-      const answer = await this.confirm(msg);
+      const answer = await this.confirm(msg, 10000, defaultAnswer);
       return answer;
     }
   }
