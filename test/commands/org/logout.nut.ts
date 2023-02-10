@@ -8,9 +8,9 @@ import { execCmd, TestSession, prepareForJwt } from '@salesforce/cli-plugins-tes
 import { expect } from 'chai';
 import { Env } from '@salesforce/kit';
 import { ensureString, getString } from '@salesforce/ts-types';
-import { AuthListResults } from '../../../src/commands/auth/list';
+import { AuthListResults } from '../../../src/commands/org/list/auth';
 
-describe('auth:logout NUTs', () => {
+describe('org:logout NUTs', () => {
   const env = new Env();
   let testSession: TestSession;
   let jwtKey: string;
@@ -33,19 +33,19 @@ describe('auth:logout NUTs', () => {
   });
 
   beforeEach(() => {
-    const command = `auth:jwt:grant -d -o ${username} -i ${clientId} -f ${jwtKey} -r ${instanceUrl} --json`;
+    const command = `org:login:jwt -d -o ${username} -i ${clientId} -f ${jwtKey} -r ${instanceUrl} --json`;
     execCmd(command, { ensureExitCode: 0 });
   });
 
   it('should remove the org specified by the -o flag (json)', () => {
-    const json = execCmd(`auth:logout -p -o ${username} --json`, { ensureExitCode: 0 }).jsonOutput;
+    const json = execCmd(`org:logout -p -o ${username} --json`, { ensureExitCode: 0 }).jsonOutput;
     expect(json).to.deep.equal({
       status: 0,
       result: [username],
       warnings: [],
     });
 
-    const list = execCmd<AuthListResults>('auth:list --json', { ensureExitCode: 0 }).jsonOutput
+    const list = execCmd<AuthListResults>('org:list:auth --json', { ensureExitCode: 0 }).jsonOutput
       ?.result as AuthListResults;
     const found = !!list.find((r) => r.username === username);
     expect(found).to.be.false;
@@ -54,14 +54,14 @@ describe('auth:logout NUTs', () => {
   it('should clear any configs that use the removed username (json)', () => {
     execCmd(`config:set target-org=${username} --global`, { ensureExitCode: 0 });
     execCmd(`config:set target-dev-hub=${username} --global`, { ensureExitCode: 0 });
-    const json = execCmd(`auth:logout -p -o ${username} --json`, { ensureExitCode: 0 }).jsonOutput;
+    const json = execCmd(`org:logout -p -o ${username} --json`, { ensureExitCode: 0 }).jsonOutput;
     expect(json).to.deep.equal({
       status: 0,
       result: [username],
       warnings: [],
     });
 
-    const list = execCmd<AuthListResults>('auth:list --json', { ensureExitCode: 0 }).jsonOutput
+    const list = execCmd<AuthListResults>('org:list:auth --json', { ensureExitCode: 0 }).jsonOutput
       ?.result as AuthListResults;
     const found = !!list.find((r) => r.username === username);
     expect(found).to.be.false;
@@ -78,19 +78,19 @@ describe('auth:logout NUTs', () => {
   });
 
   it('should remove the org specified by the -o flag (human readable)', () => {
-    const result = execCmd(`auth:logout -p -o ${username}`, { ensureExitCode: 0 });
+    const result = execCmd(`org:logout -p -o ${username}`, { ensureExitCode: 0 });
     const output = getString(result, 'shellOutput.stdout');
     expect(output).to.include(`Successfully logged out of orgs: ${username}`);
   });
 
   it('should fail if there is no default org and the -o flag is not specified (json)', () => {
-    const json = execCmd<{ name: string }>('auth:logout -p --json', { ensureExitCode: 1 }).jsonOutput;
+    const json = execCmd<{ name: string }>('org:logout -p --json', { ensureExitCode: 1 }).jsonOutput;
     expect(json?.name).to.equal('NoOrgFound');
   });
 
   it('should remove the default username if the -o flag is not specified (json)', () => {
     execCmd(`config:set target-org=${username} --global`, { ensureExitCode: 0 });
-    const json = execCmd('auth:logout -p --json', { ensureExitCode: 0 }).jsonOutput;
+    const json = execCmd('org:logout -p --json', { ensureExitCode: 0 }).jsonOutput;
     expect(json).to.deep.equal({
       status: 0,
       result: [username],

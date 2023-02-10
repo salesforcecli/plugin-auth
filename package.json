@@ -16,7 +16,7 @@
     "tslib": "^2"
   },
   "devDependencies": {
-    "@oclif/plugin-command-snapshot": "^3.3.1",
+    "@oclif/plugin-command-snapshot": "^3.3.4",
     "@salesforce/cli-plugins-testkit": "^3.2.18",
     "@salesforce/dev-config": "^3.1.0",
     "@salesforce/dev-scripts": "^3.1.1",
@@ -81,24 +81,33 @@
       "@salesforce/plugin-config"
     ],
     "topics": {
-      "auth": {
-        "description": "authorize an org for use with the Salesforce CLI",
-        "longDescription": "Use the auth commands to authorize a Salesforce org for use with the Salesforce CLI.",
+      "org": {
+        "description": "manage Salesforce orgs",
+        "longDescription": "Use the org commands to create and manage Salesforce orgs.",
         "subtopics": {
-          "jwt": {
-            "description": "authorize an org using JWT"
+          "login": {
+            "description": "authorize an org for use with the Salesforce CLI",
+            "longDescription": "Use the auth commands to authorize a Salesforce org for use with the Salesforce CLI.",
+            "subtopics": {
+              "jwt": {
+                "description": "authorize an org using JWT"
+              },
+              "sfdx-url": {
+                "description": "authorize an org using sfdxurl"
+              },
+              "web": {
+                "description": "authorize an org using a web browser"
+              },
+              "access-token": {
+                "description": "authorize an org using an access token"
+              },
+              "device": {
+                "description": "authorize an org using a device code"
+              }
+            }
           },
-          "sfdxurl": {
-            "description": "authorize an org using sfdxurl"
-          },
-          "web": {
-            "description": "authorize an org using a web browser"
-          },
-          "accesstoken": {
-            "description": "authorize an org using an access token"
-          },
-          "device": {
-            "description": "authorize an org using a device code"
+          "list": {
+            "description": "list authorized orgs"
           }
         }
       }

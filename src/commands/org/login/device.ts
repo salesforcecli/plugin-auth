@@ -20,11 +20,11 @@ const commonMessages = Messages.loadMessages('@salesforce/plugin-auth', 'message
 
 export type DeviceLoginResult = (AuthFields & DeviceCodeResponse) | Record<string, never>;
 
-export default class Login extends AuthBaseCommand<DeviceLoginResult> {
+export default class LoginDevice extends AuthBaseCommand<DeviceLoginResult> {
   public static readonly summary = messages.getMessage('summary');
   public static readonly description = messages.getMessage('description');
   public static readonly examples = messages.getMessages('examples');
-  public static aliases = ['force:auth:device:login'];
+  public static aliases = ['force:auth:device:login', 'auth:device:login'];
 
   public static readonly flags = {
     'client-id': Flags.string({
@@ -67,7 +67,7 @@ export default class Login extends AuthBaseCommand<DeviceLoginResult> {
   };
 
   public async run(): Promise<DeviceLoginResult> {
-    const { flags } = await this.parse(Login);
+    const { flags } = await this.parse(LoginDevice);
     if (await this.shouldExitCommand(false)) return {};
 
     const oauthConfig: OAuth2Config = {

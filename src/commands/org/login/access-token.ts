@@ -18,12 +18,12 @@ const commonMessages = Messages.loadMessages('@salesforce/plugin-auth', 'message
 
 const ACCESS_TOKEN_FORMAT = '"<org id>!<accesstoken>"';
 
-export default class Store extends AuthBaseCommand<AuthFields> {
+export default class LoginAccessToken extends AuthBaseCommand<AuthFields> {
   public static readonly summary = messages.getMessage('summary');
   public static readonly description = messages.getMessage('description');
   public static readonly examples = messages.getMessages('examples');
   public static readonly deprecateAliases = true;
-  public static aliases = ['force:auth:accesstoken:store'];
+  public static aliases = ['force:auth:accesstoken:store', 'auth:accesstoken:store'];
 
   public static readonly flags = {
     'instance-url': Flags.url({
@@ -64,10 +64,10 @@ export default class Store extends AuthBaseCommand<AuthFields> {
     loglevel,
   };
 
-  private flags: Interfaces.InferredFlags<typeof Store.flags>;
+  private flags: Interfaces.InferredFlags<typeof LoginAccessToken.flags>;
 
   public async run(): Promise<AuthFields> {
-    const { flags } = await this.parse(Store);
+    const { flags } = await this.parse(LoginAccessToken);
     this.flags = flags;
     const instanceUrl = ensureString(getString(flags, 'instance-url.href'));
     const accessToken = await this.getAccessToken();

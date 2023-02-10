@@ -12,7 +12,7 @@ import { Env } from '@salesforce/kit';
 import { ensureString } from '@salesforce/ts-types';
 import { AuthFields } from '@salesforce/core';
 import { readJson } from 'fs-extra';
-import { AuthListResults } from '../../../lib/commands/auth/list';
+import { AuthListResults } from '../../src/commands/org/list/auth';
 
 describe('verify discovery/id of scratch org', () => {
   let testSession: TestSession;
@@ -55,18 +55,18 @@ describe('verify discovery/id of scratch org', () => {
   });
 
   it('should have the scratch org in auth files', () => {
-    const list = execCmd<AuthListResults>('auth:list --json', { ensureExitCode: 0 }).jsonOutput
+    const list = execCmd<AuthListResults>('org:list:auth --json', { ensureExitCode: 0 }).jsonOutput
       ?.result as AuthListResults;
     const found = !!list.find((r) => r.username === orgUsername);
     expect(found).to.be.true;
   });
 
   it('should logout from the org)', () => {
-    execCmd(`auth:logout -o ${orgUsername} --noprompt`, { ensureExitCode: 0 });
+    execCmd(`auth:logout -o ${orgUsername} --no-prompt`, { ensureExitCode: 0 });
   });
 
   it('should NOT have the scratch org in auth files', () => {
-    const list = execCmd<AuthListResults>('auth:list --json', { ensureExitCode: 0 }).jsonOutput
+    const list = execCmd<AuthListResults>('org:list:auth --json', { ensureExitCode: 0 }).jsonOutput
       ?.result as AuthListResults;
     const found = !!list.find((r) => r.username === orgUsername);
     expect(found).to.be.false;
@@ -74,7 +74,7 @@ describe('verify discovery/id of scratch org', () => {
 
   it('should login to the org via jwt grant', async () => {
     const env = new Env();
-    const command = `auth:jwt:grant -f ${jwtKey} --username ${orgUsername} --clientid ${env.getString(
+    const command = `org:login:jwt -f ${jwtKey} --username ${orgUsername} --client-id ${env.getString(
       'TESTKIT_JWT_CLIENT_ID'
     )} -r ${orgInstanceUrl} --json`;
     const output = execCmd<AuthFields>(command, {
@@ -83,7 +83,7 @@ describe('verify discovery/id of scratch org', () => {
     expect(output?.username).to.equal(orgUsername);
   });
 
-  it('should have the devhubUsername in the auth file', async () => {
+  it('should have the dev hub username in the auth file', async () => {
     const fileContents = (await readJson(path.join(testSession.homeDir, '.sfdx', `${orgUsername}.json`))) as {
       devHubUsername: string;
     };

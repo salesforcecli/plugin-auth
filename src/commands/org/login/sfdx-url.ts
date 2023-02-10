@@ -22,11 +22,11 @@ type AuthJson = AnyJson & {
   result?: AnyJson & { sfdxAuthUrl: string };
   sfdxAuthUrl: string;
 };
-export default class Store extends AuthBaseCommand<AuthFields> {
+export default class LoginSfdxUrl extends AuthBaseCommand<AuthFields> {
   public static readonly summary = messages.getMessage('summary');
   public static readonly description = messages.getMessage('description', [AUTH_URL_FORMAT]);
   public static readonly examples = messages.getMessages('examples');
-  public static aliases = ['force:auth:sfdxurl:store'];
+  public static aliases = ['force:auth:sfdxurl:store', 'auth:sfdxurl:store'];
 
   public static readonly flags = {
     'sfdx-url-file': Flags.file({
@@ -66,7 +66,7 @@ export default class Store extends AuthBaseCommand<AuthFields> {
   };
 
   public async run(): Promise<AuthFields> {
-    const { flags } = await this.parse(Store);
+    const { flags } = await this.parse(LoginSfdxUrl);
     if (await this.shouldExitCommand(flags['no-prompt'])) return {};
 
     const authFile = flags['sfdx-url-file'];

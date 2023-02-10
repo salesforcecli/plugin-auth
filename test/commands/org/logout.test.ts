@@ -10,7 +10,7 @@ import { MockTestOrgData, TestContext } from '@salesforce/core/lib/testSetup';
 import { expect } from 'chai';
 import { Config } from '@oclif/core';
 import { SfCommand } from '@salesforce/sf-plugins-core';
-import Logout from '../../../src/commands/auth/logout';
+import Logout from '../../../src/commands/org/logout';
 
 interface Options {
   authFiles?: string[];
@@ -23,7 +23,7 @@ interface Options {
   authInfoConfigDoesNotExist?: boolean;
 }
 
-describe('auth:logout', () => {
+describe('org:logout', () => {
   const $$ = new TestContext();
   const testOrg1 = new MockTestOrgData();
   const testOrg2 = new MockTestOrgData();

@@ -20,12 +20,12 @@ Messages.importMessagesDirectory(__dirname);
 const messages = Messages.loadMessages('@salesforce/plugin-auth', 'web.login');
 const commonMessages = Messages.loadMessages('@salesforce/plugin-auth', 'messages');
 
-export default class Login extends AuthBaseCommand<AuthFields> {
+export default class LoginWeb extends AuthBaseCommand<AuthFields> {
   public static readonly summary = messages.getMessage('summary');
   public static readonly description = messages.getMessage('description');
   public static readonly examples = messages.getMessages('examples');
   public static readonly deprecateAliases = true;
-  public static aliases = ['force:auth:web:login'];
+  public static aliases = ['force:auth:web:login', 'auth:web:login'];
 
   public static readonly flags = {
     browser: Flags.string({
@@ -80,10 +80,10 @@ export default class Login extends AuthBaseCommand<AuthFields> {
     loglevel,
   };
 
-  private flags: Interfaces.InferredFlags<typeof Login.flags>;
+  private flags: Interfaces.InferredFlags<typeof LoginWeb.flags>;
 
   public async run(): Promise<AuthFields> {
-    const { flags } = await this.parse(Login);
+    const { flags } = await this.parse(LoginWeb);
     this.flags = flags;
     if (isSFDXContainerMode()) {
       throw new SfError(messages.getMessage('deviceWarning'), 'DEVICE_WARNING');

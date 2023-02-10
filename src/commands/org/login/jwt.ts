@@ -16,19 +16,18 @@ Messages.importMessagesDirectory(__dirname);
 const messages = Messages.loadMessages('@salesforce/plugin-auth', 'jwt.grant');
 const commonMessages = Messages.loadMessages('@salesforce/plugin-auth', 'messages');
 
-export default class Grant extends AuthBaseCommand<AuthFields> {
+export default class LoginJwt extends AuthBaseCommand<AuthFields> {
   public static readonly summary = messages.getMessage('summary');
   public static readonly description = messages.getMessage('description');
   public static readonly examples = messages.getMessages('examples');
-  public static aliases = ['force:auth:jwt:grant'];
+  public static aliases = ['force:auth:jwt:grant', 'auth:jwt:grant'];
 
   public static readonly flags = {
     username: Flags.string({
-      char: 'o',
+      char: 'u',
       summary: messages.getMessage('username'),
       required: true,
       deprecateAliases: true,
-      aliases: ['u'],
     }),
     'jwt-key-file': Flags.file({
       char: 'f',
@@ -78,11 +77,11 @@ export default class Grant extends AuthBaseCommand<AuthFields> {
     }),
     loglevel,
   };
-  private flags: Interfaces.InferredFlags<typeof Grant.flags>;
+  private flags: Interfaces.InferredFlags<typeof LoginJwt.flags>;
   private logger = Logger.childFromRoot(this.constructor.name);
 
   public async run(): Promise<AuthFields> {
-    const { flags } = await this.parse(Grant);
+    const { flags } = await this.parse(LoginJwt);
     this.flags = flags;
     let result: AuthFields = {};
 
