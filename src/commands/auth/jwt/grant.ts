@@ -5,73 +5,95 @@
  * For full license text, see LICENSE.txt file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  */
 
-import * as os from 'os';
-import { flags, FlagsConfig, SfdxCommand } from '@salesforce/command';
-import { AuthFields, AuthInfo, AuthRemover, Messages, SfError } from '@salesforce/core';
-import { get, getString, Optional } from '@salesforce/ts-types';
-import { Prompts } from '../../../prompts';
+import { Flags, loglevel } from '@salesforce/sf-plugins-core';
+import { AuthFields, AuthInfo, AuthRemover, Logger, Messages, SfError } from '@salesforce/core';
+import { getString } from '@salesforce/ts-types';
+import { Interfaces } from '@oclif/core';
+import { AuthBaseCommand } from '../../../authBaseCommand';
 import { Common } from '../../../common';
 
 Messages.importMessagesDirectory(__dirname);
 const messages = Messages.loadMessages('@salesforce/plugin-auth', 'jwt.grant');
 const commonMessages = Messages.loadMessages('@salesforce/plugin-auth', 'messages');
 
-export default class Grant extends SfdxCommand {
+export default class Grant extends AuthBaseCommand<AuthFields> {
+  public static readonly summary = messages.getMessage('summary');
   public static readonly description = messages.getMessage('description');
-  public static readonly examples = messages.getMessage('examples').split(os.EOL);
+  public static readonly examples = messages.getMessages('examples');
   public static aliases = ['force:auth:jwt:grant'];
 
-  public static readonly flagsConfig: FlagsConfig = {
-    username: flags.string({
-      char: 'u',
-      description: messages.getMessage('username'),
+  public static readonly flags = {
+    username: Flags.string({
+      char: 'o',
+      summary: messages.getMessage('username'),
       required: true,
+      deprecateAliases: true,
+      aliases: ['u'],
     }),
-    jwtkeyfile: flags.filepath({
+    'jwt-key-file': Flags.file({
       char: 'f',
-      description: messages.getMessage('key'),
+      summary: messages.getMessage('key'),
       required: true,
+      deprecateAliases: true,
+      aliases: ['jwtkeyfile'],
     }),
-    clientid: flags.string({
+    'client-id': Flags.string({
       char: 'i',
-      description: commonMessages.getMessage('clientId'),
+      summary: commonMessages.getMessage('clientId'),
       required: true,
+      deprecateAliases: true,
+      aliases: ['clientid'],
     }),
-    instanceurl: flags.url({
+    'instance-url': Flags.url({
       char: 'r',
-      description: commonMessages.getMessage('instanceUrl'),
+      summary: commonMessages.getMessage('instanceUrl'),
+      deprecateAliases: true,
+      aliases: ['instanceurl'],
     }),
-    setdefaultdevhubusername: flags.boolean({
+    'set-default-dev-hub': Flags.boolean({
       char: 'd',
-      description: commonMessages.getMessage('setDefaultDevHub'),
+      summary: commonMessages.getMessage('setDefaultDevHub'),
+      deprecateAliases: true,
+      aliases: ['setdefaultdevhub'],
     }),
-    setdefaultusername: flags.boolean({
+    'set-default': Flags.boolean({
       char: 's',
-      description: commonMessages.getMessage('setDefaultUsername'),
+      summary: commonMessages.getMessage('setDefaultUsername'),
+      deprecateAliases: true,
+      aliases: ['setdefaultusername'],
     }),
-    setalias: flags.string({
+    alias: Flags.string({
       char: 'a',
-      description: commonMessages.getMessage('setAlias'),
+      summary: commonMessages.getMessage('setAlias'),
+      deprecateAliases: true,
+      aliases: ['setalias'],
     }),
-    noprompt: flags.boolean({
+    'no-prompt': Flags.boolean({
       char: 'p',
-      description: commonMessages.getMessage('noPromptAuth'),
+      summary: commonMessages.getMessage('noPromptAuth'),
       required: false,
       hidden: true,
+      deprecateAliases: true,
+      aliases: ['noprompt'],
     }),
+    loglevel,
   };
+  private flags: Interfaces.InferredFlags<typeof Grant.flags>;
+  private logger = Logger.childFromRoot(this.constructor.name);
 
   public async run(): Promise<AuthFields> {
+    const { flags } = await this.parse(Grant);
+    this.flags = flags;
     let result: AuthFields = {};
 
-    if (await Prompts.shouldExitCommand(this.ux, Boolean(this.flags.noprompt))) return {};
+    if (await this.shouldExitCommand(flags['no-prompt'])) return {};
 
     try {
       const authInfo = await this.initAuthInfo();
       await authInfo.handleAliasAndDefaultSettings({
-        alias: this.flags.setalias as string,
-        setDefault: this.flags.setdefaultusername as boolean,
-        setDefaultDevHub: this.flags.setdefaultdevhubusername as boolean,
+        alias: flags.alias as string,
+        setDefault: flags['set-default'],
+        setDefaultDevHub: flags['set-default-dev-hub'],
       });
       result = authInfo.getFields(true);
       await AuthInfo.identifyPossibleScratchOrgs(result, authInfo);
@@ -81,24 +103,24 @@ export default class Grant extends SfdxCommand {
     }
 
     const successMsg = commonMessages.getMessage('authorizeCommandSuccess', [result.username, result.orgId]);
-    this.ux.log(successMsg);
+    this.logSuccess(successMsg);
     return result;
   }
 
   private async initAuthInfo(): Promise<AuthInfo> {
     const oauth2OptionsBase = {
-      clientId: this.flags.clientid as string,
-      privateKeyFile: this.flags.jwtkeyfile as string,
+      clientId: this.flags['client-id'],
+      privateKeyFile: this.flags['jwt-key-file'],
     };
 
-    const loginUrl = await Common.resolveLoginUrl(get(this.flags.instanceurl, 'href', null) as Optional<string>);
+    const loginUrl = await Common.resolveLoginUrl(this.flags['instance-url']?.href);
 
     const oauth2Options = loginUrl ? Object.assign(oauth2OptionsBase, { loginUrl }) : oauth2OptionsBase;
 
     let authInfo: AuthInfo;
     try {
       authInfo = await AuthInfo.create({
-        username: this.flags.username as string,
+        username: this.flags.username,
         oauth2Options,
       });
     } catch (error) {
@@ -106,9 +128,9 @@ export default class Grant extends SfdxCommand {
       if (err.name === 'AuthInfoOverwriteError') {
         this.logger.debug('Auth file already exists. Removing and starting fresh.');
         const remover = await AuthRemover.create();
-        await remover.removeAuth(this.flags.username as string);
+        await remover.removeAuth(this.flags.username);
         authInfo = await AuthInfo.create({
-          username: this.flags.username as string,
+          username: this.flags.username,
           oauth2Options,
         });
       } else {

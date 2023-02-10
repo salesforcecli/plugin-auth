@@ -4,15 +4,15 @@
  * Licensed under the BSD 3-Clause license.
  * For full license text, see LICENSE.txt file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  */
-import { execCmd, TestSession, prepareForAuthUrl } from '@salesforce/cli-plugins-testkit';
+import { execCmd, prepareForAuthUrl, TestSession } from '@salesforce/cli-plugins-testkit';
 import { expect } from 'chai';
 import { Env } from '@salesforce/kit';
 import { ensureString, getString } from '@salesforce/ts-types';
 import { AuthFields } from '@salesforce/core';
 import {
-  expectPropsToExist,
   expectAccessTokenToExist,
   expectOrgIdToExist,
+  expectPropsToExist,
   expectUrlToExist,
 } from '../../../testHelper';
 
@@ -35,19 +35,19 @@ describe('auth:sfdxurl:store NUTs', () => {
   });
 
   afterEach(() => {
-    execCmd(`auth:logout -p -u ${username}`, { ensureExitCode: 0 });
+    execCmd(`auth:logout -p -o ${username}`, { ensureExitCode: 0 });
   });
 
   it('should authorize an org using sfdxurl (json)', () => {
     const command = `auth:sfdxurl:store -d -f ${authUrl} --json`;
-    const json = execCmd<AuthFields>(command, { ensureExitCode: 0 }).jsonOutput;
+    const json = execCmd<AuthFields>(command, { ensureExitCode: 0 }).jsonOutput?.result as AuthFields;
 
-    expectPropsToExist(json.result, 'refreshToken');
-    expectAccessTokenToExist(json.result);
-    expectOrgIdToExist(json.result);
-    expectUrlToExist(json.result, 'instanceUrl');
-    expectUrlToExist(json.result, 'loginUrl');
-    expect(json.result.username).to.equal(username);
+    expectPropsToExist(json, 'refreshToken');
+    expectAccessTokenToExist(json);
+    expectOrgIdToExist(json);
+    expectUrlToExist(json, 'instanceUrl');
+    expectUrlToExist(json, 'loginUrl');
+    expect(json.username).to.equal(username);
   });
 
   it('should authorize an org using sfdxurl (human readable)', () => {

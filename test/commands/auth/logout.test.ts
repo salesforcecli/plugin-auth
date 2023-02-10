@@ -5,16 +5,17 @@
  * For full license text, see LICENSE.txt file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  */
 
-import { $$, expect, test } from '@salesforce/command/lib/test';
-import { UX } from '@salesforce/command/lib/ux';
-import { AuthFields, AuthRemover, ConfigContents, Global, Mode } from '@salesforce/core';
-import { MockTestOrgData } from '@salesforce/core/lib/testSetup';
-import { parseJson, parseJsonError } from '../../testHelper';
+import { AuthRemover, ConfigContents, Global, Mode } from '@salesforce/core';
+import { MockTestOrgData, TestContext } from '@salesforce/core/lib/testSetup';
+import { expect } from 'chai';
+import { Config } from '@oclif/core';
+import { SfCommand } from '@salesforce/sf-plugins-core';
+import Logout from '../../../src/commands/auth/logout';
 
 interface Options {
   authFiles?: string[];
-  defaultUsername?: string;
-  defaultDevhubUsername?: string;
+  'target-org'?: string;
+  'target-dev-hub'?: string;
   aliases?: {
     [key: string]: string;
   };
@@ -23,213 +24,134 @@ interface Options {
 }
 
 describe('auth:logout', () => {
-  const testData = new MockTestOrgData();
+  const $$ = new TestContext();
+  const testOrg1 = new MockTestOrgData();
+  const testOrg2 = new MockTestOrgData();
+  const testOrg3 = new MockTestOrgData();
 
   let authRemoverSpy: sinon.SinonSpy;
 
   async function prepareStubs(options: Options = {}): Promise<ConfigContents> {
-    const authInfo = await testData.getConfig();
+    const authInfo = await testOrg1.getConfig();
 
     authRemoverSpy = $$.SANDBOX.spy(AuthRemover.prototype, 'removeAuth');
 
-    if (options.defaultUsername) {
-      $$.SANDBOX.stub(AuthRemover.prototype, 'findAuth').resolves({
-        username: testData.username,
-      } as AuthFields);
-    } else {
-      $$.SANDBOX.stub(AuthRemover.prototype, 'findAuth').throws('NoOrgFound');
+    if (!options.authInfoConfigDoesNotExist) {
+      await $$.stubAuths(testOrg1, testOrg2, testOrg3);
     }
 
-    $$.SANDBOX.stub(AuthRemover.prototype, 'findAllAuths').returns(options.aliases as Record<string, AuthFields>);
+    if (options['target-org']) {
+      $$.setConfigStubContents('Config', { contents: { 'target-org': options['target-org'] } });
+    }
 
+    if (options.aliases) {
+      $$.stubAliases(options.aliases);
+    }
     return authInfo;
   }
 
-  test
-    .do(async () => {
-      await prepareStubs();
-    })
-    .stdout()
-    .stderr()
-    .command(['auth:logout', '-a', '-u', testData.username, '--json'])
-    .it('should throw error when both -a and -u are specified', (ctx) => {
-      const response = parseJsonError(ctx.stdout);
-      expect(response.status).to.equal(1);
-      expect(response.name).to.equal('SpecifiedBothUserAndAll');
-    });
+  it('should throw error when both -a and -o are specified', async () => {
+    await prepareStubs();
+    const logout = new Logout(['-a', '-u', testOrg1.username, '--json'], {} as Config);
+    try {
+      await logout.run();
+    } catch (e) {
+      const error = e as Error;
+      expect(error.name).to.equal('Error');
+      expect(error.message).to.include('cannot also be provided when using --all');
+    }
+  });
 
-  test
-    .do(async () => {
-      await prepareStubs({ defaultUsername: testData.username });
-    })
-    .stdout()
-    .command(['auth:logout', '-p', '--json'])
-    .it('should remove defaultusername when neither -a nor -u are specified', (ctx) => {
-      const response = parseJson<string[]>(ctx.stdout);
+  it('should remove target-org when neither -a nor -o are specified', async () => {
+    await prepareStubs({ 'target-org': testOrg1.username });
+    const logout = new Logout(['-p', '--json'], {} as Config);
+    const response = await logout.run();
 
-      // eslint-disable-next-line no-console
-      console.log('res', response);
-      expect(response.status).to.equal(0);
-      expect(response.result).to.deep.equal([testData.username]);
-      expect(authRemoverSpy.callCount).to.equal(1);
-    });
+    expect(response).to.deep.equal([testOrg1.username]);
+    expect(authRemoverSpy.callCount).to.equal(1);
+  });
 
-  test
-    .do(async () => {
-      await prepareStubs({ defaultUsername: testData.username });
-    })
-    .stdout()
-    .command(['auth:logout', '-p', '-u', testData.username, '--json'])
-    .it('should remove username specified by -u', (ctx) => {
-      const response = parseJson<string[]>(ctx.stdout);
-      expect(response.status).to.equal(0);
-      expect(response.result).to.deep.equal([testData.username]);
-      expect(authRemoverSpy.callCount).to.equal(1);
-    });
+  it('should remove username specified by -u', async () => {
+    await prepareStubs({ 'target-org': testOrg1.username });
+    const logout = new Logout(['-p', '-u', testOrg1.username, '--json'], {} as Config);
+    const response = await logout.run();
+    expect(response).to.deep.equal([testOrg1.username]);
+    expect(authRemoverSpy.callCount).to.equal(1);
+  });
 
-  test
-    .do(async () => {
-      await prepareStubs({
-        aliases: {
-          [testData.username]: 'TestAlias',
-          'SomeOtherUser@coffee.com': 'TestAlias1',
-          'helloworld@foobar.com': 'TestAlias2',
-        },
-      });
-    })
-    .stdout()
-    .command(['auth:logout', '-p', '-a', '--json'])
-    .it('should remove all usernames when -a is specified', (ctx) => {
-      const response = parseJson<string[]>(ctx.stdout);
-      expect(response.status).to.equal(0);
-      expect(response.result).to.deep.equal([testData.username, 'SomeOtherUser@coffee.com', 'helloworld@foobar.com']);
-      expect(authRemoverSpy.callCount).to.equal(3);
-    });
+  it('should remove all usernames when -a is specified', async () => {
+    await prepareStubs();
+    const logout = new Logout(['-p', '-a', '--json'], {} as Config);
+    const response = await logout.run();
+    expect(response).to.deep.equal([testOrg1.username, testOrg2.username, testOrg3.username]);
+    expect(authRemoverSpy.callCount).to.equal(3);
+  });
 
-  test
-    .do(async () => {
-      await prepareStubs({
-        defaultUsername: 'SomeOtherUser@coffee.com',
-        aliases: {
-          [testData.username]: 'TestAlias',
-          'SomeOtherUser@coffee.com': 'TestAlias1',
-          'helloworld@foobar.com': 'TestAlias2',
-        },
-      });
+  it('should remove all usernames when in demo mode', async () => {
+    await prepareStubs();
+    $$.SANDBOX.stub(Global, 'getEnvironmentMode').returns(Mode.DEMO);
+    const logout = new Logout(['-p', '-a', '--json'], {} as Config);
+    const response = await logout.run();
+    expect(response).to.deep.equal([testOrg1.username, testOrg2.username, testOrg3.username]);
+    expect(authRemoverSpy.callCount).to.equal(3);
+  });
 
-      $$.SANDBOX.stub(Global, 'getEnvironmentMode').returns(Mode.DEMO);
-    })
-    .stdout()
-    .command(['auth:logout', '-p', '--json'])
-    .it('should remove all usernames when in demo mode', (ctx) => {
-      const response = parseJson<string[]>(ctx.stdout);
-      expect(response.status).to.equal(0);
-      expect(response.result).to.deep.equal([testData.username, 'SomeOtherUser@coffee.com', 'helloworld@foobar.com']);
-      expect(authRemoverSpy.callCount).to.equal(3);
-    });
-
-  test
-    .do(async () => {
-      await prepareStubs();
-    })
-    .stdout()
-    .stderr()
-    .command(['auth:logout', '-p', '--json'])
-    .it('should throw error if no defaultusername', (ctx) => {
-      const response = parseJsonError(ctx.stdout);
-      expect(response.status).to.equal(1);
-      expect(response.name).to.equal('NoOrgFound');
+  it('should throw error if no target-org', async () => {
+    await prepareStubs();
+    const logout = new Logout(['-p', '--json'], {} as Config);
+    try {
+      const response = await logout.run();
+      expect.fail(`should have thrown error. Response: ${JSON.stringify(response)}`);
+    } catch (e) {
+      expect((e as Error).name).to.equal('NoOrgFound');
       expect(authRemoverSpy.callCount).to.equal(0);
-    });
+    }
+  });
 
-  test
-    .do(async () => {
-      await prepareStubs();
-    })
-    .stdout()
-    .stderr()
-    .command(['auth:logout', '-p', '-u', 'foobar@org.com', '--json'])
-    .it('should throw error if no defaultusername and targetusername does not exist', (ctx) => {
-      const response = parseJsonError(ctx.stdout);
-      expect(response.status).to.equal(1);
-      expect(response.name).to.equal('NoOrgFound');
-    });
+  it('should do nothing when prompt is answered with no', async () => {
+    await prepareStubs();
+    $$.SANDBOX.stub(SfCommand.prototype, 'confirm').resolves(false);
+    const logout = new Logout(['-u', testOrg1.username, '--json'], {} as Config);
+    const response = await logout.run();
+    expect(response).to.deep.equal([]);
+  });
 
-  test
-    .do(async () => {
-      await prepareStubs({
-        defaultUsername: 'SomeOtherUser@coffee.com',
-        aliases: { TestAlias: testData.username },
-      });
-      $$.SANDBOX.stub(UX.prototype, 'prompt').resolves('no');
-    })
-    .stdout()
-    .command(['auth:logout', '-u', testData.username, '--json'])
-    .it('should do nothing when prompt is answered with no', (ctx) => {
-      const response = parseJson<string[]>(ctx.stdout);
-      expect(response.status).to.equal(0);
-      expect(response.result).to.deep.equal([]);
-    });
+  it('should remove auth when alias is specified', async () => {
+    await prepareStubs({ aliases: { TestAlias: testOrg1.username } });
+    const logout = new Logout(['-p', '-u', 'TestAlias', '--json'], {} as Config);
+    const response = await logout.run();
+    expect(response).to.deep.equal([testOrg1.username]);
+  });
 
-  test
-    .do(async () => {
-      await prepareStubs({
-        defaultUsername: testData.username,
-        aliases: { TestAlias: testData.username },
-      });
-    })
-    .stdout()
-    .command(['auth:logout', '-p', '-u', 'TestAlias', '--json'])
-    .it('should remove auth when alias is specifed', (ctx) => {
-      const response = parseJson<string[]>(ctx.stdout);
-      expect(response.status).to.equal(0);
-      expect(response.result).to.deep.equal([testData.username]);
+  it('should remove auth when target-org and target-dev-hub have same alias', async () => {
+    await prepareStubs({
+      'target-org': 'TestAlias',
+      'target-dev-hub': 'TestAlias',
+      aliases: { TestAlias: testOrg1.username },
     });
+    const logout = new Logout(['-p', '--json'], {} as Config);
+    const response = await logout.run();
+    expect(response).to.deep.equal([testOrg1.username]);
+  });
 
-  test
-    .do(async () => {
-      await prepareStubs({
-        defaultUsername: 'TestAlias',
-        defaultDevhubUsername: 'TestAlias',
-        aliases: { TestAlias: testData.username },
-      });
-    })
-    .stdout()
-    .command(['auth:logout', '-p', '--json'])
-    .it('should remove auth when defaultusername and defaultdevhubusername is alias', (ctx) => {
-      const response = parseJson<string[]>(ctx.stdout);
-      expect(response.status).to.equal(0);
-      expect(response.result).to.deep.equal([testData.username]);
+  it('should remove auth when target-org is alias', async () => {
+    await prepareStubs({
+      'target-org': 'TestAlias',
+      aliases: { TestAlias: testOrg1.username },
     });
+    const logout = new Logout(['-p', '--json'], {} as Config);
+    const response = await logout.run();
+    expect(response).to.deep.equal([testOrg1.username]);
+  });
 
-  test
-    .do(async () => {
-      await prepareStubs({
-        defaultUsername: 'TestAlias',
-        aliases: { TestAlias: testData.username },
-      });
-    })
-    .stdout()
-    .command(['auth:logout', '-p', '--json'])
-    .it('should remove auth when defaultusername is alias', (ctx) => {
-      const response = parseJson<string[]>(ctx.stdout);
-      expect(response.status).to.equal(0);
-      expect(response.result).to.deep.equal([testData.username]);
+  it('should not fail when the auth file does not exist', async () => {
+    await prepareStubs({
+      'target-org': testOrg2.username,
+      aliases: { TestAlias: testOrg1.username },
+      authInfoConfigDoesNotExist: true,
     });
-
-  test
-    .do(async () => {
-      await prepareStubs({
-        defaultUsername: 'SomeOtherUser@coffee.com',
-        aliases: { TestAlias: testData.username },
-        authInfoConfigDoesNotExist: true,
-      });
-    })
-    .stdout()
-    .command(['auth:logout', '-p', '-u', testData.username, '--json'])
-    .it('should not fail when the auth file does not exist', (ctx) => {
-      const response = parseJson<string[]>(ctx.stdout);
-      expect(response.status).to.equal(0);
-      expect(response.result).to.deep.equal([testData.username]);
-    });
+    const logout = new Logout(['-p', '-u', testOrg1.username, '--json'], {} as Config);
+    const response = await logout.run();
+    expect(response).to.deep.equal([testOrg1.username]);
+  });
 });

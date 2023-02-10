@@ -6,13 +6,13 @@
  */
 
 import * as fs from 'fs/promises';
-import { $$, expect, test } from '@salesforce/command/lib/test';
-import { AuthFields, AuthInfo, Global, Mode, OrgAuthorization } from '@salesforce/core';
-import { MockTestOrgData } from '@salesforce/core/lib/testSetup';
-import { StubbedType, stubInterface, stubMethod } from '@salesforce/ts-sinon';
-import { UX } from '@salesforce/command';
-import * as fse from 'fs-extra';
-import { parseJson, parseJsonError } from '../../../testHelper';
+import { AuthFields, AuthInfo, Global, Mode } from '@salesforce/core';
+import { MockTestOrgData, TestContext } from '@salesforce/core/lib/testSetup';
+import { expect } from 'chai';
+import { Config } from '@oclif/core';
+import { StubbedType, stubInterface } from '@salesforce/ts-sinon';
+import { SfCommand } from '@salesforce/sf-plugins-core';
+import Store from '../../../../src/commands/auth/sfdxurl/store';
 
 interface Options {
   authInfoCreateFails?: boolean;
@@ -21,6 +21,7 @@ interface Options {
 }
 
 describe('auth:sfdxurl:store', async () => {
+  const $$ = new TestContext();
   const testData = new MockTestOrgData();
   let authFields: AuthFields;
   let authInfoStub: StubbedType<AuthInfo>;
@@ -28,13 +29,12 @@ describe('auth:sfdxurl:store', async () => {
   async function prepareStubs(options: Options = {}) {
     authFields = await testData.getConfig();
     delete authFields.isDevHub;
+
     authInfoStub = stubInterface<AuthInfo>($$.SANDBOX, {
-      getFields: () => authFields,
+      getFields: () => authFields
     });
 
-    $$.SANDBOX.stub(AuthInfo, 'listAllAuthorizations').callsFake(
-      async () => [{ [authFields.username]: {} }] as OrgAuthorization[]
-    );
+    await $$.stubAuths(testData);
 
     if (!options.fileDoesNotExist) {
       $$.SANDBOX.stub(fs, 'readFile').resolves('force://PlatformCLI::CoffeeAndBacon@su0503.my.salesforce.com');
@@ -42,225 +42,162 @@ describe('auth:sfdxurl:store', async () => {
 
     if (options.authInfoCreateFails) {
       $$.SANDBOX.stub(AuthInfo, 'create').throws(new Error('invalid client id'));
-    } else if (options.existingAuth) {
-      stubMethod($$.SANDBOX, AuthInfo, 'create').callsFake(async () => authInfoStub);
     } else {
-      stubMethod($$.SANDBOX, AuthInfo, 'create').callsFake(async () => authInfoStub);
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      $$.SANDBOX.stub(AuthInfo, 'create').callsFake(async () => authInfoStub);
     }
   }
 
-  test
-    .do(async () => prepareStubs())
-    .stdout()
-    .command(['auth:sfdxurl:store', '-f', 'path/to/key.txt', '--json'])
-    .it('should return auth fields', (ctx) => {
-      const response = parseJson<AuthFields>(ctx.stdout);
-      expect(response.status).to.equal(0);
-      expect(response.result.username).to.equal(testData.username);
-    });
+  it('should return auth fields', async () => {
+    await prepareStubs();
+    const store = new Store(['-f', 'path/to/key.txt', '--json'], {} as Config);
+    const response = await store.run();
+    expect(response.username).to.equal(testData.username);
+  });
 
-  test
-    .do(async () => {
-      await prepareStubs({ fileDoesNotExist: true });
-      $$.SANDBOX.stub(fse, 'readJson').callsFake(async () => ({
-        sfdxAuthUrl: 'force://PlatformCLI::CoffeeAndBacon@su0503.my.salesforce.com',
-      }));
-    })
-    .stdout()
-    .command(['auth:sfdxurl:store', '-f', 'path/to/key.json', '--json'])
-    .it('should return auth fields when passing in a json file', (ctx) => {
-      const response = parseJson<AuthFields>(ctx.stdout);
-      expect(response.status).to.equal(0);
-      expect(response.result.username).to.equal(testData.username);
-    });
+  it('should return auth fields when passing in a json file', async () => {
+    await prepareStubs({ fileDoesNotExist: true });
+    $$.SANDBOX.stub(fs, 'readFile').resolves(JSON.stringify({
+      sfdxAuthUrl: 'force://PlatformCLI::CoffeeAndBacon@su0503.my.salesforce.com'
+    }));
 
-  test
-    .do(async () => {
-      await prepareStubs({ fileDoesNotExist: true });
-      $$.SANDBOX.stub(fse, 'readJson').callsFake(async () => ({
-        result: { sfdxAuthUrl: 'force://PlatformCLI::CoffeeAndBacon@su0503.my.salesforce.com' },
-      }));
-    })
-    .stdout()
-    .command(['auth:sfdxurl:store', '-f', 'path/to/key.json', '--json'])
-    .it(
-      'should return auth fields when passing in a json result a la `sfdx force:org:display --verbose --json`',
-      (ctx) => {
-        const response = parseJson<AuthFields>(ctx.stdout);
-        expect(response.status).to.equal(0);
-        expect(response.result.username).to.equal(testData.username);
+    const store = new Store(['-f', 'path/to/key.json', '--json'], {} as Config);
+    const response = await store.run();
+    expect(response.username).to.equal(testData.username);
+  });
+
+  it('should error out when it doesn\'t find a url in a JSON file', async () => {
+    await prepareStubs({ fileDoesNotExist: true });
+    $$.SANDBOX.stub(fs, 'readFile').resolves(JSON.stringify({
+      notASfdxAuthUrl: 'force://PlatformCLI::CoffeeAndBacon@su0503.my.salesforce.com'
+    }));
+
+    const store = new Store(['-f', 'path/to/key.json', '--json'], {} as Config);
+    try {
+      const response = await store.run();
+      expect.fail(`Should have thrown an error. Response: ${JSON.stringify(response)}`);
+    } catch (e) {
+      expect((e as Error).message).to.includes('Error getting the auth URL from file');
+    }
+  });
+
+  it('should set alias when -a is provided', async () => {
+    await prepareStubs();
+    const store = new Store(['-f', 'path/to/key.txt', '-a', 'MyAlias', '--json'], {} as Config);
+    await store.run();
+    expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
+  });
+
+  it('should set target-org to alias when -s and -a are provided', async () => {
+    await prepareStubs();
+    const store = new Store(['-f', 'path/to/key.txt', '-a', 'MyAlias', '-s', '--json'], {} as Config);
+    await store.run();
+    expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
+    expect(authInfoStub.handleAliasAndDefaultSettings.args[0]).to.deep.equal([
+      {
+        alias: 'MyAlias',
+        setDefaultDevHub: undefined,
+        setDefault: true
       }
-    );
+    ]);
+  });
 
-  test
-    .do(async () => {
-      await prepareStubs({ fileDoesNotExist: true });
-      $$.SANDBOX.stub(fse, 'readJson').callsFake(async () => ({
-        result: { notASfdxAuthUrl: 'force://PlatformCLI::CoffeeAndBacon@su0503.my.salesforce.com' },
-      }));
-    })
-    .stdout()
-    .command(['auth:sfdxurl:store', '-f', 'path/to/key.json', '--json'])
-    .it("should error out when it doesn't find a url in a JSON file", (ctx) => {
-      const response = parseJsonError(ctx.stdout);
-      expect(response.status).to.equal(1);
-      // eslint-disable-next-line no-console
-      expect(response.message).to.equal(
-        'Error getting the auth URL from file path/to/key.json. Please ensure it meets the description shown in the documentation for this command.'
-      );
-    });
+  it('should set target-org to username when -s is provided', async () => {
+    await prepareStubs();
+    const store = new Store(['-f', 'path/to/key.txt', '-s', '--json'], {} as Config);
+    await store.run();
+    expect(authInfoStub.setAlias.callCount).to.equal(0);
+    expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
+    expect(authInfoStub.handleAliasAndDefaultSettings.args[0]).to.deep.equal([
+      {
+        alias: undefined,
+        setDefaultDevHub: undefined,
+        setDefault: true
+      }
+    ]);
+  });
 
-  test
-    .do(async () => prepareStubs())
-    .stdout()
-    .command(['auth:sfdxurl:store', '-f', 'path/to/key.txt', '-a', 'MyAlias', '--json'])
-    .it('should set alias when -a is provided', (ctx) => {
-      const response = parseJson<AuthFields>(ctx.stdout);
-      expect(response.status).to.equal(0);
-      expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
-    });
+  it('should set target-dev-hub to alias when -d and -a are provided', async () => {
+    await prepareStubs();
+    const store = new Store(['-f', 'path/to/key.txt', '-a', 'MyAlias', '-d', '--json'], {} as Config);
+    await store.run();
+    expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
+    expect(authInfoStub.handleAliasAndDefaultSettings.args[0]).to.deep.equal([
+      {
+        alias: 'MyAlias',
+        setDefaultDevHub: true,
+        setDefault: undefined
+      }
+    ]);
+  });
 
-  test
-    .do(async () => prepareStubs())
-    .stdout()
-    .command(['auth:sfdxurl:store', '-f', 'path/to/key.txt', '-a', 'MyAlias', '-s', '--json'])
-    .it('should set defaultusername to alias when -s and -a are provided', (ctx) => {
-      const response = parseJson<AuthFields>(ctx.stdout);
-      expect(response.status).to.equal(0);
-      expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
-      expect(authInfoStub.handleAliasAndDefaultSettings.args[0]).to.deep.equal([
-        {
-          alias: 'MyAlias',
-          setDefaultDevHub: undefined,
-          setDefault: true,
-        },
-      ]);
-    });
+  it('should set target-dev-hub to username when -d is provided', async () => {
+    await prepareStubs();
+    const store = new Store(['-f', 'path/to/key.txt', '-d', '--json'], {} as Config);
+    await store.run();
+    expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
+    expect(authInfoStub.handleAliasAndDefaultSettings.args[0]).to.deep.equal([
+      {
+        alias: undefined,
+        setDefaultDevHub: true,
+        setDefault: undefined
+      }
+    ]);
+  });
 
-  test
-    .do(async () => prepareStubs())
-    .stdout()
-    .command(['auth:sfdxurl:store', '-f', 'path/to/key.txt', '-s', '--json'])
-    .it('should set defaultusername to username when -s is provided', (ctx) => {
-      const response = parseJson<AuthFields>(ctx.stdout);
-      expect(response.status).to.equal(0);
-      expect(authInfoStub.setAlias.callCount).to.equal(0);
-      expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
-      expect(authInfoStub.handleAliasAndDefaultSettings.args[0]).to.deep.equal([
-        {
-          alias: undefined,
-          setDefaultDevHub: undefined,
-          setDefault: true,
-        },
-      ]);
-    });
+  it('should set target-org and target-dev-hub to username when -d and -s are provided', async () => {
+    await prepareStubs();
+    const store = new Store(['-f', 'path/to/key.txt', '-d', '-s', '--json'], {} as Config);
+    await store.run();
+    expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
+    expect(authInfoStub.handleAliasAndDefaultSettings.args[0]).to.deep.equal([
+      {
+        alias: undefined,
+        setDefaultDevHub: true,
+        setDefault: true
+      }
+    ]);
+  });
 
-  test
-    .do(async () => prepareStubs())
-    .stdout()
-    .command(['auth:sfdxurl:store', '-f', 'path/to/key.txt', '-a', 'MyAlias', '-d', '--json'])
-    .it('should set defaultdevhubusername to alias when -d and -a are provided', (ctx) => {
-      const response = parseJson<AuthFields>(ctx.stdout);
-      expect(response.status).to.equal(0);
-      expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
-      expect(authInfoStub.handleAliasAndDefaultSettings.args[0]).to.deep.equal([
-        {
-          alias: 'MyAlias',
-          setDefaultDevHub: true,
-          setDefault: undefined,
-        },
-      ]);
-    });
+  it('should set target-org and target-dev-hub to alias when -a, -d, and -s are provided', async () => {
+    await prepareStubs();
+    const store = new Store(['-f', 'path/to/key.txt', '-d', '-s', '-a', 'MyAlias', '--json'], {} as Config);
+    await store.run();
+    expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
+    expect(authInfoStub.handleAliasAndDefaultSettings.args[0]).to.deep.equal([
+      {
+        alias: 'MyAlias',
+        setDefaultDevHub: true,
+        setDefault: true
+      }
+    ]);
+  });
 
-  test
-    .do(async () => prepareStubs())
-    .stdout()
-    .command(['auth:sfdxurl:store', '-f', 'path/to/key.txt', '-d', '--json'])
-    .it('should set defaultdevhubusername to username when -d is provided', (ctx) => {
-      const response = parseJson<AuthFields>(ctx.stdout);
-      expect(response.status).to.equal(0);
-      expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
-      expect(authInfoStub.handleAliasAndDefaultSettings.args[0]).to.deep.equal([
-        {
-          alias: undefined,
-          setDefaultDevHub: true,
-          setDefault: undefined,
-        },
-      ]);
-    });
-  test
-    .do(async () => prepareStubs())
-    .stdout()
-    .command(['auth:sfdxurl:store', '-f', 'path/to/key.txt', '-d', '-s', '--json'])
-    .it('should set defaultusername and defaultdevhubusername to username when -d and -s are provided', (ctx) => {
-      const response = parseJson<AuthFields>(ctx.stdout);
-      expect(response.status).to.equal(0);
-      expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
-      expect(authInfoStub.handleAliasAndDefaultSettings.args[0]).to.deep.equal([
-        {
-          alias: undefined,
-          setDefaultDevHub: true,
-          setDefault: true,
-        },
-      ]);
-    });
+  it('should auth when in demo mode (SFDX_ENV=demo) and prompt is answered with yes', async () => {
+    await prepareStubs();
+    $$.SANDBOX.stub(Global, 'getEnvironmentMode').returns(Mode.DEMO);
+    $$.SANDBOX.stub(SfCommand.prototype, 'confirm').resolves(true);
+    const store = new Store(['-f', 'path/to/key.txt', '--json'], {} as Config);
+    await store.run();
+    expect(authInfoStub.save.callCount).to.equal(1);
+  });
 
-  test
-    .do(async () => prepareStubs())
-    .stdout()
-    .command(['auth:sfdxurl:store', '-f', 'path/to/key.txt', '-d', '-s', '-a', 'MyAlias', '--json'])
-    .it('should set defaultusername and defaultdevhubusername to alias when -a, -d, and -s are provided', (ctx) => {
-      const response = parseJson<AuthFields>(ctx.stdout);
-      expect(response.status).to.equal(0);
-      expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
-      expect(authInfoStub.handleAliasAndDefaultSettings.args[0]).to.deep.equal([
-        {
-          alias: 'MyAlias',
-          setDefaultDevHub: true,
-          setDefault: true,
-        },
-      ]);
-    });
+  it('should do nothing when in demo mode (SFDX_ENV=demo) and prompt is answered with no', async () => {
+    await prepareStubs();
+    $$.SANDBOX.stub(Global, 'getEnvironmentMode').returns(Mode.DEMO);
+    $$.SANDBOX.stub(SfCommand.prototype, 'confirm').resolves(false);
+    const store = new Store(['-f', 'path/to/key.txt', '--json'], {} as Config);
+    await store.run();
+    expect(authInfoStub.save.callCount).to.equal(0);
+  });
 
-  test
-    .do(async () => {
-      await prepareStubs();
-      $$.SANDBOX.stub(Global, 'getEnvironmentMode').returns(Mode.DEMO);
-      $$.SANDBOX.stub(UX.prototype, 'prompt').resolves('yes');
-    })
-    .stdout()
-    .command(['auth:sfdxurl:store', '-f', 'path/to/key.txt', '--json'])
-    .it('should auth when in demo mode (SFDX_ENV=demo) and prompt is answered with yes', (ctx) => {
-      const response = parseJson<AuthFields>(ctx.stdout);
-      expect(response.status).to.equal(0);
-      expect(authInfoStub.save.callCount).to.equal(1);
-    });
-
-  test
-    .do(async () => {
-      await prepareStubs();
-      $$.SANDBOX.stub(Global, 'getEnvironmentMode').returns(Mode.DEMO);
-      $$.SANDBOX.stub(UX.prototype, 'prompt').resolves('no');
-    })
-    .stdout()
-    .command(['auth:sfdxurl:store', '-f', 'path/to/key.txt', '--json'])
-    .it('should do nothing when in demo mode (SFDX_ENV=demo) and prompt is answered with no', (ctx) => {
-      const response = parseJson<AuthFields>(ctx.stdout);
-      expect(response.status).to.equal(0);
-      expect(response.result).to.deep.equal({});
-      expect(authInfoStub.save.callCount).to.equal(0);
-    });
-
-  test
-    .do(async () => {
-      await prepareStubs();
-      $$.SANDBOX.stub(Global, 'getEnvironmentMode').returns(Mode.DEMO);
-    })
-    .stdout()
-    .command(['auth:sfdxurl:store', '-f', 'path/to/key.txt', '--json', '-p'])
-    .it('should ignore prompt when in demo mode (SFDX_ENV=demo) and -p is provided', (ctx) => {
-      const response = parseJson<AuthFields>(ctx.stdout);
-      expect(response.status).to.equal(0);
-      expect(authInfoStub.save.callCount).to.equal(1);
-    });
+  it('should ignore prompt when in demo mode (SFDX_ENV=demo) and -p is provided', async () => {
+    await prepareStubs();
+    $$.SANDBOX.stub(Global, 'getEnvironmentMode').returns(Mode.DEMO);
+    $$.SANDBOX.stub(SfCommand.prototype, 'confirm').resolves(false);
+    const store = new Store(['-p', '-f', 'path/to/key.txt', '--json'], {} as Config);
+    await store.run();
+    expect(authInfoStub.save.callCount).to.equal(1);
+  });
 });

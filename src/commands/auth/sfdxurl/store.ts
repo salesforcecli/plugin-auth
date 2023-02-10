@@ -5,13 +5,12 @@
  * For full license text, see LICENSE.txt file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  */
 
-import * as os from 'os';
 import { readFile } from 'fs/promises';
-import { readJson } from 'fs-extra';
-import { flags, FlagsConfig, SfdxCommand } from '@salesforce/command';
+import { Flags, loglevel } from '@salesforce/sf-plugins-core';
 import { AuthFields, AuthInfo, Messages } from '@salesforce/core';
 import { AnyJson } from '@salesforce/ts-types';
-import { Prompts } from '../../../prompts';
+import { parseJson } from '@salesforce/kit';
+import { AuthBaseCommand } from '../../../authBaseCommand';
 
 Messages.importMessagesDirectory(__dirname);
 const messages = Messages.loadMessages('@salesforce/plugin-auth', 'sfdxurl.store');
@@ -23,41 +22,54 @@ type AuthJson = AnyJson & {
   result?: AnyJson & { sfdxAuthUrl: string };
   sfdxAuthUrl: string;
 };
-export default class Store extends SfdxCommand {
+export default class Store extends AuthBaseCommand<AuthFields> {
+  public static readonly summary = messages.getMessage('summary');
   public static readonly description = messages.getMessage('description', [AUTH_URL_FORMAT]);
-  public static readonly examples = messages.getMessage('examples').split(os.EOL);
+  public static readonly examples = messages.getMessages('examples');
   public static aliases = ['force:auth:sfdxurl:store'];
 
-  public static readonly flagsConfig: FlagsConfig = {
-    sfdxurlfile: flags.filepath({
+  public static readonly flags = {
+    'sfdx-url-file': Flags.file({
       char: 'f',
-      description: messages.getMessage('file'),
+      summary: messages.getMessage('file'),
       required: true,
+      deprecateAliases: true,
+      aliases: ['sfdxurlfile'],
     }),
-    setdefaultdevhubusername: flags.boolean({
+    'set-default-dev-hub': Flags.boolean({
       char: 'd',
-      description: commonMessages.getMessage('setDefaultDevHub'),
+      summary: commonMessages.getMessage('setDefaultDevHub'),
+      deprecateAliases: true,
+      aliases: ['setdefaultdevhub'],
     }),
-    setdefaultusername: flags.boolean({
+    'set-default': Flags.boolean({
       char: 's',
-      description: commonMessages.getMessage('setDefaultUsername'),
+      summary: commonMessages.getMessage('setDefaultUsername'),
+      deprecateAliases: true,
+      aliases: ['setdefaultusername'],
     }),
-    setalias: flags.string({
+    alias: Flags.string({
       char: 'a',
-      description: commonMessages.getMessage('setAlias'),
+      summary: commonMessages.getMessage('setAlias'),
+      deprecateAliases: true,
+      aliases: ['setalias'],
     }),
-    noprompt: flags.boolean({
+    'no-prompt': Flags.boolean({
       char: 'p',
-      description: commonMessages.getMessage('noPromptAuth'),
+      summary: commonMessages.getMessage('noPromptAuth'),
       required: false,
       hidden: true,
+      deprecateAliases: true,
+      aliases: ['noprompt'],
     }),
+    loglevel,
   };
 
   public async run(): Promise<AuthFields> {
-    if (await Prompts.shouldExitCommand(this.ux, this.flags.noprompt as boolean)) return {};
+    const { flags } = await this.parse(Store);
+    if (await this.shouldExitCommand(flags['no-prompt'])) return {};
 
-    const authFile = this.flags.sfdxurlfile as string;
+    const authFile = flags['sfdx-url-file'];
 
     const sfdxAuthUrl = authFile.endsWith('.json') ? await getUrlFromJson(authFile) : await readFile(authFile, 'utf8');
 
@@ -73,9 +85,9 @@ export default class Store extends SfdxCommand {
     await authInfo.save();
 
     await authInfo.handleAliasAndDefaultSettings({
-      alias: this.flags.setalias as string,
-      setDefault: this.flags.setdefaultusername as boolean,
-      setDefaultDevHub: this.flags.setdefaultdevhubusername as boolean,
+      alias: flags.alias as string,
+      setDefault: flags['set-default'],
+      setDefaultDevHub: flags['set-default-dev-hub'],
     });
 
     const result = authInfo.getFields(true);
@@ -84,12 +96,13 @@ export default class Store extends SfdxCommand {
     await AuthInfo.identifyPossibleScratchOrgs(result, authInfo);
 
     const successMsg = commonMessages.getMessage('authorizeCommandSuccess', [result.username, result.orgId]);
-    this.ux.log(successMsg);
+    this.logSuccess(successMsg);
     return result;
   }
 }
 
 const getUrlFromJson = async (authFile: string): Promise<string> => {
-  const authFileJson = (await readJson(authFile)) as AuthJson;
+  const jsonContents = await readFile(authFile, 'utf8');
+  const authFileJson = parseJson(jsonContents) as AuthJson;
   return authFileJson.result?.sfdxAuthUrl ?? authFileJson.sfdxAuthUrl;
 };

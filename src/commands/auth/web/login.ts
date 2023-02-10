@@ -5,92 +5,113 @@
  * For full license text, see LICENSE.txt file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  */
 
-import * as os from 'os';
 import * as open from 'open';
 
-import { flags, FlagsConfig, SfdxCommand } from '@salesforce/command';
+import { Flags, loglevel } from '@salesforce/sf-plugins-core';
 import { OAuth2Config } from 'jsforce';
 import { AuthFields, AuthInfo, Logger, Messages, SfError, WebOAuthServer } from '@salesforce/core';
 import { Env } from '@salesforce/kit';
 import { get, Optional } from '@salesforce/ts-types';
-import { Prompts } from '../../../prompts';
+import { Interfaces } from '@oclif/core';
+import { AuthBaseCommand } from '../../../authBaseCommand';
 import { Common } from '../../../common';
 
 Messages.importMessagesDirectory(__dirname);
 const messages = Messages.loadMessages('@salesforce/plugin-auth', 'web.login');
 const commonMessages = Messages.loadMessages('@salesforce/plugin-auth', 'messages');
 
-export default class Login extends SfdxCommand {
+export default class Login extends AuthBaseCommand<AuthFields> {
+  public static readonly summary = messages.getMessage('summary');
   public static readonly description = messages.getMessage('description');
-  public static readonly examples = messages.getMessage('examples').split(os.EOL);
+  public static readonly examples = messages.getMessages('examples');
+  public static readonly deprecateAliases = true;
   public static aliases = ['force:auth:web:login'];
 
-  public static readonly flagsConfig: FlagsConfig = {
-    browser: flags.enum({
+  public static readonly flags = {
+    browser: Flags.string({
       char: 'b',
-      description: messages.getMessage('browser'),
+      summary: messages.getMessage('browser'),
       options: ['chrome', 'edge', 'firefox'], // These are ones supported by "open" package
     }),
-    clientid: flags.string({
+    'client-id': Flags.string({
       char: 'i',
-      description: commonMessages.getMessage('clientId'),
+      summary: commonMessages.getMessage('clientId'),
+      deprecateAliases: true,
+      aliases: ['clientid'],
     }),
-    instanceurl: flags.url({
+    'instance-url': Flags.url({
       char: 'r',
-      description: commonMessages.getMessage('instanceUrl'),
+      summary: commonMessages.getMessage('instanceUrl'),
+      deprecateAliases: true,
+      aliases: ['instanceurl'],
     }),
-    setdefaultdevhubusername: flags.boolean({
+    'set-default-dev-hub': Flags.boolean({
       char: 'd',
-      description: commonMessages.getMessage('setDefaultDevHub'),
+      summary: commonMessages.getMessage('setDefaultDevHub'),
+      deprecateAliases: true,
+      aliases: ['setdefaultdevhubusername'],
     }),
-    setdefaultusername: flags.boolean({
+    'set-default': Flags.boolean({
       char: 's',
-      description: commonMessages.getMessage('setDefaultUsername'),
+      summary: commonMessages.getMessage('setDefaultUsername'),
+      deprecateAliases: true,
+      aliases: ['setdefaultusername'],
     }),
-    setalias: flags.string({
+    alias: Flags.string({
       char: 'a',
-      description: commonMessages.getMessage('setAlias'),
+      summary: commonMessages.getMessage('setAlias'),
+      deprecateAliases: true,
+      aliases: ['setalias'],
     }),
-    disablemasking: flags.boolean({
-      description: commonMessages.getMessage('disableMasking'),
+    'disable-masking': Flags.boolean({
+      summary: commonMessages.getMessage('disableMasking'),
       hidden: true,
+      deprecateAliases: true,
+      aliases: ['disablemasking'],
     }),
-    noprompt: flags.boolean({
+    'no-prompt': Flags.boolean({
       char: 'p',
-      description: commonMessages.getMessage('noPromptAuth'),
+      summary: commonMessages.getMessage('noPromptAuth'),
       required: false,
       hidden: true,
+      deprecateAliases: true,
+      aliases: ['noprompt'],
     }),
+    loglevel,
   };
 
+  private flags: Interfaces.InferredFlags<typeof Login.flags>;
+
   public async run(): Promise<AuthFields> {
+    const { flags } = await this.parse(Login);
+    this.flags = flags;
     if (isSFDXContainerMode()) {
       throw new SfError(messages.getMessage('deviceWarning'), 'DEVICE_WARNING');
     }
 
-    if (await Prompts.shouldExitCommand(this.ux, this.flags.noprompt as boolean)) return {};
+    if (await this.shouldExitCommand(flags['no-prompt'])) return {};
 
     const oauthConfig: OAuth2Config = {
-      loginUrl: await Common.resolveLoginUrl(get(this.flags.instanceurl, 'href', null) as Optional<string>),
-      clientId: this.flags.clientid as string,
+      loginUrl: await Common.resolveLoginUrl(get(flags['instance-url'], 'href', null) as Optional<string>),
+      clientId: flags.clientid as string,
     };
 
-    if (this.flags.clientid) {
-      oauthConfig.clientSecret = await Prompts.askForClientSecret(this.ux, Boolean(this.flags.disablemasking));
+    if (flags.clientid) {
+      oauthConfig.clientSecret = await this.askForClientSecret(flags['disable-masking']);
     }
 
     try {
       const authInfo = await this.executeLoginFlow(oauthConfig);
       await authInfo.handleAliasAndDefaultSettings({
-        alias: this.flags.setalias as string,
-        setDefault: this.flags.setdefaultusername as boolean,
-        setDefaultDevHub: this.flags.setdefaultdevhubusername as boolean,
+        alias: flags.alias,
+        setDefault: flags['set-default'],
+        setDefaultDevHub: flags['set-default-dev-hub'],
       });
       const fields = authInfo.getFields(true);
       await AuthInfo.identifyPossibleScratchOrgs(fields, authInfo);
 
       const successMsg = commonMessages.getMessage('authorizeCommandSuccess', [fields.username, fields.orgId]);
-      this.ux.log(successMsg);
+      this.logSuccess(successMsg);
       return fields;
     } catch (err) {
       const error = err as Error;
@@ -108,7 +129,7 @@ export default class Login extends SfdxCommand {
     const oauthServer = await WebOAuthServer.create({ oauthConfig });
     await oauthServer.start();
     const openOptions = this.flags.browser
-      ? { app: { name: open.apps[this.flags.browser as string] as open.AppName }, wait: false }
+      ? { app: { name: open.apps[this.flags.browser] as open.AppName }, wait: false }
       : { wait: false };
     await open(oauthServer.getAuthorizationUrl(), openOptions);
     return oauthServer.authorizeAndSave();

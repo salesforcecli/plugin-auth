@@ -5,86 +5,104 @@
  * For full license text, see LICENSE.txt file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  */
 
-import * as os from 'os';
-import { flags, FlagsConfig, SfdxCommand } from '@salesforce/command';
 import { OAuth2Config } from 'jsforce';
 import { AuthFields, AuthInfo, DeviceOauthService, Messages } from '@salesforce/core';
 import { get, Optional } from '@salesforce/ts-types';
-import { Prompts } from '../../../prompts';
+import { Flags, loglevel } from '@salesforce/sf-plugins-core';
+import { DeviceCodeResponse } from '@salesforce/core/lib/deviceOauthService';
+import { ux } from '@oclif/core';
+import { AuthBaseCommand } from '../../../authBaseCommand';
 import { Common } from '../../../common';
 
 Messages.importMessagesDirectory(__dirname);
 const messages = Messages.loadMessages('@salesforce/plugin-auth', 'device.login');
 const commonMessages = Messages.loadMessages('@salesforce/plugin-auth', 'messages');
 
-export default class Login extends SfdxCommand {
+export type DeviceLoginResult = (AuthFields & DeviceCodeResponse) | Record<string, never>;
+
+export default class Login extends AuthBaseCommand<DeviceLoginResult> {
+  public static readonly summary = messages.getMessage('summary');
   public static readonly description = messages.getMessage('description');
-  public static readonly examples = messages.getMessage('examples').split(os.EOL);
+  public static readonly examples = messages.getMessages('examples');
   public static aliases = ['force:auth:device:login'];
 
-  public static readonly flagsConfig: FlagsConfig = {
-    clientid: flags.string({
+  public static readonly flags = {
+    'client-id': Flags.string({
       char: 'i',
-      description: commonMessages.getMessage('clientId'),
+      summary: commonMessages.getMessage('clientId'),
+      deprecateAliases: true,
+      aliases: ['clientid'],
     }),
-    instanceurl: flags.url({
+    'instance-url': Flags.url({
       char: 'r',
-      description: commonMessages.getMessage('instanceUrl'),
+      summary: commonMessages.getMessage('instanceUrl'),
+      deprecateAliases: true,
+      aliases: ['instanceurl'],
     }),
-    setdefaultdevhubusername: flags.boolean({
+    'set-default-dev-hub': Flags.boolean({
       char: 'd',
-      description: commonMessages.getMessage('setDefaultDevHub'),
+      summary: commonMessages.getMessage('setDefaultDevHub'),
+      deprecateAliases: true,
+      aliases: ['setdefaultdevhub'],
     }),
-    setdefaultusername: flags.boolean({
+    'set-default': Flags.boolean({
       char: 's',
-      description: commonMessages.getMessage('setDefaultUsername'),
+      summary: commonMessages.getMessage('setDefaultUsername'),
+      deprecateAliases: true,
+      aliases: ['setdefaultusername'],
     }),
-    setalias: flags.string({
+    alias: Flags.string({
       char: 'a',
-      description: commonMessages.getMessage('setAlias'),
+      summary: commonMessages.getMessage('setAlias'),
+      deprecateAliases: true,
+      aliases: ['setalias'],
     }),
-    disablemasking: flags.boolean({
-      description: commonMessages.getMessage('disableMasking'),
+    'disable-masking': Flags.boolean({
+      summary: commonMessages.getMessage('disableMasking'),
       hidden: true,
+      deprecateAliases: true,
+      aliases: ['disablemasking'],
     }),
+    loglevel,
   };
 
-  public async run(): Promise<AuthFields> {
-    if (await Prompts.shouldExitCommand(this.ux, false)) return {};
+  public async run(): Promise<DeviceLoginResult> {
+    const { flags } = await this.parse(Login);
+    if (await this.shouldExitCommand(false)) return {};
 
     const oauthConfig: OAuth2Config = {
-      loginUrl: await Common.resolveLoginUrl(get(this.flags.instanceurl, 'href', null) as Optional<string>),
-      clientId: this.flags.clientid as string,
+      loginUrl: await Common.resolveLoginUrl(get(flags.instanceurl, 'href', null) as Optional<string>),
+      clientId: flags.clientid as string,
     };
 
-    if (this.flags.clientid) {
-      oauthConfig.clientSecret = await Prompts.askForClientSecret(this.ux, this.flags.disablemasking as boolean);
+    if (flags.clientid) {
+      oauthConfig.clientSecret = await this.askForClientSecret(flags['disable-masking']);
     }
 
     const deviceOauthService = await DeviceOauthService.create(oauthConfig);
     const loginData = await deviceOauthService.requestDeviceLogin();
 
-    if (this.flags.json) {
-      this.ux.logJson(loginData);
+    if (this.jsonEnabled()) {
+      ux.log(JSON.stringify(loginData, null, 2));
     } else {
-      this.ux.styledHeader(messages.getMessage('actionRequired'));
-      this.ux.log(messages.getMessage('enterCode'), loginData.user_code, loginData.verification_uri);
-      this.ux.log();
+      this.styledHeader(messages.getMessage('actionRequired'));
+      this.log(messages.getMessage('enterCode', [loginData.user_code, loginData.verification_uri]));
+      this.log();
     }
 
     const approval = await deviceOauthService.awaitDeviceApproval(loginData);
     if (approval) {
       const authInfo = await deviceOauthService.authorizeAndSave(approval);
       await authInfo.handleAliasAndDefaultSettings({
-        alias: this.flags.setalias as string,
-        setDefault: this.flags.setdefaultusername as boolean,
-        setDefaultDevHub: this.flags.setdefaultdevhubusername as boolean,
+        alias: flags.alias as string,
+        setDefault: flags['set-default'],
+        setDefaultDevHub: flags['set-default-dev-hub'],
       });
       const fields = authInfo.getFields(true);
       await AuthInfo.identifyPossibleScratchOrgs(fields, authInfo);
       const successMsg = messages.getMessage('success', [fields.username]);
-      this.ux.log(successMsg);
-      return fields;
+      this.logSuccess(successMsg);
+      return { ...fields, ...loginData };
     } else {
       return {};
     }

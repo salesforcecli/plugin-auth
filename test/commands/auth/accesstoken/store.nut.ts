@@ -28,14 +28,14 @@ describe('auth:accesstoken:store NUTs', () => {
     testSession = await TestSession.create();
     const jwtKeyFilePath = prepareForJwt(testSession.homeDir);
     const res = execCmd<{ accessToken: string }>(
-      `auth:jwt:grant -f ${jwtKeyFilePath} -i ${clientId} -u ${username} --setdefaultdevhubusername --instanceurl ${instanceUrl} --json`,
+      `auth:jwt:grant -f ${jwtKeyFilePath} -i ${clientId} -o ${username} --set-default-dev-hub --instance-url ${instanceUrl} --json`,
       {
         ensureExitCode: 0,
       }
     );
-    accessToken = res.jsonOutput.result.accessToken;
+    accessToken = res.jsonOutput?.result.accessToken as string;
     env.setString('SFDX_ACCESS_TOKEN', accessToken);
-    execCmd(`auth:logout -p -u ${username}`, { ensureExitCode: 0 });
+    execCmd(`auth:logout -p -o ${username}`, { ensureExitCode: 0 });
   });
 
   after(async () => {
@@ -43,24 +43,24 @@ describe('auth:accesstoken:store NUTs', () => {
   });
 
   afterEach(() => {
-    execCmd(`auth:logout -p -u ${username}`, { ensureExitCode: 0 });
+    execCmd(`auth:logout -p -o ${username}`, { ensureExitCode: 0 });
   });
 
   it('should authorize an org using access token (json)', () => {
-    const command = `auth:accesstoken:store --setdefaultdevhubusername --instanceurl ${instanceUrl} --noprompt --json`;
+    const command = `auth:accesstoken:store --set-default-dev-hub --instance-url ${instanceUrl} --no-prompt --json`;
     const cmdresult = execCmd<AuthFields>(command, { ensureExitCode: 0 });
-    const json = cmdresult.jsonOutput;
+    const json = cmdresult.jsonOutput?.result as AuthFields;
 
-    expectAccessTokenToExist(json.result);
-    expectOrgIdToExist(json.result);
-    expectUrlToExist(json.result, 'instanceUrl');
-    expectUrlToExist(json.result, 'loginUrl');
-    expect(json.result.username).to.equal(username);
-    expect(json.result.accessToken).to.equal(accessToken);
+    expectAccessTokenToExist(json);
+    expectOrgIdToExist(json);
+    expectUrlToExist(json, 'instanceUrl');
+    expectUrlToExist(json, 'loginUrl');
+    expect(json.username).to.equal(username);
+    expect(json.accessToken).to.equal(accessToken);
   });
 
   it('should authorize an org using access token (human readable)', () => {
-    const command = `auth:accesstoken:store --setdefaultdevhubusername --instanceurl ${instanceUrl} --noprompt`;
+    const command = `auth:accesstoken:store --set-default-dev-hub --instance-url ${instanceUrl} --no-prompt`;
     const result = execCmd(command, { ensureExitCode: 0 });
     const output = getString(result, 'shellOutput.stdout');
     expect(output).to.include(`Successfully authorized ${username} with org ID`);

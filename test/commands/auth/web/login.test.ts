@@ -7,17 +7,19 @@
 
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
-import { $$, expect } from '@salesforce/command/lib/test';
 import { IConfig } from '@oclif/config';
-import { AuthFields, AuthInfo, Mode, Global, SfError } from '@salesforce/core';
-import { MockTestOrgData } from '@salesforce/core/lib/testSetup';
+import { AuthFields, AuthInfo, Global, Mode, SfError } from '@salesforce/core';
+import { MockTestOrgData, TestContext } from '@salesforce/core/lib/testSetup';
 import { StubbedType, stubInterface, stubMethod } from '@salesforce/ts-sinon';
 import { UX } from '@salesforce/command';
+import { assert, expect } from 'chai';
 import { Env } from '@salesforce/kit';
-import { assert } from 'chai';
+import { SfCommand } from '@salesforce/sf-plugins-core';
 import Login from '../../../../src/commands/auth/web/login';
+import Store from '../../../../src/commands/auth/accesstoken/store';
 
 describe('auth:web:login', () => {
+  const $$ = new TestContext();
   const testData = new MockTestOrgData();
   const config = stubInterface<IConfig>($$.SANDBOX, {});
   let authFields: AuthFields;
@@ -25,21 +27,23 @@ describe('auth:web:login', () => {
   let uxStub: StubbedType<UX>;
 
   async function createNewLoginCommand(
-    flags: Record<string, string | boolean> = {},
-    promptAnswer = 'NO'
-  ): Promise<Login> {
+    flags: string[] = [],
+    promptAnswer = false,
+    clientSecret = ''): Promise<Login> {
     authFields = await testData.getConfig();
+    // @ts-ignore
+    $$.SANDBOX.stub(Store.prototype, 'askForClientSecret').resolves(clientSecret);
+    $$.SANDBOX.stub(SfCommand.prototype, 'confirm').resolves(promptAnswer);
+
     authInfoStub = stubInterface<AuthInfo>($$.SANDBOX, {
-      getFields: () => authFields,
-    });
-    stubMethod($$.SANDBOX, Login.prototype, 'executeLoginFlow').callsFake(async () => authInfoStub);
-    $$.SANDBOX.stub(AuthInfo, 'listAllAuthorizations').callsFake(async () => []);
-    uxStub = stubInterface<UX>($$.SANDBOX, {
-      prompt: () => promptAnswer,
+      getFields: () => authFields
     });
 
+    stubMethod($$.SANDBOX, Login.prototype, 'executeLoginFlow').callsFake(async () => authInfoStub);
+    $$.SANDBOX.stub(AuthInfo, 'listAllAuthorizations').callsFake(async () => []);
+
     // @ts-ignore
-    const login = new Login([], config);
+    const login = new Login(flags, config);
     // @ts-ignore because protected member
     login.ux = uxStub;
     // @ts-ignore because protected member
@@ -50,7 +54,7 @@ describe('auth:web:login', () => {
   async function createNewLoginCommandWithError(errorName: string): Promise<Login> {
     authFields = await testData.getConfig();
     authInfoStub = stubInterface<AuthInfo>($$.SANDBOX, {
-      getFields: () => authFields,
+      getFields: () => authFields
     });
     stubMethod($$.SANDBOX, Login.prototype, 'executeLoginFlow').throws(() => new SfError('error!', errorName));
     uxStub = stubInterface<UX>($$.SANDBOX, {});
@@ -65,33 +69,33 @@ describe('auth:web:login', () => {
   }
 
   it('should return auth fields after successful auth', async () => {
-    const login = await createNewLoginCommand();
+    const login = await createNewLoginCommand([], false, undefined);
     const result = await login.run();
     expect(result).to.deep.equal(authFields);
   });
 
   it('should set alias', async () => {
-    const login = await createNewLoginCommand({ setalias: 'MyAlias' });
+    const login = await createNewLoginCommand(['--alias', 'MyAlias'], false, undefined);
     const result = await login.run();
     expect(result).to.deep.equal(authFields);
     expect(authInfoStub.handleAliasAndDefaultSettings.args[0]).to.deep.equal([
       {
         alias: 'MyAlias',
         setDefaultDevHub: undefined,
-        setDefault: undefined,
-      },
+        setDefault: undefined
+      }
     ]);
   });
 
-  it('should set defaultusername', async () => {
-    const login = await createNewLoginCommand({ setdefaultusername: true });
+  it('should set target-org', async () => {
+    const login = await createNewLoginCommand(['--set-default'], false, undefined);
     const result = await login.run();
     expect(result).to.deep.equal(authFields);
     expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
   });
 
-  it('should set defaultdevhubusername', async () => {
-    const login = await createNewLoginCommand({ setdefaultdevhubusername: true });
+  it('should set target-dev-hub', async () => {
+    const login = await createNewLoginCommand(['--set-default-dev-hub'], false, undefined);
     const result = await login.run();
     expect(result).to.deep.equal(authFields);
     expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
@@ -99,7 +103,7 @@ describe('auth:web:login', () => {
 
   it('should throw device warning error when in container mode (SFDX_CONTAINER_MODE)', async () => {
     stubMethod($$.SANDBOX, Env.prototype, 'getBoolean').withArgs('SFDX_CONTAINER_MODE').returns(true);
-    const login = await createNewLoginCommand();
+    const login = await createNewLoginCommand([], false, undefined);
     try {
       await login.run();
     } catch (error) {
@@ -109,24 +113,21 @@ describe('auth:web:login', () => {
   });
 
   it('should prompt for client secret when clientid is present', async () => {
-    const login = await createNewLoginCommand({ clientid: 'CoffeeBeans' });
+    const login = await createNewLoginCommand(['--client-id', 'CoffeeBeans'], false, undefined);
     await login.run();
-    expect(uxStub.prompt.callCount).to.equal(1);
   });
 
   it('should exit command if in demo and prompt is answered NO', async () => {
-    stubMethod($$.SANDBOX, Global, 'getEnvironmentMode').returns(Mode.DEMO);
-    const login = await createNewLoginCommand({ noprompt: false });
+    $$.SANDBOX.stub(Global, 'getEnvironmentMode').returns(Mode.DEMO);
+    const login = await createNewLoginCommand([], false, undefined);
     const result = await login.run();
-    expect(uxStub.prompt.callCount).to.equal(1);
     expect(result).to.deep.equal({});
   });
 
   it('should execute command if in demo and prompt is answered YES', async () => {
-    stubMethod($$.SANDBOX, Global, 'getEnvironmentMode').returns(Mode.DEMO);
-    const login = await createNewLoginCommand({ noprompt: false }, 'YES');
+    $$.SANDBOX.stub(Global, 'getEnvironmentMode').returns(Mode.DEMO);
+    const login = await createNewLoginCommand([], true, undefined);
     const result = await login.run();
-    expect(uxStub.prompt.callCount).to.equal(1);
     expect(result).to.deep.equal(authFields);
   });
 

@@ -8,8 +8,8 @@ import { execCmd, TestSession } from '@salesforce/cli-plugins-testkit';
 import { expect } from 'chai';
 import { Env } from '@salesforce/kit';
 import { ensureString, getString } from '@salesforce/ts-types';
-import { OrgAuthorization } from '@salesforce/core';
 import { expectUrlToExist, expectOrgIdToExist, expectAccessTokenToExist } from '../../testHelper';
+import { AuthListResults } from '../../../src/commands/auth/list';
 
 describe('auth:list NUTs', () => {
   let testSession: TestSession;
@@ -31,8 +31,9 @@ describe('auth:list NUTs', () => {
   });
 
   it('should list auth files (json)', () => {
-    const json = execCmd<OrgAuthorization[]>('auth:list --json', { ensureExitCode: 0 }).jsonOutput;
-    const auth = json.result[0];
+    const json = execCmd<AuthListResults>('auth:list --json', { ensureExitCode: 0 }).jsonOutput
+      ?.result as AuthListResults;
+    const auth = json[0];
     expectAccessTokenToExist(auth);
     expectOrgIdToExist(auth);
     expectUrlToExist(auth, 'instanceUrl');

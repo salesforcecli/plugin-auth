@@ -5,12 +5,13 @@
  * For full license text, see LICENSE.txt file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  */
 
-import { $$, expect, test } from '@salesforce/command/lib/test';
-import { AuthFields, AuthInfo, Global, Mode, OrgAuthorization, SfError } from '@salesforce/core';
-import { MockTestOrgData } from '@salesforce/core/lib/testSetup';
-import { StubbedType, stubInterface, stubMethod } from '@salesforce/ts-sinon';
-import { UX } from '@salesforce/command';
-import { parseJson, parseJsonError } from '../../../testHelper';
+import { AuthFields, AuthInfo, Global, Mode, SfError } from '@salesforce/core';
+import { MockTestOrgData, TestContext } from '@salesforce/core/lib/testSetup';
+import { StubbedType, stubInterface } from '@salesforce/ts-sinon';
+import { expect } from 'chai';
+import { Config } from '@oclif/core';
+import { SfCommand } from '@salesforce/sf-plugins-core';
+import Grant from '../../../../src/commands/auth/jwt/grant';
 
 interface Options {
   authInfoCreateFails?: boolean;
@@ -18,6 +19,8 @@ interface Options {
 }
 
 describe('auth:jwt:grant', async () => {
+  const $$ = new TestContext();
+
   const testData = new MockTestOrgData();
   let authFields: AuthFields;
   let authInfoStub: StubbedType<AuthInfo>;
@@ -27,41 +30,38 @@ describe('auth:jwt:grant', async () => {
     delete authFields.isDevHub;
 
     authInfoStub = stubInterface<AuthInfo>($$.SANDBOX, {
-      getFields: () => authFields,
+      getFields: () => authFields
     });
 
-    $$.SANDBOX.stub(AuthInfo, 'listAllAuthorizations').callsFake(
-      async () => [{ [authFields.username]: {} }] as OrgAuthorization[]
-    );
+    await $$.stubAuths(testData);
 
     if (options.authInfoCreateFails) {
       $$.SANDBOX.stub(AuthInfo, 'create').throws(new Error('invalid client id'));
     } else if (options.existingAuth) {
-      stubMethod($$.SANDBOX, AuthInfo, 'create')
+       $$.SANDBOX.stub(AuthInfo, 'create')
         .onFirstCall()
         .throws(new SfError('auth exists', 'AuthInfoOverwriteError'))
         .onSecondCall()
+         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+         // @ts-ignore
         .callsFake(async () => authInfoStub);
     } else {
-      stubMethod($$.SANDBOX, AuthInfo, 'create').callsFake(async () => authInfoStub);
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      $$.SANDBOX.stub(AuthInfo, 'create').callsFake(async () => authInfoStub);
     }
   }
 
-  test
-    .do(async () => prepareStubs())
-    .stdout()
-    .command(['auth:jwt:grant', '-u', testData.username, '-f', 'path/to/key.json', '-i', '123456', '--json'])
-    .it('should return auth fields', (ctx) => {
-      const response = parseJson<AuthFields>(ctx.stdout);
-      expect(response.status).to.equal(0);
-    });
+  it('should return auth fields', async () => {
+    await prepareStubs();
+    const grant = new Grant(['-u', testData.username, '-f', 'path/to/key.json', '-i', '123456', '--json'], {} as Config);
+    const response = await grant.run();
+    expect(response.username).to.equal(testData.username);
+  });
 
-  test
-    .do(async () => prepareStubs())
-    .stdout()
-    .command([
-      'auth:jwt:grant',
-      '-u',
+  it('should set alias when -a is provided', async () => {
+    await prepareStubs();
+    const grant = new Grant(['-u',
       testData.username,
       '-f',
       'path/to/key.json',
@@ -69,20 +69,14 @@ describe('auth:jwt:grant', async () => {
       '123456',
       '-a',
       'MyAlias',
-      '--json',
-    ])
-    .it('should set alias when -a is provided', (ctx) => {
-      const response = parseJson<AuthFields>(ctx.stdout);
-      expect(response.status).to.equal(0);
-      expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
-    });
+      '--json'], {} as Config);
+    await grant.run();
+    expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
+  });
 
-  test
-    .do(async () => prepareStubs())
-    .stdout()
-    .command([
-      'auth:jwt:grant',
-      '-u',
+  it('should set target-org to alias when -s and -a are provided', async () => {
+    await prepareStubs();
+    const grant = new Grant(['-u',
       testData.username,
       '-f',
       'path/to/key.json',
@@ -91,43 +85,35 @@ describe('auth:jwt:grant', async () => {
       '-a',
       'MyAlias',
       '-s',
-      '--json',
-    ])
-    .it('should set defaultusername to alias when -s and -a are provided', (ctx) => {
-      const response = parseJson<AuthFields>(ctx.stdout);
-      expect(response.status).to.equal(0);
-      expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
-      expect(authInfoStub.handleAliasAndDefaultSettings.args[0]).to.deep.equal([
-        {
-          alias: 'MyAlias',
-          setDefaultDevHub: undefined,
-          setDefault: true,
-        },
-      ]);
-    });
+      '--json'], {} as Config);
+    await grant.run();
+    expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
+    expect(authInfoStub.handleAliasAndDefaultSettings.args[0]).to.deep.equal([
+      {
+        alias: 'MyAlias',
+        setDefaultDevHub: undefined,
+        setDefault: true
+      }
+    ]);
+  });
 
-  test
-    .do(async () => prepareStubs())
-    .stdout()
-    .command(['auth:jwt:grant', '-u', testData.username, '-f', 'path/to/key.json', '-i', '123456', '-s', '--json'])
-    .it('should set defaultusername to username when -s is provided', (ctx) => {
-      const response = parseJson<AuthFields>(ctx.stdout);
-      expect(response.status).to.equal(0);
-      expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
-      expect(authInfoStub.handleAliasAndDefaultSettings.args[0]).to.deep.equal([
-        {
-          alias: undefined,
-          setDefaultDevHub: undefined,
-          setDefault: true,
-        },
-      ]);
-    });
+  it('should set target-org to username when -s is provided', async () => {
+    await prepareStubs();
+    const grant = new Grant(['-u', testData.username, '-f', 'path/to/key.json', '-i', '123456', '-s', '--json'], {} as Config);
+    await grant.run();
+    expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
+    expect(authInfoStub.handleAliasAndDefaultSettings.args[0]).to.deep.equal([
+      {
+        alias: undefined,
+        setDefaultDevHub: undefined,
+        setDefault: true
+      }
+    ]);
+  });
 
-  test
-    .do(async () => prepareStubs())
-    .stdout()
-    .command([
-      'auth:jwt:grant',
+  it('should set target-dev-hub to alias when -d and -a are provided', async () => {
+    await prepareStubs();
+    const grant = new Grant([
       '-u',
       testData.username,
       '-f',
@@ -137,43 +123,36 @@ describe('auth:jwt:grant', async () => {
       '-a',
       'MyAlias',
       '-d',
-      '--json',
-    ])
-    .it('should set defaultdevhubusername to alias when -d and -a are provided', (ctx) => {
-      const response = parseJson<AuthFields>(ctx.stdout);
-      expect(response.status).to.equal(0);
-      expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
-      expect(authInfoStub.handleAliasAndDefaultSettings.args[0]).to.deep.equal([
-        {
-          alias: 'MyAlias',
-          setDefaultDevHub: true,
-          setDefault: undefined,
-        },
-      ]);
-    });
+      '--json'
+    ], {} as Config);
+    await grant.run();
+    expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
+    expect(authInfoStub.handleAliasAndDefaultSettings.args[0]).to.deep.equal([
+      {
+        alias: 'MyAlias',
+        setDefaultDevHub: true,
+        setDefault: undefined
+      }
+    ]);
+  });
 
-  test
-    .do(async () => prepareStubs())
-    .stdout()
-    .command(['auth:jwt:grant', '-u', testData.username, '-f', 'path/to/key.json', '-i', '123456', '-d', '--json'])
-    .it('should set defaultdevhubusername to username when -d is provided', (ctx) => {
-      const response = parseJson<AuthFields>(ctx.stdout);
-      expect(response.status).to.equal(0);
-      expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
-      expect(authInfoStub.handleAliasAndDefaultSettings.args[0]).to.deep.equal([
-        {
-          alias: undefined,
-          setDefaultDevHub: true,
-          setDefault: undefined,
-        },
-      ]);
-    });
+  it('should set target-dev-hub to username when -d is provided', async () => {
+    await prepareStubs();
+    const grant = new Grant(['-u', testData.username, '-f', 'path/to/key.json', '-i', '123456', '-d', '--json'], {} as Config);
+    await grant.run();
+    expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
+    expect(authInfoStub.handleAliasAndDefaultSettings.args[0]).to.deep.equal([
+      {
+        alias: undefined,
+        setDefaultDevHub: true,
+        setDefault: undefined
+      }
+    ]);
+  });
 
-  test
-    .do(async () => prepareStubs())
-    .stdout()
-    .command([
-      'auth:jwt:grant',
+  it('should set target-org and target-dev-hub to username when -d and -s are provided', async () => {
+    await prepareStubs();
+    const grant = new Grant([
       '-u',
       testData.username,
       '-f',
@@ -182,27 +161,22 @@ describe('auth:jwt:grant', async () => {
       '123456',
       '-d',
       '-s',
-      '--json',
-    ])
-    .it('should set defaultusername and defaultdevhubusername to username when -d and -s are provided', (ctx) => {
-      const response = parseJson<AuthFields>(ctx.stdout);
-      expect(response.status).to.equal(0);
-      expect(authInfoStub.setAlias.callCount).to.equal(0);
-      expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
-      expect(authInfoStub.handleAliasAndDefaultSettings.args[0]).to.deep.equal([
-        {
-          alias: undefined,
-          setDefaultDevHub: true,
-          setDefault: true,
-        },
-      ]);
-    });
+      '--json'], {} as Config);
+    await grant.run();
+    expect(authInfoStub.setAlias.callCount).to.equal(0);
+    expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
+    expect(authInfoStub.handleAliasAndDefaultSettings.args[0]).to.deep.equal([
+      {
+        alias: undefined,
+        setDefaultDevHub: true,
+        setDefault: true
+      }
+    ]);
+  });
 
-  test
-    .do(async () => prepareStubs())
-    .stdout()
-    .command([
-      'auth:jwt:grant',
+  it('should set target-org and target-dev-hub to alias when -a, -d, and -s are provided', async () => {
+    await prepareStubs();
+    const grant = new Grant([
       '-u',
       testData.username,
       '-f',
@@ -213,99 +187,64 @@ describe('auth:jwt:grant', async () => {
       '-s',
       '-a',
       'MyAlias',
-      '--json',
-    ])
-    .it('should set defaultusername and defaultdevhubusername to alias when -a, -d, and -s are provided', (ctx) => {
-      const response = parseJson<AuthFields>(ctx.stdout);
-      expect(response.status).to.equal(0);
-      expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
-      expect(authInfoStub.handleAliasAndDefaultSettings.args[0]).to.deep.equal([
-        {
-          alias: 'MyAlias',
-          setDefaultDevHub: true,
-          setDefault: true,
-        },
-      ]);
-    });
+      '--json'], {} as Config);
+    await grant.run();
+    expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
+    expect(authInfoStub.handleAliasAndDefaultSettings.args[0]).to.deep.equal([
+      {
+        alias: 'MyAlias',
+        setDefaultDevHub: true,
+        setDefault: true
+      }
+    ]);
+  });
 
-  test
-    .do(async () => prepareStubs())
-    .stdout()
-    .command(['auth:jwt:grant', '-u', testData.username, '-f', 'path/to/key.json', '--json'])
-    .it('should throw an error when client id (-i) is not provided', (ctx) => {
-      const response = parseJsonError(ctx.stdout);
-      expect(response.status).to.equal(1);
-      expect(response.message).to.include('Missing required flag');
-    });
 
-  test
-    .do(async () => prepareStubs({ authInfoCreateFails: true }))
-    .stdout()
-    .command(['auth:jwt:grant', '-u', testData.username, '-f', 'path/to/key.json', '-i', '123456INVALID', '--json'])
-    .it('should throw an error when client id is invalid', (ctx) => {
-      const response = parseJsonError(ctx.stdout);
-      expect(response.status).to.equal(1);
-      expect(response.message).to.include('We encountered a JSON web token error');
-    });
+  it('should throw an error when client id is invalid', async () => {
+    await prepareStubs({ authInfoCreateFails: true });
+    const grant = new Grant(['-u', testData.username, '-f', 'path/to/key.json', '-i', '123456INVALID', '--json'], {} as Config);
+    try {
+      await grant.run();
+      expect.fail('Should have thrown an error');
+    } catch (e) {
+      expect((e as Error).message).to.include('We encountered a JSON web token error');
+    }
+  });
 
-  test
-    .do(async () => prepareStubs())
-    .stdout()
-    .command(['auth:jwt:grant', '-u', testData.username, '-i', '123456', '--json'])
-    .it('should throw an error when private key file (-f) is not provided', (ctx) => {
-      const response = parseJsonError(ctx.stdout);
-      expect(response.status).to.equal(1);
-      expect(response.message).to.include('Missing required flag');
-    });
 
-  test
-    .do(async () => prepareStubs({ existingAuth: true }))
-    .stdout()
-    .command(['auth:jwt:grant', '-u', testData.username, '-f', 'path/to/key.json', '-i', '123456', '--json'])
-    .it('should not throw an error when the authorization already exists', (ctx) => {
-      const response = parseJson<AuthFields>(ctx.stdout);
-      expect(response.status).to.equal(0);
-    });
+  it('should not throw an error when the authorization already exists', async () => {
+    await prepareStubs({ existingAuth: true });
+    const grant = new Grant(['-u', testData.username, '-f', 'path/to/key.json', '-i', '123456', '--json'], {} as Config);
+    try {
+      await grant.run();
+    } catch (e) {
+      expect.fail('Should not have thrown an error');
+    }
+  });
 
-  test
-    .do(async () => {
-      await prepareStubs();
-      $$.SANDBOX.stub(Global, 'getEnvironmentMode').returns(Mode.DEMO);
-      $$.SANDBOX.stub(UX.prototype, 'prompt').resolves('yes');
-    })
-    .stdout()
-    .command(['auth:jwt:grant', '-u', testData.username, '-f', 'path/to/key.json', '-i', '123456', '--json'])
-    .it('should auth when in demo mode (SFDX_ENV=demo) and prompt is answered with yes', (ctx) => {
-      const response = parseJson<AuthFields>(ctx.stdout);
-      expect(response.status).to.equal(0);
-      expect(authInfoStub.save.callCount).to.equal(1);
-    });
+  it('should auth when in demo mode (SFDX_ENV=demo) and prompt is answered with yes', async () => {
+    await prepareStubs();
+    $$.SANDBOX.stub(Global, 'getEnvironmentMode').returns(Mode.DEMO);
+    $$.SANDBOX.stub(SfCommand.prototype, 'confirm').resolves(true);
+    const grant = new Grant(['-u', testData.username, '-f', 'path/to/key.json', '-i', '123456', '--json'], {} as Config);
+    await grant.run();
+    expect(authInfoStub.save.callCount).to.equal(1);
+  });
 
-  test
-    .do(async () => {
-      await prepareStubs();
-      $$.SANDBOX.stub(UX.prototype, 'prompt').resolves('no');
-      $$.SANDBOX.stub(Global, 'getEnvironmentMode').returns(Mode.DEMO);
-    })
-    .stdout()
-    .command(['auth:jwt:grant', '-u', testData.username, '-f', 'path/to/key.json', '-i', '123456', '--json'])
-    .it('should do nothing when in demo mode (SFDX_ENV=demo) and prompt is answered with no', (ctx) => {
-      const response = parseJson<AuthFields>(ctx.stdout);
-      expect(response.status).to.equal(0);
-      expect(response.result).to.deep.equal({});
-      expect(authInfoStub.save.callCount).to.equal(0);
-    });
+  it('should do nothing when in demo mode (SFDX_ENV=demo) and prompt is answered with no', async () => {
+    await prepareStubs();
+    $$.SANDBOX.stub(Global, 'getEnvironmentMode').returns(Mode.DEMO);
+    $$.SANDBOX.stub(SfCommand.prototype, 'confirm').resolves(false);
+    const grant = new Grant(['-u', testData.username, '-f', 'path/to/key.json', '-i', '123456', '--json'], {} as Config);
+    await grant.run();
+    expect(authInfoStub.save.callCount).to.equal(0);
+  });
 
-  test
-    .do(async () => {
-      await prepareStubs();
-      $$.SANDBOX.stub(Global, 'getEnvironmentMode').returns(Mode.DEMO);
-    })
-    .stdout()
-    .command(['auth:jwt:grant', '-u', testData.username, '-f', 'path/to/key.json', '-i', '123456', '--json', '-p'])
-    .it('should ignore prompt when in demo mode (SFDX_ENV=demo) and -p is provided', (ctx) => {
-      const response = parseJson<AuthFields>(ctx.stdout);
-      expect(response.status).to.equal(0);
-      expect(authInfoStub.save.callCount).to.equal(1);
-    });
+  it('should ignore prompt when in demo mode (SFDX_ENV=demo) and -p is provided', async () => {
+    await prepareStubs();
+    $$.SANDBOX.stub(Global, 'getEnvironmentMode').returns(Mode.DEMO);
+    const grant = new Grant(['-p', '-u', testData.username, '-f', 'path/to/key.json', '-i', '123456', '--json'], {} as Config);
+    await grant.run();
+    expect(authInfoStub.save.callCount).to.equal(1);
+  });
 });

@@ -1,0 +1,71 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$ref": "#/definitions/AuthListResults",
+  "definitions": {
+    "AuthListResults": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "alias": {
+            "type": "string"
+          },
+          "orgId": {
+            "type": "string"
+          },
+          "username": {
+            "type": "string"
+          },
+          "oauthMethod": {
+            "type": "string",
+            "enum": ["jwt", "web", "token", "unknown"]
+          },
+          "configs": {
+            "anyOf": [
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "isScratchOrg": {
+            "type": "boolean"
+          },
+          "isDevHub": {
+            "type": "boolean"
+          },
+          "isSandbox": {
+            "type": "boolean"
+          },
+          "instanceUrl": {
+            "type": "string"
+          },
+          "accessToken": {
+            "type": "string"
+          },
+          "error": {
+            "type": "string"
+          },
+          "isExpired": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "string",
+                "const": "unknown"
+              }
+            ]
+          }
+        },
+        "required": ["alias", "isExpired", "oauthMethod", "orgId", "username"]
+      }
+    }
+  }
+}

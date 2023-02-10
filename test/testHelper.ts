@@ -31,17 +31,17 @@ export function expectPropsToExist(auth: AuthFields, ...props: Array<keyof AuthF
 
 export function expectOrgIdToExist(auth: AuthFields): void {
   expect(auth.orgId).to.exist;
-  expect(auth.orgId.length).to.equal(18);
+  expect(auth.orgId?.length).to.equal(18);
 }
 
 export function expectUrlToExist(auth: AuthFields, urlKey: UrlKey): void {
   expect(auth[urlKey]).to.exist;
-  expect(/^https*:\/\//.test(auth[urlKey])).to.be.true;
+  expect(/^https*:\/\//.test(auth[urlKey] ?? '')).to.be.true;
 }
 
 export function expectAccessTokenToExist(auth: AuthFields): void {
   expect(auth.accessToken).to.exist;
-  expect(auth.accessToken.startsWith(auth.orgId.substr(0, 15))).to.be.true;
+  expect(auth.accessToken?.startsWith((auth.orgId ?? '').substr(0, 15))).to.be.true;
 }
 
 export function parseJson<T = unknown>(jsonString: string): Result<T> {

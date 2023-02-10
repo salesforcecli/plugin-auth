@@ -5,65 +5,45 @@
  * For full license text, see LICENSE.txt file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  */
 
-import { $$, expect, test } from '@salesforce/command/lib/test';
-import { AuthInfo, OrgAuthorization } from '@salesforce/core';
-import { MockTestOrgData } from '@salesforce/core/lib/testSetup';
-import { StubbedType, stubInterface, stubMethod } from '@salesforce/ts-sinon';
-import { parseJson } from '../../testHelper';
+import { MockTestOrgData, TestContext } from '@salesforce/core/lib/testSetup';
+import { Config } from '@oclif/core';
+import { expect } from 'chai';
+import { AuthInfo } from '@salesforce/core';
+import List from '../../../src/commands/auth/list';
 
 describe('auth:list', async () => {
+  const $$ = new TestContext();
   const testData = new MockTestOrgData();
-  let authInfoStub: StubbedType<AuthInfo>;
+  testData.aliases = ['TestAlias'];
 
   async function prepareStubs(forceFailure = false) {
-    const authFields = await testData.getConfig();
-    authInfoStub = stubInterface<AuthInfo>($$.SANDBOX, {
-      getFields: () => authFields,
-      getConnectionOptions: () => ({ accessToken: authFields.accessToken }),
-      isJwt: () => true,
-      isOauth: () => false,
-    });
-
-    let auth = {
-      username: authFields.username,
-      aliases: ['TestAlias'],
-      orgId: testData.orgId,
-      instanceUrl: testData.instanceUrl,
-      oauthMethod: forceFailure ? 'unknown' : 'jwt',
-    } as OrgAuthorization;
-
+    await $$.stubAuths(testData);
+    $$.stubAliases({ TestAlias: testData.username });
     if (forceFailure) {
-      auth = { ...auth, ...{ error: 'decrypt error' } };
-    } else {
-      stubMethod($$.SANDBOX, AuthInfo, 'create').callsFake(async () => authInfoStub);
+      $$.SANDBOX.stub(AuthInfo, 'create').throws(new Error('decrypt error'));
     }
-    $$.SANDBOX.stub(AuthInfo, 'listAllAuthorizations').resolves([auth]);
   }
 
-  test
-    .do(async () => prepareStubs())
-    .stdout()
-    .command(['auth:list', '--json'])
-    .it('should show auth files', (ctx) => {
-      const auths = parseJson<Array<OrgAuthorization & { alias: string }>>(ctx.stdout).result;
-      expect(auths[0].alias).to.deep.equal('TestAlias');
-      expect(auths[0].username).to.equal(testData.username);
-      expect(auths[0].instanceUrl).to.equal(testData.instanceUrl);
-      expect(auths[0].orgId).to.equal(testData.orgId);
-      expect(auths[0].oauthMethod).to.equal('jwt');
-    });
+  it('should show auth files', async () => {
+    await prepareStubs();
+    const list = new List(['--json'], {} as Config);
+    const [auths] = await list.run();
+    expect(auths.alias).to.deep.equal(testData.aliases?.join(',') ?? '');
+    expect(auths.username).to.equal(testData.username);
+    expect(auths.instanceUrl).to.equal(testData.instanceUrl);
+    expect(auths.orgId).to.equal(testData.orgId);
+    expect(auths.oauthMethod).to.equal('web');
+  });
 
-  test
-    .do(async () => prepareStubs(true))
-    .stdout()
-    .command(['auth:list', '--json'])
-    .it('should show files with auth errors', (ctx) => {
-      const auths = parseJson<Array<OrgAuthorization & { alias: string }>>(ctx.stdout).result;
-      expect(auths[0].alias).to.deep.equal('TestAlias');
-      expect(auths[0].username).to.equal(testData.username);
-      expect(auths[0].instanceUrl).to.equal(testData.instanceUrl);
-      expect(auths[0].orgId).to.equal(testData.orgId);
-      expect(auths[0].oauthMethod).to.equal('unknown');
-      expect(auths[0].error).to.equal('decrypt error');
-    });
+  it('should show files with auth errors', async () => {
+    await prepareStubs(true);
+    const list = new List(['--json'], {} as Config);
+    const [auths] = await list.run();
+    expect(auths.alias).to.deep.equal(testData.aliases?.join(',') ?? '');
+    expect(auths.username).to.equal(testData.username);
+    expect(auths.instanceUrl).to.equal(testData.instanceUrl);
+    expect(auths.orgId).to.equal(testData.orgId);
+    expect(auths.oauthMethod).to.equal('unknown');
+    expect(auths.error).to.equal('decrypt error');
+  });
 });

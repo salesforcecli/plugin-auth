@@ -5,12 +5,12 @@
  * For full license text, see LICENSE.txt file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  */
 
-import * as os from 'os';
-import { flags, FlagsConfig, SfdxCommand } from '@salesforce/command';
+import { Flags, loglevel } from '@salesforce/sf-plugins-core';
 import { AuthFields, AuthInfo, Messages, sfdc, SfError, StateAggregator } from '@salesforce/core';
 import { ensureString, getString } from '@salesforce/ts-types';
 import { env } from '@salesforce/kit';
-import { Prompts } from '../../../prompts';
+import { Interfaces } from '@oclif/core';
+import { AuthBaseCommand } from '../../../authBaseCommand';
 
 Messages.importMessagesDirectory(__dirname);
 const messages = Messages.loadMessages('@salesforce/plugin-auth', 'accesstoken.store');
@@ -18,41 +18,58 @@ const commonMessages = Messages.loadMessages('@salesforce/plugin-auth', 'message
 
 const ACCESS_TOKEN_FORMAT = '"<org id>!<accesstoken>"';
 
-export default class Store extends SfdxCommand {
-  public static readonly description = messages.getMessage('description', [ACCESS_TOKEN_FORMAT]);
-  public static readonly examples = messages.getMessage('examples').split(os.EOL);
+export default class Store extends AuthBaseCommand<AuthFields> {
+  public static readonly summary = messages.getMessage('summary');
+  public static readonly description = messages.getMessage('description');
+  public static readonly examples = messages.getMessages('examples');
+  public static readonly deprecateAliases = true;
   public static aliases = ['force:auth:accesstoken:store'];
 
-  public static readonly flagsConfig: FlagsConfig = {
-    instanceurl: flags.url({
+  public static readonly flags = {
+    'instance-url': Flags.url({
       char: 'r',
-      description: commonMessages.getMessage('instanceUrl'),
+      summary: commonMessages.getMessage('instanceUrl'),
       required: true,
+      deprecateAliases: true,
+      aliases: ['instanceurl'],
     }),
-    setdefaultdevhubusername: flags.boolean({
+    'set-default-dev-hub': Flags.boolean({
       char: 'd',
-      description: commonMessages.getMessage('setDefaultDevHub'),
+      summary: commonMessages.getMessage('setDefaultDevHub'),
       default: false,
+      deprecateAliases: true,
+      aliases: ['setdefaultdevhub'],
     }),
-    setdefaultusername: flags.boolean({
+    'set-default': Flags.boolean({
       char: 's',
-      description: commonMessages.getMessage('setDefaultUsername'),
+      summary: commonMessages.getMessage('setDefaultUsername'),
       default: false,
+      deprecateAliases: true,
+      aliases: ['setdefaultusername'],
     }),
-    setalias: flags.string({
+    alias: Flags.string({
       char: 'a',
-      description: commonMessages.getMessage('setAlias'),
+      summary: commonMessages.getMessage('setAlias'),
+      deprecateAliases: true,
+      aliases: ['setalias'],
     }),
-    noprompt: flags.boolean({
+    'no-prompt': Flags.boolean({
       char: 'p',
-      description: commonMessages.getMessage('noPrompt'),
+      summary: commonMessages.getMessage('noPrompt'),
       required: false,
       default: false,
+      deprecateAliases: true,
+      aliases: ['noprompt'],
     }),
+    loglevel,
   };
 
+  private flags: Interfaces.InferredFlags<typeof Store.flags>;
+
   public async run(): Promise<AuthFields> {
-    const instanceUrl = ensureString(getString(this.flags, 'instanceurl.href'));
+    const { flags } = await this.parse(Store);
+    this.flags = flags;
+    const instanceUrl = ensureString(getString(flags, 'instance-url.href'));
     const accessToken = await this.getAccessToken();
     const authInfo = await this.getUserInfo(accessToken, instanceUrl);
     return this.storeAuthFromAccessToken(authInfo);
@@ -71,7 +88,7 @@ export default class Store extends SfdxCommand {
         authInfo.getUsername(),
         authInfo.getFields(true).orgId,
       ]);
-      this.ux.log(successMsg);
+      this.logSuccess(successMsg);
     }
     return authInfo.getFields(true);
   }
@@ -79,30 +96,26 @@ export default class Store extends SfdxCommand {
   private async saveAuthInfo(authInfo: AuthInfo): Promise<void> {
     await authInfo.save();
     await authInfo.handleAliasAndDefaultSettings({
-      alias: this.flags.setalias as string,
-      setDefault: this.flags.setdefaultusername as boolean,
-      setDefaultDevHub: this.flags.setdefaultdevhubusername as boolean,
+      alias: this.flags.alias,
+      setDefault: this.flags['set-default'],
+      setDefaultDevHub: this.flags['set-default-dev-hub'],
     });
     await AuthInfo.identifyPossibleScratchOrgs(authInfo.getFields(true), authInfo);
   }
 
   private async overwriteAuthInfo(username: string): Promise<boolean> {
-    if (!this.flags.noprompt) {
+    if (!this.flags['no-prompt']) {
       const stateAggregator = await StateAggregator.getInstance();
       if (await stateAggregator.orgs.exists(username)) {
-        return Prompts.askOverwriteAuthFile(this.ux, username);
+        return this.askOverwriteAuthFile(username);
       }
     }
     return true;
   }
 
   private async getAccessToken(): Promise<string> {
-    let accessToken: string;
-    if (env.getString('SFDX_ACCESS_TOKEN')) {
-      accessToken = env.getString('SFDX_ACCESS_TOKEN');
-    } else {
-      accessToken = await Prompts.askForAccessToken(this.ux);
-    }
+    const accessToken = env.getString('SFDX_ACCESS_TOKEN') ?? (await this.askForAccessToken());
+
     if (!sfdc.matchesAccessToken(accessToken)) {
       throw new SfError(messages.getMessage('invalidAccessTokenFormat', [ACCESS_TOKEN_FORMAT]));
     }
