@@ -24,10 +24,11 @@ export default class LoginJwt extends AuthBaseCommand<AuthFields> {
 
   public static readonly flags = {
     username: Flags.string({
-      char: 'u',
+      char: 'o',
       summary: messages.getMessage('username'),
       required: true,
       deprecateAliases: true,
+      aliases: ['u'],
     }),
     'jwt-key-file': Flags.file({
       char: 'f',

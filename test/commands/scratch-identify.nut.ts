@@ -62,7 +62,7 @@ describe('verify discovery/id of scratch org', () => {
   });
 
   it('should logout from the org)', () => {
-    execCmd(`auth:logout -o ${orgUsername} --no-prompt`, { ensureExitCode: 0 });
+    execCmd(`org:logout -o ${orgUsername} --no-prompt`, { ensureExitCode: 0 });
   });
 
   it('should NOT have the scratch org in auth files', () => {

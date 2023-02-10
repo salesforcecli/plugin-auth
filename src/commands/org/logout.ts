@@ -24,7 +24,7 @@ export default class Logout extends AuthBaseCommand<AuthLogoutResults> {
   public static readonly examples = messages.getMessages('examples');
 
   public static readonly deprecateAliases = true;
-  public static aliases = ['force:auth:logout'];
+  public static aliases = ['force:auth:logout', 'auth:logout'];
 
   public static readonly flags = {
     // taking control over target-org vs using a org flag from sf-plugins-core to guarantee

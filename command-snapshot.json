@@ -70,6 +70,6 @@
     "command": "org:logout",
     "plugin": "@salesforce/plugin-auth",
     "flags": ["all", "json", "loglevel", "no-prompt", "target-org"],
-    "alias": ["force:auth:logout"]
+    "alias": ["force:auth:logout", "auth:logout"]
   }
 ]

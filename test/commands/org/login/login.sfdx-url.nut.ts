@@ -38,7 +38,7 @@ describe('org:login:sfdx-url NUTs', () => {
     execCmd(`auth:logout -p -o ${username}`, { ensureExitCode: 0 });
   });
 
-  it('should authorize an org using sfdxurl (json)', () => {
+  it('should authorize an org using sfdx-url (json)', () => {
     const command = `org:login:sfdx-url -d -f ${authUrl} --json`;
     const json = execCmd<AuthFields>(command, { ensureExitCode: 0 }).jsonOutput?.result as AuthFields;
 
@@ -50,7 +50,7 @@ describe('org:login:sfdx-url NUTs', () => {
     expect(json.username).to.equal(username);
   });
 
-  it('should authorize an org using sfdxurl (human readable)', () => {
+  it('should authorize an org using sfdx-url (human readable)', () => {
     const command = `org:login:sfdx-url -d -f ${authUrl}`;
     const result = execCmd(command, { ensureExitCode: 0 });
     const output = getString(result, 'shellOutput.stdout');
