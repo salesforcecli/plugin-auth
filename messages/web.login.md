@@ -24,7 +24,7 @@ browser where the org opens
 
 # deviceWarning
 
-auth:web:login doesn't work when authorizing to a headless environment. Use auth:device:login instead.
+org:login:web doesn't work when authorizing to a headless environment. Use org:login:device instead.
 
 # invalidClientId
 

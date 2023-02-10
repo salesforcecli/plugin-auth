@@ -24,7 +24,7 @@ Successfully authorized %s with org ID %s
 
 # warnAuth
 
-Logging in to a business or production org is not recommended on a demo or shared machine. Please run "%s auth:logout --target-org <your username> --no-prompt" when finished using this org, which is similar to logging out of the org in the browser.
+Logging in to a business or production org is not recommended on a demo or shared machine. Please run "%s org:logout --target-org <your username> --no-prompt" when finished using this org, which is similar to logging out of the org in the browser.
 
 Do you want to authorize this org for use with the Salesforce CLI?
 
