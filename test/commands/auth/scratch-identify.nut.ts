@@ -12,7 +12,7 @@ import { Env } from '@salesforce/kit';
 import { ensureString } from '@salesforce/ts-types';
 import { AuthFields } from '@salesforce/core';
 import { readJson } from 'fs-extra';
-import { AuthListResults } from '../../../lib/commands/auth/list';
+import { AuthListResults } from '../../../src/commands/auth/list';
 
 describe('verify discovery/id of scratch org', () => {
   let testSession: TestSession;
