@@ -14,7 +14,7 @@ import { DeviceCodeResponse } from '@salesforce/core/lib/deviceOauthService';
 import { expect } from 'chai';
 import { Config } from '@oclif/core';
 import { SfCommand } from '@salesforce/sf-plugins-core';
-import Login from '../../../../lib/commands/org/login/device';
+import Login from '../../../../src/commands/org/login/device';
 
 interface Options {
   approvalTimesout?: boolean;
