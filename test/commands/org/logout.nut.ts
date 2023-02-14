@@ -85,7 +85,7 @@ describe('org:logout NUTs', () => {
 
   it('should fail if there is no default org and the -o flag is not specified (json)', () => {
     const json = execCmd<{ name: string }>('org:logout -p --json', { ensureExitCode: 1 }).jsonOutput;
-    expect(json?.name).to.equal('NoOrgFound');
+    expect(json?.name).to.equal('NoOrgSpecifiedWithNoPromptError');
   });
 
   it('should remove the default username if the -o flag is not specified (json)', () => {

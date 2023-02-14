@@ -27,19 +27,38 @@ include all authenticated orgs
 
 Includes all authenticated orgs: for example, Dev Hubs, sandboxes, DE orgs, and expired, deleted, and unknown-status scratch orgs.
 
-# logoutCommandYesNo
-
-Are you sure you want to log out from these org(s)?
-%s
-
-Important: You need a password to reauthorize scratch orgs. By default, scratch orgs have no password. If you still need your scratch orgs, run "%s org:generate:password" before logging out. If you don't need the scratch orgs anymore, run "%s org:delete:scratch" or "%s org:delete:sandbox"instead of logging out.
-
-Log out?
-
 # logoutOrgCommandSuccess
 
 Successfully logged out of orgs: %s
 
-# logoutOrgCommandNoOrgsFound
+# noOrgsFound
 
 No orgs found to log out of.
+
+# noOrgsSelected
+
+No orgs selected for logout.
+
+# prompt.select-envs
+
+Select the environments you want to log out of:
+
+# prompt.confirm
+
+Are you sure you want to log out of %d org%s?
+
+# prompt.confirm-all
+
+Are you sure you want to log out of all your orgs?
+
+# prompt.confirm.single
+
+Are you sure you want to log out of %s?
+
+# warning
+
+Warning: If you log out of a scratch org without having access to its password, you can't access this environment again, either through the CLI or the Salesforce UI.
+
+# noOrgSpecifiedWithNoPrompt
+
+You must specify a target-org (or default target-org config is set) or use --all flag when using the --no-prompt flag.
