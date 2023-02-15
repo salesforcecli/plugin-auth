@@ -19,6 +19,7 @@ import {
 import { Flags, loglevel } from '@salesforce/sf-plugins-core';
 import { Interfaces } from '@oclif/core';
 import { Separator } from 'inquirer';
+import * as chalk from 'chalk';
 import { AuthBaseCommand } from '../../authBaseCommand';
 
 Messages.importMessagesDirectory(__dirname);
@@ -92,11 +93,16 @@ export default class Logout extends AuthBaseCommand<AuthLogoutResults> {
       .map((orgAuth) => {
         const aliasString = (orgAuth.aliases ? orgAuth.aliases.join(',') : '').padEnd(maxAliasLength, ' ');
         const configString = (orgAuth.configs ? orgAuth.configs.join(',') : '').padEnd(maxConfigLength, ' ');
-        const typeString = (
-          orgAuth.isScratchOrg ? 'Scratch' : orgAuth.isDevHub ? 'DevHub' : orgAuth.isSandbox ? 'Sandbox' : ''
-        ).padEnd(maxTypeLength, ' ');
+        const typeString = chalk.dim(
+          (orgAuth.isScratchOrg ? 'Scratch' : orgAuth.isDevHub ? 'DevHub' : orgAuth.isSandbox ? 'Sandbox' : '').padEnd(
+            maxTypeLength,
+            ' '
+          )
+        );
         // username - aliases - configs
-        const key = `${orgAuth.username.padEnd(maxUsernameLength)} | ${typeString} | ${aliasString} | ${configString}`;
+        const key = `${chalk.bold(
+          orgAuth.username.padEnd(maxUsernameLength)
+        )} | ${typeString} | ${aliasString} | ${chalk.yellowBright(configString)}`;
         return { name: key, value: orgAuth, checked: all, short: `${os.EOL}${orgAuth.username}` };
       })
       .sort((a, b) => a.value.username.localeCompare(b.value.username));
