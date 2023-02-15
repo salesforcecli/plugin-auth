@@ -64,26 +64,47 @@ export default class Logout extends AuthBaseCommand<AuthLogoutResults> {
   private flags: Interfaces.InferredFlags<typeof Logout.flags>;
 
   private static buildChoices(orgAuths: OrgAuthorization[], all: boolean): Array<choice | Separator> {
+    const maxUsernameLength = Math.max('Username'.length, ...orgAuths.map((orgAuth) => orgAuth.username.length));
+    const maxAliasLength = Math.max(
+      'Aliases'.length,
+      ...orgAuths.map((orgAuth) => (orgAuth.aliases ? orgAuth.aliases.join(',') : '').length)
+    );
+    const maxConfigLength = Math.max(
+      'Configs'.length,
+      ...orgAuths.map((orgAuth) => (orgAuth.configs ? orgAuth.configs.join(',') : '').length)
+    );
+    const maxTypeLength = Math.max(
+      'Type'.length,
+      ...orgAuths.map((orgAuth) => {
+        if (orgAuth.isScratchOrg) {
+          return 'Scratch'.length;
+        }
+        if (orgAuth.isDevHub) {
+          return 'DevHub'.length;
+        }
+        if (orgAuth.isSandbox) {
+          return 'Sandbox'.length;
+        }
+        return 0;
+      })
+    );
     const choices = orgAuths
       .map((orgAuth) => {
-        const aliasString = orgAuth.aliases?.length ? `(${orgAuth.aliases.join(',')})` : '';
-        const configString = orgAuth.configs?.length ? `(${orgAuth.configs.join(',')})` : '';
-        const typeString = orgAuth.isScratchOrg
-          ? '(Scratch)'
-          : orgAuth.isDevHub
-          ? '(DevHub)'
-          : orgAuth.isSandbox
-          ? '(Sandbox)'
-          : '';
+        const aliasString = (orgAuth.aliases ? orgAuth.aliases.join(',') : '').padEnd(maxAliasLength, ' ');
+        const configString = (orgAuth.configs ? orgAuth.configs.join(',') : '').padEnd(maxConfigLength, ' ');
+        const typeString = (
+          orgAuth.isScratchOrg ? 'Scratch' : orgAuth.isDevHub ? 'DevHub' : orgAuth.isSandbox ? 'Sandbox' : ''
+        ).padEnd(maxTypeLength, ' ');
         // username - aliases - configs
-        const key = `${orgAuth.username} ${typeString}${aliasString}${configString}`;
-        return { name: key, value: orgAuth, checked: all };
+        const key = `${orgAuth.username.padEnd(maxUsernameLength)} | ${typeString} | ${aliasString} | ${configString}`;
+        return { name: key, value: orgAuth, checked: all, short: `${os.EOL}${orgAuth.username}` };
       })
       .sort((a, b) => a.value.username.localeCompare(b.value.username));
-    return [
-      new Separator(`'  '${''.padEnd(Math.max(...choices.map((choice) => choice.name.length)), '-')}`),
-      ...choices,
-    ];
+    const userHeader = `${'Username'.padEnd(maxUsernameLength, ' ')}`;
+    const aliasHeader = `${'Aliases'.padEnd(maxAliasLength, ' ')}`;
+    const configHeader = `${'Configs'.padEnd(maxConfigLength, ' ')}`;
+    const typeHeader = `${'Type'.padEnd(maxTypeLength, ' ')}`;
+    return [new Separator(`  ${userHeader} | ${typeHeader} | ${aliasHeader} | ${configHeader}`), ...choices];
   }
 
   public async run(): Promise<AuthLogoutResults> {
@@ -131,7 +152,7 @@ export default class Logout extends AuthBaseCommand<AuthLogoutResults> {
   }
 
   private shouldFindAllAuths(targetUsername: string | undefined): boolean {
-    if (targetUsername) {
+    if (targetUsername && !this.flags.all) {
       return false;
     }
     return this.flags.all || Global.getEnvironmentMode() === Mode.DEMO || !this.flags['no-prompt'];
