@@ -177,7 +177,7 @@ export default class Logout extends AuthBaseCommand<AuthLogoutResults> {
     // pick the orgs to delete - if this.flags.all - set each org to selected
     // otherwise prompt the user to select the orgs to delete
     const choices = Logout.buildChoices(orgAuths, all);
-    const { orgs, confirmed } = await this.prompt<{ orgs: OrgAuthorization[]; confirmed: boolean }>([
+    const { orgs, confirmed } = await this.timedPrompt<{ orgs: OrgAuthorization[]; confirmed: boolean }>([
       {
         name: 'orgs',
         message: messages.getMessage('prompt.select-envs'),
