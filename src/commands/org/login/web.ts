@@ -30,48 +30,49 @@ export default class LoginWeb extends AuthBaseCommand<AuthFields> {
   public static readonly flags = {
     browser: Flags.string({
       char: 'b',
-      summary: messages.getMessage('browser'),
+      summary: messages.getMessage('flags.browser.summary'),
       options: ['chrome', 'edge', 'firefox'], // These are ones supported by "open" package
     }),
     'client-id': Flags.string({
       char: 'i',
-      summary: commonMessages.getMessage('clientId'),
+      summary: commonMessages.getMessage('flags.client-id.summary'),
       deprecateAliases: true,
       aliases: ['clientid'],
     }),
     'instance-url': Flags.url({
       char: 'r',
-      summary: commonMessages.getMessage('instanceUrl'),
+      summary: commonMessages.getMessage('flags.instance-url.summary'),
+      description: commonMessages.getMessage('flags.instance-url.description'),
       deprecateAliases: true,
       aliases: ['instanceurl'],
     }),
     'set-default-dev-hub': Flags.boolean({
       char: 'd',
-      summary: commonMessages.getMessage('setDefaultDevHub'),
+      summary: commonMessages.getMessage('flags.set-default-dev-hub.summary'),
       deprecateAliases: true,
       aliases: ['setdefaultdevhubusername'],
     }),
     'set-default': Flags.boolean({
       char: 's',
-      summary: commonMessages.getMessage('setDefaultUsername'),
+      summary: commonMessages.getMessage('flags.set-default.summary'),
       deprecateAliases: true,
       aliases: ['setdefaultusername'],
     }),
     alias: Flags.string({
       char: 'a',
-      summary: commonMessages.getMessage('setAlias'),
+      summary: commonMessages.getMessage('flags.alias.summary'),
       deprecateAliases: true,
       aliases: ['setalias'],
     }),
     'disable-masking': Flags.boolean({
-      summary: commonMessages.getMessage('disableMasking'),
+      summary: commonMessages.getMessage('flags.disable-masking.summary'),
       hidden: true,
       deprecateAliases: true,
       aliases: ['disablemasking'],
     }),
     'no-prompt': Flags.boolean({
       char: 'p',
-      summary: commonMessages.getMessage('noPromptAuth'),
+      summary: commonMessages.getMessage('flags.no-prompt.summary'),
       required: false,
       hidden: true,
       deprecateAliases: true,

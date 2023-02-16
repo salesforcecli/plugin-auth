@@ -19,11 +19,11 @@ By default, this command logs you out from your default scratch org.
 
 Username or alias of the target org.
 
-# all
+# flags.all.summary
 
 include all authenticated orgs
 
-# allLong
+# flags.all.description
 
 Includes all authenticated orgs: for example, Dev Hubs, sandboxes, DE orgs, and expired, deleted, and unknown-status scratch orgs.
 

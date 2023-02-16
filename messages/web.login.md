@@ -18,7 +18,7 @@ To open in a specific browser, use the --browser parameter. Supported browsers a
 
 - $ <%= config.bin %> <%= command.id %> -a TestOrg1 -b firefox
 
-# browser
+# flags.browser.summary
 
 browser where the org opens
 

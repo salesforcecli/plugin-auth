@@ -16,7 +16,7 @@ The resulting JSON file contains the URL in the sfdxAuthUrl property inside of a
 
 You can also create a JSON file that has a top-level property named sfdxAuthUrl whose value is the auth URL. Finally, you can create a normal text file that includes just the URL and nothing else.
 
-# file
+# flags.sfdx-url-file.summary
 
 path to a file containing the sfdx url
 
