@@ -1,22 +1,30 @@
-# clientId
+# flags.client-id.summary
 
-OAuth client ID (sometimes called the consumer key)
+OAuth client ID (also called consumer key) of your custom connected app.
 
-# setDefaultDevHub
+# flags.set-default-dev-hub.summary
 
-set the authenticated org as the default dev hub org for scratch org creation
+Set the authenticated org as the default Dev Hub.
 
-# setDefaultUsername
+# flags.set-default.summary
 
-set the authenticated org as the default username that all commands run against
+Set the authenticated org as the default that all org-related commands run against.
 
-# setAlias
+# flags.alias.summary
 
-set an alias for the authenticated org
+Alias for the org.
 
-# instanceUrl
+# flags.instance-url.summary
 
-the login URL of the instance the org lives on
+URL of the instance that the org lives on.
+
+# flags.instance-url.description
+
+If you specify an --instance-url value, this value overrides the sfdcLoginUrl value in your sfdx-project.json file.
+
+To specify a My Domain URL, use the format https://yourcompanyname.my.salesforce.com.
+
+To specify a sandbox, set --instance-url to https://MyDomainName--SandboxName.sandbox.my.salesforce.com.
 
 # authorizeCommandSuccess
 
@@ -28,13 +36,13 @@ Logging in to a business or production org is not recommended on a demo or share
 
 Do you want to authorize this org for use with the Salesforce CLI?
 
-# noPromptAuth
+# flags.no-prompt.summary
 
-do not prompt for auth confirmation in demo mode
+Don't prompt for confirmation.
 
-# disableMasking
+# flags.disable-masking.summary
 
-disable masking of user input (for use with problematic terminals)
+Disable masking of user input; use with problematic terminals.
 
 # clientSecretStdin
 
