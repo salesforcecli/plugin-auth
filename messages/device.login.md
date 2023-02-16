@@ -1,10 +1,9 @@
 # summary
 
-authorize an org using a device code
+Authorize an org using a device code.
 
 # description
 
-authorize an org using a device code
 You must open a browser, navigate to the verification URL, and enter the code. Log in, if not already logged in, and you’ll be prompted to allow the device to connect to the org.
 
 # examples

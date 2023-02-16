@@ -31,6 +31,7 @@ export default class LoginWeb extends AuthBaseCommand<AuthFields> {
     browser: Flags.string({
       char: 'b',
       summary: messages.getMessage('flags.browser.summary'),
+      description: messages.getMessage('flags.browser.description'),
       options: ['chrome', 'edge', 'firefox'], // These are ones supported by "open" package
     }),
     'client-id': Flags.string({
