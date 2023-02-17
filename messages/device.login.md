@@ -4,7 +4,7 @@ Authorize an org using a device code.
 
 # description
 
-You must open a browser, navigate to the verification URL, and enter the code. Log in, if not already logged in, and you’ll be prompted to allow the device to connect to the org.
+When you run this command, it first displays an 8-digit device code and the URL for verifying the code on your org. The default instance URL is https://login.salesforce.com, so if the org you're authorizing is on a different instance, use the --instance-url. The command waits while you complete the verification. Open a browser and navigate to the displayed verification URL, enter the code, then click Connect. If you aren't already logged into your org, log in, and then you're prompted to allow the device to connect to the org. After you successfully authorize the org, you can close the browser window.
 
 # examples
 
