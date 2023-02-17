@@ -127,13 +127,16 @@ export default class Logout extends AuthBaseCommand<AuthLogoutResults> {
       throw messages.createError('noOrgSpecifiedWithNoPrompt');
     }
 
-    orgAuths = this.shouldFindAllAuths(targetUsername)
-      ? await AuthInfo.listAllAuthorizations()
-      : targetUsername
-      ? await AuthInfo.listAllAuthorizations(
-          (orgAuth) => orgAuth.username === targetUsername || !!orgAuth.aliases?.includes(targetUsername)
-        )
-      : [];
+    if (this.shouldFindAllAuths(targetUsername)) {
+      orgAuths = await AuthInfo.listAllAuthorizations();
+    } else if (targetUsername) {
+      orgAuths = await AuthInfo.listAllAuthorizations(
+        (orgAuth) => orgAuth.username === targetUsername || !!orgAuth.aliases?.includes(targetUsername)
+      );
+    } else {
+      // just for clarity
+      orgAuths = [];
+    }
 
     if (orgAuths.length === 0) {
       this.info(messages.getMessage('noOrgsFound'));
