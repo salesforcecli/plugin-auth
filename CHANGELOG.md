@@ -1,3 +1,12 @@
+## [2.5.2](https://github.com/salesforcecli/plugin-auth/compare/2.5.1...2.5.2) (2023-02-19)
+
+
+### Bug Fixes
+
+* **deps:** bump @salesforce/sf-plugins-core from 2.1.1 to 2.1.2 ([dd6a07a](https://github.com/salesforcecli/plugin-auth/commit/dd6a07a8ae6f1b1b696a319475ecb46c10ab8868))
+
+
+
 ## [2.5.1](https://github.com/salesforcecli/plugin-auth/compare/2.5.0...2.5.1) (2023-02-18)
 
 
