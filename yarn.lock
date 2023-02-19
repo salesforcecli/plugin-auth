@@ -790,10 +790,10 @@
     widest-line "^3.1.0"
     wrap-ansi "^7.0.0"
 
-"@oclif/core@^2.0.10", "@oclif/core@^2.0.3", "@oclif/core@^2.0.7", "@oclif/core@^2.0.8", "@oclif/core@^2.1.6":
-  version "2.1.6"
-  resolved "https://registry.yarnpkg.com/@oclif/core/-/core-2.1.6.tgz#34a1847da7195616fda62663098c9df0c486ae64"
-  integrity sha512-RMqjKVExVxMmAm3a64LFrIZloKD7emSDro1Mmcc8DOB3O+/pL9drqScc/dw/Alhi6KrmdqwOtxHtKrAwqvyKMg==
+"@oclif/core@^2.0.3", "@oclif/core@^2.0.7", "@oclif/core@^2.0.8", "@oclif/core@^2.1.1", "@oclif/core@^2.1.6":
+  version "2.1.7"
+  resolved "https://registry.yarnpkg.com/@oclif/core/-/core-2.1.7.tgz#d51d8758a195bb0d813d19a89b286756ddb0b51b"
+  integrity sha512-6QZvUmKHLqrESIW4mu8azE0sQ7I9LVC3iM9O4ipp53Pqe5pQhIyxv8tB/zvagmPxJXXiCbfPsBazeqjCcM3/tg==
   dependencies:
     "@types/cli-progress" "^3.11.0"
     ansi-escapes "^4.3.2"
@@ -803,7 +803,7 @@
     clean-stack "^3.0.1"
     cli-progress "^3.11.2"
     debug "^4.3.4"
-    ejs "^3.1.6"
+    ejs "^3.1.8"
     fs-extra "^9.1.0"
     get-package-type "^0.1.0"
     globby "^11.1.0"
@@ -1226,12 +1226,12 @@
   resolved "https://registry.yarnpkg.com/@salesforce/schemas/-/schemas-1.5.0.tgz#8bfe2cb5d7cb29d3394b3b9cfb71bb527009c82c"
   integrity sha512-EKFBURBuON7cj8XZCW+ybeSRRw7wUP1XUXZVHzFgx8KiYmSeGiRHBYbDjQOsQMho2uOLsTozMPEt2ehYnji0YA==
 
-"@salesforce/sf-plugins-core@^2.0.1", "@salesforce/sf-plugins-core@^2.1.1":
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/@salesforce/sf-plugins-core/-/sf-plugins-core-2.1.1.tgz#2c03762328d5ad8462de5d364bb1c54836daef3f"
-  integrity sha512-O+GP+nY/oRRtPVL7r0ITjUTDT7mbWHQt8jzUJ8nux7mkp1wKk1uq/qTtkDMc1fcFhCkslJSyIzoE84X7j9w7jQ==
+"@salesforce/sf-plugins-core@^2.0.1", "@salesforce/sf-plugins-core@^2.1.2":
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/@salesforce/sf-plugins-core/-/sf-plugins-core-2.1.2.tgz#51a7a3d401ccfe18351f30eed60b59ce47df4ab4"
+  integrity sha512-XOLmtRDIQQbfewegxqWAOYRD0lypVyjl39XBrfu65qenfDfUXYcEDvDcWJFCnL+IwvUe4VhapFqmjZLMxG+YWA==
   dependencies:
-    "@oclif/core" "^2.0.10"
+    "@oclif/core" "^2.1.1"
     "@salesforce/core" "^3.33.1"
     "@salesforce/kit" "^1.8.3"
     "@salesforce/ts-types" "^1.7.1"
