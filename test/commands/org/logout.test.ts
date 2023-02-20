@@ -111,7 +111,7 @@ describe('org:logout', () => {
   it('should do nothing when prompt is answered with no', async () => {
     await prepareStubs();
     $$.SANDBOX.stub(SfCommand.prototype, 'confirm').resolves(false);
-    const logout = new Logout(['-o', testOrg1.username, '--json'], {} as Config);
+    const logout = new Logout(['-o', testOrg1.username], {} as Config);
     const response = await logout.run();
     expect(response).to.deep.equal([]);
   });
