@@ -185,6 +185,9 @@ export default class Logout extends AuthBaseCommand<AuthLogoutResults> {
     }
 
     if (orgAuths.length === 1) {
+      if (orgAuths[0].isScratchOrg) {
+        this.warn(messages.getMessage('warning'));
+      }
       if (await this.confirm(messages.getMessage('prompt.confirm.single', [orgAuths[0].username]), 30_000, false)) {
         return { orgs: orgAuths, confirmed: true };
       } else {
@@ -208,7 +211,10 @@ export default class Logout extends AuthBaseCommand<AuthLogoutResults> {
           name: 'confirmed',
           when: (answers): boolean => answers.orgs.length > 0,
           message: (answers): string => {
-            this.log(messages.getMessage('warning'));
+            const hasScratchOrgs = answers.orgs.some((org) => org.isScratchOrg);
+            if (hasScratchOrgs) {
+              this.warn(messages.getMessage('warning'));
+            }
             const names = answers.orgs.map((org) => org.username);
             if (names.length === orgAuths.length) {
               return messages.getMessage('prompt.confirm-all');
