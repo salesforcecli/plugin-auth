@@ -127,6 +127,10 @@ export default class Logout extends AuthBaseCommand<AuthLogoutResults> {
       throw messages.createError('noOrgSpecifiedWithNoPrompt');
     }
 
+    if (this.jsonEnabled() && !targetUsername && !flags.all) {
+      throw messages.createError('noOrgSpecifiedWithJson');
+    }
+
     if (this.shouldFindAllAuths(targetUsername)) {
       orgAuths = await AuthInfo.listAllAuthorizations();
     } else if (targetUsername) {
@@ -176,12 +180,12 @@ export default class Logout extends AuthBaseCommand<AuthLogoutResults> {
     orgAuths: OrgAuthorization[],
     all: boolean
   ): Promise<{ orgs: OrgAuthorization[]; confirmed: boolean }> {
-    if (this.flags['no-prompt']) {
+    if (this.flags['no-prompt'] || this.jsonEnabled()) {
       return { orgs: orgAuths, confirmed: true };
     }
 
     if (orgAuths.length === 1) {
-      if (await this.confirm(messages.getMessage('prompt.confirm.single', [orgAuths[0].username]), 10000, false)) {
+      if (await this.confirm(messages.getMessage('prompt.confirm.single', [orgAuths[0].username]), 30_000, false)) {
         return { orgs: orgAuths, confirmed: true };
       } else {
         return { orgs: [], confirmed: false };
@@ -191,30 +195,33 @@ export default class Logout extends AuthBaseCommand<AuthLogoutResults> {
     // pick the orgs to delete - if this.flags.all - set each org to selected
     // otherwise prompt the user to select the orgs to delete
     const choices = Logout.buildChoices(orgAuths, all);
-    const { orgs, confirmed } = await this.timedPrompt<{ orgs: OrgAuthorization[]; confirmed: boolean }>([
-      {
-        name: 'orgs',
-        message: messages.getMessage('prompt.select-envs'),
-        type: 'checkbox',
-        choices,
-        loop: true,
-      },
-      {
-        name: 'confirmed',
-        when: (answers): boolean => answers.orgs.length > 0,
-        message: (answers): string => {
-          this.log(messages.getMessage('warning'));
-          const names = answers.orgs.map((org) => org.username);
-          if (names.length === orgAuths.length) {
-            return messages.getMessage('prompt.confirm-all');
-          } else {
-            return messages.getMessage('prompt.confirm', [names.length, names.length > 1 ? 's' : '']);
-          }
+    const { orgs, confirmed } = await this.timedPrompt<{ orgs: OrgAuthorization[]; confirmed: boolean }>(
+      [
+        {
+          name: 'orgs',
+          message: messages.getMessage('prompt.select-envs'),
+          type: 'checkbox',
+          choices,
+          loop: true,
         },
-        type: 'confirm',
-        default: false,
-      },
-    ]);
+        {
+          name: 'confirmed',
+          when: (answers): boolean => answers.orgs.length > 0,
+          message: (answers): string => {
+            this.log(messages.getMessage('warning'));
+            const names = answers.orgs.map((org) => org.username);
+            if (names.length === orgAuths.length) {
+              return messages.getMessage('prompt.confirm-all');
+            } else {
+              return messages.getMessage('prompt.confirm', [names.length, names.length > 1 ? 's' : '']);
+            }
+          },
+          type: 'confirm',
+          default: false,
+        },
+      ],
+      30_000
+    );
     return {
       orgs: orgs.map((a) => a),
       confirmed,

@@ -75,3 +75,7 @@ Warning: If you log out of a scratch org without having access to its password, 
 # noOrgSpecifiedWithNoPrompt
 
 You must specify a target-org (or default target-org config is set) or use --all flag when using the --no-prompt flag.
+
+# noOrgSpecifiedWithJson
+
+You must specify a target-org (or default target-org config is set) or use --all flag when using the --json flag.
