@@ -92,7 +92,7 @@ export default class LoginJwt extends AuthBaseCommand<AuthFields> {
     try {
       const authInfo = await this.initAuthInfo();
       await authInfo.handleAliasAndDefaultSettings({
-        alias: flags.alias as string,
+        alias: flags.alias,
         setDefault: flags['set-default'],
         setDefaultDevHub: flags['set-default-dev-hub'],
       });

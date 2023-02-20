@@ -85,7 +85,7 @@ export default class LoginSfdxUrl extends AuthBaseCommand<AuthFields> {
     await authInfo.save();
 
     await authInfo.handleAliasAndDefaultSettings({
-      alias: flags.alias as string,
+      alias: flags.alias,
       setDefault: flags['set-default'],
       setDefaultDevHub: flags['set-default-dev-hub'],
     });

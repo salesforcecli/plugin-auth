@@ -95,10 +95,10 @@ export default class LoginWeb extends AuthBaseCommand<AuthFields> {
 
     const oauthConfig: OAuth2Config = {
       loginUrl: await Common.resolveLoginUrl(get(flags['instance-url'], 'href', null) as Optional<string>),
-      clientId: flags.clientid as string,
+      clientId: flags['client-id'] as string,
     };
 
-    if (flags.clientid) {
+    if (flags['client-id']) {
       oauthConfig.clientSecret = await this.askForClientSecret(flags['disable-masking']);
     }
 
