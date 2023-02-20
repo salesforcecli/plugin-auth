@@ -6,7 +6,7 @@
  */
 
 import { Flags, loglevel } from '@salesforce/sf-plugins-core';
-import { AuthFields, AuthInfo, Messages, sfdc, SfError, StateAggregator } from '@salesforce/core';
+import { AuthFields, AuthInfo, Messages, matchesAccessToken, SfError, StateAggregator } from '@salesforce/core';
 import { ensureString, getString } from '@salesforce/ts-types';
 import { env } from '@salesforce/kit';
 import { Interfaces } from '@oclif/core';
@@ -117,7 +117,7 @@ export default class LoginAccessToken extends AuthBaseCommand<AuthFields> {
   private async getAccessToken(): Promise<string> {
     const accessToken = env.getString('SFDX_ACCESS_TOKEN') ?? (await this.askForAccessToken());
 
-    if (!sfdc.matchesAccessToken(accessToken)) {
+    if (!matchesAccessToken(accessToken)) {
       throw new SfError(messages.getMessage('invalidAccessTokenFormat', [ACCESS_TOKEN_FORMAT]));
     }
     return accessToken;
