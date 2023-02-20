@@ -46,15 +46,15 @@ export default class Logout extends AuthBaseCommand<AuthLogoutResults> {
     }),
     all: Flags.boolean({
       char: 'a',
-      summary: messages.getMessage('all'),
-      description: messages.getMessage('allLong'),
+      summary: messages.getMessage('flags.all.summary'),
+      description: messages.getMessage('flags.all.description'),
       required: false,
       default: false,
       exclusive: ['target-org'],
     }),
     'no-prompt': Flags.boolean({
       char: 'p',
-      summary: commonMessages.getMessage('noPrompt'),
+      summary: commonMessages.getMessage('flags.no-prompt.summary'),
       required: false,
       deprecateAliases: true,
       aliases: ['noprompt'],

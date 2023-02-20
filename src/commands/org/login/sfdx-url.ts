@@ -31,32 +31,32 @@ export default class LoginSfdxUrl extends AuthBaseCommand<AuthFields> {
   public static readonly flags = {
     'sfdx-url-file': Flags.file({
       char: 'f',
-      summary: messages.getMessage('file'),
+      summary: messages.getMessage('flags.sfdx-url-file.summary'),
       required: true,
       deprecateAliases: true,
       aliases: ['sfdxurlfile'],
     }),
     'set-default-dev-hub': Flags.boolean({
       char: 'd',
-      summary: commonMessages.getMessage('setDefaultDevHub'),
+      summary: commonMessages.getMessage('flags.set-default-dev-hub.summary'),
       deprecateAliases: true,
       aliases: ['setdefaultdevhub'],
     }),
     'set-default': Flags.boolean({
       char: 's',
-      summary: commonMessages.getMessage('setDefaultUsername'),
+      summary: commonMessages.getMessage('flags.set-default.summary'),
       deprecateAliases: true,
       aliases: ['setdefaultusername'],
     }),
     alias: Flags.string({
       char: 'a',
-      summary: commonMessages.getMessage('setAlias'),
+      summary: commonMessages.getMessage('flags.alias.summary'),
       deprecateAliases: true,
       aliases: ['setalias'],
     }),
     'no-prompt': Flags.boolean({
       char: 'p',
-      summary: commonMessages.getMessage('noPromptAuth'),
+      summary: commonMessages.getMessage('flags.no-prompt.summary'),
       required: false,
       hidden: true,
       deprecateAliases: true,
