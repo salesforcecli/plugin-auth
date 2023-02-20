@@ -152,6 +152,6 @@ describe('org:logout', () => {
     });
     const logout = new Logout(['-p', '-o', testOrg1.username, '--json'], {} as Config);
     const response = await logout.run();
-    expect(response).to.deep.equal([]);
+    expect(response).to.deep.equal([testOrg1.username]);
   });
 });

@@ -139,6 +139,11 @@ export default class Logout extends AuthBaseCommand<AuthLogoutResults> {
     }
 
     if (orgAuths.length === 0) {
+      if (this.flags['target-org']) {
+        // user specified a target org but it was not resolved, issue success message and return
+        this.logSuccess(messages.getMessage('logoutOrgCommandSuccess', [this.flags['target-org']]));
+        return [this.flags['target-org']];
+      }
       this.info(messages.getMessage('noOrgsFound'));
       return [];
     }
