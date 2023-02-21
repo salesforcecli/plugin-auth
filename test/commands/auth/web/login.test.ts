@@ -15,9 +15,10 @@ import { UX } from '@salesforce/command';
 import { assert, expect } from 'chai';
 import { Env } from '@salesforce/kit';
 import { SfCommand } from '@salesforce/sf-plugins-core';
-import LoginWeb from '../../../../src/commands/org/login/web';
+import Login from '../../../../src/commands/auth/web/login';
+import Store from '../../../../src/commands/auth/accesstoken/store';
 
-describe('org:login:web', () => {
+describe('auth:web:login', () => {
   const $$ = new TestContext();
   const testData = new MockTestOrgData();
   const config = stubInterface<IConfig>($$.SANDBOX, {});
@@ -28,22 +29,21 @@ describe('org:login:web', () => {
   async function createNewLoginCommand(
     flags: string[] = [],
     promptAnswer = false,
-    clientSecret = ''
-  ): Promise<LoginWeb> {
+    clientSecret = ''): Promise<Login> {
     authFields = await testData.getConfig();
     // @ts-ignore
-    $$.SANDBOX.stub(LoginWeb.prototype, 'askForClientSecret').resolves(clientSecret);
+    $$.SANDBOX.stub(Store.prototype, 'askForClientSecret').resolves(clientSecret);
     $$.SANDBOX.stub(SfCommand.prototype, 'confirm').resolves(promptAnswer);
 
     authInfoStub = stubInterface<AuthInfo>($$.SANDBOX, {
-      getFields: () => authFields,
+      getFields: () => authFields
     });
 
-    stubMethod($$.SANDBOX, LoginWeb.prototype, 'executeLoginFlow').callsFake(async () => authInfoStub);
+    stubMethod($$.SANDBOX, Login.prototype, 'executeLoginFlow').callsFake(async () => authInfoStub);
     $$.SANDBOX.stub(AuthInfo, 'listAllAuthorizations').callsFake(async () => []);
 
     // @ts-ignore
-    const login = new LoginWeb(flags, config);
+    const login = new Login(flags, config);
     // @ts-ignore because protected member
     login.ux = uxStub;
     // @ts-ignore because protected member
@@ -51,16 +51,16 @@ describe('org:login:web', () => {
     return login;
   }
 
-  async function createNewLoginCommandWithError(errorName: string): Promise<LoginWeb> {
+  async function createNewLoginCommandWithError(errorName: string): Promise<Login> {
     authFields = await testData.getConfig();
     authInfoStub = stubInterface<AuthInfo>($$.SANDBOX, {
-      getFields: () => authFields,
+      getFields: () => authFields
     });
-    stubMethod($$.SANDBOX, LoginWeb.prototype, 'executeLoginFlow').throws(() => new SfError('error!', errorName));
+    stubMethod($$.SANDBOX, Login.prototype, 'executeLoginFlow').throws(() => new SfError('error!', errorName));
     uxStub = stubInterface<UX>($$.SANDBOX, {});
 
     // @ts-ignore
-    const login = new LoginWeb([], config);
+    const login = new Login([], config);
     // @ts-ignore because protected member
     login.ux = uxStub;
     // @ts-ignore because protected member
@@ -82,8 +82,8 @@ describe('org:login:web', () => {
       {
         alias: 'MyAlias',
         setDefaultDevHub: undefined,
-        setDefault: undefined,
-      },
+        setDefault: undefined
+      }
     ]);
   });
 

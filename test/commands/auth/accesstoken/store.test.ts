@@ -14,9 +14,9 @@ import { TestContext } from '@salesforce/core/lib/testSetup';
 import { assert } from 'chai';
 import { Env } from '@salesforce/kit';
 import { Config } from '@oclif/core';
-import Store from '../../../../src/commands/org/login/access-token';
+import Store from '../../../../src/commands/auth/accesstoken/store';
 
-describe('org:login:access-token', () => {
+describe('auth:accesstoken:store', () => {
   const $$ = new TestContext();
 
   let authFields: AuthFields;
@@ -62,10 +62,7 @@ describe('org:login:access-token', () => {
     if (useSfdxAccessTokenEnvVar) {
       stubMethod($$.SANDBOX, Env.prototype, 'getString').callsFake(() => accessToken);
     }
-    const store = new Store(
-      ['--instance-url', 'https://foo.bar.org.salesforce.com', '--no-prompt', ...flags],
-      {} as Config
-    );
+    const store = new Store(['--instance-url', 'https://foo.bar.org.salesforce.com', '--no-prompt', ...flags], {} as Config);
     // @ts-ignore
     $$.SANDBOX.stub(Store.prototype, 'askForAccessToken').resolves(promptAnswer);
 
@@ -85,10 +82,7 @@ describe('org:login:access-token', () => {
   });
 
   it('should show invalid access token provided as input', async () => {
-    const store = await createNewStoreCommand(
-      ['--instance-url', 'https://foo.bar.org.salesforce.com', '--no-prompt'],
-      'invalidaccesstokenformat'
-    );
+    const store = await createNewStoreCommand(['--instance-url', 'https://foo.bar.org.salesforce.com', '--no-prompt'], 'invalidaccesstokenformat');
     try {
       await store.run();
       assert(false, 'should throw error');
@@ -99,11 +93,7 @@ describe('org:login:access-token', () => {
   });
 
   it('should show that auth file already exists', async () => {
-    const store = await createNewStoreCommand(
-      ['--instance-url', 'https://foo.bar.org.salesforce.com'],
-      accessToken,
-      true
-    );
+    const store = await createNewStoreCommand(['--instance-url', 'https://foo.bar.org.salesforce.com'], accessToken, true);
     await store.run();
   });
 
@@ -114,12 +104,7 @@ describe('org:login:access-token', () => {
     expect(result).to.deep.equal(authFields);
   });
   it('should use env var SFDX_ACCESS_TOKEN as input to the store command', async () => {
-    const store = await createNewStoreCommand(
-      ['--instance-url', 'https://foo.bar.org.salesforce.com'],
-      accessToken,
-      false,
-      true
-    );
+    const store = await createNewStoreCommand(['--instance-url', 'https://foo.bar.org.salesforce.com'], accessToken, false, true);
     const result = await store.run();
     // no prompts
     expect(result).to.deep.equal(authFields);
