@@ -1,0 +1,185 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$ref": "#/definitions/DeviceLoginResult",
+  "definitions": {
+    "DeviceLoginResult": {
+      "anyOf": [
+        {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/Optional%3CAnyJson%3E"
+          },
+          "properties": {
+            "device_code": {
+              "type": "string"
+            },
+            "interval": {
+              "type": "number"
+            },
+            "user_code": {
+              "type": "string"
+            },
+            "verification_uri": {
+              "type": "string"
+            },
+            "accessToken": {
+              "type": "string"
+            },
+            "alias": {
+              "type": "string"
+            },
+            "authCode": {
+              "type": "string"
+            },
+            "clientId": {
+              "type": "string"
+            },
+            "clientSecret": {
+              "type": "string"
+            },
+            "created": {
+              "type": "string"
+            },
+            "createdOrgInstance": {
+              "type": "string"
+            },
+            "devHubUsername": {
+              "type": "string"
+            },
+            "instanceUrl": {
+              "type": "string"
+            },
+            "instanceApiVersion": {
+              "type": "string"
+            },
+            "instanceApiVersionLastRetrieved": {
+              "type": "string"
+            },
+            "isDevHub": {
+              "type": "boolean"
+            },
+            "loginUrl": {
+              "type": "string"
+            },
+            "orgId": {
+              "type": "string"
+            },
+            "password": {
+              "type": "string"
+            },
+            "privateKey": {
+              "type": "string"
+            },
+            "refreshToken": {
+              "type": "string"
+            },
+            "scratchAdminUsername": {
+              "type": "string"
+            },
+            "snapshot": {
+              "type": "string"
+            },
+            "userId": {
+              "type": "string"
+            },
+            "username": {
+              "type": "string"
+            },
+            "usernames": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "userProfileName": {
+              "type": "string"
+            },
+            "expirationDate": {
+              "type": "string"
+            },
+            "tracksSource": {
+              "type": "boolean"
+            },
+            "name": {
+              "type": "string"
+            },
+            "instanceName": {
+              "type": "string"
+            },
+            "namespacePrefix": {
+              "type": ["string", "null"]
+            },
+            "isSandbox": {
+              "type": "boolean"
+            },
+            "isScratch": {
+              "type": "boolean"
+            },
+            "trailExpirationDate": {
+              "type": ["string", "null"]
+            }
+          },
+          "required": ["device_code", "interval", "user_code", "verification_uri"]
+        },
+        {
+          "type": "object",
+          "additionalProperties": {
+            "not": {}
+          }
+        }
+      ]
+    },
+    "Optional<AnyJson>": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/AnyJson"
+        },
+        {
+          "not": {}
+        }
+      ],
+      "description": "A union type for either the parameterized type `T` or `undefined` -- the opposite of  {@link  NonOptional  } ."
+    },
+    "AnyJson": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/JsonPrimitive"
+        },
+        {
+          "$ref": "#/definitions/JsonCollection"
+        }
+      ],
+      "description": "Any valid JSON value."
+    },
+    "JsonPrimitive": {
+      "type": ["null", "boolean", "number", "string"],
+      "description": "Any valid JSON primitive value."
+    },
+    "JsonCollection": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/JsonMap"
+        },
+        {
+          "$ref": "#/definitions/JsonArray"
+        }
+      ],
+      "description": "Any valid JSON collection value."
+    },
+    "JsonMap": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/definitions/Optional%3CAnyJson%3E"
+      },
+      "properties": {},
+      "description": "Any JSON-compatible object."
+    },
+    "JsonArray": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/AnyJson"
+      },
+      "description": "Any JSON-compatible array."
+    }
+  }
+}

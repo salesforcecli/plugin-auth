@@ -20,58 +20,60 @@ Messages.importMessagesDirectory(__dirname);
 const messages = Messages.loadMessages('@salesforce/plugin-auth', 'web.login');
 const commonMessages = Messages.loadMessages('@salesforce/plugin-auth', 'messages');
 
-export default class Login extends AuthBaseCommand<AuthFields> {
+export default class LoginWeb extends AuthBaseCommand<AuthFields> {
   public static readonly summary = messages.getMessage('summary');
   public static readonly description = messages.getMessage('description');
   public static readonly examples = messages.getMessages('examples');
   public static readonly deprecateAliases = true;
-  public static aliases = ['force:auth:web:login'];
+  public static aliases = ['force:auth:web:login', 'auth:web:login'];
 
   public static readonly flags = {
     browser: Flags.string({
       char: 'b',
-      summary: messages.getMessage('browser'),
+      summary: messages.getMessage('flags.browser.summary'),
+      description: messages.getMessage('flags.browser.description'),
       options: ['chrome', 'edge', 'firefox'], // These are ones supported by "open" package
     }),
     'client-id': Flags.string({
       char: 'i',
-      summary: commonMessages.getMessage('clientId'),
+      summary: commonMessages.getMessage('flags.client-id.summary'),
       deprecateAliases: true,
       aliases: ['clientid'],
     }),
     'instance-url': Flags.url({
       char: 'r',
-      summary: commonMessages.getMessage('instanceUrl'),
+      summary: commonMessages.getMessage('flags.instance-url.summary'),
+      description: commonMessages.getMessage('flags.instance-url.description'),
       deprecateAliases: true,
       aliases: ['instanceurl'],
     }),
     'set-default-dev-hub': Flags.boolean({
       char: 'd',
-      summary: commonMessages.getMessage('setDefaultDevHub'),
+      summary: commonMessages.getMessage('flags.set-default-dev-hub.summary'),
       deprecateAliases: true,
-      aliases: ['setdefaultdevhubusername'],
+      aliases: ['setdefaultdevhubusername', 'setdefaultdevhub'],
     }),
     'set-default': Flags.boolean({
       char: 's',
-      summary: commonMessages.getMessage('setDefaultUsername'),
+      summary: commonMessages.getMessage('flags.set-default.summary'),
       deprecateAliases: true,
       aliases: ['setdefaultusername'],
     }),
     alias: Flags.string({
       char: 'a',
-      summary: commonMessages.getMessage('setAlias'),
+      summary: commonMessages.getMessage('flags.alias.summary'),
       deprecateAliases: true,
       aliases: ['setalias'],
     }),
     'disable-masking': Flags.boolean({
-      summary: commonMessages.getMessage('disableMasking'),
+      summary: commonMessages.getMessage('flags.disable-masking.summary'),
       hidden: true,
       deprecateAliases: true,
       aliases: ['disablemasking'],
     }),
     'no-prompt': Flags.boolean({
       char: 'p',
-      summary: commonMessages.getMessage('noPromptAuth'),
+      summary: commonMessages.getMessage('flags.no-prompt.summary'),
       required: false,
       hidden: true,
       deprecateAliases: true,
@@ -80,10 +82,10 @@ export default class Login extends AuthBaseCommand<AuthFields> {
     loglevel,
   };
 
-  private flags: Interfaces.InferredFlags<typeof Login.flags>;
+  private flags: Interfaces.InferredFlags<typeof LoginWeb.flags>;
 
   public async run(): Promise<AuthFields> {
-    const { flags } = await this.parse(Login);
+    const { flags } = await this.parse(LoginWeb);
     this.flags = flags;
     if (isSFDXContainerMode()) {
       throw new SfError(messages.getMessage('deviceWarning'), 'DEVICE_WARNING');
@@ -93,10 +95,10 @@ export default class Login extends AuthBaseCommand<AuthFields> {
 
     const oauthConfig: OAuth2Config = {
       loginUrl: await Common.resolveLoginUrl(get(flags['instance-url'], 'href', null) as Optional<string>),
-      clientId: flags.clientid as string,
+      clientId: flags['client-id'] as string,
     };
 
-    if (flags.clientid) {
+    if (flags['client-id']) {
       oauthConfig.clientSecret = await this.askForClientSecret(flags['disable-masking']);
     }
 

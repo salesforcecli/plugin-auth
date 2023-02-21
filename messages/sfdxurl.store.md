@@ -1,27 +1,33 @@
 # summary
 
-authorize an org using an SFDX auth URL stored within a file
+Authorize an org using a Salesforce DX authorization URL stored in a file.
 
 # description
 
-authorize an org using an SFDX auth URL stored within a file
-The SFDX auth URL must have the format "%s". NOTE: The SFDX auth URL uses the "force" protocol, and not "http" or "https". Also, the "instanceUrl" inside the SFDX auth URL doesn't include the protocol ("https://").
+The Salesforce DX (SFDX) authorization URL must have the format "%s". NOTE: The SFDX authorization URL uses the "force" protocol, and not "http" or "https". Also, the "instanceUrl" inside the SFDX authorization URL doesn't include the protocol ("https://").
 
-You have three options when creating the auth file. The easiest option is to redirect the output of the `<%= config.bin %> org:display --verbose --json` command into a file. For example, using an org you have already authorized:
+You have three options when creating the authorization file. The easiest option is to redirect the output of the "<%= config.bin %> org display --verbose --json" command into a file. For example, using an org with alias my-org that you've already authorized:
 
-    $ <%= config.bin %> org:display -o <OrgUsername> --verbose --json > authFile.json
-    $ <%= config.bin %> <%= command.id %> -f authFile.json
+    $ <%= config.bin %> org display --target-org my-org --verbose --json > authFile.json
 
-The resulting JSON file contains the URL in the sfdxAuthUrl property inside of a results object. NOTE: The `org:display --verbose` command displays the refresh token only for orgs authorized with the web server flow, and not the JWT bearer flow.
+The resulting JSON file contains the URL in the "sfdxAuthUrl" property of the "result" object. You can then reference the file when running this command:
 
-You can also create a JSON file that has a top-level property named sfdxAuthUrl whose value is the auth URL. Finally, you can create a normal text file that includes just the URL and nothing else.
+    $ <%= config.bin %> <%= command.id %> --sfdx-url-file authFile.json
 
-# file
+NOTE: The "<%= config.bin %> org display --verbose" command displays the refresh token only for orgs authorized with the web server flow, and not the JWT bearer flow.
 
-path to a file containing the sfdx url
+You can also create a JSON file that has a top-level property named sfdxAuthUrl whose value is the authorization URL. Finally, you can create a normal text file that includes just the URL and nothing else.
+
+# flags.sfdx-url-file.summary
+
+Path to a file that contains the Salesforce DX authorization URL.
 
 # examples
 
-- $ <%= config.bin %> <%= command.id %> -f <path to sfdxAuthUrl file>
+- Authorize an org using the SFDX authorization URL in the files/authFile.json file:
 
-- $ <%= config.bin %> <%= command.id %> -f <path to sfdxAuthUrl file> -s -a MyDefaultOrg
+  <%= config.bin %> <%= command.id %> --sfdx-url-file files/authFile.json
+
+- Similar to previous example, but set the org as your default and give it an alias MyDefaultOrg:
+
+  <%= config.bin %> <%= command.id %> --sfdx-url-file files/authFile.json --set-default --alias MyDefaultOrg

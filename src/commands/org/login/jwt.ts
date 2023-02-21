@@ -16,61 +16,62 @@ Messages.importMessagesDirectory(__dirname);
 const messages = Messages.loadMessages('@salesforce/plugin-auth', 'jwt.grant');
 const commonMessages = Messages.loadMessages('@salesforce/plugin-auth', 'messages');
 
-export default class Grant extends AuthBaseCommand<AuthFields> {
+export default class LoginJwt extends AuthBaseCommand<AuthFields> {
   public static readonly summary = messages.getMessage('summary');
   public static readonly description = messages.getMessage('description');
   public static readonly examples = messages.getMessages('examples');
-  public static aliases = ['force:auth:jwt:grant'];
+  public static aliases = ['force:auth:jwt:grant', 'auth:jwt:grant'];
 
   public static readonly flags = {
     username: Flags.string({
       char: 'o',
-      summary: messages.getMessage('username'),
+      summary: messages.getMessage('flags.username.summary'),
       required: true,
       deprecateAliases: true,
       aliases: ['u'],
     }),
     'jwt-key-file': Flags.file({
       char: 'f',
-      summary: messages.getMessage('key'),
+      summary: messages.getMessage('flags.jwt-key-file.summary'),
       required: true,
       deprecateAliases: true,
       aliases: ['jwtkeyfile'],
     }),
     'client-id': Flags.string({
       char: 'i',
-      summary: commonMessages.getMessage('clientId'),
+      summary: commonMessages.getMessage('flags.client-id.summary'),
       required: true,
       deprecateAliases: true,
       aliases: ['clientid'],
     }),
     'instance-url': Flags.url({
       char: 'r',
-      summary: commonMessages.getMessage('instanceUrl'),
+      summary: commonMessages.getMessage('flags.instance-url.summary'),
+      description: commonMessages.getMessage('flags.instance-url.description'),
       deprecateAliases: true,
       aliases: ['instanceurl'],
     }),
     'set-default-dev-hub': Flags.boolean({
       char: 'd',
-      summary: commonMessages.getMessage('setDefaultDevHub'),
+      summary: commonMessages.getMessage('flags.set-default-dev-hub.summary'),
       deprecateAliases: true,
-      aliases: ['setdefaultdevhub'],
+      aliases: ['setdefaultdevhub', 'setdefaultdevhubusername'],
     }),
     'set-default': Flags.boolean({
       char: 's',
-      summary: commonMessages.getMessage('setDefaultUsername'),
+      summary: commonMessages.getMessage('flags.set-default.summary'),
       deprecateAliases: true,
       aliases: ['setdefaultusername'],
     }),
     alias: Flags.string({
       char: 'a',
-      summary: commonMessages.getMessage('setAlias'),
+      summary: commonMessages.getMessage('flags.alias.summary'),
       deprecateAliases: true,
       aliases: ['setalias'],
     }),
     'no-prompt': Flags.boolean({
       char: 'p',
-      summary: commonMessages.getMessage('noPromptAuth'),
+      summary: commonMessages.getMessage('flags.no-prompt.summary'),
       required: false,
       hidden: true,
       deprecateAliases: true,
@@ -78,11 +79,11 @@ export default class Grant extends AuthBaseCommand<AuthFields> {
     }),
     loglevel,
   };
-  private flags: Interfaces.InferredFlags<typeof Grant.flags>;
+  private flags: Interfaces.InferredFlags<typeof LoginJwt.flags>;
   private logger = Logger.childFromRoot(this.constructor.name);
 
   public async run(): Promise<AuthFields> {
-    const { flags } = await this.parse(Grant);
+    const { flags } = await this.parse(LoginJwt);
     this.flags = flags;
     let result: AuthFields = {};
 
@@ -91,7 +92,7 @@ export default class Grant extends AuthBaseCommand<AuthFields> {
     try {
       const authInfo = await this.initAuthInfo();
       await authInfo.handleAliasAndDefaultSettings({
-        alias: flags.alias as string,
+        alias: flags.alias,
         setDefault: flags['set-default'],
         setDefaultDevHub: flags['set-default-dev-hub'],
       });

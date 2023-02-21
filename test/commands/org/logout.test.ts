@@ -10,7 +10,7 @@ import { MockTestOrgData, TestContext } from '@salesforce/core/lib/testSetup';
 import { expect } from 'chai';
 import { Config } from '@oclif/core';
 import { SfCommand } from '@salesforce/sf-plugins-core';
-import Logout from '../../../src/commands/auth/logout';
+import Logout from '../../../src/commands/org/logout';
 
 interface Options {
   authFiles?: string[];
@@ -23,7 +23,7 @@ interface Options {
   authInfoConfigDoesNotExist?: boolean;
 }
 
-describe('auth:logout', () => {
+describe('org:logout', () => {
   const $$ = new TestContext();
   const testOrg1 = new MockTestOrgData();
   const testOrg2 = new MockTestOrgData();
@@ -52,7 +52,7 @@ describe('auth:logout', () => {
 
   it('should throw error when both -a and -o are specified', async () => {
     await prepareStubs();
-    const logout = new Logout(['-a', '-u', testOrg1.username, '--json'], {} as Config);
+    const logout = new Logout(['-a', '-o', testOrg1.username, '--json'], {} as Config);
     try {
       await logout.run();
     } catch (e) {
@@ -71,9 +71,9 @@ describe('auth:logout', () => {
     expect(authRemoverSpy.callCount).to.equal(1);
   });
 
-  it('should remove username specified by -u', async () => {
+  it('should remove username specified by -o', async () => {
     await prepareStubs({ 'target-org': testOrg1.username });
-    const logout = new Logout(['-p', '-u', testOrg1.username, '--json'], {} as Config);
+    const logout = new Logout(['-p', '-o', testOrg1.username, '--json'], {} as Config);
     const response = await logout.run();
     expect(response).to.deep.equal([testOrg1.username]);
     expect(authRemoverSpy.callCount).to.equal(1);
@@ -103,7 +103,7 @@ describe('auth:logout', () => {
       const response = await logout.run();
       expect.fail(`should have thrown error. Response: ${JSON.stringify(response)}`);
     } catch (e) {
-      expect((e as Error).name).to.equal('NoOrgFound');
+      expect((e as Error).name).to.equal('NoOrgSpecifiedWithNoPromptError');
       expect(authRemoverSpy.callCount).to.equal(0);
     }
   });
@@ -111,14 +111,14 @@ describe('auth:logout', () => {
   it('should do nothing when prompt is answered with no', async () => {
     await prepareStubs();
     $$.SANDBOX.stub(SfCommand.prototype, 'confirm').resolves(false);
-    const logout = new Logout(['-u', testOrg1.username, '--json'], {} as Config);
+    const logout = new Logout(['-o', testOrg1.username], {} as Config);
     const response = await logout.run();
     expect(response).to.deep.equal([]);
   });
 
   it('should remove auth when alias is specified', async () => {
     await prepareStubs({ aliases: { TestAlias: testOrg1.username } });
-    const logout = new Logout(['-p', '-u', 'TestAlias', '--json'], {} as Config);
+    const logout = new Logout(['-p', '-o', 'TestAlias', '--json'], {} as Config);
     const response = await logout.run();
     expect(response).to.deep.equal([testOrg1.username]);
   });
@@ -150,7 +150,7 @@ describe('auth:logout', () => {
       aliases: { TestAlias: testOrg1.username },
       authInfoConfigDoesNotExist: true,
     });
-    const logout = new Logout(['-p', '-u', testOrg1.username, '--json'], {} as Config);
+    const logout = new Logout(['-p', '-o', testOrg1.username, '--json'], {} as Config);
     const response = await logout.run();
     expect(response).to.deep.equal([testOrg1.username]);
   });
