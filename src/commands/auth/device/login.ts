@@ -71,7 +71,7 @@ export default class Login extends AuthBaseCommand<DeviceLoginResult> {
     if (await this.shouldExitCommand(false)) return {};
 
     const oauthConfig: OAuth2Config = {
-      loginUrl: await Common.resolveLoginUrl(get(flags.instanceurl, 'href', null) as Optional<string>),
+      loginUrl: await Common.resolveLoginUrl(get(flags['instance-url'], 'href', null) as Optional<string>),
       clientId: flags['client-id'] as string,
     };
 
