@@ -7,7 +7,6 @@
 
 import { Flags, loglevel } from '@salesforce/sf-plugins-core';
 import { AuthFields, AuthInfo, Messages, matchesAccessToken, SfError, StateAggregator } from '@salesforce/core';
-import { ensureString, getString } from '@salesforce/ts-types';
 import { env } from '@salesforce/kit';
 import { Interfaces } from '@oclif/core';
 import { AuthBaseCommand } from '../../../authBaseCommand';
@@ -70,7 +69,7 @@ export default class LoginAccessToken extends AuthBaseCommand<AuthFields> {
   public async run(): Promise<AuthFields> {
     const { flags } = await this.parse(LoginAccessToken);
     this.flags = flags;
-    const instanceUrl = ensureString(getString(flags, 'instance-url.href'));
+    const instanceUrl = flags['instance-url'].href;
     const accessToken = await this.getAccessToken();
     const authInfo = await this.getUserInfo(accessToken, instanceUrl);
     return this.storeAuthFromAccessToken(authInfo);
