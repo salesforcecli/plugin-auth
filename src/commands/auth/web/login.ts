@@ -49,7 +49,7 @@ export default class Login extends AuthBaseCommand<AuthFields> {
       char: 'd',
       summary: commonMessages.getMessage('setDefaultDevHub'),
       deprecateAliases: true,
-      aliases: ['setdefaultdevhubusername'],
+      aliases: ['setdefaultdevhub', 'setdefaultdevhubusername'],
     }),
     'set-default': Flags.boolean({
       char: 's',

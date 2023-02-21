@@ -38,7 +38,7 @@ export default class Store extends AuthBaseCommand<AuthFields> {
       summary: commonMessages.getMessage('setDefaultDevHub'),
       default: false,
       deprecateAliases: true,
-      aliases: ['setdefaultdevhub'],
+      aliases: ['setdefaultdevhub', 'setdefaultdevhubusername'],
     }),
     'set-default': Flags.boolean({
       char: 's',
