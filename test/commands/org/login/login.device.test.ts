@@ -14,14 +14,14 @@ import { DeviceCodeResponse } from '@salesforce/core/lib/deviceOauthService';
 import { expect } from 'chai';
 import { Config } from '@oclif/core';
 import { SfCommand } from '@salesforce/sf-plugins-core';
-import Login from '../../../../src/commands/auth/device/login';
+import Login from '../../../../src/commands/org/login/device';
 
 interface Options {
   approvalTimesout?: boolean;
   approvalFails?: boolean;
 }
 
-describe('auth:device:login', async () => {
+describe('org:login:device', async () => {
   const $$ = new TestContext();
 
   const testData = new MockTestOrgData();

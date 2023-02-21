@@ -13,7 +13,7 @@ import { expectAccessTokenToExist, expectOrgIdToExist, expectUrlToExist } from '
 
 let testSession: TestSession;
 
-describe('auth:accesstoken:store NUTs', () => {
+describe('org:login:access-token NUTs', () => {
   const env = new Env();
   let username: string;
   let instanceUrl: string;
@@ -28,7 +28,7 @@ describe('auth:accesstoken:store NUTs', () => {
     testSession = await TestSession.create();
     const jwtKeyFilePath = prepareForJwt(testSession.homeDir);
     const res = execCmd<{ accessToken: string }>(
-      `auth:jwt:grant -f ${jwtKeyFilePath} -i ${clientId} -o ${username} --set-default-dev-hub --instance-url ${instanceUrl} --json`,
+      `org:login:jwt -f ${jwtKeyFilePath} -i ${clientId} -o ${username} --set-default-dev-hub --instance-url ${instanceUrl} --json`,
       {
         ensureExitCode: 0,
       }
@@ -47,7 +47,7 @@ describe('auth:accesstoken:store NUTs', () => {
   });
 
   it('should authorize an org using access token (json)', () => {
-    const command = `auth:accesstoken:store --set-default-dev-hub --instance-url ${instanceUrl} --no-prompt --json`;
+    const command = `org:login:access-token --set-default-dev-hub --instance-url ${instanceUrl} --no-prompt --json`;
     const cmdresult = execCmd<AuthFields>(command, { ensureExitCode: 0 });
     const json = cmdresult.jsonOutput?.result as AuthFields;
 
@@ -60,7 +60,7 @@ describe('auth:accesstoken:store NUTs', () => {
   });
 
   it('should authorize an org using access token (human readable)', () => {
-    const command = `auth:accesstoken:store --set-default-dev-hub --instance-url ${instanceUrl} --no-prompt`;
+    const command = `org:login:access-token --set-default-dev-hub --instance-url ${instanceUrl} --no-prompt`;
     const result = execCmd(command, { ensureExitCode: 0 });
     const output = getString(result, 'shellOutput.stdout');
     expect(output).to.include(`Successfully authorized ${username} with org ID`);
