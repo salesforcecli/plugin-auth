@@ -16,7 +16,6 @@ import { assert, expect } from 'chai';
 import { Env } from '@salesforce/kit';
 import { SfCommand } from '@salesforce/sf-plugins-core';
 import Login from '../../../../src/commands/auth/web/login';
-import Store from '../../../../src/commands/auth/accesstoken/store';
 
 describe('auth:web:login', () => {
   const $$ = new TestContext();
@@ -26,17 +25,14 @@ describe('auth:web:login', () => {
   let authInfoStub: StubbedType<AuthInfo>;
   let uxStub: StubbedType<UX>;
 
-  async function createNewLoginCommand(
-    flags: string[] = [],
-    promptAnswer = false,
-    clientSecret = ''): Promise<Login> {
+  async function createNewLoginCommand(flags: string[] = [], promptAnswer = false, clientSecret = ''): Promise<Login> {
     authFields = await testData.getConfig();
     // @ts-ignore
-    $$.SANDBOX.stub(Store.prototype, 'askForClientSecret').resolves(clientSecret);
+    $$.SANDBOX.stub(Login.prototype, 'askForClientSecret').resolves(clientSecret);
     $$.SANDBOX.stub(SfCommand.prototype, 'confirm').resolves(promptAnswer);
 
     authInfoStub = stubInterface<AuthInfo>($$.SANDBOX, {
-      getFields: () => authFields
+      getFields: () => authFields,
     });
 
     stubMethod($$.SANDBOX, Login.prototype, 'executeLoginFlow').callsFake(async () => authInfoStub);
@@ -54,7 +50,7 @@ describe('auth:web:login', () => {
   async function createNewLoginCommandWithError(errorName: string): Promise<Login> {
     authFields = await testData.getConfig();
     authInfoStub = stubInterface<AuthInfo>($$.SANDBOX, {
-      getFields: () => authFields
+      getFields: () => authFields,
     });
     stubMethod($$.SANDBOX, Login.prototype, 'executeLoginFlow').throws(() => new SfError('error!', errorName));
     uxStub = stubInterface<UX>($$.SANDBOX, {});
@@ -82,8 +78,8 @@ describe('auth:web:login', () => {
       {
         alias: 'MyAlias',
         setDefaultDevHub: undefined,
-        setDefault: undefined
-      }
+        setDefault: undefined,
+      },
     ]);
   });
 
