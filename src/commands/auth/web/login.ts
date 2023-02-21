@@ -49,7 +49,7 @@ export default class Login extends AuthBaseCommand<AuthFields> {
       char: 'd',
       summary: commonMessages.getMessage('setDefaultDevHub'),
       deprecateAliases: true,
-      aliases: ['setdefaultdevhubusername'],
+      aliases: ['setdefaultdevhub', 'setdefaultdevhubusername'],
     }),
     'set-default': Flags.boolean({
       char: 's',
@@ -93,10 +93,10 @@ export default class Login extends AuthBaseCommand<AuthFields> {
 
     const oauthConfig: OAuth2Config = {
       loginUrl: await Common.resolveLoginUrl(get(flags['instance-url'], 'href', null) as Optional<string>),
-      clientId: flags.clientid as string,
+      clientId: flags['client-id'] as string,
     };
 
-    if (flags.clientid) {
+    if (flags['client-id']) {
       oauthConfig.clientSecret = await this.askForClientSecret(flags['disable-masking']);
     }
 
