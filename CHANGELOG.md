@@ -1,3 +1,13 @@
+## [2.6.1](https://github.com/salesforcecli/plugin-auth/compare/2.6.0...2.6.1) (2023-02-21)
+
+
+### Bug Fixes
+
+* add missing flag aliases 'setdefaultdevhubusername' ([a779339](https://github.com/salesforcecli/plugin-auth/commit/a77933961b9e171efb7f2408f5dbb15399b8db70))
+* fix more flags ([faad6bc](https://github.com/salesforcecli/plugin-auth/commit/faad6bc10a9f9f10aba5c6714e75cf9d70212e25))
+
+
+
 # [2.6.0](https://github.com/salesforcecli/plugin-auth/compare/2.5.2...2.6.0) (2023-02-21)
 
 
