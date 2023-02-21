@@ -6,7 +6,7 @@
  */
 
 import { Flags, loglevel } from '@salesforce/sf-plugins-core';
-import { AuthFields, AuthInfo, Messages, matchesAccessToken, SfError, StateAggregator } from '@salesforce/core';
+import { AuthFields, AuthInfo, Messages, sfdc, SfError, StateAggregator } from '@salesforce/core';
 import { ensureString, getString } from '@salesforce/ts-types';
 import { env } from '@salesforce/kit';
 import { Interfaces } from '@oclif/core';
@@ -18,45 +18,44 @@ const commonMessages = Messages.loadMessages('@salesforce/plugin-auth', 'message
 
 const ACCESS_TOKEN_FORMAT = '"<org id>!<accesstoken>"';
 
-export default class LoginAccessToken extends AuthBaseCommand<AuthFields> {
+export default class Store extends AuthBaseCommand<AuthFields> {
   public static readonly summary = messages.getMessage('summary');
   public static readonly description = messages.getMessage('description');
   public static readonly examples = messages.getMessages('examples');
   public static readonly deprecateAliases = true;
-  public static aliases = ['force:auth:accesstoken:store', 'auth:accesstoken:store'];
+  public static aliases = ['force:auth:accesstoken:store'];
 
   public static readonly flags = {
     'instance-url': Flags.url({
       char: 'r',
-      summary: commonMessages.getMessage('flags.instance-url.summary'),
-      description: commonMessages.getMessage('flags.instance-url.description'),
+      summary: commonMessages.getMessage('instanceUrl'),
       required: true,
       deprecateAliases: true,
       aliases: ['instanceurl'],
     }),
     'set-default-dev-hub': Flags.boolean({
       char: 'd',
-      summary: commonMessages.getMessage('flags.set-default-dev-hub.summary'),
+      summary: commonMessages.getMessage('setDefaultDevHub'),
       default: false,
       deprecateAliases: true,
-      aliases: ['setdefaultdevhub', 'setdefaultdevhubusername'],
+      aliases: ['setdefaultdevhub'],
     }),
     'set-default': Flags.boolean({
       char: 's',
-      summary: commonMessages.getMessage('flags.set-default.summary'),
+      summary: commonMessages.getMessage('setDefaultUsername'),
       default: false,
       deprecateAliases: true,
       aliases: ['setdefaultusername'],
     }),
     alias: Flags.string({
       char: 'a',
-      summary: commonMessages.getMessage('flags.alias.summary'),
+      summary: commonMessages.getMessage('setAlias'),
       deprecateAliases: true,
       aliases: ['setalias'],
     }),
     'no-prompt': Flags.boolean({
       char: 'p',
-      summary: commonMessages.getMessage('flags.no-prompt.summary'),
+      summary: commonMessages.getMessage('noPrompt'),
       required: false,
       default: false,
       deprecateAliases: true,
@@ -65,10 +64,10 @@ export default class LoginAccessToken extends AuthBaseCommand<AuthFields> {
     loglevel,
   };
 
-  private flags: Interfaces.InferredFlags<typeof LoginAccessToken.flags>;
+  private flags: Interfaces.InferredFlags<typeof Store.flags>;
 
   public async run(): Promise<AuthFields> {
-    const { flags } = await this.parse(LoginAccessToken);
+    const { flags } = await this.parse(Store);
     this.flags = flags;
     const instanceUrl = ensureString(getString(flags, 'instance-url.href'));
     const accessToken = await this.getAccessToken();
@@ -117,7 +116,7 @@ export default class LoginAccessToken extends AuthBaseCommand<AuthFields> {
   private async getAccessToken(): Promise<string> {
     const accessToken = env.getString('SFDX_ACCESS_TOKEN') ?? (await this.askForAccessToken());
 
-    if (!matchesAccessToken(accessToken)) {
+    if (!sfdc.matchesAccessToken(accessToken)) {
       throw new SfError(messages.getMessage('invalidAccessTokenFormat', [ACCESS_TOKEN_FORMAT]));
     }
     return accessToken;

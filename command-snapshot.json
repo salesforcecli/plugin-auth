@@ -1,18 +1,12 @@
 [
   {
-    "command": "org:list:auth",
-    "plugin": "@salesforce/plugin-auth",
-    "flags": ["json", "loglevel"],
-    "alias": ["force:auth:list", "auth:list"]
-  },
-  {
-    "command": "org:login:access-token",
+    "command": "auth:accesstoken:store",
     "plugin": "@salesforce/plugin-auth",
     "flags": ["alias", "instance-url", "json", "loglevel", "no-prompt", "set-default", "set-default-dev-hub"],
-    "alias": ["force:auth:accesstoken:store", "auth:accesstoken:store"]
+    "alias": ["force:auth:accesstoken:store"]
   },
   {
-    "command": "org:login:device",
+    "command": "auth:device:login",
     "plugin": "@salesforce/plugin-auth",
     "flags": [
       "alias",
@@ -24,10 +18,10 @@
       "set-default",
       "set-default-dev-hub"
     ],
-    "alias": ["force:auth:device:login", "auth:device:login"]
+    "alias": ["force:auth:device:login"]
   },
   {
-    "command": "org:login:jwt",
+    "command": "auth:jwt:grant",
     "plugin": "@salesforce/plugin-auth",
     "flags": [
       "alias",
@@ -41,16 +35,28 @@
       "set-default-dev-hub",
       "username"
     ],
-    "alias": ["force:auth:jwt:grant", "auth:jwt:grant"]
+    "alias": ["force:auth:jwt:grant"]
   },
   {
-    "command": "org:login:sfdx-url",
+    "command": "auth:list",
+    "plugin": "@salesforce/plugin-auth",
+    "flags": ["json", "loglevel"],
+    "alias": ["force:auth:list"]
+  },
+  {
+    "command": "auth:logout",
+    "plugin": "@salesforce/plugin-auth",
+    "flags": ["all", "json", "loglevel", "no-prompt", "target-org"],
+    "alias": ["force:auth:logout"]
+  },
+  {
+    "command": "auth:sfdxurl:store",
     "plugin": "@salesforce/plugin-auth",
     "flags": ["alias", "json", "loglevel", "no-prompt", "set-default", "set-default-dev-hub", "sfdx-url-file"],
-    "alias": ["force:auth:sfdxurl:store", "auth:sfdxurl:store"]
+    "alias": ["force:auth:sfdxurl:store"]
   },
   {
-    "command": "org:login:web",
+    "command": "auth:web:login",
     "plugin": "@salesforce/plugin-auth",
     "flags": [
       "alias",
@@ -64,12 +70,6 @@
       "set-default",
       "set-default-dev-hub"
     ],
-    "alias": ["force:auth:web:login", "auth:web:login"]
-  },
-  {
-    "command": "org:logout",
-    "plugin": "@salesforce/plugin-auth",
-    "flags": ["all", "json", "loglevel", "no-prompt", "target-org"],
-    "alias": ["force:auth:logout", "auth:logout"]
+    "alias": ["force:auth:web:login"]
   }
 ]

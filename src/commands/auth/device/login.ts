@@ -20,46 +20,45 @@ const commonMessages = Messages.loadMessages('@salesforce/plugin-auth', 'message
 
 export type DeviceLoginResult = (AuthFields & DeviceCodeResponse) | Record<string, never>;
 
-export default class LoginDevice extends AuthBaseCommand<DeviceLoginResult> {
+export default class Login extends AuthBaseCommand<DeviceLoginResult> {
   public static readonly summary = messages.getMessage('summary');
   public static readonly description = messages.getMessage('description');
   public static readonly examples = messages.getMessages('examples');
-  public static aliases = ['force:auth:device:login', 'auth:device:login'];
+  public static aliases = ['force:auth:device:login'];
 
   public static readonly flags = {
     'client-id': Flags.string({
       char: 'i',
-      summary: commonMessages.getMessage('flags.client-id.summary'),
+      summary: commonMessages.getMessage('clientId'),
       deprecateAliases: true,
       aliases: ['clientid'],
     }),
     'instance-url': Flags.url({
       char: 'r',
-      summary: commonMessages.getMessage('flags.instance-url.summary'),
-      description: commonMessages.getMessage('flags.instance-url.description'),
+      summary: commonMessages.getMessage('instanceUrl'),
       deprecateAliases: true,
       aliases: ['instanceurl'],
     }),
     'set-default-dev-hub': Flags.boolean({
       char: 'd',
-      summary: commonMessages.getMessage('flags.set-default-dev-hub.summary'),
+      summary: commonMessages.getMessage('setDefaultDevHub'),
       deprecateAliases: true,
-      aliases: ['setdefaultdevhub', 'setdefaultdevhubusername'],
+      aliases: ['setdefaultdevhub'],
     }),
     'set-default': Flags.boolean({
       char: 's',
-      summary: commonMessages.getMessage('flags.set-default.summary'),
+      summary: commonMessages.getMessage('setDefaultUsername'),
       deprecateAliases: true,
       aliases: ['setdefaultusername'],
     }),
     alias: Flags.string({
       char: 'a',
-      summary: commonMessages.getMessage('flags.alias.summary'),
+      summary: commonMessages.getMessage('setAlias'),
       deprecateAliases: true,
       aliases: ['setalias'],
     }),
     'disable-masking': Flags.boolean({
-      summary: commonMessages.getMessage('flags.disable-masking.summary'),
+      summary: commonMessages.getMessage('disableMasking'),
       hidden: true,
       deprecateAliases: true,
       aliases: ['disablemasking'],
@@ -68,15 +67,15 @@ export default class LoginDevice extends AuthBaseCommand<DeviceLoginResult> {
   };
 
   public async run(): Promise<DeviceLoginResult> {
-    const { flags } = await this.parse(LoginDevice);
+    const { flags } = await this.parse(Login);
     if (await this.shouldExitCommand(false)) return {};
 
     const oauthConfig: OAuth2Config = {
-      loginUrl: await Common.resolveLoginUrl(get(flags['instance-url'], 'href', null) as Optional<string>),
-      clientId: flags['client-id'] as string,
+      loginUrl: await Common.resolveLoginUrl(get(flags.instanceurl, 'href', null) as Optional<string>),
+      clientId: flags.clientid as string,
     };
 
-    if (flags['client-id']) {
+    if (flags.clientid) {
       oauthConfig.clientSecret = await this.askForClientSecret(flags['disable-masking']);
     }
 

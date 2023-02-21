@@ -12,19 +12,19 @@ export type AuthListResults = AuthListResult[];
 Messages.importMessagesDirectory(__dirname);
 const messages = Messages.loadMessages('@salesforce/plugin-auth', 'list');
 
-export default class ListAuth extends SfCommand<AuthListResults> {
+export default class List extends SfCommand<AuthListResults> {
   public static readonly summary = messages.getMessage('summary');
   public static readonly description = messages.getMessage('description');
   public static readonly examples = messages.getMessages('examples');
   public static readonly deprecateAliases = true;
-  public static aliases = ['force:auth:list', 'auth:list'];
+  public static aliases = ['force:auth:list'];
 
   public static readonly flags = {
     loglevel,
   };
 
   public async run(): Promise<AuthListResults> {
-    await this.parse(ListAuth);
+    await this.parse(List);
     try {
       const auths = await AuthInfo.listAllAuthorizations();
       if (auths.length === 0) {

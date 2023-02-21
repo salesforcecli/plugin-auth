@@ -4,31 +4,30 @@
  * Licensed under the BSD 3-Clause license.
  * For full license text, see LICENSE.txt file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  */
-import * as path from 'path';
-import { execCmd, TestSession, prepareForJwt } from '@salesforce/cli-plugins-testkit';
+import { execCmd, prepareForAuthUrl, TestSession } from '@salesforce/cli-plugins-testkit';
 import { expect } from 'chai';
 import { Env } from '@salesforce/kit';
 import { ensureString, getString } from '@salesforce/ts-types';
 import { AuthFields } from '@salesforce/core';
-import { expectUrlToExist, expectOrgIdToExist, expectAccessTokenToExist } from '../../../testHelper';
+import {
+  expectAccessTokenToExist,
+  expectOrgIdToExist,
+  expectPropsToExist,
+  expectUrlToExist,
+} from '../../../testHelper';
 
 let testSession: TestSession;
 
-describe('org:login:jwt NUTs', () => {
+describe('auth:sfdxurl:store NUTs', () => {
   const env = new Env();
-  let jwtKey: string;
+  let authUrl: string;
   let username: string;
-  let instanceUrl: string;
-  let clientId: string;
 
   before('prepare session and ensure environment variables', async () => {
+    ensureString(env.getString('TESTKIT_AUTH_URL'));
     username = ensureString(env.getString('TESTKIT_HUB_USERNAME'));
-    instanceUrl = ensureString(env.getString('TESTKIT_HUB_INSTANCE'));
-    clientId = ensureString(env.getString('TESTKIT_JWT_CLIENT_ID'));
-    ensureString(env.getString('TESTKIT_JWT_KEY'));
-
     testSession = await TestSession.create();
-    jwtKey = prepareForJwt(testSession.homeDir);
+    authUrl = prepareForAuthUrl(testSession.homeDir);
   });
 
   after(async () => {
@@ -39,19 +38,20 @@ describe('org:login:jwt NUTs', () => {
     execCmd(`auth:logout -p -o ${username}`, { ensureExitCode: 0 });
   });
 
-  it('should authorize an org using jwt (json)', () => {
-    const command = `org:login:jwt -d -o ${username} -i ${clientId} -f ${jwtKey} -r ${instanceUrl} --json`;
+  it('should authorize an org using sfdxurl (json)', () => {
+    const command = `auth:sfdxurl:store -d -f ${authUrl} --json`;
     const json = execCmd<AuthFields>(command, { ensureExitCode: 0 }).jsonOutput?.result as AuthFields;
+
+    expectPropsToExist(json, 'refreshToken');
     expectAccessTokenToExist(json);
     expectOrgIdToExist(json);
     expectUrlToExist(json, 'instanceUrl');
     expectUrlToExist(json, 'loginUrl');
-    expect(json.privateKey).to.equal(path.join(testSession.homeDir, 'jwtKey'));
     expect(json.username).to.equal(username);
   });
 
-  it('should authorize an org using jwt (human readable)', () => {
-    const command = `org:login:jwt -d -o ${username} -i ${clientId} -f ${jwtKey} -r ${instanceUrl}`;
+  it('should authorize an org using sfdxurl (human readable)', () => {
+    const command = `auth:sfdxurl:store -d -f ${authUrl}`;
     const result = execCmd(command, { ensureExitCode: 0 });
     const output = getString(result, 'shellOutput.stdout');
     expect(output).to.include(`Successfully authorized ${username} with org ID`);

@@ -20,60 +20,58 @@ Messages.importMessagesDirectory(__dirname);
 const messages = Messages.loadMessages('@salesforce/plugin-auth', 'web.login');
 const commonMessages = Messages.loadMessages('@salesforce/plugin-auth', 'messages');
 
-export default class LoginWeb extends AuthBaseCommand<AuthFields> {
+export default class Login extends AuthBaseCommand<AuthFields> {
   public static readonly summary = messages.getMessage('summary');
   public static readonly description = messages.getMessage('description');
   public static readonly examples = messages.getMessages('examples');
   public static readonly deprecateAliases = true;
-  public static aliases = ['force:auth:web:login', 'auth:web:login'];
+  public static aliases = ['force:auth:web:login'];
 
   public static readonly flags = {
     browser: Flags.string({
       char: 'b',
-      summary: messages.getMessage('flags.browser.summary'),
-      description: messages.getMessage('flags.browser.description'),
+      summary: messages.getMessage('browser'),
       options: ['chrome', 'edge', 'firefox'], // These are ones supported by "open" package
     }),
     'client-id': Flags.string({
       char: 'i',
-      summary: commonMessages.getMessage('flags.client-id.summary'),
+      summary: commonMessages.getMessage('clientId'),
       deprecateAliases: true,
       aliases: ['clientid'],
     }),
     'instance-url': Flags.url({
       char: 'r',
-      summary: commonMessages.getMessage('flags.instance-url.summary'),
-      description: commonMessages.getMessage('flags.instance-url.description'),
+      summary: commonMessages.getMessage('instanceUrl'),
       deprecateAliases: true,
       aliases: ['instanceurl'],
     }),
     'set-default-dev-hub': Flags.boolean({
       char: 'd',
-      summary: commonMessages.getMessage('flags.set-default-dev-hub.summary'),
+      summary: commonMessages.getMessage('setDefaultDevHub'),
       deprecateAliases: true,
-      aliases: ['setdefaultdevhubusername', 'setdefaultdevhub'],
+      aliases: ['setdefaultdevhubusername'],
     }),
     'set-default': Flags.boolean({
       char: 's',
-      summary: commonMessages.getMessage('flags.set-default.summary'),
+      summary: commonMessages.getMessage('setDefaultUsername'),
       deprecateAliases: true,
       aliases: ['setdefaultusername'],
     }),
     alias: Flags.string({
       char: 'a',
-      summary: commonMessages.getMessage('flags.alias.summary'),
+      summary: commonMessages.getMessage('setAlias'),
       deprecateAliases: true,
       aliases: ['setalias'],
     }),
     'disable-masking': Flags.boolean({
-      summary: commonMessages.getMessage('flags.disable-masking.summary'),
+      summary: commonMessages.getMessage('disableMasking'),
       hidden: true,
       deprecateAliases: true,
       aliases: ['disablemasking'],
     }),
     'no-prompt': Flags.boolean({
       char: 'p',
-      summary: commonMessages.getMessage('flags.no-prompt.summary'),
+      summary: commonMessages.getMessage('noPromptAuth'),
       required: false,
       hidden: true,
       deprecateAliases: true,
@@ -82,10 +80,10 @@ export default class LoginWeb extends AuthBaseCommand<AuthFields> {
     loglevel,
   };
 
-  private flags: Interfaces.InferredFlags<typeof LoginWeb.flags>;
+  private flags: Interfaces.InferredFlags<typeof Login.flags>;
 
   public async run(): Promise<AuthFields> {
-    const { flags } = await this.parse(LoginWeb);
+    const { flags } = await this.parse(Login);
     this.flags = flags;
     if (isSFDXContainerMode()) {
       throw new SfError(messages.getMessage('deviceWarning'), 'DEVICE_WARNING');
@@ -95,10 +93,10 @@ export default class LoginWeb extends AuthBaseCommand<AuthFields> {
 
     const oauthConfig: OAuth2Config = {
       loginUrl: await Common.resolveLoginUrl(get(flags['instance-url'], 'href', null) as Optional<string>),
-      clientId: flags['client-id'] as string,
+      clientId: flags.clientid as string,
     };
 
-    if (flags['client-id']) {
+    if (flags.clientid) {
       oauthConfig.clientSecret = await this.askForClientSecret(flags['disable-masking']);
     }
 
