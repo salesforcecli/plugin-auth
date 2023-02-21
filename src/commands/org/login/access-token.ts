@@ -39,7 +39,7 @@ export default class LoginAccessToken extends AuthBaseCommand<AuthFields> {
       summary: commonMessages.getMessage('flags.set-default-dev-hub.summary'),
       default: false,
       deprecateAliases: true,
-      aliases: ['setdefaultdevhub'],
+      aliases: ['setdefaultdevhub', 'setdefaultdevhubusername'],
     }),
     'set-default': Flags.boolean({
       char: 's',
