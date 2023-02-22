@@ -73,12 +73,8 @@ export default class LoginDevice extends AuthBaseCommand<DeviceLoginResult> {
 
     const oauthConfig: OAuth2Config = {
       loginUrl: await Common.resolveLoginUrl(get(flags['instance-url'], 'href', null) as Optional<string>),
-      clientId: flags['client-id'] as string,
+      clientId: flags['client-id'],
     };
-
-    if (flags['client-id']) {
-      oauthConfig.clientSecret = await this.askForClientSecret(flags['disable-masking']);
-    }
 
     const deviceOauthService = await DeviceOauthService.create(oauthConfig);
     const loginData = await deviceOauthService.requestDeviceLogin();
@@ -95,7 +91,7 @@ export default class LoginDevice extends AuthBaseCommand<DeviceLoginResult> {
     if (approval) {
       const authInfo = await deviceOauthService.authorizeAndSave(approval);
       await authInfo.handleAliasAndDefaultSettings({
-        alias: flags.alias as string,
+        alias: flags.alias,
         setDefault: flags['set-default'],
         setDefaultDevHub: flags['set-default-dev-hub'],
       });

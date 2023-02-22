@@ -95,7 +95,7 @@ export default class LoginWeb extends AuthBaseCommand<AuthFields> {
 
     const oauthConfig: OAuth2Config = {
       loginUrl: await Common.resolveLoginUrl(get(flags['instance-url'], 'href', null) as Optional<string>),
-      clientId: flags['client-id'] as string,
+      clientId: flags['client-id'],
     };
 
     if (flags['client-id']) {
