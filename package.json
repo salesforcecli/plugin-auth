@@ -7,11 +7,12 @@
   "main": "lib/index.js",
   "dependencies": {
     "@oclif/core": "^2.1.6",
-    "@salesforce/core": "^3.33.1",
-    "@salesforce/kit": "^1.8.3",
+    "@salesforce/core": "^3.33.2",
+    "@salesforce/kit": "^1.8.5",
     "@salesforce/sf-plugins-core": "^2.1.2",
     "chalk": "^4.1.2",
     "fs-extra": "^10.0.1",
+    "inquirer": "^8.2.5",
     "open": "^8.2.1",
     "tslib": "^2"
   },
@@ -19,7 +20,7 @@
     "@oclif/plugin-command-snapshot": "^3.3.6",
     "@salesforce/cli-plugins-testkit": "^3.2.18",
     "@salesforce/dev-config": "^3.1.0",
-    "@salesforce/dev-scripts": "^3.1.1",
+    "@salesforce/dev-scripts": "^4.0.0-beta.9",
     "@salesforce/plugin-command-reference": "^2",
     "@salesforce/plugin-config": "^1.4.23",
     "@salesforce/prettier-config": "^0.0.2",
@@ -27,6 +28,7 @@
     "@swc/core": "^1.3.35",
     "@types/fs-extra": "^9.0.13",
     "@types/graceful-fs": "^4.1.6",
+    "@types/inquirer": "^8.2.0",
     "@types/mkdirp": "^1.0.1",
     "@typescript-eslint/eslint-plugin": "^5.49.0",
     "@typescript-eslint/parser": "^5.52.0",
@@ -82,24 +84,33 @@
       "@salesforce/plugin-config"
     ],
     "topics": {
-      "auth": {
-        "description": "authorize an org for use with the Salesforce CLI",
-        "longDescription": "Use the auth commands to authorize a Salesforce org for use with the Salesforce CLI.",
+      "org": {
+        "description": "manage Salesforce orgs",
+        "longDescription": "Use the org commands to create and manage Salesforce orgs.",
         "subtopics": {
-          "jwt": {
-            "description": "authorize an org using JWT"
+          "login": {
+            "description": "authorize an org for use with the Salesforce CLI",
+            "longDescription": "Use the auth commands to authorize a Salesforce org for use with the Salesforce CLI.",
+            "subtopics": {
+              "jwt": {
+                "description": "authorize an org using JWT"
+              },
+              "sfdx-url": {
+                "description": "authorize an org using sfdxurl"
+              },
+              "web": {
+                "description": "authorize an org using a web browser"
+              },
+              "access-token": {
+                "description": "authorize an org using an access token"
+              },
+              "device": {
+                "description": "authorize an org using a device code"
+              }
+            }
           },
-          "sfdxurl": {
-            "description": "authorize an org using sfdxurl"
-          },
-          "web": {
-            "description": "authorize an org using a web browser"
-          },
-          "accesstoken": {
-            "description": "authorize an org using an access token"
-          },
-          "device": {
-            "description": "authorize an org using a device code"
+          "list": {
+            "description": "list authorized orgs"
           }
         }
       }
@@ -107,25 +118,24 @@
   },
   "repository": "salesforcecli/plugin-auth",
   "scripts": {
-    "build": "sf-build",
+    "build": "wireit",
     "clean": "sf-clean",
     "clean-all": "sf-clean all",
     "clean:lib": "shx rm -rf lib && shx rm -rf coverage && shx rm -rf .nyc_output && shx rm -f oclif.manifest.json",
-    "compile": "sf-compile",
+    "compile": "wireit",
     "docs": "sf-docs",
-    "format": "sf-format",
-    "lint": "sf-lint",
+    "format": "wireit",
+    "lint": "wireit",
     "postpack": "shx rm -f oclif.manifest.json",
     "prepack": "sf-prepack",
     "prepare": "sf-install",
-    "pretest": "sf-compile-test",
     "reformat": "prettier --config .prettierrc --write './*.{js,json,md}' './**/*.{ts,json,md}'",
-    "test": "sf-test",
+    "test": "wireit",
     "test:command-reference": "wireit",
     "test:compile": "wireit",
     "test:deprecation-policy": "wireit",
     "test:json-schema": "wireit",
-    "test:nuts": "nyc mocha \"**/*.nut.ts\" --slow 4500 --timeout 600000 --parallel",
+    "test:nuts": "nyc mocha \"**/*.nut.ts\" --slow 4500 --timeout 600000 --parallel --jobs 20",
     "test:only": "wireit",
     "version": "oclif readme"
   },

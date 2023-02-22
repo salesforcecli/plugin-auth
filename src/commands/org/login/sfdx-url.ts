@@ -22,41 +22,41 @@ type AuthJson = AnyJson & {
   result?: AnyJson & { sfdxAuthUrl: string };
   sfdxAuthUrl: string;
 };
-export default class Store extends AuthBaseCommand<AuthFields> {
+export default class LoginSfdxUrl extends AuthBaseCommand<AuthFields> {
   public static readonly summary = messages.getMessage('summary');
   public static readonly description = messages.getMessage('description', [AUTH_URL_FORMAT]);
   public static readonly examples = messages.getMessages('examples');
-  public static aliases = ['force:auth:sfdxurl:store'];
+  public static aliases = ['force:auth:sfdxurl:store', 'auth:sfdxurl:store'];
 
   public static readonly flags = {
     'sfdx-url-file': Flags.file({
       char: 'f',
-      summary: messages.getMessage('file'),
+      summary: messages.getMessage('flags.sfdx-url-file.summary'),
       required: true,
       deprecateAliases: true,
       aliases: ['sfdxurlfile'],
     }),
     'set-default-dev-hub': Flags.boolean({
       char: 'd',
-      summary: commonMessages.getMessage('setDefaultDevHub'),
+      summary: commonMessages.getMessage('flags.set-default-dev-hub.summary'),
       deprecateAliases: true,
       aliases: ['setdefaultdevhub', 'setdefaultdevhubusername'],
     }),
     'set-default': Flags.boolean({
       char: 's',
-      summary: commonMessages.getMessage('setDefaultUsername'),
+      summary: commonMessages.getMessage('flags.set-default.summary'),
       deprecateAliases: true,
       aliases: ['setdefaultusername'],
     }),
     alias: Flags.string({
       char: 'a',
-      summary: commonMessages.getMessage('setAlias'),
+      summary: commonMessages.getMessage('flags.alias.summary'),
       deprecateAliases: true,
       aliases: ['setalias'],
     }),
     'no-prompt': Flags.boolean({
       char: 'p',
-      summary: commonMessages.getMessage('noPromptAuth'),
+      summary: commonMessages.getMessage('flags.no-prompt.summary'),
       required: false,
       hidden: true,
       deprecateAliases: true,
@@ -66,7 +66,7 @@ export default class Store extends AuthBaseCommand<AuthFields> {
   };
 
   public async run(): Promise<AuthFields> {
-    const { flags } = await this.parse(Store);
+    const { flags } = await this.parse(LoginSfdxUrl);
     if (await this.shouldExitCommand(flags['no-prompt'])) return {};
 
     const authFile = flags['sfdx-url-file'];
@@ -85,7 +85,7 @@ export default class Store extends AuthBaseCommand<AuthFields> {
     await authInfo.save();
 
     await authInfo.handleAliasAndDefaultSettings({
-      alias: flags.alias as string,
+      alias: flags.alias,
       setDefault: flags['set-default'],
       setDefaultDevHub: flags['set-default-dev-hub'],
     });

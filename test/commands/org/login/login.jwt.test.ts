@@ -5,23 +5,22 @@
  * For full license text, see LICENSE.txt file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  */
 
-import * as fs from 'fs/promises';
-import { AuthFields, AuthInfo, Global, Mode } from '@salesforce/core';
+import { AuthFields, AuthInfo, Global, Mode, SfError } from '@salesforce/core';
 import { MockTestOrgData, TestContext } from '@salesforce/core/lib/testSetup';
+import { StubbedType, stubInterface } from '@salesforce/ts-sinon';
 import { expect } from 'chai';
 import { Config } from '@oclif/core';
-import { StubbedType, stubInterface } from '@salesforce/ts-sinon';
 import { SfCommand } from '@salesforce/sf-plugins-core';
-import Store from '../../../../src/commands/auth/sfdxurl/store';
+import LoginJwt from '../../../../src/commands/org/login/jwt';
 
 interface Options {
   authInfoCreateFails?: boolean;
   existingAuth?: boolean;
-  fileDoesNotExist?: boolean;
 }
 
-describe('auth:sfdxurl:store', async () => {
+describe('org:login:jwt', async () => {
   const $$ = new TestContext();
+
   const testData = new MockTestOrgData();
   let authFields: AuthFields;
   let authInfoStub: StubbedType<AuthInfo>;
@@ -31,17 +30,21 @@ describe('auth:sfdxurl:store', async () => {
     delete authFields.isDevHub;
 
     authInfoStub = stubInterface<AuthInfo>($$.SANDBOX, {
-      getFields: () => authFields
+      getFields: () => authFields,
     });
 
     await $$.stubAuths(testData);
 
-    if (!options.fileDoesNotExist) {
-      $$.SANDBOX.stub(fs, 'readFile').resolves('force://PlatformCLI::CoffeeAndBacon@su0503.my.salesforce.com');
-    }
-
     if (options.authInfoCreateFails) {
       $$.SANDBOX.stub(AuthInfo, 'create').throws(new Error('invalid client id'));
+    } else if (options.existingAuth) {
+      $$.SANDBOX.stub(AuthInfo, 'create')
+        .onFirstCall()
+        .throws(new SfError('auth exists', 'AuthInfoOverwriteError'))
+        .onSecondCall()
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        .callsFake(async () => authInfoStub);
     } else {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
@@ -51,135 +54,163 @@ describe('auth:sfdxurl:store', async () => {
 
   it('should return auth fields', async () => {
     await prepareStubs();
-    const store = new Store(['-f', 'path/to/key.txt', '--json'], {} as Config);
-    const response = await store.run();
+    const grant = new LoginJwt(
+      ['-u', testData.username, '-f', 'path/to/key.json', '-i', '123456', '--json'],
+      {} as Config
+    );
+    const response = await grant.run();
     expect(response.username).to.equal(testData.username);
-  });
-
-  it('should return auth fields when passing in a json file', async () => {
-    await prepareStubs({ fileDoesNotExist: true });
-    $$.SANDBOX.stub(fs, 'readFile').resolves(JSON.stringify({
-      sfdxAuthUrl: 'force://PlatformCLI::CoffeeAndBacon@su0503.my.salesforce.com'
-    }));
-
-    const store = new Store(['-f', 'path/to/key.json', '--json'], {} as Config);
-    const response = await store.run();
-    expect(response.username).to.equal(testData.username);
-  });
-
-  it('should error out when it doesn\'t find a url in a JSON file', async () => {
-    await prepareStubs({ fileDoesNotExist: true });
-    $$.SANDBOX.stub(fs, 'readFile').resolves(JSON.stringify({
-      notASfdxAuthUrl: 'force://PlatformCLI::CoffeeAndBacon@su0503.my.salesforce.com'
-    }));
-
-    const store = new Store(['-f', 'path/to/key.json', '--json'], {} as Config);
-    try {
-      const response = await store.run();
-      expect.fail(`Should have thrown an error. Response: ${JSON.stringify(response)}`);
-    } catch (e) {
-      expect((e as Error).message).to.includes('Error getting the auth URL from file');
-    }
   });
 
   it('should set alias when -a is provided', async () => {
     await prepareStubs();
-    const store = new Store(['-f', 'path/to/key.txt', '-a', 'MyAlias', '--json'], {} as Config);
-    await store.run();
+    const grant = new LoginJwt(
+      ['-u', testData.username, '-f', 'path/to/key.json', '-i', '123456', '-a', 'MyAlias', '--json'],
+      {} as Config
+    );
+    await grant.run();
     expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
   });
 
   it('should set target-org to alias when -s and -a are provided', async () => {
     await prepareStubs();
-    const store = new Store(['-f', 'path/to/key.txt', '-a', 'MyAlias', '-s', '--json'], {} as Config);
-    await store.run();
+    const grant = new LoginJwt(
+      ['-u', testData.username, '-f', 'path/to/key.json', '-i', '123456', '-a', 'MyAlias', '-s', '--json'],
+      {} as Config
+    );
+    await grant.run();
     expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
     expect(authInfoStub.handleAliasAndDefaultSettings.args[0]).to.deep.equal([
       {
         alias: 'MyAlias',
         setDefaultDevHub: undefined,
-        setDefault: true
-      }
+        setDefault: true,
+      },
     ]);
   });
 
   it('should set target-org to username when -s is provided', async () => {
     await prepareStubs();
-    const store = new Store(['-f', 'path/to/key.txt', '-s', '--json'], {} as Config);
-    await store.run();
-    expect(authInfoStub.setAlias.callCount).to.equal(0);
+    const grant = new LoginJwt(
+      ['-u', testData.username, '-f', 'path/to/key.json', '-i', '123456', '-s', '--json'],
+      {} as Config
+    );
+    await grant.run();
     expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
     expect(authInfoStub.handleAliasAndDefaultSettings.args[0]).to.deep.equal([
       {
         alias: undefined,
         setDefaultDevHub: undefined,
-        setDefault: true
-      }
+        setDefault: true,
+      },
     ]);
   });
 
   it('should set target-dev-hub to alias when -d and -a are provided', async () => {
     await prepareStubs();
-    const store = new Store(['-f', 'path/to/key.txt', '-a', 'MyAlias', '-d', '--json'], {} as Config);
-    await store.run();
+    const grant = new LoginJwt(
+      ['-u', testData.username, '-f', 'path/to/key.json', '-i', '123456', '-a', 'MyAlias', '-d', '--json'],
+      {} as Config
+    );
+    await grant.run();
     expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
     expect(authInfoStub.handleAliasAndDefaultSettings.args[0]).to.deep.equal([
       {
         alias: 'MyAlias',
         setDefaultDevHub: true,
-        setDefault: undefined
-      }
+        setDefault: undefined,
+      },
     ]);
   });
 
   it('should set target-dev-hub to username when -d is provided', async () => {
     await prepareStubs();
-    const store = new Store(['-f', 'path/to/key.txt', '-d', '--json'], {} as Config);
-    await store.run();
+    const grant = new LoginJwt(
+      ['-u', testData.username, '-f', 'path/to/key.json', '-i', '123456', '-d', '--json'],
+      {} as Config
+    );
+    await grant.run();
     expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
     expect(authInfoStub.handleAliasAndDefaultSettings.args[0]).to.deep.equal([
       {
         alias: undefined,
         setDefaultDevHub: true,
-        setDefault: undefined
-      }
+        setDefault: undefined,
+      },
     ]);
   });
 
   it('should set target-org and target-dev-hub to username when -d and -s are provided', async () => {
     await prepareStubs();
-    const store = new Store(['-f', 'path/to/key.txt', '-d', '-s', '--json'], {} as Config);
-    await store.run();
+    const grant = new LoginJwt(
+      ['-u', testData.username, '-f', 'path/to/key.json', '-i', '123456', '-d', '-s', '--json'],
+      {} as Config
+    );
+    await grant.run();
+    expect(authInfoStub.setAlias.callCount).to.equal(0);
     expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
     expect(authInfoStub.handleAliasAndDefaultSettings.args[0]).to.deep.equal([
       {
         alias: undefined,
         setDefaultDevHub: true,
-        setDefault: true
-      }
+        setDefault: true,
+      },
     ]);
   });
 
   it('should set target-org and target-dev-hub to alias when -a, -d, and -s are provided', async () => {
     await prepareStubs();
-    const store = new Store(['-f', 'path/to/key.txt', '-d', '-s', '-a', 'MyAlias', '--json'], {} as Config);
-    await store.run();
+    const grant = new LoginJwt(
+      ['-u', testData.username, '-f', 'path/to/key.json', '-i', '123456', '-d', '-s', '-a', 'MyAlias', '--json'],
+      {} as Config
+    );
+    await grant.run();
     expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
     expect(authInfoStub.handleAliasAndDefaultSettings.args[0]).to.deep.equal([
       {
         alias: 'MyAlias',
         setDefaultDevHub: true,
-        setDefault: true
-      }
+        setDefault: true,
+      },
     ]);
+  });
+
+  it('should throw an error when client id is invalid', async () => {
+    await prepareStubs({ authInfoCreateFails: true });
+    const grant = new LoginJwt(
+      ['-u', testData.username, '-f', 'path/to/key.json', '-i', '123456INVALID', '--json'],
+      {} as Config
+    );
+    try {
+      await grant.run();
+      expect.fail('Should have thrown an error');
+    } catch (e) {
+      expect((e as Error).message).to.include('We encountered a JSON web token error');
+    }
+  });
+
+  it('should not throw an error when the authorization already exists', async () => {
+    await prepareStubs({ existingAuth: true });
+    const grant = new LoginJwt(
+      ['-u', testData.username, '-f', 'path/to/key.json', '-i', '123456', '--json'],
+      {} as Config
+    );
+    try {
+      await grant.run();
+    } catch (e) {
+      expect.fail('Should not have thrown an error');
+    }
   });
 
   it('should auth when in demo mode (SFDX_ENV=demo) and prompt is answered with yes', async () => {
     await prepareStubs();
     $$.SANDBOX.stub(Global, 'getEnvironmentMode').returns(Mode.DEMO);
     $$.SANDBOX.stub(SfCommand.prototype, 'confirm').resolves(true);
-    const store = new Store(['-f', 'path/to/key.txt', '--json'], {} as Config);
-    await store.run();
+    const grant = new LoginJwt(
+      ['-u', testData.username, '-f', 'path/to/key.json', '-i', '123456', '--json'],
+      {} as Config
+    );
+    await grant.run();
     expect(authInfoStub.save.callCount).to.equal(1);
   });
 
@@ -187,17 +218,22 @@ describe('auth:sfdxurl:store', async () => {
     await prepareStubs();
     $$.SANDBOX.stub(Global, 'getEnvironmentMode').returns(Mode.DEMO);
     $$.SANDBOX.stub(SfCommand.prototype, 'confirm').resolves(false);
-    const store = new Store(['-f', 'path/to/key.txt', '--json'], {} as Config);
-    await store.run();
+    const grant = new LoginJwt(
+      ['-u', testData.username, '-f', 'path/to/key.json', '-i', '123456', '--json'],
+      {} as Config
+    );
+    await grant.run();
     expect(authInfoStub.save.callCount).to.equal(0);
   });
 
   it('should ignore prompt when in demo mode (SFDX_ENV=demo) and -p is provided', async () => {
     await prepareStubs();
     $$.SANDBOX.stub(Global, 'getEnvironmentMode').returns(Mode.DEMO);
-    $$.SANDBOX.stub(SfCommand.prototype, 'confirm').resolves(false);
-    const store = new Store(['-p', '-f', 'path/to/key.txt', '--json'], {} as Config);
-    await store.run();
+    const grant = new LoginJwt(
+      ['-p', '-u', testData.username, '-f', 'path/to/key.json', '-i', '123456', '--json'],
+      {} as Config
+    );
+    await grant.run();
     expect(authInfoStub.save.callCount).to.equal(1);
   });
 });

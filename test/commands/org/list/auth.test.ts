@@ -9,9 +9,9 @@ import { MockTestOrgData, TestContext } from '@salesforce/core/lib/testSetup';
 import { Config } from '@oclif/core';
 import { expect } from 'chai';
 import { AuthInfo } from '@salesforce/core';
-import List from '../../../src/commands/auth/list';
+import ListAuth from '../../../../src/commands/org/list/auth';
 
-describe('auth:list', async () => {
+describe('org:list:auth', async () => {
   const $$ = new TestContext();
   const testData = new MockTestOrgData();
   testData.aliases = ['TestAlias'];
@@ -26,7 +26,7 @@ describe('auth:list', async () => {
 
   it('should show auth files', async () => {
     await prepareStubs();
-    const list = new List(['--json'], {} as Config);
+    const list = new ListAuth(['--json'], {} as Config);
     const [auths] = await list.run();
     expect(auths.alias).to.deep.equal(testData.aliases?.join(',') ?? '');
     expect(auths.username).to.equal(testData.username);
@@ -37,7 +37,7 @@ describe('auth:list', async () => {
 
   it('should show files with auth errors', async () => {
     await prepareStubs(true);
-    const list = new List(['--json'], {} as Config);
+    const list = new ListAuth(['--json'], {} as Config);
     const [auths] = await list.run();
     expect(auths.alias).to.deep.equal(testData.aliases?.join(',') ?? '');
     expect(auths.username).to.equal(testData.username);
