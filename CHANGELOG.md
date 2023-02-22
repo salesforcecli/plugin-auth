@@ -1,3 +1,12 @@
+# [2.7.0](https://github.com/salesforcecli/plugin-auth/compare/2.6.1...2.7.0) (2023-02-22)
+
+
+### Features
+
+* reconcile login nev and auth ([d8d4276](https://github.com/salesforcecli/plugin-auth/commit/d8d427689acefd740c581e1f0124928d2f62b1bd))
+
+
+
 ## [2.6.1](https://github.com/salesforcecli/plugin-auth/compare/2.6.0...2.6.1) (2023-02-21)
 
 
