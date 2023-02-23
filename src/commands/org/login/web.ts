@@ -45,13 +45,13 @@ export default class LoginWeb extends AuthBaseCommand<AuthFields> {
       summary: commonMessages.getMessage('flags.instance-url.summary'),
       description: commonMessages.getMessage('flags.instance-url.description'),
       deprecateAliases: true,
-      aliases: ['instanceurl'],
+      aliases: ['instanceurl', 'l'],
     }),
     'set-default-dev-hub': Flags.boolean({
       char: 'd',
       summary: commonMessages.getMessage('flags.set-default-dev-hub.summary'),
       deprecateAliases: true,
-      aliases: ['setdefaultdevhubusername', 'setdefaultdevhub'],
+      aliases: ['setdefaultdevhubusername', 'setdefaultdevhub', 'v'],
     }),
     'set-default': Flags.boolean({
       char: 's',

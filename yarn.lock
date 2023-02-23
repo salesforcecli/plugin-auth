@@ -1111,10 +1111,10 @@
   resolved "https://registry.yarnpkg.com/@salesforce/dev-config/-/dev-config-3.1.0.tgz#8eb5b35860ff60d1c1dc3fd9329b01a28475d5b9"
   integrity sha512-cPph7ibj3DeSzWDFLcLtxOh5fmUlDUY2Ezq43n0V6auVP+l8orxRHjCExHS86SB3QKVgXkC8yYhryXiS8KF7Zw==
 
-"@salesforce/dev-scripts@^4.0.0-beta.9":
-  version "4.0.0-beta.9"
-  resolved "https://registry.yarnpkg.com/@salesforce/dev-scripts/-/dev-scripts-4.0.0-beta.9.tgz#da6b699e80c0ea6d484942fe51fa9d1f7317688d"
-  integrity sha512-biFkKPIFO2Bje9dWd8u6sfq5Ph1DXVnGlkmrzoe0jfTAWAzveddPUenX7V8XC4btd7YRJm02QtkAo/KAgKXmvQ==
+"@salesforce/dev-scripts@^4.1.0":
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/@salesforce/dev-scripts/-/dev-scripts-4.1.0.tgz#955255b7bc70f1e0c993cb0d2aa67d98efcb2632"
+  integrity sha512-plRjF4PWoYz/4n/q8ha28rS5Qmx9TJWk6hfXp2jpTqOJajdZjXL0mWjPCEWlfvFm3xvQcdH1HGGKsWcl71x6sQ==
   dependencies:
     "@commitlint/cli" "^17.1.2"
     "@commitlint/config-conventional" "^17.1.0"
@@ -1149,7 +1149,7 @@
     typedoc "0.23.16"
     typedoc-plugin-missing-exports "0.23.0"
     typescript "^4.1.3"
-    wireit "^0.9.3"
+    wireit "^0.9.5"
 
 "@salesforce/kit@^1.8.0", "@salesforce/kit@^1.8.2", "@salesforce/kit@^1.8.3", "@salesforce/kit@^1.8.5":
   version "1.9.0"
@@ -7722,7 +7722,7 @@ widest-line@^3.1.0:
   dependencies:
     string-width "^4.0.0"
 
-wireit@^0.9.3:
+wireit@^0.9.5:
   version "0.9.5"
   resolved "https://registry.yarnpkg.com/wireit/-/wireit-0.9.5.tgz#7c3622f6ff5e63b7fac05783baf82f967f52562c"
   integrity sha512-dKKNAwLxQjbPPMrltPxMUFKvLy2z6hlVjvR/qitvPm8GEQyb/1QYBG7ObvOQLsi95uAXpkWLJXBYkCKeVcMVgA==

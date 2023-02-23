@@ -35,7 +35,7 @@ export default class LoginJwt extends AuthBaseCommand<AuthFields> {
       summary: messages.getMessage('flags.jwt-key-file.summary'),
       required: true,
       deprecateAliases: true,
-      aliases: ['jwtkeyfile'],
+      aliases: ['jwtkeyfile', 'keyfile'],
     }),
     'client-id': Flags.string({
       char: 'i',
@@ -49,13 +49,13 @@ export default class LoginJwt extends AuthBaseCommand<AuthFields> {
       summary: commonMessages.getMessage('flags.instance-url.summary'),
       description: commonMessages.getMessage('flags.instance-url.description'),
       deprecateAliases: true,
-      aliases: ['instanceurl'],
+      aliases: ['instanceurl', 'l'],
     }),
     'set-default-dev-hub': Flags.boolean({
       char: 'd',
       summary: commonMessages.getMessage('flags.set-default-dev-hub.summary'),
       deprecateAliases: true,
-      aliases: ['setdefaultdevhub', 'setdefaultdevhubusername'],
+      aliases: ['setdefaultdevhub', 'setdefaultdevhubusername', 'v'],
     }),
     'set-default': Flags.boolean({
       char: 's',
