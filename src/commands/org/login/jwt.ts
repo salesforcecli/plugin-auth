@@ -55,7 +55,7 @@ export default class LoginJwt extends AuthBaseCommand<AuthFields> {
       char: 'd',
       summary: commonMessages.getMessage('flags.set-default-dev-hub.summary'),
       deprecateAliases: true,
-      aliases: ['setdefaultdevhub', 'setdefaultdevhubusername'],
+      aliases: ['setdefaultdevhub', 'setdefaultdevhubusername', 'v'],
     }),
     'set-default': Flags.boolean({
       char: 's',
