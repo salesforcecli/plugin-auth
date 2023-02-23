@@ -49,7 +49,7 @@ export default class LoginJwt extends AuthBaseCommand<AuthFields> {
       summary: commonMessages.getMessage('flags.instance-url.summary'),
       description: commonMessages.getMessage('flags.instance-url.description'),
       deprecateAliases: true,
-      aliases: ['instanceurl', '-l'],
+      aliases: ['instanceurl', 'l'],
     }),
     'set-default-dev-hub': Flags.boolean({
       char: 'd',
