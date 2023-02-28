@@ -7,7 +7,7 @@
 
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
-import { IConfig } from '@oclif/config';
+import { Config } from '@oclif/core';
 import { AuthFields, AuthInfo, Global, Mode, SfError } from '@salesforce/core';
 import { MockTestOrgData, TestContext } from '@salesforce/core/lib/testSetup';
 import { StubbedType, stubInterface, stubMethod } from '@salesforce/ts-sinon';
@@ -20,7 +20,7 @@ import LoginWeb from '../../../../src/commands/org/login/web';
 describe('org:login:web', () => {
   const $$ = new TestContext();
   const testData = new MockTestOrgData();
-  const config = stubInterface<IConfig>($$.SANDBOX, {});
+  const config = stubInterface<Config>($$.SANDBOX, {});
   let authFields: AuthFields;
   let authInfoStub: StubbedType<AuthInfo>;
   let uxStub: StubbedType<UX>;
