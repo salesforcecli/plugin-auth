@@ -1,3 +1,16 @@
+## [2.7.2](https://github.com/salesforcecli/plugin-auth/compare/2.7.1...2.7.2) (2023-02-28)
+
+
+### Bug Fixes
+
+* **deps:** bump core and other deps ([e441c3d](https://github.com/salesforcecli/plugin-auth/commit/e441c3d7d303d9e2308e647b9fdb33605c60a0f2))
+
+
+
+## [2.7.1](https://github.com/salesforcecli/plugin-auth/compare/2.7.0...2.7.1) (2023-02-23)
+
+
+
 # [2.7.0](https://github.com/salesforcecli/plugin-auth/compare/2.6.1...2.7.0) (2023-02-22)
 
 
