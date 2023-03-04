@@ -1,3 +1,12 @@
+## [2.7.4](https://github.com/salesforcecli/plugin-auth/compare/2.7.3...2.7.4) (2023-03-04)
+
+
+### Bug Fixes
+
+* **deps:** bump @oclif/core from 2.3.1 to 2.4.0 ([984f6a2](https://github.com/salesforcecli/plugin-auth/commit/984f6a2c0714b38a310e1511b4a8075984b32458))
+
+
+
 ## [2.7.3](https://github.com/salesforcecli/plugin-auth/compare/2.7.2...2.7.3) (2023-02-28)
 
 
