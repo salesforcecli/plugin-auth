@@ -20,7 +20,7 @@
     "@oclif/plugin-command-snapshot": "^3.3.7",
     "@salesforce/cli-plugins-testkit": "^3.2.23",
     "@salesforce/dev-config": "^3.1.0",
-    "@salesforce/dev-scripts": "^4.1.1",
+    "@salesforce/dev-scripts": "^4.1.2",
     "@salesforce/plugin-command-reference": "^2",
     "@salesforce/plugin-config": "^1.4.23",
     "@salesforce/prettier-config": "^0.0.2",
@@ -200,6 +200,9 @@
     },
     "test:only": {
       "command": "nyc mocha \"test/**/*.test.ts\"",
+      "env": {
+        "FORCE_COLOR": "2"
+      },
       "files": [
         "test/**/*.ts",
         "src/**/*.ts",
