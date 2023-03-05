@@ -975,10 +975,10 @@
   resolved "https://registry.yarnpkg.com/@salesforce/dev-config/-/dev-config-3.1.0.tgz#8eb5b35860ff60d1c1dc3fd9329b01a28475d5b9"
   integrity sha512-cPph7ibj3DeSzWDFLcLtxOh5fmUlDUY2Ezq43n0V6auVP+l8orxRHjCExHS86SB3QKVgXkC8yYhryXiS8KF7Zw==
 
-"@salesforce/dev-scripts@^4.1.1":
-  version "4.1.1"
-  resolved "https://registry.yarnpkg.com/@salesforce/dev-scripts/-/dev-scripts-4.1.1.tgz#f88deda82c78ccb059f04a6532edd9a5399cc25e"
-  integrity sha512-+TP0j5dhjWlYJnDvR0QhTNq7igEniXlLGoqudZI79JQAnXZ5h/m/pPEi8wzG/gSx+NNRNGixuYEXHCYbWU2rYA==
+"@salesforce/dev-scripts@^4.1.2":
+  version "4.1.2"
+  resolved "https://registry.yarnpkg.com/@salesforce/dev-scripts/-/dev-scripts-4.1.2.tgz#d9d4b403ac06934c069ca16d849ff7c2e12ee773"
+  integrity sha512-mxpwOb818k4H04DM/GV0/ZTzK5EDovcnROI+0CnR71Fqc4gwrWBmK+jlcRtICGypC48W+myOXKXet0oySQphyA==
   dependencies:
     "@commitlint/cli" "^17.1.2"
     "@commitlint/config-conventional" "^17.1.0"
@@ -1061,19 +1061,7 @@
   resolved "https://registry.yarnpkg.com/@salesforce/schemas/-/schemas-1.5.0.tgz#8bfe2cb5d7cb29d3394b3b9cfb71bb527009c82c"
   integrity sha512-EKFBURBuON7cj8XZCW+ybeSRRw7wUP1XUXZVHzFgx8KiYmSeGiRHBYbDjQOsQMho2uOLsTozMPEt2ehYnji0YA==
 
-"@salesforce/sf-plugins-core@^2.0.1":
-  version "2.2.1"
-  resolved "https://registry.yarnpkg.com/@salesforce/sf-plugins-core/-/sf-plugins-core-2.2.1.tgz#845ab6c21f840cb70330006b44fa4230867ee50a"
-  integrity sha512-KT5y/HK9Y6FSjEiMy5Sc55RXfjMvwDgqutpMdKpBl2KH8DS1L8rISjuVzoZQv9WrkAHHLNF1Uv5tk4awesbQMQ==
-  dependencies:
-    "@oclif/core" "^2.2.1"
-    "@salesforce/core" "^3.33.1"
-    "@salesforce/kit" "^1.8.3"
-    "@salesforce/ts-types" "^1.7.1"
-    chalk "^4"
-    inquirer "^8.2.5"
-
-"@salesforce/sf-plugins-core@^2.2.3":
+"@salesforce/sf-plugins-core@^2.0.1", "@salesforce/sf-plugins-core@^2.2.3":
   version "2.2.3"
   resolved "https://registry.yarnpkg.com/@salesforce/sf-plugins-core/-/sf-plugins-core-2.2.3.tgz#f491156fbd83b18d01d943a43396a57009d10b42"
   integrity sha512-B+ITa19o2ChAQXWNjmqxtXy7Bn0+dOcFwxqUhVR4YJ7wBzgvvGQ/pvG/WOah+v/uza91Jqfokq59D14fNAQfPw==
