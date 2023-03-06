@@ -81,6 +81,7 @@ describe('verify discovery/id of scratch org', () => {
       ensureExitCode: 0,
     }).jsonOutput?.result;
     expect(output?.username).to.equal(orgUsername);
+    expect(output?.devHubUsername).to.equal(hubUsername);
   });
 
   it('should have the dev hub username in the auth file', async () => {
