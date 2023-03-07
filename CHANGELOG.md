@@ -1,3 +1,12 @@
+## [2.7.7](https://github.com/salesforcecli/plugin-auth/compare/2.7.6...2.7.7) (2023-03-07)
+
+
+### Bug Fixes
+
+* fix NUTs ([#642](https://github.com/salesforcecli/plugin-auth/issues/642)) ([71ca387](https://github.com/salesforcecli/plugin-auth/commit/71ca38741bfddcae5f8d5fb2d460c4cac2de209e))
+
+
+
 ## [2.7.6](https://github.com/salesforcecli/plugin-auth/compare/2.7.5...2.7.6) (2023-03-05)
 
 
