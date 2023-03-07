@@ -82,5 +82,6 @@ describe('verify discovery/id of scratch org', () => {
     const authInfo = await AuthInfo.create({ username: orgUsername });
     expect(output?.username).to.equal(orgUsername);
     expect(authInfo?.getFields().devHubUsername).to.equal(hubUsername);
+    await authInfo.save();
   });
 });
