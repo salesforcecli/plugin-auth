@@ -10,8 +10,7 @@ import { expect } from 'chai';
 import { execCmd, TestSession } from '@salesforce/cli-plugins-testkit';
 import { Env } from '@salesforce/kit';
 import { ensureString } from '@salesforce/ts-types';
-import { AuthFields } from '@salesforce/core';
-import { readJson } from 'fs-extra';
+import { AuthFields, AuthInfo } from '@salesforce/core';
 import { AuthListResults } from '../../src/commands/org/list/auth';
 
 describe('verify discovery/id of scratch org', () => {
@@ -80,13 +79,8 @@ describe('verify discovery/id of scratch org', () => {
     const output = execCmd<AuthFields>(command, {
       ensureExitCode: 0,
     }).jsonOutput?.result;
+    const authInfo = await AuthInfo.create({ username: orgUsername });
     expect(output?.username).to.equal(orgUsername);
-  });
-
-  it('should have the dev hub username in the auth file', async () => {
-    const fileContents = (await readJson(path.join(testSession.homeDir, '.sfdx', `${orgUsername}.json`))) as {
-      devHubUsername: string;
-    };
-    expect(fileContents.devHubUsername).to.equal(hubUsername);
+    expect(authInfo?.getFields().devHubUsername).to.equal(hubUsername);
   });
 });
