@@ -1,3 +1,12 @@
+## [2.7.8](https://github.com/salesforcecli/plugin-auth/compare/2.7.7...2.7.8) (2023-03-14)
+
+
+### Bug Fixes
+
+* bump sfdx-core to pickup fix ([200c9b4](https://github.com/salesforcecli/plugin-auth/commit/200c9b425c8e36ff5751bb2a8b5b0d98fdc7cf00))
+
+
+
 ## [2.7.7](https://github.com/salesforcecli/plugin-auth/compare/2.7.6...2.7.7) (2023-03-07)
 
 
