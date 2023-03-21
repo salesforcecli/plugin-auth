@@ -11,10 +11,9 @@ import { Config } from '@oclif/core';
 import { AuthFields, AuthInfo, Global, Mode, SfError } from '@salesforce/core';
 import { MockTestOrgData, TestContext } from '@salesforce/core/lib/testSetup';
 import { StubbedType, stubInterface, stubMethod } from '@salesforce/ts-sinon';
-import { UX } from '@salesforce/command';
 import { assert, expect } from 'chai';
 import { Env } from '@salesforce/kit';
-import { SfCommand } from '@salesforce/sf-plugins-core';
+import { SfCommand, Ux } from '@salesforce/sf-plugins-core';
 import LoginWeb from '../../../../src/commands/org/login/web';
 
 describe('org:login:web', () => {
@@ -23,7 +22,7 @@ describe('org:login:web', () => {
   const config = stubInterface<Config>($$.SANDBOX, {});
   let authFields: AuthFields;
   let authInfoStub: StubbedType<AuthInfo>;
-  let uxStub: StubbedType<UX>;
+  let uxStub: StubbedType<Ux>;
 
   async function createNewLoginCommand(
     flags: string[] = [],
@@ -57,7 +56,7 @@ describe('org:login:web', () => {
       getFields: () => authFields,
     });
     stubMethod($$.SANDBOX, LoginWeb.prototype, 'executeLoginFlow').throws(() => new SfError('error!', errorName));
-    uxStub = stubInterface<UX>($$.SANDBOX, {});
+    uxStub = stubInterface<Ux>($$.SANDBOX, {});
 
     // @ts-ignore
     const login = new LoginWeb([], config);
