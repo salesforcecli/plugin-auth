@@ -85,8 +85,7 @@
     ],
     "topics": {
       "org": {
-        "description": "manage Salesforce orgs",
-        "longDescription": "Use the org commands to create and manage Salesforce orgs.",
+        "external": true,
         "subtopics": {
           "login": {
             "description": "authorize an org for use with the Salesforce CLI",
