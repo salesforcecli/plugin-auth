@@ -85,11 +85,10 @@
     ],
     "topics": {
       "org": {
-        "description": "manage Salesforce orgs",
-        "longDescription": "Use the org commands to create and manage Salesforce orgs.",
+        "external": true,
         "subtopics": {
           "login": {
-            "description": "authorize an org for use with the Salesforce CLI",
+            "description": "Authorize an org for use with Salesforce CLI.",
             "longDescription": "Use the auth commands to authorize a Salesforce org for use with the Salesforce CLI.",
             "subtopics": {
               "jwt": {
@@ -110,7 +109,7 @@
             }
           },
           "list": {
-            "description": "list authorized orgs"
+            "description": "List authorized orgs."
           }
         }
       }
