@@ -1,3 +1,12 @@
+## [2.7.12](https://github.com/salesforcecli/plugin-auth/compare/2.7.11...2.7.12) (2023-04-07)
+
+
+### Bug Fixes
+
+* update package.json for correct help and command ref ([7cc481b](https://github.com/salesforcecli/plugin-auth/commit/7cc481be345e2c2dccb49de7a54dacb91f948466))
+
+
+
 ## [2.7.11](https://github.com/salesforcecli/plugin-auth/compare/2.7.10...2.7.11) (2023-04-02)
 
 
