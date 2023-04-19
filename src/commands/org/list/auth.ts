@@ -17,7 +17,7 @@ export default class ListAuth extends SfCommand<AuthListResults> {
   public static readonly description = messages.getMessage('description');
   public static readonly examples = messages.getMessages('examples');
   public static readonly deprecateAliases = true;
-  public static aliases = ['force:auth:list', 'auth:list'];
+  public static readonly aliases = ['force:auth:list', 'auth:list'];
 
   public static readonly flags = {
     loglevel,
