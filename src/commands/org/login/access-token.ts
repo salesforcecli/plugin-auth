@@ -64,7 +64,7 @@ export default class LoginAccessToken extends AuthBaseCommand<AuthFields> {
     loglevel,
   };
 
-  private flags: Interfaces.InferredFlags<typeof LoginAccessToken.flags>;
+  private flags!: Interfaces.InferredFlags<typeof LoginAccessToken.flags>;
 
   public async run(): Promise<AuthFields> {
     const { flags } = await this.parse(LoginAccessToken);

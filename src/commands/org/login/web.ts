@@ -82,7 +82,7 @@ export default class LoginWeb extends AuthBaseCommand<AuthFields> {
     loglevel,
   };
 
-  private flags: Interfaces.InferredFlags<typeof LoginWeb.flags>;
+  private flags!: Interfaces.InferredFlags<typeof LoginWeb.flags>;
 
   public async run(): Promise<AuthFields> {
     const { flags } = await this.parse(LoginWeb);
@@ -130,9 +130,9 @@ export default class LoginWeb extends AuthBaseCommand<AuthFields> {
   private async executeLoginFlow(oauthConfig: OAuth2Config): Promise<AuthInfo> {
     const oauthServer = await WebOAuthServer.create({ oauthConfig });
     await oauthServer.start();
-    const openOptions = this.flags.browser
-      ? { app: { name: open.apps[this.flags.browser] as open.AppName }, wait: false }
-      : { wait: false };
+    const app =
+      this.flags.browser && this.flags.browser in open.apps ? (this.flags.browser as open.AppName) : undefined;
+    const openOptions = app ? { app: { name: open.apps[app] }, wait: false } : { wait: false };
     await open(oauthServer.getAuthorizationUrl(), openOptions);
     return oauthServer.authorizeAndSave();
   }
