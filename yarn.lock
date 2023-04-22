@@ -886,15 +886,15 @@
     mv "~2"
     safe-json-stringify "~1"
 
-"@salesforce/cli-plugins-testkit@^3.3.2":
-  version "3.3.2"
-  resolved "https://registry.yarnpkg.com/@salesforce/cli-plugins-testkit/-/cli-plugins-testkit-3.3.2.tgz#5a5bd6f1c505962b97682463c0a204fb6b67b5bf"
-  integrity sha512-lXxm9tYNRD34GdcHtYVcFIccG9k5v8Ai/O1ytHE4zOoDowmeyB5l47O7Qo8blmeYbggRJUQIFfao2EPrJlTKCQ==
+"@salesforce/cli-plugins-testkit@^3.3.3":
+  version "3.3.3"
+  resolved "https://registry.yarnpkg.com/@salesforce/cli-plugins-testkit/-/cli-plugins-testkit-3.3.3.tgz#861853bd97077d888f2b6a4acd56b3cf2f202c95"
+  integrity sha512-BBEMPFbRd20N79PQbodUJUvzTd4L5DVSS07JfXmMmJgpbyy8fgUzQmuczfMiU7Dfs445+1UX8St1Q1JaPp8z6A==
   dependencies:
     "@salesforce/core" "^3.34.6"
     "@salesforce/kit" "^1.9.2"
     "@salesforce/ts-types" "^1.7.3"
-    "@types/shelljs" "^0.8.11"
+    "@types/shelljs" "^0.8.12"
     archiver "^5.2.0"
     debug "^4.3.1"
     shelljs "^0.8.4"
@@ -1238,12 +1238,12 @@
   dependencies:
     "@types/node" "*"
 
-"@types/glob@*":
-  version "8.0.1"
-  resolved "https://registry.yarnpkg.com/@types/glob/-/glob-8.0.1.tgz#6e3041640148b7764adf21ce5c7138ad454725b0"
-  integrity sha512-8bVUjXZvJacUFkJXHdyZ9iH1Eaj5V7I8c4NdH5sQJsdXkqT4CA5Dhb4yb4VE/3asyx4L9ayZr1NIhTsWHczmMw==
+"@types/glob@~7.2.0":
+  version "7.2.0"
+  resolved "https://registry.yarnpkg.com/@types/glob/-/glob-7.2.0.tgz#bc1b5bf3aa92f25bd5dd39f35c57361bdce5b2eb"
+  integrity sha512-ZUxbzKl0IfJILTS6t7ip5fQQM/J3TJYubDm3nMbgubNNYS62eXeUpoLUC8/7fJNiFYHTrGPQn7hspDUzIHX3UA==
   dependencies:
-    "@types/minimatch" "^5.1.2"
+    "@types/minimatch" "*"
     "@types/node" "*"
 
 "@types/graceful-fs@^4.1.6":
@@ -1283,15 +1283,15 @@
   dependencies:
     "@types/node" "*"
 
+"@types/minimatch@*":
+  version "5.1.2"
+  resolved "https://registry.yarnpkg.com/@types/minimatch/-/minimatch-5.1.2.tgz#07508b45797cb81ec3f273011b054cd0755eddca"
+  integrity sha512-K0VQKziLUWkVKiRVrx4a40iPaxTUefQmjtkQofBkYRcoaaL/8rhwDWww9qWbrgicNOgnpIsMxyNIUM4+n6dUIA==
+
 "@types/minimatch@^3.0.3":
   version "3.0.5"
   resolved "https://registry.yarnpkg.com/@types/minimatch/-/minimatch-3.0.5.tgz#1001cc5e6a3704b83c236027e77f2f58ea010f40"
   integrity sha512-Klz949h02Gz2uZCMGwDUSDS1YBlTdDDgbWHi+81l29tQALUtvz4rAYi5uoVhE5Lagoq6DeqAUlbrHvW/mXDgdQ==
-
-"@types/minimatch@^5.1.2":
-  version "5.1.2"
-  resolved "https://registry.yarnpkg.com/@types/minimatch/-/minimatch-5.1.2.tgz#07508b45797cb81ec3f273011b054cd0755eddca"
-  integrity sha512-K0VQKziLUWkVKiRVrx4a40iPaxTUefQmjtkQofBkYRcoaaL/8rhwDWww9qWbrgicNOgnpIsMxyNIUM4+n6dUIA==
 
 "@types/minimist@^1.2.0":
   version "1.2.2"
@@ -1347,12 +1347,12 @@
   resolved "https://registry.yarnpkg.com/@types/semver/-/semver-7.3.13.tgz#da4bfd73f49bd541d28920ab0e2bf0ee80f71c91"
   integrity sha512-21cFJr9z3g5dW8B0CVI9g2O9beqaThGQ6ZFBqHfwhzLDKUxaqTIy3vnfah/UPkfOiF2pLq+tGz+W8RyCskuslw==
 
-"@types/shelljs@^0.8.11":
-  version "0.8.11"
-  resolved "https://registry.yarnpkg.com/@types/shelljs/-/shelljs-0.8.11.tgz#17a5696c825974e96828e96e89585d685646fcb8"
-  integrity sha512-x9yaMvEh5BEaZKeVQC4vp3l+QoFj3BXcd4aYfuKSzIIyihjdVARAadYy3SMNIz0WCCdS2vB9JL/U6GQk5PaxQw==
+"@types/shelljs@^0.8.12":
+  version "0.8.12"
+  resolved "https://registry.yarnpkg.com/@types/shelljs/-/shelljs-0.8.12.tgz#79dc9632af7d5ca1b5afb65a6bfc1422d79b5fa0"
+  integrity sha512-ZA8U81/gldY+rR5zl/7HSHrG2KDfEb3lzG6uCUDhW1DTQE9yC/VBQ45fXnXq8f3CgInfhZmjtdu/WOUlrXRQUg==
   dependencies:
-    "@types/glob" "*"
+    "@types/glob" "~7.2.0"
     "@types/node" "*"
 
 "@types/sinon@10.0.11":
