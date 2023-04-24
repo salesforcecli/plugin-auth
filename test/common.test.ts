@@ -4,6 +4,7 @@
  * Licensed under the BSD 3-Clause license.
  * For full license text, see LICENSE.txt file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  */
+
 import { ConfigContents, SfdcUrl, SfError } from '@salesforce/core';
 import { expect } from 'chai';
 import { TestContext, uniqid } from '@salesforce/core/lib/testSetup';
@@ -38,10 +39,10 @@ describe('common unit tests', () => {
         packageDirectories: [
           {
             path: 'force-app',
-            default: true
-          }
+            default: true,
+          },
         ],
-        sourceApiVersion: '50.0'
+        sourceApiVersion: '50.0',
       });
       const loginUrl = await Common.resolveLoginUrl(undefined);
       expect(loginUrl).to.equal(SfdcUrl.PRODUCTION);
@@ -51,11 +52,11 @@ describe('common unit tests', () => {
         packageDirectories: [
           {
             path: 'force-app',
-            default: true
-          }
+            default: true,
+          },
         ],
         sfdcLoginUrl: 'https://login.salesforce.com',
-        sourceApiVersion: '50.0'
+        sourceApiVersion: '50.0',
       });
       const loginUrl = await Common.resolveLoginUrl(undefined);
       expect(loginUrl).to.equal(SfdcUrl.PRODUCTION);
@@ -65,11 +66,11 @@ describe('common unit tests', () => {
         packageDirectories: [
           {
             path: 'force-app',
-            default: true
-          }
+            default: true,
+          },
         ],
         sfdcLoginUrl: 'https://shanedevhub.lightning.force.com',
-        sourceApiVersion: '50.0'
+        sourceApiVersion: '50.0',
       });
       try {
         await Common.resolveLoginUrl(undefined);
@@ -105,25 +106,25 @@ describe('common unit tests', () => {
           packageDirectories: [
             {
               path: 'force-app',
-              default: true
-            }
+              default: true,
+            },
           ],
-          sourceApiVersion: '50.0'
-        }
+          sourceApiVersion: '50.0',
+        },
       });
       const loginUrl = await Common.resolveLoginUrl(INSTANCE_URL_1);
       expect(loginUrl).to.equal(INSTANCE_URL_1);
     });
     it('should return custom login URL if project with property sfdcLoginUrl present and not equal to production URL', async () => {
       await projectSetup($$, true, {
-          packageDirectories: [
-            {
-              path: 'force-app',
-              default: true
-            }
-          ],
-          sfdcLoginUrl: INSTANCE_URL_2,
-          sourceApiVersion: '50.0'
+        packageDirectories: [
+          {
+            path: 'force-app',
+            default: true,
+          },
+        ],
+        sfdcLoginUrl: INSTANCE_URL_2,
+        sourceApiVersion: '50.0',
       });
       const loginUrl = await Common.resolveLoginUrl(undefined);
       expect(loginUrl).to.equal(INSTANCE_URL_2);
@@ -134,12 +135,12 @@ describe('common unit tests', () => {
           packageDirectories: [
             {
               path: 'force-app',
-              default: true
-            }
+              default: true,
+            },
           ],
           sfdcLoginUrl: INSTANCE_URL_2,
-          sourceApiVersion: '50.0'
-        }
+          sourceApiVersion: '50.0',
+        },
       });
       const loginUrl = await Common.resolveLoginUrl(INSTANCE_URL_1);
       expect(loginUrl).to.equal(INSTANCE_URL_1);

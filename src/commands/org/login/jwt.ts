@@ -79,7 +79,7 @@ export default class LoginJwt extends AuthBaseCommand<AuthFields> {
     }),
     loglevel,
   };
-  private flags: Interfaces.InferredFlags<typeof LoginJwt.flags>;
+  private flags!: Interfaces.InferredFlags<typeof LoginJwt.flags>;
   private logger = Logger.childFromRoot(this.constructor.name);
 
   public async run(): Promise<AuthFields> {

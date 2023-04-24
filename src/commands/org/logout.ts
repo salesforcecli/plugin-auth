@@ -62,7 +62,7 @@ export default class Logout extends AuthBaseCommand<AuthLogoutResults> {
     loglevel,
   };
 
-  private flags: Interfaces.InferredFlags<typeof Logout.flags>;
+  private flags!: Interfaces.InferredFlags<typeof Logout.flags>;
 
   private static buildChoices(orgAuths: OrgAuthorization[], all: boolean): Array<choice | Separator> {
     const maxUsernameLength = Math.max('Username'.length, ...orgAuths.map((orgAuth) => orgAuth.username.length));

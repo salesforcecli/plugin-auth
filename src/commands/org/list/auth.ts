@@ -17,7 +17,7 @@ export default class ListAuth extends SfCommand<AuthListResults> {
   public static readonly description = messages.getMessage('description');
   public static readonly examples = messages.getMessages('examples');
   public static readonly deprecateAliases = true;
-  public static aliases = ['force:auth:list', 'auth:list'];
+  public static readonly aliases = ['force:auth:list', 'auth:list'];
 
   public static readonly flags = {
     loglevel,
@@ -31,13 +31,12 @@ export default class ListAuth extends SfCommand<AuthListResults> {
         this.log(messages.getMessage('noResultsFound'));
         return [];
       }
-      const mappedAuths = auths.map((auth: OrgAuthorization & { alias: string }) => {
+      const mappedAuths: AuthListResults = auths.map((auth: OrgAuthorization) => {
+        const { aliases, ...rest } = auth;
         // core3 moved to aliases as a string[], revert to alias as a string
-        auth.alias = auth.aliases ? auth.aliases.join(',') : '';
-
-        delete auth.aliases;
-        return auth;
+        return { ...rest, alias: aliases ? aliases.join(',') : '' };
       });
+
       const hasErrors = auths.filter((auth) => !!auth.error).length > 0;
       let columns = {
         alias: { header: 'ALIAS' },
