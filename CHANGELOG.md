@@ -1,3 +1,12 @@
+## [2.7.13](https://github.com/salesforcecli/plugin-auth/compare/2.7.12...2.7.13) (2023-04-24)
+
+
+### Bug Fixes
+
+* add ts strict null checks ([#677](https://github.com/salesforcecli/plugin-auth/issues/677)) ([239a175](https://github.com/salesforcecli/plugin-auth/commit/239a1757211cc578a04beac9317a031b8007c447))
+
+
+
 ## [2.7.12](https://github.com/salesforcecli/plugin-auth/compare/2.7.11...2.7.12) (2023-04-07)
 
 
