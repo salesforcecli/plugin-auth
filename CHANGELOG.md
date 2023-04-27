@@ -1,3 +1,12 @@
+## [2.7.14](https://github.com/salesforcecli/plugin-auth/compare/2.7.13...2.7.14) (2023-04-27)
+
+
+### Bug Fixes
+
+* bump sfdx-core to pick up web logiin changes ([f76672c](https://github.com/salesforcecli/plugin-auth/commit/f76672c73464ec2a7242d83ee1e8a51caee79d86))
+
+
+
 ## [2.7.13](https://github.com/salesforcecli/plugin-auth/compare/2.7.12...2.7.13) (2023-04-24)
 
 
