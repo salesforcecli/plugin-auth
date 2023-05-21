@@ -1,3 +1,12 @@
+## [2.7.16](https://github.com/salesforcecli/plugin-auth/compare/2.7.15...2.7.16) (2023-05-21)
+
+
+### Bug Fixes
+
+* **deps:** bump tslib from 2.5.0 to 2.5.2 ([434de08](https://github.com/salesforcecli/plugin-auth/commit/434de0884c2c1694fa10efeaa29c3aec44a38cf9))
+
+
+
 ## [2.7.15](https://github.com/salesforcecli/plugin-auth/compare/2.7.14...2.7.15) (2023-05-07)
 
 
