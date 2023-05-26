@@ -32,8 +32,6 @@ describe('verify discovery/id of scratch org', () => {
       project: { name: 'ScratchIDProject' },
       scratchOrgs: [
         {
-          executable: 'sfdx',
-          duration: 1,
           setDefault: true,
           config: path.join('config', 'project-scratch-def.json'),
         },
