@@ -1,3 +1,12 @@
+## [2.7.17](https://github.com/salesforcecli/plugin-auth/compare/2.7.16...2.7.17) (2023-05-28)
+
+
+### Bug Fixes
+
+* **deps:** bump @salesforce/sf-plugins-core from 2.4.2 to 2.4.3 ([882c0bf](https://github.com/salesforcecli/plugin-auth/commit/882c0bfa2af356a35b250c081332822783d28189))
+
+
+
 ## [2.7.16](https://github.com/salesforcecli/plugin-auth/compare/2.7.15...2.7.16) (2023-05-21)
 
 
