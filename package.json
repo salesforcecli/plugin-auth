@@ -6,10 +6,10 @@
   "bugs": "https://github.com/forcedotcom/cli/issues",
   "main": "lib/index.js",
   "dependencies": {
-    "@oclif/core": "^2.8.5",
-    "@salesforce/core": "^3.34.9",
-    "@salesforce/kit": "^1.9.2",
-    "@salesforce/sf-plugins-core": "^2.4.3",
+    "@oclif/core": "^2.8.2",
+    "@salesforce/core": "^3.36.0",
+    "@salesforce/kit": "^3.0.0",
+    "@salesforce/sf-plugins-core": "^2.4.2",
     "chalk": "^4.1.2",
     "inquirer": "^8.2.5",
     "open": "^8.2.1",
@@ -18,8 +18,8 @@
   "devDependencies": {
     "@oclif/plugin-command-snapshot": "^3.3.15",
     "@salesforce/cli-plugins-testkit": "^3.4.0",
-    "@salesforce/dev-config": "^3.1.0",
-    "@salesforce/dev-scripts": "^4.3.1",
+    "@salesforce/dev-config": "^4.0.1",
+    "@salesforce/dev-scripts": "^5.1.0",
     "@salesforce/plugin-command-reference": "^2.4.5",
     "@salesforce/plugin-settings": "^1.4.6",
     "@salesforce/prettier-config": "^0.0.2",
@@ -29,9 +29,9 @@
     "@typescript-eslint/eslint-plugin": "^5.59.7",
     "@typescript-eslint/parser": "^5.59.1",
     "chai": "^4.3.7",
-    "eslint": "^8.39.0",
+    "eslint": "^8.41.0",
     "eslint-config-prettier": "^8.8.0",
-    "eslint-config-salesforce": "^1.2.0",
+    "eslint-config-salesforce": "^2.0.1",
     "eslint-config-salesforce-license": "^0.2.0",
     "eslint-config-salesforce-typescript": "^1.1.1",
     "eslint-plugin-header": "^3.1.1",
@@ -51,7 +51,7 @@
     "wireit": "^0.9.5"
   },
   "engines": {
-    "node": ">=14.0.0"
+    "node": ">=16.0.0"
   },
   "files": [
     "/lib",
