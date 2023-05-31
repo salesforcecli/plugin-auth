@@ -7,7 +7,6 @@
 
 import { Flags, loglevel } from '@salesforce/sf-plugins-core';
 import { AuthFields, AuthInfo, AuthRemover, Logger, Messages, SfError } from '@salesforce/core';
-import { getString } from '@salesforce/ts-types';
 import { Interfaces } from '@oclif/core';
 import { AuthBaseCommand } from '../../../authBaseCommand';
 import { Common } from '../../../common';
@@ -99,8 +98,10 @@ export default class LoginJwt extends AuthBaseCommand<AuthFields> {
       result = authInfo.getFields(true);
       await AuthInfo.identifyPossibleScratchOrgs(result, authInfo);
     } catch (err) {
-      const msg = getString(err, 'message');
-      throw messages.createError('JwtGrantError', [msg]);
+      if (!(err instanceof Error)) {
+        throw err;
+      }
+      throw messages.createError('JwtGrantError', [err.message]);
     }
 
     const successMsg = commonMessages.getMessage('authorizeCommandSuccess', [result.username, result.orgId]);
