@@ -48,9 +48,9 @@ Disable masking of user input; use with problematic terminals.
 
 OAuth client secret of personal connected app?
 
-# invalidInstanceUrl
+# lightningInstanceUrl
 
-Invalid instance URL. Specify a Salesforce instance URL using the format <domainname>.salesforce.com
+Invalid instance URL. It should NOT be a lightning domain.
 
 # accessTokenStdin
 

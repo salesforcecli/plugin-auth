@@ -77,7 +77,7 @@ describe('common unit tests', () => {
         expect.fail('This test is failing because it is expecting an error that is never thrown');
       } catch (error) {
         assert(error instanceof Error);
-        expect(error.name).to.equal('URL_WARNING');
+        expect(error.name).to.equal('LightningDomain');
       }
     });
     it('should throw on lightning login URL passed in to resolveLoginUrl()', async () => {
@@ -87,7 +87,7 @@ describe('common unit tests', () => {
         expect.fail('This test is failing because it is expecting an error that is never thrown');
       } catch (error) {
         assert(error instanceof Error);
-        expect(error.name).to.equal('URL_WARNING');
+        expect(error.name).to.equal('LightningDomain');
       }
     });
 
@@ -98,7 +98,7 @@ describe('common unit tests', () => {
         expect.fail('This test is failing because it is expecting an error that is never thrown');
       } catch (error) {
         assert(error instanceof Error);
-        expect(error.name).to.equal('URL_WARNING');
+        expect(error.name).to.equal('LightningDomain');
       }
     });
   });

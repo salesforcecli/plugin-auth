@@ -14,9 +14,7 @@ export class Common {
   public static async resolveLoginUrl(instanceUrl?: string): Promise<string> {
     const logger = await Logger.child('Common', { tag: 'resolveLoginUrl' });
     if (instanceUrl) {
-      if (instanceUrl.match(/lightning\..*force\.com/)) {
-        throw new SfError(messages.getMessage('invalidInstanceUrl'), 'URL_WARNING');
-      }
+      throwIfLightning(instanceUrl);
       return instanceUrl;
     }
     let loginUrl: string;
@@ -29,10 +27,17 @@ export class Common {
       logger.debug(`error occurred while trying to determine loginUrl: ${message}`);
       loginUrl = SfdcUrl.PRODUCTION;
     }
-    if (loginUrl.match(/lightning\..*force\.com/)) {
-      throw new SfError(messages.getMessage('invalidInstanceUrl'), 'URL_WARNING');
-    }
+    throwIfLightning(loginUrl);
+
     logger.debug(`loginUrl: ${loginUrl}`);
     return loginUrl;
   }
 }
+
+const throwIfLightning = (urlString?: string): void => {
+  if (urlString?.match(/lightning\..*force\.com/)) {
+    throw new SfError(messages.getMessage('lightningInstanceUrl'), 'LightningDomain', [
+      messages.getMessage('flags.instance-url.description'),
+    ]);
+  }
+};
