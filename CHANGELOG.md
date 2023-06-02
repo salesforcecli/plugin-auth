@@ -1,3 +1,18 @@
+# [2.8.0](https://github.com/salesforcecli/plugin-auth/compare/2.7.17...2.8.0) (2023-06-02)
+
+
+### Bug Fixes
+
+* undeclared dependency on ts-types ([bc4b9c7](https://github.com/salesforcecli/plugin-auth/commit/bc4b9c7bb98b7ead90d8de7c7067f3fa752343bd))
+
+
+### Features
+
+* better error name/messaging/suggestion and DRY ([7227acc](https://github.com/salesforcecli/plugin-auth/commit/7227acc4130ca964504af8ca81127f763e9f1512))
+* help with internal lighting domain issues ([8617e5b](https://github.com/salesforcecli/plugin-auth/commit/8617e5b87e35a6d0b65ed9bb3a75afa2fb85084d))
+
+
+
 ## [2.7.17](https://github.com/salesforcecli/plugin-auth/compare/2.7.16...2.7.17) (2023-05-28)
 
 
