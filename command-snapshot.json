@@ -3,13 +3,24 @@
     "command": "org:list:auth",
     "plugin": "@salesforce/plugin-auth",
     "flags": ["json", "loglevel"],
-    "alias": ["force:auth:list", "auth:list"]
+    "alias": ["force:auth:list", "auth:list"],
+    "flagChars": [],
+    "flagAliases": []
   },
   {
     "command": "org:login:access-token",
     "plugin": "@salesforce/plugin-auth",
     "flags": ["alias", "instance-url", "json", "loglevel", "no-prompt", "set-default", "set-default-dev-hub"],
-    "alias": ["force:auth:accesstoken:store", "auth:accesstoken:store"]
+    "alias": ["force:auth:accesstoken:store", "auth:accesstoken:store"],
+    "flagChars": ["a", "d", "p", "r", "s"],
+    "flagAliases": [
+      "instanceurl",
+      "noprompt",
+      "setalias",
+      "setdefaultdevhub",
+      "setdefaultdevhubusername",
+      "setdefaultusername"
+    ]
   },
   {
     "command": "org:login:device",
@@ -24,7 +35,17 @@
       "set-default",
       "set-default-dev-hub"
     ],
-    "alias": ["force:auth:device:login", "auth:device:login"]
+    "alias": ["force:auth:device:login", "auth:device:login"],
+    "flagChars": ["a", "d", "i", "r", "s"],
+    "flagAliases": [
+      "clientid",
+      "disablemasking",
+      "instanceurl",
+      "setalias",
+      "setdefaultdevhub",
+      "setdefaultdevhubusername",
+      "setdefaultusername"
+    ]
   },
   {
     "command": "org:login:jwt",
@@ -41,13 +62,37 @@
       "set-default-dev-hub",
       "username"
     ],
-    "alias": ["force:auth:jwt:grant", "auth:jwt:grant"]
+    "alias": ["force:auth:jwt:grant", "auth:jwt:grant"],
+    "flagChars": ["a", "d", "f", "i", "o", "p", "r", "s"],
+    "flagAliases": [
+      "clientid",
+      "instanceurl",
+      "jwtkeyfile",
+      "keyfile",
+      "l",
+      "noprompt",
+      "setalias",
+      "setdefaultdevhub",
+      "setdefaultdevhubusername",
+      "setdefaultusername",
+      "u",
+      "v"
+    ]
   },
   {
     "command": "org:login:sfdx-url",
     "plugin": "@salesforce/plugin-auth",
     "flags": ["alias", "json", "loglevel", "no-prompt", "set-default", "set-default-dev-hub", "sfdx-url-file"],
-    "alias": ["force:auth:sfdxurl:store", "auth:sfdxurl:store"]
+    "alias": ["force:auth:sfdxurl:store", "auth:sfdxurl:store"],
+    "flagChars": ["a", "d", "f", "p", "s"],
+    "flagAliases": [
+      "noprompt",
+      "setalias",
+      "setdefaultdevhub",
+      "setdefaultdevhubusername",
+      "setdefaultusername",
+      "sfdxurlfile"
+    ]
   },
   {
     "command": "org:login:web",
@@ -64,12 +109,27 @@
       "set-default",
       "set-default-dev-hub"
     ],
-    "alias": ["force:auth:web:login", "auth:web:login"]
+    "alias": ["force:auth:web:login", "auth:web:login"],
+    "flagChars": ["a", "b", "d", "i", "p", "r", "s"],
+    "flagAliases": [
+      "clientid",
+      "disablemasking",
+      "instanceurl",
+      "l",
+      "noprompt",
+      "setalias",
+      "setdefaultdevhub",
+      "setdefaultdevhubusername",
+      "setdefaultusername",
+      "v"
+    ]
   },
   {
     "command": "org:logout",
     "plugin": "@salesforce/plugin-auth",
     "flags": ["all", "json", "loglevel", "no-prompt", "target-org"],
-    "alias": ["force:auth:logout", "auth:logout"]
+    "alias": ["force:auth:logout", "auth:logout"],
+    "flagChars": ["a", "o", "p"],
+    "flagAliases": ["noprompt", "targetusername", "u"]
   }
 ]

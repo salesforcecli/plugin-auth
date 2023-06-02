@@ -11,7 +11,6 @@ import { Flags, loglevel } from '@salesforce/sf-plugins-core';
 import { OAuth2Config } from 'jsforce';
 import { AuthFields, AuthInfo, Logger, Messages, SfError, WebOAuthServer } from '@salesforce/core';
 import { Env } from '@salesforce/kit';
-import { get, Optional } from '@salesforce/ts-types';
 import { Interfaces } from '@oclif/core';
 import { AuthBaseCommand } from '../../../authBaseCommand';
 import { Common } from '../../../common';
@@ -94,7 +93,7 @@ export default class LoginWeb extends AuthBaseCommand<AuthFields> {
     if (await this.shouldExitCommand(flags['no-prompt'])) return {};
 
     const oauthConfig: OAuth2Config = {
-      loginUrl: await Common.resolveLoginUrl(get(flags['instance-url'], 'href', null) as Optional<string>),
+      loginUrl: await Common.resolveLoginUrl(flags['instance-url']?.href),
       clientId: flags['client-id'],
     };
 

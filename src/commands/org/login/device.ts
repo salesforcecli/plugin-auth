@@ -7,7 +7,6 @@
 
 import { OAuth2Config } from 'jsforce';
 import { AuthFields, AuthInfo, DeviceOauthService, Messages } from '@salesforce/core';
-import { get, Optional } from '@salesforce/ts-types';
 import { Flags, loglevel } from '@salesforce/sf-plugins-core';
 import { DeviceCodeResponse } from '@salesforce/core/lib/deviceOauthService';
 import { ux } from '@oclif/core';
@@ -72,7 +71,7 @@ export default class LoginDevice extends AuthBaseCommand<DeviceLoginResult> {
     if (await this.shouldExitCommand(false)) return {};
 
     const oauthConfig: OAuth2Config = {
-      loginUrl: await Common.resolveLoginUrl(get(flags['instance-url'], 'href', null) as Optional<string>),
+      loginUrl: await Common.resolveLoginUrl(flags['instance-url']?.href),
       clientId: flags['client-id'],
     };
 

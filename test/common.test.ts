@@ -5,8 +5,8 @@
  * For full license text, see LICENSE.txt file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  */
 
-import { ConfigContents, SfdcUrl, SfError } from '@salesforce/core';
-import { expect } from 'chai';
+import { ConfigContents, SfdcUrl } from '@salesforce/core';
+import { assert, expect } from 'chai';
 import { TestContext, uniqid } from '@salesforce/core/lib/testSetup';
 import { Common } from '../src/common';
 
@@ -76,8 +76,8 @@ describe('common unit tests', () => {
         await Common.resolveLoginUrl(undefined);
         expect.fail('This test is failing because it is expecting an error that is never thrown');
       } catch (error) {
-        const err = error as SfError;
-        expect(err.name).to.equal('URL_WARNING');
+        assert(error instanceof Error);
+        expect(error.name).to.equal('LightningDomain');
       }
     });
     it('should throw on lightning login URL passed in to resolveLoginUrl()', async () => {
@@ -86,8 +86,19 @@ describe('common unit tests', () => {
         await Common.resolveLoginUrl('https://shanedevhub.lightning.force.com');
         expect.fail('This test is failing because it is expecting an error that is never thrown');
       } catch (error) {
-        const err = error as SfError;
-        expect(err.name).to.equal('URL_WARNING');
+        assert(error instanceof Error);
+        expect(error.name).to.equal('LightningDomain');
+      }
+    });
+
+    it('should throw on internal lightning login URL passed in to resolveLoginUrl()', async () => {
+      await projectSetup($$, true);
+      try {
+        await Common.resolveLoginUrl('https://dro000000osjp2a0.test1.lightning.pc-rnd.force.com/');
+        expect.fail('This test is failing because it is expecting an error that is never thrown');
+      } catch (error) {
+        assert(error instanceof Error);
+        expect(error.name).to.equal('LightningDomain');
       }
     });
   });
