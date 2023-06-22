@@ -91,6 +91,12 @@ describe('common unit tests', () => {
       }
     });
 
+    it('should allow a domain containing lightning in its login URL', async () => {
+      await projectSetup($$, true);
+      const loginUrl = await Common.resolveLoginUrl('https://mycompany-lightning.my.salesforce.com');
+      expect(loginUrl).equals('https://mycompany-lightning.my.salesforce.com');
+    });
+
     it('should throw on internal lightning login URL passed in to resolveLoginUrl()', async () => {
       await projectSetup($$, true);
       try {
