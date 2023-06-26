@@ -1,3 +1,12 @@
+## [2.8.3](https://github.com/salesforcecli/plugin-auth/compare/2.8.2...2.8.3) (2023-06-26)
+
+
+### Bug Fixes
+
+* regex lightning is surrounded by period ([#732](https://github.com/salesforcecli/plugin-auth/issues/732)) ([372d7a1](https://github.com/salesforcecli/plugin-auth/commit/372d7a1c9f318726096cf83056eaaf2bc3cd4f05))
+
+
+
 ## [2.8.2](https://github.com/salesforcecli/plugin-auth/compare/2.8.1...2.8.2) (2023-06-17)
 
 
