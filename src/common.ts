@@ -35,7 +35,7 @@ export class Common {
 }
 
 const throwIfLightning = (urlString?: string): void => {
-  if (urlString?.match(/lightning\..*force\.com/)) {
+  if (urlString?.match(/\.lightning\..*force\.com/)) {
     throw new SfError(messages.getMessage('lightningInstanceUrl'), 'LightningDomain', [
       messages.getMessage('flags.instance-url.description'),
     ]);
