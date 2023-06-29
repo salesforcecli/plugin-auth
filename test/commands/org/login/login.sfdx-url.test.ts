@@ -25,9 +25,12 @@ describe('org:login:sfdx-url', async () => {
   const testData = new MockTestOrgData();
   let authFields: AuthFields;
   let authInfoStub: StubbedType<AuthInfo>;
+  const keyPathTxt = 'path/to/key.txt';
+  const keyPathJson = 'path/to/key.json';
 
   async function prepareStubs(options: Options = {}) {
     authFields = await testData.getConfig();
+    $$.stubAliases({});
     delete authFields.isDevHub;
 
     authInfoStub = stubInterface<AuthInfo>($$.SANDBOX, {
@@ -37,7 +40,10 @@ describe('org:login:sfdx-url', async () => {
     await $$.stubAuths(testData);
 
     if (!options.fileDoesNotExist) {
-      $$.SANDBOX.stub(fs, 'readFile').resolves('force://PlatformCLI::CoffeeAndBacon@su0503.my.salesforce.com');
+      $$.SANDBOX.stub(fs, 'readFile')
+        .callThrough()
+        .withArgs(keyPathTxt, 'utf8')
+        .resolves('force://PlatformCLI::CoffeeAndBacon@su0503.my.salesforce.com');
     }
 
     if (options.authInfoCreateFails) {
@@ -51,20 +57,23 @@ describe('org:login:sfdx-url', async () => {
 
   it('should return auth fields', async () => {
     await prepareStubs();
-    const store = new LoginSfdxUrl(['-f', 'path/to/key.txt', '--json'], {} as Config);
+    const store = new LoginSfdxUrl(['-f', keyPathTxt, '--json'], {} as Config);
     const response = await store.run();
     expect(response.username).to.equal(testData.username);
   });
 
   it('should return auth fields when passing in a json file', async () => {
     await prepareStubs({ fileDoesNotExist: true });
-    $$.SANDBOX.stub(fs, 'readFile').resolves(
-      JSON.stringify({
-        sfdxAuthUrl: 'force://PlatformCLI::CoffeeAndBacon@su0503.my.salesforce.com',
-      })
-    );
+    $$.SANDBOX.stub(fs, 'readFile')
+      .callThrough()
+      .withArgs(keyPathJson, 'utf8')
+      .resolves(
+        JSON.stringify({
+          sfdxAuthUrl: 'force://PlatformCLI::CoffeeAndBacon@su0503.my.salesforce.com',
+        })
+      );
 
-    const store = new LoginSfdxUrl(['-f', 'path/to/key.json', '--json'], {} as Config);
+    const store = new LoginSfdxUrl(['-f', keyPathJson, '--json'], {} as Config);
     const response = await store.run();
     expect(response.username).to.equal(testData.username);
   });
@@ -77,7 +86,7 @@ describe('org:login:sfdx-url', async () => {
       })
     );
 
-    const store = new LoginSfdxUrl(['-f', 'path/to/key.json', '--json'], {} as Config);
+    const store = new LoginSfdxUrl(['-f', keyPathJson, '--json'], {} as Config);
     try {
       const response = await store.run();
       expect.fail(`Should have thrown an error. Response: ${JSON.stringify(response)}`);
@@ -88,14 +97,14 @@ describe('org:login:sfdx-url', async () => {
 
   it('should set alias when -a is provided', async () => {
     await prepareStubs();
-    const store = new LoginSfdxUrl(['-f', 'path/to/key.txt', '-a', 'MyAlias', '--json'], {} as Config);
+    const store = new LoginSfdxUrl(['-f', keyPathTxt, '-a', 'MyAlias', '--json'], {} as Config);
     await store.run();
     expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
   });
 
   it('should set target-org to alias when -s and -a are provided', async () => {
     await prepareStubs();
-    const store = new LoginSfdxUrl(['-f', 'path/to/key.txt', '-a', 'MyAlias', '-s', '--json'], {} as Config);
+    const store = new LoginSfdxUrl(['-f', keyPathTxt, '-a', 'MyAlias', '-s', '--json'], {} as Config);
     await store.run();
     expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
     expect(authInfoStub.handleAliasAndDefaultSettings.args[0]).to.deep.equal([
@@ -109,7 +118,7 @@ describe('org:login:sfdx-url', async () => {
 
   it('should set target-org to username when -s is provided', async () => {
     await prepareStubs();
-    const store = new LoginSfdxUrl(['-f', 'path/to/key.txt', '-s', '--json'], {} as Config);
+    const store = new LoginSfdxUrl(['-f', keyPathTxt, '-s', '--json'], {} as Config);
     await store.run();
     expect(authInfoStub.setAlias.callCount).to.equal(0);
     expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
@@ -124,7 +133,7 @@ describe('org:login:sfdx-url', async () => {
 
   it('should set target-dev-hub to alias when -d and -a are provided', async () => {
     await prepareStubs();
-    const store = new LoginSfdxUrl(['-f', 'path/to/key.txt', '-a', 'MyAlias', '-d', '--json'], {} as Config);
+    const store = new LoginSfdxUrl(['-f', keyPathTxt, '-a', 'MyAlias', '-d', '--json'], {} as Config);
     await store.run();
     expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
     expect(authInfoStub.handleAliasAndDefaultSettings.args[0]).to.deep.equal([
@@ -138,7 +147,7 @@ describe('org:login:sfdx-url', async () => {
 
   it('should set target-dev-hub to username when -d is provided', async () => {
     await prepareStubs();
-    const store = new LoginSfdxUrl(['-f', 'path/to/key.txt', '-d', '--json'], {} as Config);
+    const store = new LoginSfdxUrl(['-f', keyPathTxt, '-d', '--json'], {} as Config);
     await store.run();
     expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
     expect(authInfoStub.handleAliasAndDefaultSettings.args[0]).to.deep.equal([
@@ -152,7 +161,7 @@ describe('org:login:sfdx-url', async () => {
 
   it('should set target-org and target-dev-hub to username when -d and -s are provided', async () => {
     await prepareStubs();
-    const store = new LoginSfdxUrl(['-f', 'path/to/key.txt', '-d', '-s', '--json'], {} as Config);
+    const store = new LoginSfdxUrl(['-f', keyPathTxt, '-d', '-s', '--json'], {} as Config);
     await store.run();
     expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
     expect(authInfoStub.handleAliasAndDefaultSettings.args[0]).to.deep.equal([
@@ -166,7 +175,7 @@ describe('org:login:sfdx-url', async () => {
 
   it('should set target-org and target-dev-hub to alias when -a, -d, and -s are provided', async () => {
     await prepareStubs();
-    const store = new LoginSfdxUrl(['-f', 'path/to/key.txt', '-d', '-s', '-a', 'MyAlias', '--json'], {} as Config);
+    const store = new LoginSfdxUrl(['-f', keyPathTxt, '-d', '-s', '-a', 'MyAlias', '--json'], {} as Config);
     await store.run();
     expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
     expect(authInfoStub.handleAliasAndDefaultSettings.args[0]).to.deep.equal([
@@ -182,7 +191,7 @@ describe('org:login:sfdx-url', async () => {
     await prepareStubs();
     $$.SANDBOX.stub(Global, 'getEnvironmentMode').returns(Mode.DEMO);
     $$.SANDBOX.stub(SfCommand.prototype, 'confirm').resolves(true);
-    const store = new LoginSfdxUrl(['-f', 'path/to/key.txt', '--json'], {} as Config);
+    const store = new LoginSfdxUrl(['-f', keyPathTxt, '--json'], {} as Config);
     await store.run();
     expect(authInfoStub.save.callCount).to.equal(1);
   });
@@ -191,7 +200,7 @@ describe('org:login:sfdx-url', async () => {
     await prepareStubs();
     $$.SANDBOX.stub(Global, 'getEnvironmentMode').returns(Mode.DEMO);
     $$.SANDBOX.stub(SfCommand.prototype, 'confirm').resolves(false);
-    const store = new LoginSfdxUrl(['-f', 'path/to/key.txt', '--json'], {} as Config);
+    const store = new LoginSfdxUrl(['-f', keyPathTxt, '--json'], {} as Config);
     await store.run();
     expect(authInfoStub.save.callCount).to.equal(0);
   });
@@ -200,7 +209,7 @@ describe('org:login:sfdx-url', async () => {
     await prepareStubs();
     $$.SANDBOX.stub(Global, 'getEnvironmentMode').returns(Mode.DEMO);
     $$.SANDBOX.stub(SfCommand.prototype, 'confirm').resolves(false);
-    const store = new LoginSfdxUrl(['-p', '-f', 'path/to/key.txt', '--json'], {} as Config);
+    const store = new LoginSfdxUrl(['-p', '-f', keyPathTxt, '--json'], {} as Config);
     await store.run();
     expect(authInfoStub.save.callCount).to.equal(1);
   });
