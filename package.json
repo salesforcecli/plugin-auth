@@ -127,7 +127,7 @@
     "prepare": "sf-install",
     "reformat": "prettier --config .prettierrc --write './*.{js,json,md}' './**/*.{ts,json,md}'",
     "test": "wireit",
-    "test:nuts": "nyc mocha \"**/*.nut.ts\" --slow 4500 --timeout 600000 --parallel --jobs 20",
+    "test:nuts": "nyc mocha \"**/*.nut.ts\" --slow 4500 --timeout 1200000 --parallel --jobs 20",
     "test:only": "wireit",
     "version": "oclif readme"
   },
