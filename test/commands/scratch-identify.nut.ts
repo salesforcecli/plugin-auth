@@ -52,22 +52,28 @@ describe('verify discovery/id of scratch org', () => {
     await testSession?.clean();
   });
 
-  it('should have the scratch org in auth files', () => {
+  it('should have the scratch org and devHub in auth files', () => {
     const list = execCmd<AuthListResults>('org:list:auth --json', { ensureExitCode: 0 }).jsonOutput
       ?.result as AuthListResults;
     const found = !!list.find((r) => r.username === orgUsername);
     expect(found).to.be.true;
+
+    const hubFound = !!list.find((r) => r.username === hubUsername);
+    expect(hubFound).to.be.true;
   });
 
   it('should logout from the org)', () => {
     execCmd(`org:logout -o ${orgUsername} --no-prompt`, { ensureExitCode: 0 });
   });
 
-  it('should NOT have the scratch org in auth files', () => {
+  it('should NOT have the scratch org in auth files (but still has the hub)', () => {
     const list = execCmd<AuthListResults>('org:list:auth --json', { ensureExitCode: 0 }).jsonOutput
       ?.result as AuthListResults;
     const found = !!list.find((r) => r.username === orgUsername);
     expect(found).to.be.false;
+
+    const hubFound = !!list.find((r) => r.username === hubUsername);
+    expect(hubFound).to.be.true;
   });
 
   it('should login to the org via jwt grant', async () => {
