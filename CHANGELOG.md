@@ -1,3 +1,12 @@
+## [2.8.5](https://github.com/salesforcecli/plugin-auth/compare/2.8.4...2.8.5) (2023-07-06)
+
+
+### Bug Fixes
+
+* **deps:** update testkit for session.clean fix ([637f738](https://github.com/salesforcecli/plugin-auth/commit/637f738a52b999333c966135a08a6bd1cbf16ba4))
+
+
+
 ## [2.8.4](https://github.com/salesforcecli/plugin-auth/compare/2.8.3...2.8.4) (2023-06-29)
 
 
