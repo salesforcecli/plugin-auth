@@ -38,8 +38,8 @@ describe('org:login:web', () => {
       getFields: () => authFields,
     });
 
-    stubMethod($$.SANDBOX, LoginWeb.prototype, 'executeLoginFlow').callsFake(async () => authInfoStub);
-    $$.SANDBOX.stub(AuthInfo, 'listAllAuthorizations').callsFake(async () => []);
+    stubMethod($$.SANDBOX, LoginWeb.prototype, 'executeLoginFlow').resolves(authInfoStub);
+    $$.SANDBOX.stub(AuthInfo, 'listAllAuthorizations').resolves([]);
 
     // @ts-ignore
     const login = new LoginWeb(flags, config);

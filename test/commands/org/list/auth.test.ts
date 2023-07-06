@@ -11,12 +11,12 @@ import { expect } from 'chai';
 import { AuthInfo } from '@salesforce/core';
 import ListAuth from '../../../../src/commands/org/list/auth';
 
-describe('org:list:auth', async () => {
+describe('org:list:auth', () => {
   const $$ = new TestContext();
   const testData = new MockTestOrgData();
   testData.aliases = ['TestAlias'];
 
-  async function prepareStubs(forceFailure = false) {
+  async function prepareStubs(forceFailure = false): Promise<void> {
     await $$.stubAuths(testData);
     $$.stubAliases({ TestAlias: testData.username });
     if (forceFailure) {
