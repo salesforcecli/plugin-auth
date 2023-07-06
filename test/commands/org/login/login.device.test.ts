@@ -21,7 +21,7 @@ interface Options {
   approvalFails?: boolean;
 }
 
-describe('org:login:device', async () => {
+describe('org:login:device', () => {
   const $$ = new TestContext();
 
   const testData = new MockTestOrgData();
@@ -35,7 +35,7 @@ describe('org:login:device', async () => {
   let authFields: AuthFields;
   let authInfoStub: StubbedType<AuthInfo>;
 
-  async function prepareStubs(options: Options = {}) {
+  async function prepareStubs(options: Options = {}): Promise<void> {
     authFields = await testData.getConfig();
     delete authFields.isDevHub;
 
@@ -52,7 +52,7 @@ describe('org:login:device', async () => {
     if (options.approvalTimesout) {
       stubMethod($$.SANDBOX, DeviceOauthService.prototype, 'pollForDeviceApproval').throws('polling timeout');
     } else {
-      stubMethod($$.SANDBOX, DeviceOauthService.prototype, 'pollForDeviceApproval').callsFake(async () => ({
+      stubMethod($$.SANDBOX, DeviceOauthService.prototype, 'pollForDeviceApproval').resolves({
         access_token: '1234',
         refresh_token: '1234',
         signature: '1234',
@@ -61,10 +61,10 @@ describe('org:login:device', async () => {
         id: '1234',
         token_type: '1234',
         issued_at: '1234',
-      }));
+      });
     }
 
-    stubMethod($$.SANDBOX, AuthInfo, 'create').callsFake(async () => authInfoStub);
+    stubMethod($$.SANDBOX, AuthInfo, 'create').resolves(authInfoStub);
     await $$.stubAuths(testData);
   }
 

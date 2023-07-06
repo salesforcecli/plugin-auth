@@ -16,10 +16,12 @@ const projectSetup = async ($$: TestContext, inProject = true, contents?: Config
     if (contents) {
       $$.setConfigStubContents('SfProjectJson', contents);
       if ($$.configStubs.SfProjectJson) {
-        $$.configStubs.SfProjectJson.retrieveContents = async () => contents;
+        // eslint-disable-next-line @typescript-eslint/require-await
+        $$.configStubs.SfProjectJson.retrieveContents = async (): Promise<ConfigContents> => contents;
       }
     }
   }
+  return Promise.resolve();
 };
 
 describe('common unit tests', () => {

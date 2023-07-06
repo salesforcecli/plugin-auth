@@ -18,14 +18,14 @@ interface Options {
   existingAuth?: boolean;
 }
 
-describe('org:login:jwt', async () => {
+describe('org:login:jwt', () => {
   const $$ = new TestContext();
 
   const testData = new MockTestOrgData();
   let authFields: AuthFields;
   let authInfoStub: StubbedType<AuthInfo>;
 
-  async function prepareStubs(options: Options = {}) {
+  async function prepareStubs(options: Options = {}): Promise<void> {
     authFields = await testData.getConfig();
     delete authFields.isDevHub;
 
@@ -44,11 +44,11 @@ describe('org:login:jwt', async () => {
         .onSecondCall()
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        .callsFake(async () => authInfoStub);
+        .resolves(authInfoStub);
     } else {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      $$.SANDBOX.stub(AuthInfo, 'create').callsFake(async () => authInfoStub);
+      $$.SANDBOX.stub(AuthInfo, 'create').resolves(authInfoStub);
     }
   }
 

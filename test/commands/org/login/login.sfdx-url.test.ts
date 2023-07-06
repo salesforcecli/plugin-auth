@@ -20,7 +20,7 @@ interface Options {
   fileDoesNotExist?: boolean;
 }
 
-describe('org:login:sfdx-url', async () => {
+describe('org:login:sfdx-url', () => {
   const $$ = new TestContext();
   const testData = new MockTestOrgData();
   let authFields: AuthFields;
@@ -28,7 +28,7 @@ describe('org:login:sfdx-url', async () => {
   const keyPathTxt = 'path/to/key.txt';
   const keyPathJson = 'path/to/key.json';
 
-  async function prepareStubs(options: Options = {}) {
+  async function prepareStubs(options: Options = {}): Promise<void> {
     authFields = await testData.getConfig();
     $$.stubAliases({});
     delete authFields.isDevHub;
@@ -51,7 +51,7 @@ describe('org:login:sfdx-url', async () => {
     } else {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      $$.SANDBOX.stub(AuthInfo, 'create').callsFake(async () => authInfoStub);
+      $$.SANDBOX.stub(AuthInfo, 'create').resolves(authInfoStub);
     }
   }
 

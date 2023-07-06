@@ -49,7 +49,7 @@ describe('org:login:access-token', () => {
         exists: () => Promise.resolve(authFileExists),
       },
     });
-    stubMethod($$.SANDBOX, Store.prototype, 'saveAuthInfo').resolves(async () => userInfo);
+    stubMethod($$.SANDBOX, Store.prototype, 'saveAuthInfo').resolves(userInfo);
     stubMethod($$.SANDBOX, AuthInfo.prototype, 'getUsername').returns(authFields.username);
     stubMethod($$.SANDBOX, AuthInfo.prototype, 'getFields').returns({
       accessToken,
@@ -69,7 +69,7 @@ describe('org:login:access-token', () => {
     // @ts-ignore
     $$.SANDBOX.stub(Store.prototype, 'askForAccessToken').resolves(promptAnswer);
 
-    return store;
+    return Promise.resolve(store);
   }
 
   it('should return auth fields after successful auth', async () => {
