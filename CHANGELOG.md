@@ -1,3 +1,12 @@
+## [2.8.6](https://github.com/salesforcecli/plugin-auth/compare/2.8.5...2.8.6) (2023-07-08)
+
+
+### Bug Fixes
+
+* **deps:** bump tough-cookie from 4.1.2 to 4.1.3 ([771d19c](https://github.com/salesforcecli/plugin-auth/commit/771d19c04a10f85a910933df27bb8aa717ab962c))
+
+
+
 ## [2.8.5](https://github.com/salesforcecli/plugin-auth/compare/2.8.4...2.8.5) (2023-07-06)
 
 
