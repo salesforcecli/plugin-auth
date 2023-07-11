@@ -1,3 +1,12 @@
+## [2.8.7](https://github.com/salesforcecli/plugin-auth/compare/2.8.6...2.8.7) (2023-07-11)
+
+
+### Bug Fixes
+
+* **deps:** bump semver from 5.7.1 to 5.7.2 ([d2d50d0](https://github.com/salesforcecli/plugin-auth/commit/d2d50d07df224ac18a8792ede4f063d818385c79))
+
+
+
 ## [2.8.6](https://github.com/salesforcecli/plugin-auth/compare/2.8.5...2.8.6) (2023-07-08)
 
 
