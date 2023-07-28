@@ -13,6 +13,7 @@ import { Config } from '@oclif/core';
 import { StubbedType, stubInterface } from '@salesforce/ts-sinon';
 import { SfCommand } from '@salesforce/sf-plugins-core';
 import LoginSfdxUrl from '../../../../src/commands/org/login/sfdx-url';
+import * as stdin from '../../../../src/stdin';
 
 interface Options {
   authInfoCreateFails?: boolean;
@@ -91,7 +92,7 @@ describe('org:login:sfdx-url', () => {
       const response = await store.run();
       expect.fail(`Should have thrown an error. Response: ${JSON.stringify(response)}`);
     } catch (e) {
-      expect((e as Error).message).to.includes('Error getting the auth URL from file');
+      expect((e as Error).message).to.includes('Error retrieving the auth URL');
     }
   });
 
@@ -212,5 +213,36 @@ describe('org:login:sfdx-url', () => {
     const store = new LoginSfdxUrl(['-p', '-f', keyPathTxt, '--json'], {} as Config);
     await store.run();
     expect(authInfoStub.save.callCount).to.equal(1);
+  });
+
+  it('should return auth fields when reading auth url from stdin', async () => {
+    await prepareStubs({ fileDoesNotExist: true });
+    $$.SANDBOX.stub(stdin, 'read').resolves('force://PlatformCLI::CoffeeAndBacon@su0503.my.salesforce.com');
+    const store = new LoginSfdxUrl(['--sfdx-url-stdin', '--json'], {} as Config);
+    const response = await store.run();
+    expect(response.username).to.equal(testData.username);
+  });
+
+  it('should throw error when passing both sfdx-url-stdin and sfdx-url-file', async () => {
+    const store = new LoginSfdxUrl(['--sfdx-url-stdin', '--sfdx-url-file', 'path/to/key.txt', '--json'], {} as Config);
+
+    try {
+      const response = await store.run();
+      expect.fail(`Should have thrown an error. Response: ${JSON.stringify(response)}`);
+    } catch (e) {
+      expect((e as Error).message).to.includes('--sfdx-url-file cannot also be provided when using --sfdx-url-stdin');
+    }
+  });
+
+  it('should throw error when not passing sfdx-url-stdin and sfdx-url-file', async () => {
+    const store = new LoginSfdxUrl(['--json'], {} as Config);
+
+    try {
+      const response = await store.run();
+      expect.fail(`Should have thrown an error. Response: ${JSON.stringify(response)}`);
+    } catch (e) {
+      expect((e as Error).message).to.includes('Exactly one of the following must be provided: --sfdx-url-file');
+      expect((e as Error).message).to.includes('Exactly one of the following must be provided: --sfdx-url-stdin');
+    }
   });
 });

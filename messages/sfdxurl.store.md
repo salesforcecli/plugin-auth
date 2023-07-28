@@ -22,6 +22,10 @@ You can also create a JSON file that has a top-level property named sfdxAuthUrl 
 
 Path to a file that contains the Salesforce DX authorization URL.
 
+# flags.sfdx-url-stdin.summary
+
+Read sfdx auth url from stdin
+
 # examples
 
 - Authorize an org using the SFDX authorization URL in the files/authFile.json file:
@@ -31,3 +35,7 @@ Path to a file that contains the Salesforce DX authorization URL.
 - Similar to previous example, but set the org as your default and give it an alias MyDefaultOrg:
 
   <%= config.bin %> <%= command.id %> --sfdx-url-file files/authFile.json --set-default --alias MyDefaultOrg
+
+- Authorize an org reading the SFDX authorization URL from stdin:
+
+  echo 'force://PlatformCLI::CoffeeAndBacon@su0503.my.salesforce.com' | <%= config.bin %> <%= command.id %> --sfdx-url-stdin --set-default --alias MyDefaultOrg
