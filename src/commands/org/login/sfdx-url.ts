@@ -11,6 +11,7 @@ import { AuthFields, AuthInfo, Messages } from '@salesforce/core';
 import { AnyJson } from '@salesforce/ts-types';
 import { parseJson } from '@salesforce/kit';
 import { AuthBaseCommand } from '../../../authBaseCommand';
+import { read } from '../../../stdin';
 
 Messages.importMessagesDirectory(__dirname);
 const messages = Messages.loadMessages('@salesforce/plugin-auth', 'sfdxurl.store');
@@ -22,6 +23,7 @@ type AuthJson = AnyJson & {
   result?: AnyJson & { sfdxAuthUrl: string };
   sfdxAuthUrl: string;
 };
+
 export default class LoginSfdxUrl extends AuthBaseCommand<AuthFields> {
   public static readonly summary = messages.getMessage('summary');
   public static readonly description = messages.getMessage('description', [AUTH_URL_FORMAT]);
@@ -29,12 +31,18 @@ export default class LoginSfdxUrl extends AuthBaseCommand<AuthFields> {
   public static aliases = ['force:auth:sfdxurl:store', 'auth:sfdxurl:store'];
 
   public static readonly flags = {
+    'sfdx-url-stdin': Flags.boolean({
+      summary: messages.getMessage('flags.sfdx-url-stdin.summary'),
+      exclusive: ['sfdx-url-file'],
+      exactlyOne: ['sfdx-url-file'],
+    }),
     'sfdx-url-file': Flags.file({
       char: 'f',
       summary: messages.getMessage('flags.sfdx-url-file.summary'),
-      required: true,
       deprecateAliases: true,
       aliases: ['sfdxurlfile'],
+      exclusive: ['sfdx-url-stdin'],
+      exactlyOne: ['sfdx-url-stdin'],
     }),
     'set-default-dev-hub': Flags.boolean({
       char: 'd',
@@ -67,15 +75,21 @@ export default class LoginSfdxUrl extends AuthBaseCommand<AuthFields> {
 
   public async run(): Promise<AuthFields> {
     const { flags } = await this.parse(LoginSfdxUrl);
+
     if (await this.shouldExitCommand(flags['no-prompt'])) return {};
 
-    const authFile = flags['sfdx-url-file'];
-
-    const sfdxAuthUrl = authFile.endsWith('.json') ? await getUrlFromJson(authFile) : await readFile(authFile, 'utf8');
+    const sfdxUrlFile = flags['sfdx-url-file'];
+    const sfdxAuthUrl = flags['sfdx-url-stdin']
+      ? await read()
+      : sfdxUrlFile
+      ? sfdxUrlFile.endsWith('.json')
+        ? await getUrlFromJson(sfdxUrlFile)
+        : await readFile(sfdxUrlFile, 'utf8')
+      : null;
 
     if (!sfdxAuthUrl) {
       throw new Error(
-        `Error getting the auth URL from file ${authFile}. Please ensure it meets the description shown in the documentation for this command.`
+        'Error retrieving the auth URL. Please ensure it meets the description shown in the documentation for this command.'
       );
     }
 

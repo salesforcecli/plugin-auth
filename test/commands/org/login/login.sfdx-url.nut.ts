@@ -56,4 +56,12 @@ describe('org:login:sfdx-url NUTs', () => {
     const output = getString(result, 'shellOutput.stdout');
     expect(output).to.include(`Successfully authorized ${username} with org ID`);
   });
+
+  it('should authorize an org using sfdx-url (human readable)', () => {
+    env.setString('TESTKIT_EXECUTABLE_PATH', `echo '${authUrl}' | ${env.getString('TESTKIT_EXECUTABLE_PATH')}`);
+    const command = 'org:login:sfdx-url -d --sfdx-url-stdin';
+    const result = execCmd(command, { ensureExitCode: 0 });
+    const output = getString(result, 'shellOutput.stdout');
+    expect(output).to.include(`Successfully authorized ${username} with org ID`);
+  });
 });
