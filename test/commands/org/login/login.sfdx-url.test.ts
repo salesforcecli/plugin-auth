@@ -8,7 +8,7 @@
 import * as fs from 'fs/promises';
 import { AuthFields, AuthInfo, Global, Mode } from '@salesforce/core';
 import { MockTestOrgData, TestContext } from '@salesforce/core/lib/testSetup';
-import { expect } from 'chai';
+import { expect, assert } from 'chai';
 import { Config } from '@oclif/core';
 import { StubbedType, stubInterface } from '@salesforce/ts-sinon';
 import { SfCommand } from '@salesforce/sf-plugins-core';
@@ -247,6 +247,16 @@ describe('org:login:sfdx-url', () => {
     } catch (e) {
       expect((e as Error).message).to.includes('Error retrieving the auth URL');
     }
+  });
+
+  it('should ignore stdin when not using --sfdx-url-stdin', async () => {
+    await prepareStubs();
+    $$.SANDBOX.stub(stdin, 'read').resolves('force://foo::bar@su0503.my.salesforce.com');
+    const parseSfdxAuthUrlSpy = $$.SANDBOX.spy(AuthInfo, 'parseSfdxAuthUrl');
+    const store = new LoginSfdxUrl(['-f', keyPathTxt, '--json'], {} as Config);
+    await store.run();
+
+    assert.isTrue(parseSfdxAuthUrlSpy.calledWith('force://PlatformCLI::CoffeeAndBacon@su0503.my.salesforce.com'));
   });
 
   it('should throw error when passing both sfdx-url-stdin and sfdx-url-file', async () => {
