@@ -236,6 +236,19 @@ describe('org:login:sfdx-url', () => {
     }
   });
 
+  it('should throw error when not piping anything to stdin', async () => {
+    await prepareStubs({ fileDoesNotExist: true });
+    $$.SANDBOX.stub(stdin, 'read').resolves(undefined);
+    const store = new LoginSfdxUrl(['--sfdx-url-stdin', '--json'], {} as Config);
+
+    try {
+      const response = await store.run();
+      expect.fail(`Should have thrown an error. Response: ${JSON.stringify(response)}`);
+    } catch (e) {
+      expect((e as Error).message).to.includes('Error retrieving the auth URL');
+    }
+  });
+
   it('should throw error when passing both sfdx-url-stdin and sfdx-url-file', async () => {
     const store = new LoginSfdxUrl(['--sfdx-url-stdin', '--sfdx-url-file', 'path/to/key.txt', '--json'], {} as Config);
 
