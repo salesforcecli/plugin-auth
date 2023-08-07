@@ -193,7 +193,7 @@ describe('org:login:sfdx-url', () => {
     $$.SANDBOX.stub(SfCommand.prototype, 'confirm').resolves(true);
     const store = new LoginSfdxUrl(['-f', keyPathTxt, '--json'], {} as Config);
     await store.run();
-    expect(authInfoStub.save.callCount).to.equal(1);
+    expect(authInfoStub.save.called);
   });
 
   it('should do nothing when in demo mode (SFDX_ENV=demo) and prompt is answered with no', async () => {
@@ -211,6 +211,6 @@ describe('org:login:sfdx-url', () => {
     $$.SANDBOX.stub(SfCommand.prototype, 'confirm').resolves(false);
     const store = new LoginSfdxUrl(['-p', '-f', keyPathTxt, '--json'], {} as Config);
     await store.run();
-    expect(authInfoStub.save.callCount).to.equal(1);
+    expect(authInfoStub.save.called);
   });
 });

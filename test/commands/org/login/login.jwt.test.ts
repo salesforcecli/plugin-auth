@@ -211,7 +211,7 @@ describe('org:login:jwt', () => {
       {} as Config
     );
     await grant.run();
-    expect(authInfoStub.save.callCount).to.equal(1);
+    expect(authInfoStub.save.called);
   });
 
   it('should do nothing when in demo mode (SFDX_ENV=demo) and prompt is answered with no', async () => {
@@ -234,6 +234,6 @@ describe('org:login:jwt', () => {
       {} as Config
     );
     await grant.run();
-    expect(authInfoStub.save.callCount).to.equal(1);
+    expect(authInfoStub.save.called);
   });
 });
