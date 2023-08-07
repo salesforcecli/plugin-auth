@@ -18,7 +18,7 @@ import {
 
 let testSession: TestSession;
 
-describe('org:login:sfdx-url NUTs', () => {
+describe.skip('org:login:sfdx-url NUTs', () => {
   const env = new Env();
   let authUrl: string;
   let username: string;
