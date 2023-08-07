@@ -23,12 +23,13 @@ describe('verify discovery/id of scratch org', () => {
 
   before('prepare session and ensure environment variables', async () => {
     const env = new Env();
-    ensureString(env.getString('TESTKIT_JWT_KEY'));
-    ensureString(env.getString('TESTKIT_JWT_CLIENT_ID'));
-    ensureString(env.getString('TESTKIT_HUB_INSTANCE'));
-    hubUsername = ensureString(env.getString('TESTKIT_HUB_USERNAME'));
+    // ensureString(env.getString('TESTKIT_JWT_KEY'));
+    // ensureString(env.getString('TESTKIT_JWT_CLIENT_ID'));
+    // ensureString(env.getString('TESTKIT_HUB_INSTANCE'));
+    // hubUsername = ensureString(env.getString('TESTKIT_HUB_USERNAME'));
+    hubUsername = ensureString(env.getString('TESTKIT_AUTH_URL'));
     testSession = await TestSession.create({
-      devhubAuthStrategy: 'AUTO',
+      devhubAuthStrategy: 'AUTH_URL',
       project: { name: 'ScratchIDProject' },
       scratchOrgs: [
         {
