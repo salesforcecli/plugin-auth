@@ -8,7 +8,7 @@
 import * as path from 'path';
 import { expect } from 'chai';
 
-import { execCmd, TestSession } from '@salesforce/cli-plugins-testkit';
+import { execCmd, TestSession, prepareForJwt } from '@salesforce/cli-plugins-testkit';
 import { Env } from '@salesforce/kit';
 import { ensureString } from '@salesforce/ts-types';
 import { AuthFields, AuthInfo } from '@salesforce/core';
@@ -23,13 +23,12 @@ describe('verify discovery/id of scratch org', () => {
 
   before('prepare session and ensure environment variables', async () => {
     const env = new Env();
-    // ensureString(env.getString('TESTKIT_JWT_KEY'));
-    // ensureString(env.getString('TESTKIT_JWT_CLIENT_ID'));
-    // ensureString(env.getString('TESTKIT_HUB_INSTANCE'));
-    // hubUsername = ensureString(env.getString('TESTKIT_HUB_USERNAME'));
-    hubUsername = ensureString(env.getString('TESTKIT_AUTH_URL'));
+    ensureString(env.getString('TESTKIT_JWT_KEY'));
+    ensureString(env.getString('TESTKIT_JWT_CLIENT_ID'));
+    ensureString(env.getString('TESTKIT_HUB_INSTANCE'));
+    hubUsername = ensureString(env.getString('TESTKIT_HUB_USERNAME'));
     testSession = await TestSession.create({
-      devhubAuthStrategy: 'AUTH_URL',
+      devhubAuthStrategy: 'AUTO',
       project: { name: 'ScratchIDProject' },
       scratchOrgs: [
         {
@@ -46,7 +45,7 @@ describe('verify discovery/id of scratch org', () => {
     );
 
     // we'll need this path for testing
-    jwtKey = path.join(testSession.homeDir, 'jwtKey');
+    jwtKey = prepareForJwt(testSession.homeDir);
   });
 
   after(async () => {
