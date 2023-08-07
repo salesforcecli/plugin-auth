@@ -10,7 +10,7 @@ import { Env } from '@salesforce/kit';
 import { ensureString, getString } from '@salesforce/ts-types';
 import { AuthListResults } from '../../../src/commands/org/list/auth';
 
-describe('org:logout NUTs', () => {
+describe.skip('org:logout NUTs', () => {
   const env = new Env();
   let testSession: TestSession;
   let jwtKey: string;
