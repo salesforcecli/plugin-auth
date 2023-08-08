@@ -1,3 +1,12 @@
+## [2.8.11](https://github.com/salesforcecli/plugin-auth/compare/2.8.10...2.8.11) (2023-08-08)
+
+
+### Bug Fixes
+
+* properly setup for jwt test ([c65182f](https://github.com/salesforcecli/plugin-auth/commit/c65182fc6f9a0947ce82f999bb3a098e4adfcf81))
+
+
+
 ## [2.8.10](https://github.com/salesforcecli/plugin-auth/compare/2.8.9...2.8.10) (2023-07-29)
 
 
