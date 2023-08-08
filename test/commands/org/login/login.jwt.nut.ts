@@ -14,7 +14,7 @@ import { expectUrlToExist, expectOrgIdToExist, expectAccessTokenToExist } from '
 
 let testSession: TestSession;
 
-describe.skip('org:login:jwt NUTs', () => {
+describe('org:login:jwt NUTs', () => {
   const env = new Env();
   let jwtKey: string;
   let username: string;

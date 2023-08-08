@@ -13,7 +13,7 @@ import { expectAccessTokenToExist, expectOrgIdToExist, expectUrlToExist } from '
 
 let testSession: TestSession;
 
-describe.skip('org:login:access-token NUTs', () => {
+describe('org:login:access-token NUTs', () => {
   const env = new Env();
   let username: string;
   let instanceUrl: string;

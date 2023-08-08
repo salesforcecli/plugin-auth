@@ -11,7 +11,7 @@ import { ensureString, getString } from '@salesforce/ts-types';
 import { expectUrlToExist, expectOrgIdToExist, expectAccessTokenToExist } from '../../../testHelper';
 import { AuthListResults } from '../../../../src/commands/org/list/auth';
 
-describe.skip('org:list:auth NUTs', () => {
+describe('org:list:auth NUTs', () => {
   let testSession: TestSession;
   let username: string;
 
