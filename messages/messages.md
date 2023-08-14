@@ -46,7 +46,7 @@ Disable masking of user input; use with problematic terminals.
 
 # clientSecretStdin
 
-OAuth client secret of personal connected app?
+OAuth client secret of personal connected app? Press Enter if it's not required.
 
 # lightningInstanceUrl
 
