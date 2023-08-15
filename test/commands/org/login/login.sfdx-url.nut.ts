@@ -6,6 +6,7 @@
  */
 import { execCmd, prepareForAuthUrl, TestSession } from '@salesforce/cli-plugins-testkit';
 import { expect } from 'chai';
+import * as exec from 'shelljs';
 import { Env } from '@salesforce/kit';
 import { ensureString, getString } from '@salesforce/ts-types';
 import { AuthFields } from '@salesforce/core';
@@ -58,10 +59,7 @@ describe('org:login:sfdx-url NUTs', () => {
   });
 
   it('should authorize an org using sfdx-url (human readable)', () => {
-    env.setString('TESTKIT_EXECUTABLE_PATH', `echo '${authUrl}' | ${env.getString('TESTKIT_EXECUTABLE_PATH')}`);
-    const command = 'org:login:sfdx-url -d --sfdx-url-stdin';
-    const result = execCmd(command, { ensureExitCode: 0 });
-    const output = getString(result, 'shellOutput.stdout');
-    expect(output).to.include(`Successfully authorized ${username} with org ID`);
+    const res = exec.cat(authUrl).exec('bin/dev org:login:sfdx-url -d --sfdx-url-stdin', { silent: true });
+    expect(res.stdout).to.include(`Successfully authorized ${username} with org ID`);
   });
 });
