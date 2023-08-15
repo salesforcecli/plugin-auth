@@ -26,6 +26,10 @@ Path to a file that contains the Salesforce DX authorization URL.
 
 Read sfdx auth url from stdin
 
+# errors.missingAuthUrl
+
+Error retrieving the auth URL. Please ensure it meets the description shown in the documentation for this command.
+
 # examples
 
 - Authorize an org using the SFDX authorization URL in the files/authFile.json file:

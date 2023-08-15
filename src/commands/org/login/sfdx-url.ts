@@ -88,9 +88,7 @@ export default class LoginSfdxUrl extends AuthBaseCommand<AuthFields> {
       : null;
 
     if (!sfdxAuthUrl) {
-      throw new Error(
-        'Error retrieving the auth URL. Please ensure it meets the description shown in the documentation for this command.'
-      );
+      throw messages.createError('errors.missingAuthUrl');
     }
 
     const oauth2Options = AuthInfo.parseSfdxAuthUrl(sfdxAuthUrl);
