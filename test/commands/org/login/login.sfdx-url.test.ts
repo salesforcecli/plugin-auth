@@ -6,7 +6,7 @@
  */
 
 import * as fs from 'fs/promises';
-import { AuthFields, AuthInfo, Global, Mode } from '@salesforce/core';
+import { AuthFields, AuthInfo, Global, Mode, Messages } from '@salesforce/core';
 import { MockTestOrgData, TestContext } from '@salesforce/core/lib/testSetup';
 import { expect, assert } from 'chai';
 import { Config } from '@oclif/core';
@@ -14,6 +14,9 @@ import { StubbedType, stubInterface } from '@salesforce/ts-sinon';
 import { SfCommand } from '@salesforce/sf-plugins-core';
 import LoginSfdxUrl from '../../../../src/commands/org/login/sfdx-url';
 import * as stdin from '../../../../src/stdin';
+
+Messages.importMessagesDirectory(__dirname);
+const messages = Messages.loadMessages('@salesforce/plugin-auth', 'sfdxurl.store');
 
 interface Options {
   authInfoCreateFails?: boolean;
@@ -92,7 +95,7 @@ describe('org:login:sfdx-url', () => {
       const response = await store.run();
       expect.fail(`Should have thrown an error. Response: ${JSON.stringify(response)}`);
     } catch (e) {
-      expect((e as Error).message).to.includes('Error retrieving the auth URL');
+      expect((e as Error).message).to.includes(messages.getMessage('errors.missingAuthUrl'));
     }
   });
 
@@ -232,7 +235,7 @@ describe('org:login:sfdx-url', () => {
       const response = await store.run();
       expect.fail(`Should have thrown an error. Response: ${JSON.stringify(response)}`);
     } catch (e) {
-      expect((e as Error).message).to.includes('Error retrieving the auth URL');
+      expect((e as Error).message).to.includes(messages.getMessage('errors.missingAuthUrl'));
     }
   });
 
@@ -245,7 +248,7 @@ describe('org:login:sfdx-url', () => {
       const response = await store.run();
       expect.fail(`Should have thrown an error. Response: ${JSON.stringify(response)}`);
     } catch (e) {
-      expect((e as Error).message).to.includes('Error retrieving the auth URL');
+      expect((e as Error).message).to.includes(messages.getMessage('errors.missingAuthUrl'));
     }
   });
 
