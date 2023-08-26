@@ -7,7 +7,7 @@
   "main": "lib/index.js",
   "dependencies": {
     "@oclif/core": "^2.11.8",
-    "@salesforce/core": "^5.2.0",
+    "@salesforce/core": "^5.2.1",
     "@salesforce/kit": "^3.0.9",
     "@salesforce/sf-plugins-core": "^3.1.14",
     "@salesforce/ts-types": "^2.0.6",
