@@ -12,7 +12,7 @@
     "@salesforce/sf-plugins-core": "^3.1.18",
     "@salesforce/ts-types": "^2.0.6",
     "chalk": "^4.1.2",
-    "inquirer": "^8.2.5",
+    "inquirer": "^8.2.6",
     "open": "^8.2.1",
     "tslib": "^2"
   },
