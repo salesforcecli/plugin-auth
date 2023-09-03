@@ -1,3 +1,12 @@
+## [2.8.16](https://github.com/salesforcecli/plugin-auth/compare/2.8.15...2.8.16) (2023-09-03)
+
+
+### Bug Fixes
+
+* **deps:** bump inquirer from 8.2.5 to 8.2.6 ([7d02f90](https://github.com/salesforcecli/plugin-auth/commit/7d02f9040cc61cb9fc5a5d05caae8dc0c35be672))
+
+
+
 ## [2.8.15](https://github.com/salesforcecli/plugin-auth/compare/2.8.14...2.8.15) (2023-09-02)
 
 
