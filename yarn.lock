@@ -868,22 +868,22 @@
   dependencies:
     "@octokit/openapi-types" "^12.11.0"
 
-"@salesforce/cli-plugins-testkit@^4.2.9":
-  version "4.2.9"
-  resolved "https://registry.yarnpkg.com/@salesforce/cli-plugins-testkit/-/cli-plugins-testkit-4.2.9.tgz#813bbb6a7926d17d5d0becd664e08f1c115680d1"
-  integrity sha512-v71dFmhlgwtmehK2QJ8+toeCYc39WQFu7R2wmhsHQeVA1UuYcx3uue5JnC392PIXddxQtjdR6eazk52tQg4nyA==
+"@salesforce/cli-plugins-testkit@^4.3.5":
+  version "4.3.5"
+  resolved "https://registry.yarnpkg.com/@salesforce/cli-plugins-testkit/-/cli-plugins-testkit-4.3.5.tgz#3efd4433c57f51dcf0acbcda4337cf530c5b3b33"
+  integrity sha512-pP9PpyLtwXKj3jvkdVGpuxOAgqML+JcTVmyjuORyiOg4BLTQVGnju/e1GXirasNrIA3Wh1DLVymFDqN4HAc32w==
   dependencies:
-    "@salesforce/core" "^5.2.0"
-    "@salesforce/kit" "^3.0.9"
-    "@salesforce/ts-types" "^2.0.2"
+    "@salesforce/core" "^5.2.7"
+    "@salesforce/kit" "^3.0.11"
+    "@salesforce/ts-types" "^2.0.6"
     "@types/shelljs" "^0.8.12"
     debug "^4.3.1"
     jszip "^3.10.1"
     shelljs "^0.8.4"
     strip-ansi "6.0.1"
-    ts-retry-promise "^0.7.0"
+    ts-retry-promise "^0.7.1"
 
-"@salesforce/core@^5.2.0", "@salesforce/core@^5.2.6":
+"@salesforce/core@^5.2.0", "@salesforce/core@^5.2.6", "@salesforce/core@^5.2.7":
   version "5.2.9"
   resolved "https://registry.yarnpkg.com/@salesforce/core/-/core-5.2.9.tgz#812478061d766cdff28f7a0e8abefc9de562465a"
   integrity sha512-ZWNxHnCPGT1pcJe1bjeRjd8VAeHELK4fftt/2WO+ZsPFHZnzmdowz2Th407v04et+uIzL0Z6+qOaRY/bZr5tLA==
@@ -1015,7 +1015,7 @@
     sinon "^5.1.1"
     tslib "^2.6.1"
 
-"@salesforce/ts-types@^2.0.2", "@salesforce/ts-types@^2.0.6", "@salesforce/ts-types@^2.0.7":
+"@salesforce/ts-types@^2.0.6", "@salesforce/ts-types@^2.0.7":
   version "2.0.7"
   resolved "https://registry.yarnpkg.com/@salesforce/ts-types/-/ts-types-2.0.7.tgz#02a6999d0b0e7bcd6c6d8ce621c79fa61af24701"
   integrity sha512-8csXgstPuy6QXL3JavkIi/f8DOWHBNCvWeszrFu5sbVlcKO3YqOOCE+rDFGPkrZsYv5OywV6H8kEi877bWOz6Q==
@@ -6815,11 +6815,6 @@ ts-node@^10.0.0, ts-node@^10.8.1, ts-node@^10.9.1:
     make-error "^1.1.1"
     v8-compile-cache-lib "^3.0.1"
     yn "3.1.1"
-
-ts-retry-promise@^0.7.0:
-  version "0.7.0"
-  resolved "https://registry.yarnpkg.com/ts-retry-promise/-/ts-retry-promise-0.7.0.tgz#08f2dcbbf5d2981495841cb63389a268324e8147"
-  integrity sha512-x6yWZXC4BfXy4UyMweOFvbS1yJ/Y5biSz/mEPiILtJZLrqD3ZxIpzVOGGgifHHdaSe3WxzFRtsRbychI6zofOg==
 
 ts-retry-promise@^0.7.1:
   version "0.7.1"
