@@ -1,3 +1,9 @@
+## [2.8.18](https://github.com/salesforcecli/plugin-auth/compare/2.8.17...2.8.18) (2023-09-28)
+
+### Bug Fixes
+
+- **deps:** bump get-func-name from 2.0.0 to 2.0.2 ([64bd912](https://github.com/salesforcecli/plugin-auth/commit/64bd9125fd2bf77e28c8cc16952c551224660260))
+
 ## [2.8.17](https://github.com/salesforcecli/plugin-auth/compare/2.8.16...2.8.17) (2023-09-16)
 
 ### Bug Fixes
