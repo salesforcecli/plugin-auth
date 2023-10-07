@@ -9,7 +9,7 @@
     "@oclif/core": "^2.15.0",
     "@salesforce/core": "^5.2.0",
     "@salesforce/kit": "^3.0.9",
-    "@salesforce/sf-plugins-core": "^3.1.25",
+    "@salesforce/sf-plugins-core": "^3.1.28",
     "@salesforce/ts-types": "^2.0.6",
     "chalk": "^4.1.2",
     "inquirer": "^8.2.6",
