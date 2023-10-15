@@ -912,10 +912,10 @@
   resolved "https://registry.yarnpkg.com/@salesforce/dev-config/-/dev-config-4.0.1.tgz#662ffaa4409713553aaf68eed93e7d2429c3ff0e"
   integrity sha512-0zMjXG4Vjlu/mB7zbuKSXfXiP7CEZBwsPtYqNgburk/wZIU9KcMspLwVBDUxmUj9ltRksD9o1ubRUblN5M3Z0g==
 
-"@salesforce/dev-scripts@^5.10.0":
-  version "5.10.0"
-  resolved "https://registry.yarnpkg.com/@salesforce/dev-scripts/-/dev-scripts-5.10.0.tgz#8fad794032860f456eadd6b26cec13330e633517"
-  integrity sha512-xtFHID4iMEXdXrOXh0FBqAKN/byZ9k9mWAYH9YRmvLgdIAM9TXsI4yTPsqXcTAHrXpzUG0ku5fJcPFKFaAk5vA==
+"@salesforce/dev-scripts@^5.11.0":
+  version "5.11.0"
+  resolved "https://registry.yarnpkg.com/@salesforce/dev-scripts/-/dev-scripts-5.11.0.tgz#e5632f0e46f2d821710ca06bb6d60378399b17cd"
+  integrity sha512-DLgjqBsYc0AiBb5BPiSMSJrwoP9ceAFePPcB6xvLrH9gas+8X3z79vc4xzlBhwzsF1WJsSOoVVTtJbPDwxvF0g==
   dependencies:
     "@commitlint/cli" "^17.1.2"
     "@commitlint/config-conventional" "^17.1.0"
@@ -925,7 +925,7 @@
     "@types/mocha" "^9.0.0"
     "@types/node" "^15.6.1"
     "@types/sinon" "10.0.11"
-    chai "^4.3.7"
+    chai "^4.3.8"
     chalk "^4.0.0"
     cosmiconfig "^7.0.0"
     eslint "^8.41.0"
@@ -1299,12 +1299,7 @@
   dependencies:
     "@types/node" "*"
 
-"@types/semver@^7.3.12":
-  version "7.5.0"
-  resolved "https://registry.yarnpkg.com/@types/semver/-/semver-7.5.0.tgz#591c1ce3a702c45ee15f47a42ade72c2fd78978a"
-  integrity sha512-G8hZ6XJiHnuhQKR7ZmysCeJWE08o8T0AXtk5darsCaTVsYZhhgUrq53jizaR2FvsoeCwJhlmwTjkXBY5Pn/ZHw==
-
-"@types/semver@^7.5.2":
+"@types/semver@^7.3.12", "@types/semver@^7.5.2":
   version "7.5.2"
   resolved "https://registry.yarnpkg.com/@types/semver/-/semver-7.5.2.tgz#31f6eec1ed7ec23f4f05608d3a2d381df041f564"
   integrity sha512-7aqorHYgdNO4DM36stTiGO3DvKoex9TQRwsJU6vMaFGyqpBA1MNZkz+PG3gaNUPpTAOYhT1WR7M1JyA3fbS9Cw==
@@ -2037,7 +2032,7 @@ cardinal@^2.1.1:
     ansicolors "~0.3.2"
     redeyed "~2.1.0"
 
-chai@^4.3.10, chai@^4.3.7:
+chai@^4.3.10, chai@^4.3.8:
   version "4.3.10"
   resolved "https://registry.yarnpkg.com/chai/-/chai-4.3.10.tgz#d784cec635e3b7e2ffb66446a63b4e33bd390384"
   integrity sha512-0UXG04VuVbruMUYbJ6JctvH0YnC/4q3/AkT18q4NaITo91CUm0liMS9VqzT9vZhVQ/1eqPanMWjBM+Juhfb/9g==
@@ -5708,15 +5703,7 @@ pify@^4.0.1:
   resolved "https://registry.yarnpkg.com/pify/-/pify-4.0.1.tgz#4b2cd25c50d598735c50292224fd8c6df41e3231"
   integrity sha512-uB80kBFb/tfd68bVleG9T5GGsGPjJrLAUpR5PZIrhBnIaRTQRjqdJSsIKkOP6OAIFbj7GOrcudc5pNjZ+geV2g==
 
-pino-abstract-transport@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/pino-abstract-transport/-/pino-abstract-transport-1.0.0.tgz#cc0d6955fffcadb91b7b49ef220a6cc111d48bb3"
-  integrity sha512-c7vo5OpW4wIS42hUVcT5REsL8ZljsUfBjqV/e2sFxmFEFZiq1XLUp5EYLtuDH6PEHq9W1egWqRbnLUP5FuZmOA==
-  dependencies:
-    readable-stream "^4.0.0"
-    split2 "^4.0.0"
-
-pino-abstract-transport@v1.1.0:
+pino-abstract-transport@^1.0.0, pino-abstract-transport@v1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/pino-abstract-transport/-/pino-abstract-transport-1.1.0.tgz#083d98f966262164504afb989bccd05f665937a8"
   integrity sha512-lsleG3/2a/JIWUtf9Q5gUNErBqwIu1tUKTT3dUzaf5DySw9ra1wcqKjJjLX1VTY64Wk1eEOYsVGSaGfCK85ekA==
