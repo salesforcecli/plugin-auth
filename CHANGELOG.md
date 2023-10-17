@@ -1,3 +1,9 @@
+## [2.8.22](https://github.com/salesforcecli/plugin-auth/compare/2.8.21...2.8.22) (2023-10-17)
+
+### Bug Fixes
+
+- **deps:** bump @babel/traverse from 7.21.0 to 7.23.2 ([da6626d](https://github.com/salesforcecli/plugin-auth/commit/da6626dbd0de39d2431eed6c0f4b933a7ca39c85))
+
 ## [2.8.21](https://github.com/salesforcecli/plugin-auth/compare/2.8.20...2.8.21) (2023-10-16)
 
 ### Bug Fixes
