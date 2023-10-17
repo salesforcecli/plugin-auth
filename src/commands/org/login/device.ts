@@ -5,8 +5,7 @@
  * For full license text, see LICENSE.txt file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  */
 
-import { OAuth2Config } from 'jsforce';
-import { AuthFields, AuthInfo, DeviceOauthService, Messages } from '@salesforce/core';
+import { AuthFields, AuthInfo, DeviceOauthService, Messages, OAuth2Config } from '@salesforce/core';
 import { Flags, loglevel } from '@salesforce/sf-plugins-core';
 import { DeviceCodeResponse } from '@salesforce/core/lib/deviceOauthService';
 import { ux } from '@oclif/core';
