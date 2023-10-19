@@ -101,7 +101,10 @@ export default class LoginJwt extends AuthBaseCommand<AuthFields> {
       if (!(err instanceof Error)) {
         throw err;
       }
-      throw messages.createError('JwtGrantError', [err.message]);
+      // pretty-print err from sfdx-core to get stacktrace swalloed by sf
+      // eslint-disable-next-line
+      console.error(err);
+      throw messages.createError('JwtGrantError', [err.message], undefined, undefined, err);
     }
 
     const successMsg = commonMessages.getMessage('authorizeCommandSuccess', [result.username, result.orgId]);
