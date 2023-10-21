@@ -940,10 +940,10 @@
   dependencies:
     "@octokit/openapi-types" "^12.11.0"
 
-"@salesforce/cli-plugins-testkit@^4.4.7":
-  version "4.4.7"
-  resolved "https://registry.yarnpkg.com/@salesforce/cli-plugins-testkit/-/cli-plugins-testkit-4.4.7.tgz#dced302efd8415b9f96df639755e279f13d6d220"
-  integrity sha512-QKxQEdYvV8hcqGfpxmYFtPBRwejLA7bhnbNNWYugEAKdsxXS12Zi1TyiUetzifQngVgvoxEDjcU+v8SRKCb96Q==
+"@salesforce/cli-plugins-testkit@^4.4.8":
+  version "4.4.8"
+  resolved "https://registry.yarnpkg.com/@salesforce/cli-plugins-testkit/-/cli-plugins-testkit-4.4.8.tgz#0c4a7e371f319f63c27b23ba6b89e3341655ff87"
+  integrity sha512-8IuVupRX8APj9FEx8HjfRxYXeTrq78/Nstch2S6FhZXbDShzqBbVfQ3DVf2uDejxgU7rehah0mwcVyWYjTcBGA==
   dependencies:
     "@salesforce/core" "^5.3.5"
     "@salesforce/kit" "^3.0.13"
