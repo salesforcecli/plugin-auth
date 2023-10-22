@@ -1,3 +1,9 @@
+## [2.8.23](https://github.com/salesforcecli/plugin-auth/compare/2.8.22...2.8.23) (2023-10-22)
+
+### Bug Fixes
+
+- **deps:** bump @salesforce/ts-types from 2.0.8 to 2.0.9 ([f68e43b](https://github.com/salesforcecli/plugin-auth/commit/f68e43b934b5c160b6059835c96598f6db649251))
+
 ## [2.8.22](https://github.com/salesforcecli/plugin-auth/compare/2.8.21...2.8.22) (2023-10-17)
 
 ### Bug Fixes
