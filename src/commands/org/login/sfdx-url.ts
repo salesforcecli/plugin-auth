@@ -5,7 +5,7 @@
  * For full license text, see LICENSE.txt file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  */
 
-import { readFile } from 'fs/promises';
+import { readFile } from 'node:fs/promises';
 import { Flags, loglevel } from '@salesforce/sf-plugins-core';
 import { AuthFields, AuthInfo, Messages } from '@salesforce/core';
 import { AnyJson } from '@salesforce/ts-types';
