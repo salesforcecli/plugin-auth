@@ -1,3 +1,9 @@
+## [2.8.24](https://github.com/salesforcecli/plugin-auth/compare/2.8.23...2.8.24) (2023-10-28)
+
+### Bug Fixes
+
+- **deps:** bump @salesforce/kit from 3.0.13 to 3.0.15 ([956e35d](https://github.com/salesforcecli/plugin-auth/commit/956e35d4ca6c5cefbbeb7c9b03312aad7f663397))
+
 ## [2.8.23](https://github.com/salesforcecli/plugin-auth/compare/2.8.22...2.8.23) (2023-10-22)
 
 ### Bug Fixes
