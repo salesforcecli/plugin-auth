@@ -52,8 +52,8 @@ describe('org:logout NUTs', () => {
   });
 
   it('should clear any configs that use the removed username (json)', () => {
-    execCmd(`config:set target-org=${username} --global`, { ensureExitCode: 0 });
-    execCmd(`config:set target-dev-hub=${username} --global`, { ensureExitCode: 0 });
+    execCmd(`config:set target-org=${username} --global`, { ensureExitCode: 0, cli: 'sf' });
+    execCmd(`config:set target-dev-hub=${username} --global`, { ensureExitCode: 0, cli: 'sf' });
     const json = execCmd(`org:logout -p -o ${username} --json`, { ensureExitCode: 0 }).jsonOutput;
     expect(json).to.deep.equal({
       status: 0,
@@ -68,11 +68,13 @@ describe('org:logout NUTs', () => {
 
     const configGetUsername = execCmd<Array<{ key: string }>>('config:get target-org --json', {
       ensureExitCode: 0,
+      cli: 'sf',
     }).jsonOutput?.result as Array<{ key: string }>;
     expect(['target-org', 'defaultusername']).to.include(configGetUsername[0].key);
 
     const configGetDevhub = execCmd<Array<{ key: string }>>('config:get target-dev-hub --json', {
       ensureExitCode: 0,
+      cli: 'sf',
     }).jsonOutput?.result as Array<{ key: string }>;
     expect(['target-dev-hub', 'defaultdevhubusername']).to.include(configGetDevhub[0].key);
   });
@@ -89,7 +91,7 @@ describe('org:logout NUTs', () => {
   });
 
   it('should remove the default username if the -o flag is not specified (json)', () => {
-    execCmd(`config:set target-org=${username} --global`, { ensureExitCode: 0 });
+    execCmd(`config:set target-org=${username} --global`, { ensureExitCode: 0, cli: 'sf' });
     const json = execCmd('org:logout -p --json', { ensureExitCode: 0 }).jsonOutput;
     expect(json).to.deep.equal({
       status: 0,
@@ -100,6 +102,7 @@ describe('org:logout NUTs', () => {
     // we expect the config for target-org to be cleared out after the logout
     const configGet = execCmd<Array<{ key: string }>>('config:get target-org --json', {
       ensureExitCode: 0,
+      cli: 'sf',
     }).jsonOutput?.result as Array<{ key: string }>;
     expect(['target-org', 'defaultusername']).to.include(configGet[0].key);
   });
