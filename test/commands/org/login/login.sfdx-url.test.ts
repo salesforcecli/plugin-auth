@@ -5,7 +5,7 @@
  * For full license text, see LICENSE.txt file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  */
 
-import * as fs from 'fs/promises';
+import * as fs from 'node:fs/promises';
 import { AuthFields, AuthInfo, Global, Mode } from '@salesforce/core';
 import { MockTestOrgData, TestContext } from '@salesforce/core/lib/testSetup';
 import { expect } from 'chai';

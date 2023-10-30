@@ -8,8 +8,7 @@
 import * as open from 'open';
 
 import { Flags, loglevel } from '@salesforce/sf-plugins-core';
-import { OAuth2Config } from 'jsforce';
-import { AuthFields, AuthInfo, Logger, Messages, SfError, WebOAuthServer } from '@salesforce/core';
+import { AuthFields, AuthInfo, Logger, Messages, OAuth2Config, SfError, WebOAuthServer } from '@salesforce/core';
 import { Env } from '@salesforce/kit';
 import { Interfaces } from '@oclif/core';
 import { AuthBaseCommand } from '../../../authBaseCommand';

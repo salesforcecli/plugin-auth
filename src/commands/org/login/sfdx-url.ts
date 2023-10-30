@@ -5,7 +5,7 @@
  * For full license text, see LICENSE.txt file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  */
 
-import { readFile } from 'fs/promises';
+import { readFile } from 'node:fs/promises';
 import { Flags, loglevel } from '@salesforce/sf-plugins-core';
 import { AuthFields, AuthInfo, Messages } from '@salesforce/core';
 import { AnyJson } from '@salesforce/ts-types';
@@ -90,9 +90,8 @@ export default class LoginSfdxUrl extends AuthBaseCommand<AuthFields> {
       setDefaultDevHub: flags['set-default-dev-hub'],
     });
 
-    const result = authInfo.getFields(true);
     // ensure the clientSecret field... even if it is empty
-    result.clientSecret = result.clientSecret ?? '';
+    const result = { clientSecret: '', ...authInfo.getFields(true) };
     await AuthInfo.identifyPossibleScratchOrgs(result, authInfo);
 
     const successMsg = commonMessages.getMessage('authorizeCommandSuccess', [result.username, result.orgId]);
