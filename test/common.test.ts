@@ -7,8 +7,8 @@
 
 import { ConfigContents, SfdcUrl } from '@salesforce/core';
 import { assert, expect } from 'chai';
-import { TestContext, uniqid } from '@salesforce/core/lib/testSetup';
-import { Common } from '../src/common';
+import { TestContext, uniqid } from '@salesforce/core/lib/testSetup.js';
+import { Common } from '../src/common.js';
 
 const projectSetup = async ($$: TestContext, inProject = true, contents?: ConfigContents): Promise<void> => {
   $$.inProject(inProject);

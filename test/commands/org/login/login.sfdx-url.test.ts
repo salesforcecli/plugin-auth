@@ -5,14 +5,14 @@
  * For full license text, see LICENSE.txt file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  */
 
-import * as fs from 'node:fs/promises';
+import fs from 'node:fs/promises';
 import { AuthFields, AuthInfo, Global, Mode } from '@salesforce/core';
-import { MockTestOrgData, TestContext } from '@salesforce/core/lib/testSetup';
+import { MockTestOrgData, TestContext } from '@salesforce/core/lib/testSetup.js';
 import { expect } from 'chai';
 import { Config } from '@oclif/core';
 import { StubbedType, stubInterface } from '@salesforce/ts-sinon';
 import { SfCommand } from '@salesforce/sf-plugins-core';
-import LoginSfdxUrl from '../../../../src/commands/org/login/sfdx-url';
+import LoginSfdxUrl from '../../../../src/commands/org/login/sfdx-url.js';
 
 interface Options {
   authInfoCreateFails?: boolean;

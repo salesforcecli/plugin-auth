@@ -8,7 +8,7 @@ import { execCmd, TestSession, prepareForJwt } from '@salesforce/cli-plugins-tes
 import { expect } from 'chai';
 import { Env } from '@salesforce/kit';
 import { ensureString, getString } from '@salesforce/ts-types';
-import { AuthListResults } from '../../../src/commands/org/list/auth';
+import { AuthListResults } from '../../../src/commands/org/list/auth.js';
 
 describe('org:logout NUTs', () => {
   const env = new Env();

@@ -6,11 +6,11 @@
  */
 
 import { AuthRemover, ConfigContents, Global, Mode } from '@salesforce/core';
-import { MockTestOrgData, TestContext } from '@salesforce/core/lib/testSetup';
+import { MockTestOrgData, TestContext } from '@salesforce/core/lib/testSetup.js';
 import { expect } from 'chai';
 import { Config } from '@oclif/core';
 import { SfCommand } from '@salesforce/sf-plugins-core';
-import Logout from '../../../src/commands/org/logout';
+import Logout from '../../../src/commands/org/logout.js';
 
 interface Options {
   authFiles?: string[];

@@ -5,7 +5,9 @@
  * For full license text, see LICENSE.txt file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  */
 
-import * as os from 'node:os';
+import { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import os from 'node:os';
 import {
   AuthInfo,
   AuthRemover,
@@ -18,11 +20,11 @@ import {
 } from '@salesforce/core';
 import { Flags, loglevel } from '@salesforce/sf-plugins-core';
 import { Interfaces } from '@oclif/core';
-import { Separator } from 'inquirer';
-import * as chalk from 'chalk';
-import { AuthBaseCommand } from '../../authBaseCommand';
+import inquirer from 'inquirer';
+import chalk from 'chalk';
+import { AuthBaseCommand } from '../../authBaseCommand.js';
 
-Messages.importMessagesDirectory(__dirname);
+Messages.importMessagesDirectory(dirname(fileURLToPath(import.meta.url)));
 const messages = Messages.loadMessages('@salesforce/plugin-auth', 'logout');
 const commonMessages = Messages.loadMessages('@salesforce/plugin-auth', 'messages');
 type choice = { name: string; value: OrgAuthorization };
@@ -64,7 +66,7 @@ export default class Logout extends AuthBaseCommand<AuthLogoutResults> {
 
   private flags!: Interfaces.InferredFlags<typeof Logout.flags>;
 
-  private static buildChoices(orgAuths: OrgAuthorization[], all: boolean): Array<choice | Separator> {
+  private static buildChoices(orgAuths: OrgAuthorization[], all: boolean): Array<choice | inquirer.Separator> {
     const maxUsernameLength = Math.max('Username'.length, ...orgAuths.map((orgAuth) => orgAuth.username.length));
     const maxAliasLength = Math.max(
       'Aliases'.length,
@@ -110,7 +112,7 @@ export default class Logout extends AuthBaseCommand<AuthLogoutResults> {
     const aliasHeader = `${'Aliases'.padEnd(maxAliasLength, ' ')}`;
     const configHeader = `${'Configs'.padEnd(maxConfigLength, ' ')}`;
     const typeHeader = `${'Type'.padEnd(maxTypeLength, ' ')}`;
-    return [new Separator(`  ${userHeader} | ${typeHeader} | ${aliasHeader} | ${configHeader}`), ...choices];
+    return [new inquirer.Separator(`  ${userHeader} | ${typeHeader} | ${aliasHeader} | ${configHeader}`), ...choices];
   }
 
   public async run(): Promise<AuthLogoutResults> {

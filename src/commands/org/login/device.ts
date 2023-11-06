@@ -5,14 +5,16 @@
  * For full license text, see LICENSE.txt file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  */
 
+import { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { AuthFields, AuthInfo, DeviceOauthService, Messages, OAuth2Config } from '@salesforce/core';
 import { Flags, loglevel } from '@salesforce/sf-plugins-core';
-import { DeviceCodeResponse } from '@salesforce/core/lib/deviceOauthService';
+import { DeviceCodeResponse } from '@salesforce/core/lib/deviceOauthService.js';
 import { ux } from '@oclif/core';
-import { AuthBaseCommand } from '../../../authBaseCommand';
-import { Common } from '../../../common';
+import { AuthBaseCommand } from '../../../authBaseCommand.js';
+import { Common } from '../../../common.js';
 
-Messages.importMessagesDirectory(__dirname);
+Messages.importMessagesDirectory(dirname(fileURLToPath(import.meta.url)));
 const messages = Messages.loadMessages('@salesforce/plugin-auth', 'device.login');
 const commonMessages = Messages.loadMessages('@salesforce/plugin-auth', 'messages');
 

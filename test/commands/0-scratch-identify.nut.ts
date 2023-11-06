@@ -12,7 +12,7 @@ import { execCmd, TestSession, prepareForJwt } from '@salesforce/cli-plugins-tes
 import { Env } from '@salesforce/kit';
 import { ensureString } from '@salesforce/ts-types';
 import { AuthFields, AuthInfo } from '@salesforce/core';
-import { AuthListResults } from '../../src/commands/org/list/auth';
+import { AuthListResults } from '../../src/commands/org/list/auth.js';
 
 describe('verify discovery/id of scratch org', () => {
   let testSession: TestSession;

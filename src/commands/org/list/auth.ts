@@ -5,11 +5,13 @@
  * For full license text, see LICENSE.txt file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  */
 
+import { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { loglevel, SfCommand } from '@salesforce/sf-plugins-core';
 import { AuthInfo, Messages, OrgAuthorization } from '@salesforce/core';
 type AuthListResult = Omit<OrgAuthorization, 'aliases'> & { alias: string };
 export type AuthListResults = AuthListResult[];
-Messages.importMessagesDirectory(__dirname);
+Messages.importMessagesDirectory(dirname(fileURLToPath(import.meta.url)));
 const messages = Messages.loadMessages('@salesforce/plugin-auth', 'list');
 
 export default class ListAuth extends SfCommand<AuthListResults> {

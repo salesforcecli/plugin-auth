@@ -8,8 +8,8 @@ import { execCmd, TestSession } from '@salesforce/cli-plugins-testkit';
 import { expect } from 'chai';
 import { Env } from '@salesforce/kit';
 import { ensureString, getString } from '@salesforce/ts-types';
-import { expectUrlToExist, expectOrgIdToExist, expectAccessTokenToExist } from '../../../testHelper';
-import { AuthListResults } from '../../../../src/commands/org/list/auth';
+import { expectUrlToExist, expectOrgIdToExist, expectAccessTokenToExist } from '../../../testHelper.js';
+import { AuthListResults } from '../../../../src/commands/org/list/auth.js';
 
 describe('org:list:auth NUTs', () => {
   let testSession: TestSession;

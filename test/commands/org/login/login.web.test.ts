@@ -9,12 +9,12 @@
 
 import { Config } from '@oclif/core';
 import { AuthFields, AuthInfo, Global, Mode, SfError } from '@salesforce/core';
-import { MockTestOrgData, TestContext } from '@salesforce/core/lib/testSetup';
+import { MockTestOrgData, TestContext } from '@salesforce/core/lib/testSetup.js';
 import { StubbedType, stubInterface, stubMethod } from '@salesforce/ts-sinon';
 import { assert, expect } from 'chai';
 import { Env } from '@salesforce/kit';
 import { SfCommand, Ux } from '@salesforce/sf-plugins-core';
-import LoginWeb from '../../../../src/commands/org/login/web';
+import LoginWeb from '../../../../src/commands/org/login/web.js';
 
 describe('org:login:web', () => {
   const $$ = new TestContext();

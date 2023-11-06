@@ -9,7 +9,7 @@ import { expect } from 'chai';
 import { Env } from '@salesforce/kit';
 import { ensureString, getString } from '@salesforce/ts-types';
 import { AuthFields } from '@salesforce/core';
-import { expectAccessTokenToExist, expectOrgIdToExist, expectUrlToExist } from '../../../testHelper';
+import { expectAccessTokenToExist, expectOrgIdToExist, expectUrlToExist } from '../../../testHelper.js';
 
 let testSession: TestSession;
 

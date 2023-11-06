@@ -5,14 +5,16 @@
  * For full license text, see LICENSE.txt file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  */
 
-import { readFile } from 'node:fs/promises';
+import { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import fs from 'node:fs/promises';
 import { Flags, loglevel } from '@salesforce/sf-plugins-core';
 import { AuthFields, AuthInfo, Messages } from '@salesforce/core';
 import { AnyJson } from '@salesforce/ts-types';
 import { parseJson } from '@salesforce/kit';
-import { AuthBaseCommand } from '../../../authBaseCommand';
+import { AuthBaseCommand } from '../../../authBaseCommand.js';
 
-Messages.importMessagesDirectory(__dirname);
+Messages.importMessagesDirectory(dirname(fileURLToPath(import.meta.url)));
 const messages = Messages.loadMessages('@salesforce/plugin-auth', 'sfdxurl.store');
 const commonMessages = Messages.loadMessages('@salesforce/plugin-auth', 'messages');
 
@@ -71,7 +73,9 @@ export default class LoginSfdxUrl extends AuthBaseCommand<AuthFields> {
 
     const authFile = flags['sfdx-url-file'];
 
-    const sfdxAuthUrl = authFile.endsWith('.json') ? await getUrlFromJson(authFile) : await readFile(authFile, 'utf8');
+    const sfdxAuthUrl = authFile.endsWith('.json')
+      ? await getUrlFromJson(authFile)
+      : await fs.readFile(authFile, 'utf8');
 
     if (!sfdxAuthUrl) {
       throw new Error(
@@ -101,7 +105,7 @@ export default class LoginSfdxUrl extends AuthBaseCommand<AuthFields> {
 }
 
 const getUrlFromJson = async (authFile: string): Promise<string> => {
-  const jsonContents = await readFile(authFile, 'utf8');
+  const jsonContents = await fs.readFile(authFile, 'utf8');
   const authFileJson = parseJson(jsonContents) as AuthJson;
   return authFileJson.result?.sfdxAuthUrl ?? authFileJson.sfdxAuthUrl;
 };
