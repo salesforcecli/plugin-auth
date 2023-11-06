@@ -33,7 +33,7 @@ export abstract class AuthBaseCommand<T> extends SfCommand<T> {
   }
 
   protected async shouldExitCommand(noPrompt?: boolean, message?: string): Promise<boolean> {
-    if (noPrompt || Global.getEnvironmentMode() !== Mode.DEMO) {
+    if (Boolean(noPrompt) || Global.getEnvironmentMode() !== Mode.DEMO) {
       return false;
     } else {
       const msg = dimMessage(message ?? messages.getMessage('warnAuth', [this.config.bin]));
@@ -43,7 +43,7 @@ export abstract class AuthBaseCommand<T> extends SfCommand<T> {
   }
 
   protected async shouldRunCommand(noPrompt?: boolean, message?: string, defaultAnswer = true): Promise<boolean> {
-    if (noPrompt || Global.getEnvironmentMode() === Mode.DEMO) {
+    if (Boolean(noPrompt) || Global.getEnvironmentMode() === Mode.DEMO) {
       return true;
     } else {
       const msg = dimMessage(message ?? messages.getMessage('warnAuth', [this.config.bin]));
