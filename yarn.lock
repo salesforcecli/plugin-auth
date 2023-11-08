@@ -1020,15 +1020,16 @@
     chalk "^4"
     inquirer "^8.2.5"
 
-"@salesforce/sf-plugins-core@^4.0.1-dev.2":
-  version "4.0.1-dev.2"
-  resolved "https://registry.yarnpkg.com/@salesforce/sf-plugins-core/-/sf-plugins-core-4.0.1-dev.2.tgz#dae8e38de2acb80f6a74c7bfcf44d01e7c46dd59"
-  integrity sha512-qJ3AByHVM/UdVLXpTDp2cLYku/6v5rd2DFmEU4/gjghLQ6W1tzONFc3BPE/EXK77A6xfzdCkaOGmoM3tQppmhg==
+"@salesforce/sf-plugins-core@^4.0.1-dev.6":
+  version "4.0.1-dev.6"
+  resolved "https://registry.yarnpkg.com/@salesforce/sf-plugins-core/-/sf-plugins-core-4.0.1-dev.6.tgz#c9a488931a40fe0f190710cc8d02406b12ee49ed"
+  integrity sha512-FOq0K9neVamAWf9sVME2Yq+l+OZ7zrD/QXkjMMt5JXD8edW8T/3bGt65PrGSZcjz2VfTJjMrvxlC4WSjlJmOsQ==
   dependencies:
     "@oclif/core" "^3.0.0"
     "@salesforce/core" "^5.3.1"
     "@salesforce/kit" "^3.0.13"
     "@salesforce/ts-types" "^2.0.7"
+    "@types/inquirer" "^8.2.3"
     chalk "^4"
     inquirer "^8.2.5"
 
@@ -1182,7 +1183,7 @@
   resolved "https://registry.yarnpkg.com/@types/http-cache-semantics/-/http-cache-semantics-4.0.1.tgz#0ea7b61496902b95890dc4c3a116b60cb8dae812"
   integrity sha512-SZs7ekbP8CN0txVG2xVRH6EgKmEm31BOxA07vkFaETzZz1xh+cbt8BcI0slpymvwhx5dlFnQG2rTlPVQn+iRPQ==
 
-"@types/inquirer@^8.2.0":
+"@types/inquirer@^8.2.3":
   version "8.2.10"
   resolved "https://registry.yarnpkg.com/@types/inquirer/-/inquirer-8.2.10.tgz#9444dce2d764c35bc5bb4d742598aaa4acb6561b"
   integrity sha512-IdD5NmHyVjWM8SHWo/kPBgtzXatwPkfwzyP3fN1jF2g9BWt5WO+8hL2F4o2GKIYsU40PpqeevuUWvkS/roXJkA==
