@@ -1,6 +1,6 @@
 {
   "name": "@salesforce/plugin-auth",
-  "description": "plugin for sfdx auth commands",
+  "description": "plugin for sf auth commands",
   "version": "3.0.0",
   "author": "Salesforce",
   "bugs": "https://github.com/forcedotcom/cli/issues",
@@ -8,11 +8,10 @@
     "@oclif/core": "^3.10.2",
     "@salesforce/core": "^5.3.17",
     "@salesforce/kit": "^3.0.15",
-    "@salesforce/sf-plugins-core": "^4.0.0",
+    "@salesforce/sf-plugins-core": "^4.0.1-dev.2",
     "@salesforce/ts-types": "^2.0.9",
     "chalk": "^5.3.0",
-    "inquirer": "^9.2.11",
-    "open": "^8.2.1"
+    "open": "^9.1.0"
   },
   "devDependencies": {
     "@oclif/plugin-command-snapshot": "^5.0.1",

@@ -7,7 +7,7 @@
 
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import open from 'open';
+import open, { apps, AppName } from 'open';
 import { Flags, loglevel } from '@salesforce/sf-plugins-core';
 import { AuthFields, AuthInfo, Logger, Messages, OAuth2Config, SfError, WebOAuthServer } from '@salesforce/core';
 import { Env } from '@salesforce/kit';
@@ -129,9 +129,8 @@ export default class LoginWeb extends AuthBaseCommand<AuthFields> {
   private async executeLoginFlow(oauthConfig: OAuth2Config): Promise<AuthInfo> {
     const oauthServer = await WebOAuthServer.create({ oauthConfig });
     await oauthServer.start();
-    const app =
-      this.flags.browser && this.flags.browser in open.apps ? (this.flags.browser as open.AppName) : undefined;
-    const openOptions = app ? { app: { name: open.apps[app] }, wait: false } : { wait: false };
+    const app = this.flags.browser && this.flags.browser in apps ? (this.flags.browser as AppName) : undefined;
+    const openOptions = app ? { app: { name: apps[app] }, wait: false } : { wait: false };
     await open(oauthServer.getAuthorizationUrl(), openOptions);
     return oauthServer.authorizeAndSave();
   }

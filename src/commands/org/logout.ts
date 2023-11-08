@@ -18,9 +18,8 @@ import {
   OrgAuthorization,
   OrgConfigProperties,
 } from '@salesforce/core';
-import { Flags, loglevel } from '@salesforce/sf-plugins-core';
+import { Flags, loglevel, Separator } from '@salesforce/sf-plugins-core';
 import { Interfaces } from '@oclif/core';
-import inquirer from 'inquirer';
 import chalk from 'chalk';
 import { AuthBaseCommand } from '../../authBaseCommand.js';
 
@@ -66,7 +65,7 @@ export default class Logout extends AuthBaseCommand<AuthLogoutResults> {
 
   private flags!: Interfaces.InferredFlags<typeof Logout.flags>;
 
-  private static buildChoices(orgAuths: OrgAuthorization[], all: boolean): Array<choice | inquirer.Separator> {
+  private static buildChoices(orgAuths: OrgAuthorization[], all: boolean): Array<choice | Separator> {
     const maxUsernameLength = Math.max('Username'.length, ...orgAuths.map((orgAuth) => orgAuth.username.length));
     const maxAliasLength = Math.max(
       'Aliases'.length,
@@ -112,7 +111,7 @@ export default class Logout extends AuthBaseCommand<AuthLogoutResults> {
     const aliasHeader = `${'Aliases'.padEnd(maxAliasLength, ' ')}`;
     const configHeader = `${'Configs'.padEnd(maxConfigLength, ' ')}`;
     const typeHeader = `${'Type'.padEnd(maxTypeLength, ' ')}`;
-    return [new inquirer.Separator(`  ${userHeader} | ${typeHeader} | ${aliasHeader} | ${configHeader}`), ...choices];
+    return [new Separator(`  ${userHeader} | ${typeHeader} | ${aliasHeader} | ${configHeader}`), ...choices];
   }
 
   public async run(): Promise<AuthLogoutResults> {
