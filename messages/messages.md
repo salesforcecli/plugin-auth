@@ -59,8 +59,3 @@ Access token of user to use for authentication
 # noPrompt
 
 do not prompt for confirmation
-
-# overwriteAccessTokenAuthUserFile
-
-A file already exists for user "%s", which is associated with the access token you provided.
-Are you sure you want to overwrite the existing file?

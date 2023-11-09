@@ -51,9 +51,4 @@ export abstract class AuthBaseCommand<T> extends SfCommand<T> {
   protected async askForAccessToken(disableMasking = false): Promise<string> {
     return this.askForHiddenResponse('accessTokenStdin', disableMasking);
   }
-
-  protected async askOverwriteAuthFile(username: string): Promise<boolean> {
-    const yN = await this.confirm(messages.getMessage('overwriteAccessTokenAuthUserFile', [username]));
-    return yN;
-  }
 }

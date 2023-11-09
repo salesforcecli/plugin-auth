@@ -109,7 +109,7 @@ export default class LoginAccessToken extends AuthBaseCommand<AuthFields> {
     if (!this.flags['no-prompt']) {
       const stateAggregator = await StateAggregator.getInstance();
       if (await stateAggregator.orgs.exists(username)) {
-        return this.askOverwriteAuthFile(username);
+        return this.confirm(messages.getMessage('overwriteAccessTokenAuthUserFile', [username]));
       }
     }
     return true;
