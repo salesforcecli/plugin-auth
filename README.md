@@ -70,21 +70,21 @@ sfdx plugins
 
 <!-- commands -->
 
-- [`sfdx org:list:auth`](#sfdx-orglistauth)
-- [`sfdx org:login:access-token`](#sfdx-orgloginaccess-token)
-- [`sfdx org:login:device`](#sfdx-orglogindevice)
-- [`sfdx org:login:jwt`](#sfdx-orgloginjwt)
-- [`sfdx org:login:sfdx-url`](#sfdx-orgloginsfdx-url)
-- [`sfdx org:login:web`](#sfdx-orgloginweb)
-- [`sfdx org:logout`](#sfdx-orglogout)
+- [`sf org list auth`](#sf-org-list-auth)
+- [`sf org login access-token`](#sf-org-login-access-token)
+- [`sf org login device`](#sf-org-login-device)
+- [`sf org login jwt`](#sf-org-login-jwt)
+- [`sf org login sfdx-url`](#sf-org-login-sfdx-url)
+- [`sf org login web`](#sf-org-login-web)
+- [`sf org logout`](#sf-org-logout)
 
-## `sfdx org:list:auth`
+## `sf org list auth`
 
 List authorization information about the orgs you created or logged into.
 
 ```
 USAGE
-  $ sfdx org:list:auth [--json]
+  $ sf org list auth [--json]
 
 GLOBAL FLAGS
   --json  Format output as json.
@@ -98,24 +98,24 @@ DESCRIPTION
   connection status, use the "org list" command.
 
 ALIASES
-  $ sfdx force:auth:list
-  $ sfdx auth:list
+  $ sf force auth list
+  $ sf auth list
 
 EXAMPLES
   List local authorization information about your orgs:
 
-    $ sfdx org:list:auth
+    $ sf org list auth
 ```
 
-_See code: [src/commands/org/list/auth.ts](https://github.com/salesforcecli/plugin-auth/blob/2.8.26/src/commands/org/list/auth.ts)_
+_See code: [src/commands/org/list/auth.ts](https://github.com/salesforcecli/plugin-auth/blob/2.8.27/src/commands/org/list/auth.ts)_
 
-## `sfdx org:login:access-token`
+## `sf org login access-token`
 
 Authorize an org using an existing Salesforce access token.
 
 ```
 USAGE
-  $ sfdx org:login:access-token -r <value> [--json] [-d] [-s] [-a <value>] [-p]
+  $ sf org login access-token -r <value> [--json] [-d] [-s] [-a <value>] [-p]
 
 FLAGS
   -a, --alias=<value>         Alias for the org.
@@ -137,18 +137,18 @@ DESCRIPTION
   command with the --no-prompt parameter.
 
 ALIASES
-  $ sfdx force:auth:accesstoken:store
-  $ sfdx auth:accesstoken:store
+  $ sf force auth accesstoken store
+  $ sf auth accesstoken store
 
 EXAMPLES
   Authorize an org on https://mycompany.my.salesforce.com; the command prompts you for the access token:
 
-    $ sfdx org:login:access-token --instance-url https://mycompany.my.salesforce.com
+    $ sf org login access-token --instance-url https://mycompany.my.salesforce.com
 
   Authorize the org without being prompted; you must have previously set the SFDX_ACCESS_TOKEN environment variable to
   the access token:
 
-    $ sfdx org:login:access-token --instance-url https://dev-hub.my.salesforce.com --no-prompt
+    $ sf org login access-token --instance-url https://dev-hub.my.salesforce.com --no-prompt
 
 FLAG DESCRIPTIONS
   -r, --instance-url=<value>  URL of the instance that the org lives on.
@@ -160,15 +160,15 @@ FLAG DESCRIPTIONS
     To specify a sandbox, set --instance-url to https://MyDomainName--SandboxName.sandbox.my.salesforce.com.
 ```
 
-_See code: [src/commands/org/login/access-token.ts](https://github.com/salesforcecli/plugin-auth/blob/2.8.26/src/commands/org/login/access-token.ts)_
+_See code: [src/commands/org/login/access-token.ts](https://github.com/salesforcecli/plugin-auth/blob/2.8.27/src/commands/org/login/access-token.ts)_
 
-## `sfdx org:login:device`
+## `sf org login device`
 
 Authorize an org using a device code.
 
 ```
 USAGE
-  $ sfdx org:login:device [--json] [-i <value>] [-r <value>] [-d] [-s] [-a <value>]
+  $ sf org login device [--json] [-i <value>] [-r <value>] [-d] [-s] [-a <value>]
 
 FLAGS
   -a, --alias=<value>         Alias for the org.
@@ -193,21 +193,21 @@ DESCRIPTION
   close the browser window.
 
 ALIASES
-  $ sfdx force:auth:device:login
-  $ sfdx auth:device:login
+  $ sf force auth device login
+  $ sf auth device login
 
 EXAMPLES
   Authorize an org using a device code, give the org the alias TestOrg1, and set it as your default Dev Hub org:
 
-    $ sfdx org:login:device --set-default-dev-hub --alias TestOrg1
+    $ sf org login device --set-default-dev-hub --alias TestOrg1
 
   Authorize an org in which you've created a custom connected app with the specified client ID (consumer key):
 
-    $ sfdx org:login:device --client-id <OAuth client id>
+    $ sf org login device --client-id <OAuth client id>
 
   Authorize a sandbox org with the specified instance URL:
 
-    $ sfdx org:login:device --instance-url https://MyDomainName--SandboxName.sandbox.my.salesforce.com
+    $ sf org login device --instance-url https://MyDomainName--SandboxName.sandbox.my.salesforce.com
 
 FLAG DESCRIPTIONS
   -r, --instance-url=<value>  URL of the instance that the org lives on.
@@ -219,15 +219,15 @@ FLAG DESCRIPTIONS
     To specify a sandbox, set --instance-url to https://MyDomainName--SandboxName.sandbox.my.salesforce.com.
 ```
 
-_See code: [src/commands/org/login/device.ts](https://github.com/salesforcecli/plugin-auth/blob/2.8.26/src/commands/org/login/device.ts)_
+_See code: [src/commands/org/login/device.ts](https://github.com/salesforcecli/plugin-auth/blob/2.8.27/src/commands/org/login/device.ts)_
 
-## `sfdx org:login:jwt`
+## `sf org login jwt`
 
 Log in to a Salesforce org using a JSON web token (JWT).
 
 ```
 USAGE
-  $ sfdx org:login:jwt -o <value> -f <value> -i <value> [--json] [-r <value>] [-d] [-s] [-a <value>]
+  $ sf org login jwt -o <value> -f <value> -i <value> [--json] [-r <value>] [-d] [-s] [-a <value>]
 
 FLAGS
   -a, --alias=<value>         Alias for the org.
@@ -271,30 +271,30 @@ DESCRIPTION
   --set-default for your default scratch org or sandbox, or --set-default-dev-hub for your default Dev Hub.
 
 ALIASES
-  $ sfdx force:auth:jwt:grant
-  $ sfdx auth:jwt:grant
+  $ sf force auth jwt grant
+  $ sf auth jwt grant
 
 EXAMPLES
   Log into an org with username jdoe@example.org and on the default instance URL (https://login.salesforce.org). The
   private key is stored in the file /Users/jdoe/JWT/server.key and the command uses the connected app with consumer
   key (client id) 04580y4051234051.
 
-    $ sfdx org:login:jwt --username jdoe@example.org --jwt-key-file /Users/jdoe/JWT/server.key --client-id \
+    $ sf org login jwt --username jdoe@example.org --jwt-key-file /Users/jdoe/JWT/server.key --client-id \
       04580y4051234051
 
   Set the org as the default and give it an alias:
 
-    $ sfdx org:login:jwt --username jdoe@example.org --jwt-key-file /Users/jdoe/JWT/server.key --client-id \
+    $ sf org login jwt --username jdoe@example.org --jwt-key-file /Users/jdoe/JWT/server.key --client-id \
       04580y4051234051 --alias ci-org --set-default
 
   Set the org as the default Dev Hub and give it an alias:
 
-    $ sfdx org:login:jwt --username jdoe@example.org --jwt-key-file /Users/jdoe/JWT/server.key --client-id \
+    $ sf org login jwt --username jdoe@example.org --jwt-key-file /Users/jdoe/JWT/server.key --client-id \
       04580y4051234051 --alias ci-dev-hub --set-default-dev-hub
 
   Log in to a sandbox using URL https://MyDomainName--SandboxName.sandbox.my.salesforce.com:
 
-    $ sfdx org:login:jwt --username jdoe@example.org --jwt-key-file /Users/jdoe/JWT/server.key --client-id \
+    $ sf org login jwt --username jdoe@example.org --jwt-key-file /Users/jdoe/JWT/server.key --client-id \
       04580y4051234051 --alias ci-org --set-default --instance-url \
       https://MyDomainName--SandboxName.sandbox.my.salesforce.com
 
@@ -308,15 +308,15 @@ FLAG DESCRIPTIONS
     To specify a sandbox, set --instance-url to https://MyDomainName--SandboxName.sandbox.my.salesforce.com.
 ```
 
-_See code: [src/commands/org/login/jwt.ts](https://github.com/salesforcecli/plugin-auth/blob/2.8.26/src/commands/org/login/jwt.ts)_
+_See code: [src/commands/org/login/jwt.ts](https://github.com/salesforcecli/plugin-auth/blob/2.8.27/src/commands/org/login/jwt.ts)_
 
-## `sfdx org:login:sfdx-url`
+## `sf org login sfdx-url`
 
 Authorize an org using a Salesforce DX authorization URL stored in a file.
 
 ```
 USAGE
-  $ sfdx org:login:sfdx-url -f <value> [--json] [-d] [-s] [-a <value>]
+  $ sf org login sfdx-url -f <value> [--json] [-d] [-s] [-a <value>]
 
 FLAGS
   -a, --alias=<value>          Alias for the org.
@@ -335,46 +335,46 @@ DESCRIPTION
   protocol, and not "http" or "https". Also, the "instanceUrl" inside the SFDX authorization URL doesn't include the
   protocol ("https://").
 
-  You have three options when creating the authorization file. The easiest option is to redirect the output of the "sfdx
+  You have three options when creating the authorization file. The easiest option is to redirect the output of the "sf
   org display --verbose --json" command into a file. For example, using an org with alias my-org that you've already
   authorized:
 
-  $ sfdx org display --target-org my-org --verbose --json > authFile.json
+  $ sf org display --target-org my-org --verbose --json > authFile.json
 
   The resulting JSON file contains the URL in the "sfdxAuthUrl" property of the "result" object. You can then reference
   the file when running this command:
 
-  $ sfdx org:login:sfdx-url --sfdx-url-file authFile.json
+  $ sf org login sfdx-url --sfdx-url-file authFile.json
 
-  NOTE: The "sfdx org display --verbose" command displays the refresh token only for orgs authorized with the web server
+  NOTE: The "sf org display --verbose" command displays the refresh token only for orgs authorized with the web server
   flow, and not the JWT bearer flow.
 
   You can also create a JSON file that has a top-level property named sfdxAuthUrl whose value is the authorization URL.
   Finally, you can create a normal text file that includes just the URL and nothing else.
 
 ALIASES
-  $ sfdx force:auth:sfdxurl:store
-  $ sfdx auth:sfdxurl:store
+  $ sf force auth sfdxurl store
+  $ sf auth sfdxurl store
 
 EXAMPLES
   Authorize an org using the SFDX authorization URL in the files/authFile.json file:
 
-    $ sfdx org:login:sfdx-url --sfdx-url-file files/authFile.json
+    $ sf org login sfdx-url --sfdx-url-file files/authFile.json
 
   Similar to previous example, but set the org as your default and give it an alias MyDefaultOrg:
 
-    $ sfdx org:login:sfdx-url --sfdx-url-file files/authFile.json --set-default --alias MyDefaultOrg
+    $ sf org login sfdx-url --sfdx-url-file files/authFile.json --set-default --alias MyDefaultOrg
 ```
 
-_See code: [src/commands/org/login/sfdx-url.ts](https://github.com/salesforcecli/plugin-auth/blob/2.8.26/src/commands/org/login/sfdx-url.ts)_
+_See code: [src/commands/org/login/sfdx-url.ts](https://github.com/salesforcecli/plugin-auth/blob/2.8.27/src/commands/org/login/sfdx-url.ts)_
 
-## `sfdx org:login:web`
+## `sf org login web`
 
 Log in to a Salesforce org using the web server flow.
 
 ```
 USAGE
-  $ sfdx org:login:web [--json] [-b chrome|edge|firefox] [-i <value>] [-r <value>] [-d] [-s] [-a <value>]
+  $ sf org login web [--json] [-b chrome|edge|firefox] [-i <value>] [-r <value>] [-d] [-s] [-a <value>]
 
 FLAGS
   -a, --alias=<value>         Alias for the org.
@@ -409,31 +409,31 @@ DESCRIPTION
   consumer key with the --client-id flag.
 
 ALIASES
-  $ sfdx force:auth:web:login
-  $ sfdx auth:web:login
+  $ sf force auth web login
+  $ sf auth web login
 
 EXAMPLES
   Run the command with no flags to open the default Salesforce login page (https://login.salesforce.com):
 
-    $ sfdx org:login:web
+    $ sf org login web
 
   Log in to your Dev Hub, set it as your default Dev Hub, and set an alias that you reference later when you create a
   scratch org:
 
-    $ sfdx org:login:web --set-default-dev-hub --alias dev-hub
+    $ sf org login web --set-default-dev-hub --alias dev-hub
 
   Log in to a sandbox and set it as your default org:
 
-    $ sfdx org:login:web --instance-url https://MyDomainName--SandboxName.sandbox.my.salesforce.com --set-default
+    $ sf org login web --instance-url https://MyDomainName--SandboxName.sandbox.my.salesforce.com --set-default
 
   Use --browser to specify a specific browser, such as Google Chrome:
 
-    $ sfdx org:login:web --instance-url https://MyDomainName--SandboxName.sandbox.my.salesforce.com --set-default \
+    $ sf org login web --instance-url https://MyDomainName--SandboxName.sandbox.my.salesforce.com --set-default \
       --browser chrome
 
   Use your own connected app by specifying its consumer key (also called client ID):
 
-    $ sfdx org:login:web --instance-url https://MyDomainName--SandboxName.sandbox.my.salesforce.com --set-default \
+    $ sf org login web --instance-url https://MyDomainName--SandboxName.sandbox.my.salesforce.com --set-default \
       --browser chrome --client-id 04580y4051234051
 
 FLAG DESCRIPTIONS
@@ -451,15 +451,15 @@ FLAG DESCRIPTIONS
     To specify a sandbox, set --instance-url to https://MyDomainName--SandboxName.sandbox.my.salesforce.com.
 ```
 
-_See code: [src/commands/org/login/web.ts](https://github.com/salesforcecli/plugin-auth/blob/2.8.26/src/commands/org/login/web.ts)_
+_See code: [src/commands/org/login/web.ts](https://github.com/salesforcecli/plugin-auth/blob/2.8.27/src/commands/org/login/web.ts)_
 
-## `sfdx org:logout`
+## `sf org logout`
 
 Log out of a Salesforce org.
 
 ```
 USAGE
-  $ sfdx org:logout [--json] [-a | -o <value>] [-p]
+  $ sf org logout [--json] [-a | -o <value>] [-p]
 
 FLAGS
   -a, --all                 Include all authenticated orgs.
@@ -485,25 +485,25 @@ DESCRIPTION
   again, either through the CLI or the Salesforce UI.
 
 ALIASES
-  $ sfdx force:auth:logout
-  $ sfdx auth:logout
+  $ sf force auth logout
+  $ sf auth logout
 
 EXAMPLES
   Interactively select the orgs to log out of:
 
-    $ sfdx org:logout
+    $ sf org logout
 
   Log out of the org with username me@my.org:
 
-    $ sfdx org:logout --target-org me@my.org
+    $ sf org logout --target-org me@my.org
 
   Log out of all orgs after confirmation:
 
-    $ sfdx org:logout --all
+    $ sf org logout --all
 
   Logout of the org with alias my-scratch and don't prompt for confirmation:
 
-    $ sfdx org:logout --target-org my-scratch --no-prompt
+    $ sf org logout --target-org my-scratch --no-prompt
 
 FLAG DESCRIPTIONS
   -a, --all  Include all authenticated orgs.
@@ -511,6 +511,6 @@ FLAG DESCRIPTIONS
     All orgs includes Dev Hubs, sandboxes, DE orgs, and expired, deleted, and unknown-status scratch orgs.
 ```
 
-_See code: [src/commands/org/logout.ts](https://github.com/salesforcecli/plugin-auth/blob/2.8.26/src/commands/org/logout.ts)_
+_See code: [src/commands/org/logout.ts](https://github.com/salesforcecli/plugin-auth/blob/2.8.27/src/commands/org/logout.ts)_
 
 <!-- commandsstop -->
