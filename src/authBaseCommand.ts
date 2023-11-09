@@ -44,16 +44,6 @@ export abstract class AuthBaseCommand<T> extends SfCommand<T> {
     }
   }
 
-  protected async shouldRunCommand(noPrompt?: boolean, message?: string, defaultAnswer = true): Promise<boolean> {
-    if (Boolean(noPrompt) || Global.getEnvironmentMode() === Mode.DEMO) {
-      return true;
-    } else {
-      const msg = dimMessage(message ?? messages.getMessage('warnAuth', [this.config.bin]));
-      const answer = await this.confirm(msg, 10000, defaultAnswer);
-      return answer;
-    }
-  }
-
   protected async askForClientSecret(disableMasking = false): Promise<string> {
     return this.askForHiddenResponse('clientSecretStdin', disableMasking);
   }
