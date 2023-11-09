@@ -14,7 +14,7 @@ import {
   expectOrgIdToExist,
   expectPropsToExist,
   expectUrlToExist,
-} from '../../../testHelper';
+} from '../../../testHelper.js';
 
 let testSession: TestSession;
 

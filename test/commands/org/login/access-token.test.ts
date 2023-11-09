@@ -9,12 +9,11 @@
 
 import { AuthFields, AuthInfo, SfError, StateAggregator } from '@salesforce/core';
 import { stubMethod } from '@salesforce/ts-sinon';
-import { expect } from 'chai';
-import { TestContext } from '@salesforce/core/lib/testSetup';
-import { assert } from 'chai';
+import { assert, expect } from 'chai';
+import { TestContext } from '@salesforce/core/lib/testSetup.js';
 import { Env } from '@salesforce/kit';
 import { Config } from '@oclif/core';
-import Store from '../../../../src/commands/org/login/access-token';
+import Store from '../../../../src/commands/org/login/access-token.js';
 
 describe('org:login:access-token', () => {
   const $$ = new TestContext();
@@ -63,7 +62,7 @@ describe('org:login:access-token', () => {
       stubMethod($$.SANDBOX, Env.prototype, 'getString').callsFake(() => accessToken);
     }
     const store = new Store(
-      ['--instance-url', 'https://foo.bar.org.salesforce.com', '--no-prompt', ...flags],
+      [...new Set(['--instance-url', 'https://foo.bar.org.salesforce.com', '--no-prompt', ...flags])],
       {} as Config
     );
     // @ts-ignore

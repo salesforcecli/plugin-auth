@@ -5,7 +5,9 @@
  * For full license text, see LICENSE.txt file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  */
 
-import * as os from 'node:os';
+import { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import os from 'node:os';
 import {
   AuthInfo,
   AuthRemover,
@@ -16,16 +18,15 @@ import {
   OrgAuthorization,
   OrgConfigProperties,
 } from '@salesforce/core';
-import { Flags, loglevel } from '@salesforce/sf-plugins-core';
+import { Flags, loglevel, Separator } from '@salesforce/sf-plugins-core';
 import { Interfaces } from '@oclif/core';
-import { Separator } from 'inquirer';
-import * as chalk from 'chalk';
-import { AuthBaseCommand } from '../../authBaseCommand';
+import chalk from 'chalk';
+import { AuthBaseCommand } from '../../authBaseCommand.js';
 
-Messages.importMessagesDirectory(__dirname);
+Messages.importMessagesDirectory(dirname(fileURLToPath(import.meta.url)));
 const messages = Messages.loadMessages('@salesforce/plugin-auth', 'logout');
 const commonMessages = Messages.loadMessages('@salesforce/plugin-auth', 'messages');
-type choice = { name: string; value: OrgAuthorization };
+type Choice = { name: string; value: OrgAuthorization };
 
 export type AuthLogoutResults = string[];
 
@@ -64,7 +65,7 @@ export default class Logout extends AuthBaseCommand<AuthLogoutResults> {
 
   private flags!: Interfaces.InferredFlags<typeof Logout.flags>;
 
-  private static buildChoices(orgAuths: OrgAuthorization[], all: boolean): Array<choice | Separator> {
+  private static buildChoices(orgAuths: OrgAuthorization[], all: boolean): Array<Choice | Separator> {
     const maxUsernameLength = Math.max('Username'.length, ...orgAuths.map((orgAuth) => orgAuth.username.length));
     const maxAliasLength = Math.max(
       'Aliases'.length,

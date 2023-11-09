@@ -22,3 +22,8 @@ To use the command in a CI/CD script, set the SFDX_ACCESS_TOKEN environment vari
 
 The access token isn't in the correct format.
 It should follow this pattern: %s.
+
+# overwriteAccessTokenAuthUserFile
+
+A file already exists for user "%s", which is associated with the access token you provided.
+Are you sure you want to overwrite the existing file?

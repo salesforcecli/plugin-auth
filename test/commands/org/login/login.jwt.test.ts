@@ -6,12 +6,12 @@
  */
 
 import { AuthFields, AuthInfo, Global, Mode, SfError } from '@salesforce/core';
-import { MockTestOrgData, TestContext } from '@salesforce/core/lib/testSetup';
+import { MockTestOrgData, TestContext } from '@salesforce/core/lib/testSetup.js';
 import { StubbedType, stubInterface } from '@salesforce/ts-sinon';
 import { expect } from 'chai';
 import { Config } from '@oclif/core';
 import { SfCommand } from '@salesforce/sf-plugins-core';
-import LoginJwt from '../../../../src/commands/org/login/jwt';
+import LoginJwt from '../../../../src/commands/org/login/jwt.js';
 
 interface Options {
   authInfoCreateFails?: boolean;

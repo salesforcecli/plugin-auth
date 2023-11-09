@@ -8,13 +8,13 @@
 /* eslint-disable camelcase */
 
 import { AuthFields, AuthInfo, DeviceOauthService, Global, Mode } from '@salesforce/core';
-import { MockTestOrgData, TestContext } from '@salesforce/core/lib/testSetup';
+import { MockTestOrgData, TestContext } from '@salesforce/core/lib/testSetup.js';
 import { StubbedType, stubInterface, stubMethod } from '@salesforce/ts-sinon';
-import { DeviceCodeResponse } from '@salesforce/core/lib/deviceOauthService';
+import { DeviceCodeResponse } from '@salesforce/core/lib/deviceOauthService.js';
 import { expect } from 'chai';
 import { Config } from '@oclif/core';
 import { SfCommand } from '@salesforce/sf-plugins-core';
-import Login from '../../../../src/commands/org/login/device';
+import Login from '../../../../src/commands/org/login/device.js';
 
 interface Options {
   approvalTimesout?: boolean;

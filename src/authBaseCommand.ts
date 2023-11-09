@@ -4,12 +4,14 @@
  * Licensed under the BSD 3-Clause license.
  * For full license text, see LICENSE.txt file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  */
+import { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { Messages, Global, Mode } from '@salesforce/core';
-import * as chalk from 'chalk';
+import chalk from 'chalk';
 import { SfCommand } from '@salesforce/sf-plugins-core';
 import { Config } from '@oclif/core';
 
-Messages.importMessagesDirectory(__dirname);
+Messages.importMessagesDirectory(dirname(fileURLToPath(import.meta.url)));
 const messages = Messages.loadMessages('@salesforce/plugin-auth', 'messages');
 
 function dimMessage(message: string): string {
@@ -42,26 +44,11 @@ export abstract class AuthBaseCommand<T> extends SfCommand<T> {
     }
   }
 
-  protected async shouldRunCommand(noPrompt?: boolean, message?: string, defaultAnswer = true): Promise<boolean> {
-    if (Boolean(noPrompt) || Global.getEnvironmentMode() === Mode.DEMO) {
-      return true;
-    } else {
-      const msg = dimMessage(message ?? messages.getMessage('warnAuth', [this.config.bin]));
-      const answer = await this.confirm(msg, 10000, defaultAnswer);
-      return answer;
-    }
-  }
-
   protected async askForClientSecret(disableMasking = false): Promise<string> {
     return this.askForHiddenResponse('clientSecretStdin', disableMasking);
   }
 
   protected async askForAccessToken(disableMasking = false): Promise<string> {
     return this.askForHiddenResponse('accessTokenStdin', disableMasking);
-  }
-
-  protected async askOverwriteAuthFile(username: string): Promise<boolean> {
-    const yN = await this.confirm(messages.getMessage('overwriteAccessTokenAuthUserFile', [username]));
-    return yN;
   }
 }
