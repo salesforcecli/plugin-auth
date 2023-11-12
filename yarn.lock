@@ -916,15 +916,15 @@
     strip-ansi "6.0.1"
     ts-retry-promise "^0.7.1"
 
-"@salesforce/core@^5.3.1", "@salesforce/core@^5.3.17", "@salesforce/core@^5.3.9":
-  version "5.3.17"
-  resolved "https://registry.yarnpkg.com/@salesforce/core/-/core-5.3.17.tgz#fe7e5b89bdfffc9c1634e0371fab6115b23fe312"
-  integrity sha512-3BYdpRwQrtaTNHINk+NSrXwlr0xZjKSkJWhMeryjGyTGf9YPRu1JNawl6PPbEpGCQp2y+NLUdp6vMy64jwIDBg==
+"@salesforce/core@^5.3.1", "@salesforce/core@^5.3.17", "@salesforce/core@^5.3.20", "@salesforce/core@^5.3.9":
+  version "5.3.20"
+  resolved "https://registry.yarnpkg.com/@salesforce/core/-/core-5.3.20.tgz#4e934d4551bb70423cb1c4115615bc41cffca41e"
+  integrity sha512-y+O6O2c8OYFDrAy2qsG+pAcNxoyL14nmBXcBRRcYA7Huj8ikK+aLJK84PuVAYdQz+hNwImQF+69IWtDkpK4Irg==
   dependencies:
     "@salesforce/kit" "^3.0.15"
     "@salesforce/schemas" "^1.6.1"
     "@salesforce/ts-types" "^2.0.9"
-    "@types/semver" "^7.5.3"
+    "@types/semver" "^7.5.4"
     ajv "^8.12.0"
     change-case "^4.1.2"
     faye "^1.4.0"
@@ -1274,10 +1274,10 @@
   dependencies:
     "@types/node" "*"
 
-"@types/semver@^7.3.12", "@types/semver@^7.5.0", "@types/semver@^7.5.3":
-  version "7.5.4"
-  resolved "https://registry.yarnpkg.com/@types/semver/-/semver-7.5.4.tgz#0a41252ad431c473158b22f9bfb9a63df7541cff"
-  integrity sha512-MMzuxN3GdFwskAnb6fz0orFvhfqi752yjaXylr0Rp4oDg5H0Zn1IuyRhDVvYOwAXoJirx2xuS16I3WjxnAIHiQ==
+"@types/semver@^7.3.12", "@types/semver@^7.5.0", "@types/semver@^7.5.4":
+  version "7.5.5"
+  resolved "https://registry.yarnpkg.com/@types/semver/-/semver-7.5.5.tgz#deed5ab7019756c9c90ea86139106b0346223f35"
+  integrity sha512-+d+WYC1BxJ6yVOgUgzK8gWvp5qF8ssV5r4nsDcZWKRWcDQLQ619tvWAxJQYGgBrO1MnLJC7a5GtiYsAoQ47dJg==
 
 "@types/shelljs@^0.8.14":
   version "0.8.14"
