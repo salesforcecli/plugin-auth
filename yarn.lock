@@ -726,10 +726,10 @@
     wordwrap "^1.0.0"
     wrap-ansi "^7.0.0"
 
-"@oclif/core@^3.0.0", "@oclif/core@^3.0.4", "@oclif/core@^3.10.2", "@oclif/core@^3.3.1", "@oclif/core@^3.5.0":
-  version "3.10.2"
-  resolved "https://registry.yarnpkg.com/@oclif/core/-/core-3.10.2.tgz#bed039f3b39208c6d4042ddd3e02fb237d78bf6d"
-  integrity sha512-tpOhDXPKLMavFsjrWpF1sTdyvOgcSlWBP+puO60XYnDk4+c1ghK7Pr7AA83VIyyUqUSBaxKjUJcZJJHGYfXuIA==
+"@oclif/core@^3.0.0", "@oclif/core@^3.0.4", "@oclif/core@^3.10.8", "@oclif/core@^3.3.1", "@oclif/core@^3.5.0":
+  version "3.10.8"
+  resolved "https://registry.yarnpkg.com/@oclif/core/-/core-3.10.8.tgz#8a855841107576b88a2ebe2e20e6e0d7ee885713"
+  integrity sha512-DRiEiXUvijq/1dXL80/sFGdhTjejFiUzxURW7N310TEKlONujas66KhLATfF/nG3mICqTCU0f9B+VNfLtZoGqw==
   dependencies:
     ansi-escapes "^4.3.2"
     ansi-styles "^4.3.0"
@@ -2788,14 +2788,7 @@ ecdsa-sig-formatter@1.0.11:
   dependencies:
     safe-buffer "^5.0.1"
 
-ejs@^3.1.8:
-  version "3.1.8"
-  resolved "https://registry.yarnpkg.com/ejs/-/ejs-3.1.8.tgz#758d32910c78047585c7ef1f92f9ee041c1c190b"
-  integrity sha512-/sXZeMlhS0ArkfX2Aw780gJzXSMPnKjtspYZv+f3NiKLlubezAHDU5+9xz6gd3/NhG3txQCo6xlglmTS+oTGEQ==
-  dependencies:
-    jake "^10.8.5"
-
-ejs@^3.1.9:
+ejs@^3.1.8, ejs@^3.1.9:
   version "3.1.9"
   resolved "https://registry.yarnpkg.com/ejs/-/ejs-3.1.9.tgz#03c9e8777fe12686a9effcef22303ca3d8eeb361"
   integrity sha512-rC+QVNMJWv+MtPgkt0y+0rVEIdbtxVADApW9JXrUVlzHetgcyczP/E7DJmWJ4fJCZF2cPcBk0laWO9ZHMG3DmQ==
