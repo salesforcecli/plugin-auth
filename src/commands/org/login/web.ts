@@ -116,9 +116,13 @@ export default class LoginWeb extends AuthBaseCommand<AuthFields> {
       return fields;
     } catch (err) {
       const error = err as Error;
-      Logger.childFromRoot('auth').debug(error);
+      Logger.childFromRoot('LoginWebCommand').debug(error);
       if (error.name === 'AuthCodeExchangeError') {
-        throw new SfError(messages.getMessage('invalidClientId', [error.message]));
+        const authError = new SfError(messages.getMessage('invalidClientId', [error.message]));
+        if (error.stack) {
+          authError.stack += `\nDUE TO:\n${error.stack}`;
+        }
+        throw authError;
       }
       throw error;
     }
