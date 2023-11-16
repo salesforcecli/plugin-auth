@@ -1,3 +1,9 @@
+## [3.0.6](https://github.com/salesforcecli/plugin-auth/compare/3.0.5...3.0.6) (2023-11-16)
+
+### Bug Fixes
+
+- add the original error stack to the new error ([#862](https://github.com/salesforcecli/plugin-auth/issues/862)) ([bdbfa1b](https://github.com/salesforcecli/plugin-auth/commit/bdbfa1b3f00e5d3d2079ce60a1e963f05d06db8e))
+
 ## [3.0.5](https://github.com/salesforcecli/plugin-auth/compare/3.0.4...3.0.5) (2023-11-15)
 
 ### Bug Fixes
