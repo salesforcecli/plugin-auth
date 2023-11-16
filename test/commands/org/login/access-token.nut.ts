@@ -34,7 +34,7 @@ describe('org:login:access-token NUTs', () => {
       }
     );
     accessToken = res.jsonOutput?.result.accessToken as string;
-    env.setString('SFDX_ACCESS_TOKEN', accessToken);
+    env.setString('SF_ACCESS_TOKEN', accessToken);
     execCmd(`auth:logout -p -o ${username}`, { ensureExitCode: 0 });
   });
 
