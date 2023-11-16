@@ -14,7 +14,7 @@ To use the command in a CI/CD script, set the SFDX_ACCESS_TOKEN environment vari
 
   <%= config.bin %> <%= command.id %> --instance-url https://mycompany.my.salesforce.com
 
-- Authorize the org without being prompted; you must have previously set the SFDX_ACCESS_TOKEN environment variable to the access token:
+- Authorize the org without being prompted; you must have previously set the SF_ACCESS_TOKEN environment variable to the access token:
 
   <%= config.bin %> <%= command.id %> --instance-url https://dev-hub.my.salesforce.com --no-prompt
 
