@@ -116,7 +116,8 @@ export default class LoginAccessToken extends AuthBaseCommand<AuthFields> {
   }
 
   private async getAccessToken(): Promise<string> {
-    const accessToken = env.getString('SFDX_ACCESS_TOKEN') ?? (await this.askForAccessToken());
+    const accessToken =
+      env.getString('SF_ACCESS_TOKEN') ?? env.getString('SFDX_ACCESS_TOKEN') ?? (await this.askForAccessToken());
 
     if (!matchesAccessToken(accessToken)) {
       throw new SfError(messages.getMessage('invalidAccessTokenFormat', [ACCESS_TOKEN_FORMAT]));

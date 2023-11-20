@@ -112,7 +112,7 @@ describe('org:login:access-token', () => {
     // prompt once; one for access token
     expect(result).to.deep.equal(authFields);
   });
-  it('should use env var SFDX_ACCESS_TOKEN as input to the store command', async () => {
+  it('should use env var SF_ACCESS_TOKEN as input to the store command', async () => {
     const store = await createNewStoreCommand(
       ['--instance-url', 'https://foo.bar.org.salesforce.com'],
       accessToken,
