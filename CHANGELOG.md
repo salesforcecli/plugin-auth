@@ -1,3 +1,5 @@
+## [3.0.7](https://github.com/salesforcecli/plugin-auth/compare/3.0.6...3.0.7) (2023-11-21)
+
 ## [3.0.6](https://github.com/salesforcecli/plugin-auth/compare/3.0.5...3.0.6) (2023-11-16)
 
 ### Bug Fixes
