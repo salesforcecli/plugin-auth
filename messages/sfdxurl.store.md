@@ -22,7 +22,15 @@ You can also create a JSON file that has a top-level property named sfdxAuthUrl 
 
 Path to a file that contains the Salesforce DX authorization URL.
 
+# flags.sfdx-url.summary
+
+The Salesforce DX authorization URL as a string.
+
 # examples
+
+- Authorize an org using the SFDX authorization URL passed in as a string:
+
+  <%= config.bin %> <%= command.id %> --sfdx-url force://<clientId>:<clientSecret>:<refreshToken>@<instanceUrl>
 
 - Authorize an org using the SFDX authorization URL in the files/authFile.json file:
 

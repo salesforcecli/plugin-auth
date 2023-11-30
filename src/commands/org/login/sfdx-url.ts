@@ -34,9 +34,15 @@ export default class LoginSfdxUrl extends AuthBaseCommand<AuthFields> {
     'sfdx-url-file': Flags.file({
       char: 'f',
       summary: messages.getMessage('flags.sfdx-url-file.summary'),
-      required: true,
+      required: false,
       deprecateAliases: true,
       aliases: ['sfdxurlfile'],
+    }),
+    'sfdx-url': Flags.string({
+      char: 'u',
+      summary: messages.getMessage('flags.sfdx-url.summary'),
+      required: false,
+      aliases: ['sfdxurl'],
     }),
     'set-default-dev-hub': Flags.boolean({
       char: 'd',
@@ -71,11 +77,26 @@ export default class LoginSfdxUrl extends AuthBaseCommand<AuthFields> {
     const { flags } = await this.parse(LoginSfdxUrl);
     if (await this.shouldExitCommand(flags['no-prompt'])) return {};
 
+    const authString = flags['sfdx-url'];
     const authFile = flags['sfdx-url-file'];
 
-    const sfdxAuthUrl = authFile.endsWith('.json')
-      ? await getUrlFromJson(authFile)
-      : await fs.readFile(authFile, 'utf8');
+    if (!authString && !authFile) {
+      throw new Error('Please include either the --sfdx-url or --sfdx-url-file flags.');
+    }
+
+    let sfdxAuthUrlVar;
+
+    if (authString) {
+      sfdxAuthUrlVar = authString;
+    }
+
+    if (!sfdxAuthUrlVar && authFile) {
+      sfdxAuthUrlVar = authFile.endsWith('.json')
+        ? await getUrlFromJson(authFile)
+        : await fs.readFile(authFile, 'utf8');
+    }
+
+    const sfdxAuthUrl = sfdxAuthUrlVar;
 
     if (!sfdxAuthUrl) {
       throw new Error(
