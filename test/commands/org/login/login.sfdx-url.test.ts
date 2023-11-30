@@ -55,6 +55,25 @@ describe('org:login:sfdx-url', () => {
     }
   }
 
+  it('should return auth fields when passing in sfdxurl as string', async () => {
+    await prepareStubs();
+    const sfdxAuthUrl = 'force://PlatformCLI::CoffeeAndBacon@su0503.my.salesforce.com';
+    const store = new LoginSfdxUrl(['-u', sfdxAuthUrl], {} as Config);
+    const response = await store.run();
+    expect(response.username).to.equal(testData.username);
+  });
+
+  it('should error out when neither file or url are provided', async () => {
+    await prepareStubs();
+    const store = new LoginSfdxUrl([], {} as Config);
+    try {
+      const response = await store.run();
+      expect.fail(`Should have thrown an error. Response: ${JSON.stringify(response)}`);
+    } catch (e) {
+      expect((e as Error).message).to.includes('Please include either the --sfdx-url or --sfdx-url-file flags.');
+    }
+  });
+
   it('should return auth fields', async () => {
     await prepareStubs();
     const store = new LoginSfdxUrl(['-f', keyPathTxt, '--json'], {} as Config);
