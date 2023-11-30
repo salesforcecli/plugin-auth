@@ -82,16 +82,26 @@
   {
     "command": "org:login:sfdx-url",
     "plugin": "@salesforce/plugin-auth",
-    "flags": ["alias", "json", "loglevel", "no-prompt", "set-default", "set-default-dev-hub", "sfdx-url-file"],
+    "flags": [
+      "alias",
+      "json",
+      "loglevel",
+      "no-prompt",
+      "set-default",
+      "set-default-dev-hub",
+      "sfdx-url-file",
+      "sfdx-url"
+    ],
     "alias": ["force:auth:sfdxurl:store", "auth:sfdxurl:store"],
-    "flagChars": ["a", "d", "f", "p", "s"],
+    "flagChars": ["a", "d", "f", "p", "s", "u"],
     "flagAliases": [
       "noprompt",
       "setalias",
       "setdefaultdevhub",
       "setdefaultdevhubusername",
       "setdefaultusername",
-      "sfdxurlfile"
+      "sfdxurlfile",
+      "sfdxurl"
     ]
   },
   {
