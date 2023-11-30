@@ -1,10 +1,12 @@
 # summary
 
-Authorize an org using a Salesforce DX authorization URL stored in a file.
+Authorize an org using a Salesforce DX authorization URL.
 
 # description
 
 The Salesforce DX (SFDX) authorization URL must have the format "%s". NOTE: The SFDX authorization URL uses the "force" protocol, and not "http" or "https". Also, the "instanceUrl" inside the SFDX authorization URL doesn't include the protocol ("https://").
+
+You can pass in the authorization URL using the --sfdx-url flag or by referencing a file path that contains the URL with the --sfdx-url-file flag.
 
 You have three options when creating the authorization file. The easiest option is to redirect the output of the "<%= config.bin %> org display --verbose --json" command into a file. For example, using an org with alias my-org that you've already authorized:
 
