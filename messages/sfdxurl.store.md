@@ -24,7 +24,7 @@ Path to a file that contains the Salesforce DX authorization URL.
 
 # flags.sfdx-url.summary
 
-The Salesforce DX authorization URL as a string.
+Salesforce DX authorization URL.
 
 # examples
 
