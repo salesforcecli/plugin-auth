@@ -20,7 +20,7 @@ You can also create a JSON file that has a top-level property named sfdxAuthUrl 
 
 # flags.sfdx-url-file.summary
 
-Path to a file that contains the Salesforce DX authorization URL. Use the '-' character to pipe through stdin.
+Path to a file that contains the Salesforce DX authorization URL. Use the '-' character to pipe the value through standard input (stdin).
 
 # examples
 
