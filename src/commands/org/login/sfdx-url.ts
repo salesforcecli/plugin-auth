@@ -37,6 +37,7 @@ export default class LoginSfdxUrl extends AuthBaseCommand<AuthFields> {
       required: true,
       deprecateAliases: true,
       aliases: ['sfdxurlfile'],
+      allowStdin: true,
     }),
     'set-default-dev-hub': Flags.boolean({
       char: 'd',
@@ -71,11 +72,18 @@ export default class LoginSfdxUrl extends AuthBaseCommand<AuthFields> {
     const { flags } = await this.parse(LoginSfdxUrl);
     if (await this.shouldExitCommand(flags['no-prompt'])) return {};
 
-    const authFile = flags['sfdx-url-file'];
+    const authFile: string = flags['sfdx-url-file'];
+    let sfdxAuthUrl: string;
 
-    const sfdxAuthUrl = authFile.endsWith('.json')
-      ? await getUrlFromJson(authFile)
-      : await fs.readFile(authFile, 'utf8');
+    const match = authFile.match(
+      /^force:\/\/([a-zA-Z0-9._-]+={0,2}):([a-zA-Z0-9._-]*={0,2}):([a-zA-Z0-9._-]+={0,2})@([a-zA-Z0-9._-]+)/
+    );
+
+    if (match) {
+      sfdxAuthUrl = authFile;
+    } else {
+      sfdxAuthUrl = authFile.endsWith('.json') ? await getUrlFromJson(authFile) : await fs.readFile(authFile, 'utf8');
+    }
 
     if (!sfdxAuthUrl) {
       throw new Error(
