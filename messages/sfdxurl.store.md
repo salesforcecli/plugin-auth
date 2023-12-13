@@ -1,6 +1,6 @@
 # summary
 
-Authorize an org using a Salesforce DX authorization URL stored in a file or through stdin.
+Authorize an org using a Salesforce DX authorization URL stored in a file or through standard input (stdin).
 
 # description
 
