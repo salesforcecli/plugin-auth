@@ -32,6 +32,6 @@ Path to a file that contains the Salesforce DX authorization URL. Use the '-' ch
 
   <%= config.bin %> <%= command.id %> --sfdx-url-file files/authFile.json --set-default --alias MyDefaultOrg
 
-- Pipe the SFDX authorization url from stdin by providing the '-' value.
+- Pipe the SFDX authorization URL from stdin by specifying the '-' value.
 
   $ echo $url | <%= config.bin %> <%= command.id %> --sfdx-url-file -
