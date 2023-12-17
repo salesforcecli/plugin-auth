@@ -1,3 +1,9 @@
+## [3.0.13](https://github.com/salesforcecli/plugin-auth/compare/3.0.12...3.0.13) (2023-12-17)
+
+### Bug Fixes
+
+- **deps:** bump @oclif/core from 3.14.1 to 3.15.0 ([35bb28a](https://github.com/salesforcecli/plugin-auth/commit/35bb28a470987d875ff9c8166ba84d06dc4f6e53))
+
 ## [3.0.12](https://github.com/salesforcecli/plugin-auth/compare/3.0.11...3.0.12) (2023-12-10)
 
 ### Bug Fixes
