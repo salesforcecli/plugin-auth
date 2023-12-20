@@ -18,9 +18,15 @@ NOTE: The "<%= config.bin %> org display --verbose" command displays the refresh
 
 You can also create a JSON file that has a top-level property named sfdxAuthUrl whose value is the authorization URL. Finally, you can create a normal text file that includes just the URL and nothing else.
 
+Alternatively, you can pipe the SFDX authorization url through standard input by using the --sfdx-url-stdin flag and providing the '-' character as the value.
+
 # flags.sfdx-url-file.summary
 
-Path to a file that contains the Salesforce DX authorization URL. Use the '-' character to pipe the value through standard input (stdin).
+Path to a file that contains the Salesforce DX authorization URL.
+
+# flags.sfdx-url-stdin.summary
+
+Provide '-' as the value to pipe the Salesforce DX authorization URL through standard input (stdin).
 
 # examples
 
@@ -34,4 +40,4 @@ Path to a file that contains the Salesforce DX authorization URL. Use the '-' ch
 
 - Pipe the SFDX authorization URL from stdin by specifying the '-' value.
 
-  echo $url | <%= config.bin %> <%= command.id %> --sfdx-url-file -
+  <%= "\n $ echo url | " + config.bin %> <%= command.id %> --sfdx-url-stdin -

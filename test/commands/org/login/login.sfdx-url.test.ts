@@ -10,7 +10,7 @@ import { AuthFields, AuthInfo, Global, Mode } from '@salesforce/core';
 import { MockTestOrgData, TestContext } from '@salesforce/core/lib/testSetup.js';
 import { expect } from 'chai';
 import { Config } from '@oclif/core';
-import { StubbedType, stubInterface } from '@salesforce/ts-sinon';
+import { StubbedType, stubInterface, stubMethod } from '@salesforce/ts-sinon';
 import { SfCommand } from '@salesforce/sf-plugins-core';
 import LoginSfdxUrl from '../../../../src/commands/org/login/sfdx-url.js';
 
@@ -212,5 +212,32 @@ describe('org:login:sfdx-url', () => {
     const store = new LoginSfdxUrl(['-p', '-f', keyPathTxt, '--json'], {} as Config);
     await store.run();
     expect(authInfoStub.save.called);
+  });
+
+  it('should error out when neither file or url are provided', async () => {
+    await prepareStubs();
+    const store = new LoginSfdxUrl([], {} as Config);
+    try {
+      const response = await store.run();
+      expect.fail(`Should have thrown an error. Response: ${JSON.stringify(response)}`);
+    } catch (e) {
+      expect((e as Error).message).to.includes('Please include either the --sfdx-url-stdin or --sfdx-url-file flags.');
+    }
+  });
+
+  it('should return auth fields when using stdin', async () => {
+    await prepareStubs();
+    const sfdxAuthUrl = 'force://PlatformCLI::CoffeeAndBacon@su0503.my.salesforce.com';
+    const flagOutput = {
+      flags: {
+        'no-prompt': false,
+        'sfdx-url-file': '',
+        'sfdx-url-stdin': sfdxAuthUrl,
+      },
+    };
+    const store = new LoginSfdxUrl(['-u', '-'], {} as Config);
+    stubMethod($$.SANDBOX, store, 'parse').resolves(flagOutput);
+    const response = await store.run();
+    expect(response.username).to.equal(testData.username);
   });
 });

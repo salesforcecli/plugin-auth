@@ -34,9 +34,16 @@ export default class LoginSfdxUrl extends AuthBaseCommand<AuthFields> {
     'sfdx-url-file': Flags.file({
       char: 'f',
       summary: messages.getMessage('flags.sfdx-url-file.summary'),
-      required: true,
+      required: false,
       deprecateAliases: true,
       aliases: ['sfdxurlfile'],
+    }),
+    'sfdx-url-stdin': Flags.file({
+      char: 'u',
+      summary: messages.getMessage('flags.sfdx-url-stdin.summary'),
+      required: false,
+      deprecateAliases: true,
+      aliases: ['sfdxurlstdin'],
       allowStdin: true,
     }),
     'set-default-dev-hub': Flags.boolean({
@@ -72,23 +79,28 @@ export default class LoginSfdxUrl extends AuthBaseCommand<AuthFields> {
     const { flags } = await this.parse(LoginSfdxUrl);
     if (await this.shouldExitCommand(flags['no-prompt'])) return {};
 
-    const authFile: string = flags['sfdx-url-file'];
+    const authFile = flags['sfdx-url-file'];
+    const authStdin = flags['sfdx-url-stdin'];
     let sfdxAuthUrl: string;
 
-    const match = authFile.match(
-      /^force:\/\/([a-zA-Z0-9._-]+={0,2}):([a-zA-Z0-9._-]*={0,2}):([a-zA-Z0-9._-]+={0,2})@([a-zA-Z0-9._-]+)/
-    );
-
-    if (match) {
-      sfdxAuthUrl = authFile;
-    } else {
+    if (authFile) {
       sfdxAuthUrl = authFile.endsWith('.json') ? await getUrlFromJson(authFile) : await fs.readFile(authFile, 'utf8');
-    }
 
-    if (!sfdxAuthUrl) {
-      throw new Error(
-        `Error getting the auth URL from file ${authFile}. Please ensure it meets the description shown in the documentation for this command.`
-      );
+      if (!sfdxAuthUrl) {
+        throw new Error(
+          `Error getting the auth URL from file ${authFile}. Please ensure it meets the description shown in the documentation for this command.`
+        );
+      }
+    } else if (authStdin) {
+      sfdxAuthUrl = authStdin;
+
+      if (!sfdxAuthUrl) {
+        throw new Error(
+          'Error getting the auth URL from stdin. Please ensure it meets the description shown in the documentation for this command.'
+        );
+      }
+    } else {
+      throw new Error('Please include either the --sfdx-url-stdin or --sfdx-url-file flags.');
     }
 
     const oauth2Options = AuthInfo.parseSfdxAuthUrl(sfdxAuthUrl);
