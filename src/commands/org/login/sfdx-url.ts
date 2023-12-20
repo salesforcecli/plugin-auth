@@ -93,12 +93,6 @@ export default class LoginSfdxUrl extends AuthBaseCommand<AuthFields> {
       }
     } else if (authStdin) {
       sfdxAuthUrl = authStdin;
-
-      if (!sfdxAuthUrl) {
-        throw new Error(
-          'Error getting the auth URL from stdin. Please ensure it meets the description shown in the documentation for this command.'
-        );
-      }
     } else {
       throw new Error('Please include either the --sfdx-url-stdin or --sfdx-url-file flags.');
     }
