@@ -1,3 +1,9 @@
+## [3.0.15](https://github.com/salesforcecli/plugin-auth/compare/3.0.14...3.0.15) (2023-12-30)
+
+### Bug Fixes
+
+- **deps:** bump @salesforce/sf-plugins-core from 5.0.12 to 5.0.13 ([0dc3ee7](https://github.com/salesforcecli/plugin-auth/commit/0dc3ee799c0861b772f18962127ccbf7a5c4d210))
+
 ## [3.0.14](https://github.com/salesforcecli/plugin-auth/compare/3.0.13...3.0.14) (2023-12-24)
 
 ### Bug Fixes
