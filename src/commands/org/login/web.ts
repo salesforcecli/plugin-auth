@@ -5,26 +5,23 @@
  * For full license text, see LICENSE.txt file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  */
 
-
-
 import open, { apps, AppName } from 'open';
-import { Flags, loglevel } from '@salesforce/sf-plugins-core';
+import { Flags, SfCommand, loglevel } from '@salesforce/sf-plugins-core';
 import { AuthFields, AuthInfo, Logger, Messages, OAuth2Config, SfError, WebOAuthServer } from '@salesforce/core';
 import { Env } from '@salesforce/kit';
 import { Interfaces } from '@oclif/core';
-import { AuthBaseCommand } from '../../../authBaseCommand.js';
-import { Common } from '../../../common.js';
+import common from '../../../common.js';
 
-Messages.importMessagesDirectoryFromMetaUrl(import.meta.url)
+Messages.importMessagesDirectoryFromMetaUrl(import.meta.url);
 const messages = Messages.loadMessages('@salesforce/plugin-auth', 'web.login');
 const commonMessages = Messages.loadMessages('@salesforce/plugin-auth', 'messages');
 
-export default class LoginWeb extends AuthBaseCommand<AuthFields> {
+export default class LoginWeb extends SfCommand<AuthFields> {
   public static readonly summary = messages.getMessage('summary');
   public static readonly description = messages.getMessage('description');
   public static readonly examples = messages.getMessages('examples');
   public static readonly deprecateAliases = true;
-  public static aliases = ['force:auth:web:login', 'auth:web:login'];
+  public static readonly aliases = ['force:auth:web:login', 'auth:web:login'];
 
   public static readonly flags = {
     browser: Flags.string({
@@ -64,12 +61,6 @@ export default class LoginWeb extends AuthBaseCommand<AuthFields> {
       deprecateAliases: true,
       aliases: ['setalias'],
     }),
-    'disable-masking': Flags.boolean({
-      summary: commonMessages.getMessage('flags.disable-masking.summary'),
-      hidden: true,
-      deprecateAliases: true,
-      aliases: ['disablemasking'],
-    }),
     'no-prompt': Flags.boolean({
       char: 'p',
       summary: commonMessages.getMessage('flags.no-prompt.summary'),
@@ -90,16 +81,13 @@ export default class LoginWeb extends AuthBaseCommand<AuthFields> {
       throw new SfError(messages.getMessage('deviceWarning'), 'DEVICE_WARNING');
     }
 
-    if (await this.shouldExitCommand(flags['no-prompt'])) return {};
+    if (await common.shouldExitCommand(flags['no-prompt'])) return {};
 
     const oauthConfig: OAuth2Config = {
-      loginUrl: await Common.resolveLoginUrl(flags['instance-url']?.href),
+      loginUrl: await common.resolveLoginUrl(flags['instance-url']?.href),
       clientId: flags['client-id'],
+      ...(flags['client-id'] ? { clientSecret: await common.clientSecretPrompt() } : {}),
     };
-
-    if (flags['client-id']) {
-      oauthConfig.clientSecret = await this.askForClientSecret(flags['disable-masking']);
-    }
 
     try {
       const authInfo = await this.executeLoginFlow(oauthConfig);
@@ -115,12 +103,11 @@ export default class LoginWeb extends AuthBaseCommand<AuthFields> {
       this.logSuccess(successMsg);
       return fields;
     } catch (err) {
-      const error = err as Error;
-      Logger.childFromRoot('LoginWebCommand').debug(error);
-      if (error.name === 'AuthCodeExchangeError') {
-        throw new SfError(messages.getMessage('invalidClientId', [error.message]), undefined, undefined, error);
+      Logger.childFromRoot('LoginWebCommand').debug(err);
+      if (err instanceof Error && err.name === 'AuthCodeExchangeError') {
+        throw new SfError(messages.getMessage('invalidClientId', [err.message]), undefined, undefined, err);
       }
-      throw error;
+      throw err;
     }
   }
 

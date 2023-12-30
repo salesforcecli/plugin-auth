@@ -8,17 +8,17 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
 import { AuthFields, AuthInfo, SfError, StateAggregator } from '@salesforce/core';
-import { stubMethod } from '@salesforce/ts-sinon';
 import { assert, expect } from 'chai';
 import { TestContext } from '@salesforce/core/lib/testSetup.js';
 import { Env } from '@salesforce/kit';
 import { Config } from '@oclif/core';
 import Store from '../../../../src/commands/org/login/access-token.js';
+import common from '../../../../src/common.js';
 
 describe('org:login:access-token', () => {
   const $$ = new TestContext();
 
-  let authFields: AuthFields;
+  let authFields: Required<Pick<AuthFields, 'accessToken' | 'instanceUrl' | 'loginUrl' | 'orgId' | 'username'>>;
   const accessToken = '00Dxx0000000000!xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
 
   /* eslint-disable camelcase */
@@ -43,30 +43,32 @@ describe('org:login:access-token', () => {
       username: 'foo@baz.org',
     };
 
-    stubMethod($$.SANDBOX, StateAggregator, 'getInstance').resolves({
+    $$.SANDBOX.stub(StateAggregator, 'getInstance').resolves({
+      // @ts-expect-error because incomplete interface
       orgs: {
         exists: () => Promise.resolve(authFileExists),
       },
     });
-    stubMethod($$.SANDBOX, Store.prototype, 'saveAuthInfo').resolves(userInfo);
-    stubMethod($$.SANDBOX, AuthInfo.prototype, 'getUsername').returns(authFields.username);
-    stubMethod($$.SANDBOX, AuthInfo.prototype, 'getFields').returns({
+    // @ts-expect-error because private method
+    $$.SANDBOX.stub(Store.prototype, 'saveAuthInfo').resolves(userInfo);
+    $$.SANDBOX.stub(AuthInfo.prototype, 'getUsername').returns(authFields.username);
+    $$.SANDBOX.stub(AuthInfo.prototype, 'getFields').returns({
       accessToken,
       orgId: authFields.orgId,
       instanceUrl: authFields.instanceUrl,
       loginUrl: authFields.loginUrl,
       username: authFields.username,
     });
-    stubMethod($$.SANDBOX, Store.prototype, 'getUserInfo').resolves(AuthInfo.prototype);
+    // @ts-expect-error because private method
+    $$.SANDBOX.stub(Store.prototype, 'getUserInfo').resolves(AuthInfo.prototype);
     if (useSfdxAccessTokenEnvVar) {
-      stubMethod($$.SANDBOX, Env.prototype, 'getString').callsFake(() => accessToken);
+      $$.SANDBOX.stub(Env.prototype, 'getString').callsFake(() => accessToken);
     }
     const store = new Store(
       [...new Set(['--instance-url', 'https://foo.bar.org.salesforce.com', '--no-prompt', ...flags])],
       {} as Config
     );
-    // @ts-ignore
-    $$.SANDBOX.stub(Store.prototype, 'askForAccessToken').resolves(promptAnswer);
+    $$.SANDBOX.stub(common, 'accessTokenPrompt').resolves(promptAnswer);
 
     return Promise.resolve(store);
   }

@@ -8,13 +8,14 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
 import { Config } from '@oclif/core';
-import { AuthFields, AuthInfo, Global, Mode, SfError } from '@salesforce/core';
+import { AuthFields, AuthInfo, SfError } from '@salesforce/core';
 import { MockTestOrgData, TestContext } from '@salesforce/core/lib/testSetup.js';
 import { StubbedType, stubInterface, stubMethod } from '@salesforce/ts-sinon';
 import { assert, expect } from 'chai';
 import { Env } from '@salesforce/kit';
 import { SfCommand, Ux } from '@salesforce/sf-plugins-core';
 import LoginWeb from '../../../../src/commands/org/login/web.js';
+import common from '../../../../src/common.js';
 
 describe('org:login:web', () => {
   const $$ = new TestContext();
@@ -30,8 +31,7 @@ describe('org:login:web', () => {
     clientSecret = ''
   ): Promise<LoginWeb> {
     authFields = await testData.getConfig();
-    // @ts-ignore
-    $$.SANDBOX.stub(LoginWeb.prototype, 'askForClientSecret').resolves(clientSecret);
+    $$.SANDBOX.stub(common, 'clientSecretPrompt').resolves(clientSecret);
     $$.SANDBOX.stub(SfCommand.prototype, 'confirm').resolves(promptAnswer);
 
     authInfoStub = stubInterface<AuthInfo>($$.SANDBOX, {
@@ -114,20 +114,6 @@ describe('org:login:web', () => {
   it('should prompt for client secret when clientid is present', async () => {
     const login = await createNewLoginCommand(['--client-id', 'CoffeeBeans'], false, undefined);
     await login.run();
-  });
-
-  it('should exit command if in demo and prompt is answered NO', async () => {
-    $$.SANDBOX.stub(Global, 'getEnvironmentMode').returns(Mode.DEMO);
-    const login = await createNewLoginCommand([], false, undefined);
-    const result = await login.run();
-    expect(result).to.deep.equal({});
-  });
-
-  it('should execute command if in demo and prompt is answered YES', async () => {
-    $$.SANDBOX.stub(Global, 'getEnvironmentMode').returns(Mode.DEMO);
-    const login = await createNewLoginCommand([], true, undefined);
-    const result = await login.run();
-    expect(result).to.deep.equal(authFields);
   });
 
   it('should show invalidClientId error if AuthCodeExchangeError', async () => {

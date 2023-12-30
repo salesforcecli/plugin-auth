@@ -5,8 +5,6 @@
  * For full license text, see LICENSE.txt file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  */
 
-
-
 import os from 'node:os';
 import {
   AuthInfo,
@@ -18,25 +16,24 @@ import {
   OrgAuthorization,
   OrgConfigProperties,
 } from '@salesforce/core';
-import { Flags, loglevel, Separator } from '@salesforce/sf-plugins-core';
+import { Flags, loglevel, Separator, SfCommand } from '@salesforce/sf-plugins-core';
 import { Interfaces } from '@oclif/core';
 import chalk from 'chalk';
-import { AuthBaseCommand } from '../../authBaseCommand.js';
 
-Messages.importMessagesDirectoryFromMetaUrl(import.meta.url)
+Messages.importMessagesDirectoryFromMetaUrl(import.meta.url);
 const messages = Messages.loadMessages('@salesforce/plugin-auth', 'logout');
 const commonMessages = Messages.loadMessages('@salesforce/plugin-auth', 'messages');
 type Choice = { name: string; value: OrgAuthorization };
 
 export type AuthLogoutResults = string[];
 
-export default class Logout extends AuthBaseCommand<AuthLogoutResults> {
+export default class Logout extends SfCommand<AuthLogoutResults> {
   public static readonly summary = messages.getMessage('summary');
   public static readonly description = messages.getMessage('description');
   public static readonly examples = messages.getMessages('examples');
 
   public static readonly deprecateAliases = true;
-  public static aliases = ['force:auth:logout', 'auth:logout'];
+  public static readonly aliases = ['force:auth:logout', 'auth:logout'];
 
   public static readonly flags = {
     'target-org': Flags.string({

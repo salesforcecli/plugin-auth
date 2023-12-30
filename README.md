@@ -275,7 +275,7 @@ ALIASES
   $ sf auth jwt grant
 
 EXAMPLES
-  Log into an org with username jdoe@example.org and on the default instance URL (https://login.salesforce.org). The
+  Log into an org with username jdoe@example.org and on the default instance URL (https://login.salesforce.com). The
   private key is stored in the file /Users/jdoe/JWT/server.key and the command uses the connected app with consumer
   key (client id) 04580y4051234051.
 

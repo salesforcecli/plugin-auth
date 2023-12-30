@@ -25,16 +25,7 @@
   {
     "command": "org:login:device",
     "plugin": "@salesforce/plugin-auth",
-    "flags": [
-      "alias",
-      "client-id",
-      "disable-masking",
-      "instance-url",
-      "json",
-      "loglevel",
-      "set-default",
-      "set-default-dev-hub"
-    ],
+    "flags": ["alias", "client-id", "instance-url", "json", "loglevel", "set-default", "set-default-dev-hub"],
     "alias": ["force:auth:device:login", "auth:device:login"],
     "flagChars": ["a", "d", "i", "r", "s"],
     "flagAliases": [
@@ -101,7 +92,6 @@
       "alias",
       "browser",
       "client-id",
-      "disable-masking",
       "instance-url",
       "json",
       "loglevel",

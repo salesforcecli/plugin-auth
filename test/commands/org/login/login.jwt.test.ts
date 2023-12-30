@@ -5,12 +5,11 @@
  * For full license text, see LICENSE.txt file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  */
 
-import { AuthFields, AuthInfo, Global, Mode, SfError } from '@salesforce/core';
+import { AuthFields, AuthInfo, SfError } from '@salesforce/core';
 import { MockTestOrgData, TestContext } from '@salesforce/core/lib/testSetup.js';
 import { StubbedType, stubInterface } from '@salesforce/ts-sinon';
 import { expect } from 'chai';
 import { Config } from '@oclif/core';
-import { SfCommand } from '@salesforce/sf-plugins-core';
 import LoginJwt from '../../../../src/commands/org/login/jwt.js';
 
 interface Options {
@@ -200,40 +199,5 @@ describe('org:login:jwt', () => {
     } catch (e) {
       expect.fail('Should not have thrown an error');
     }
-  });
-
-  it('should auth when in demo mode (SFDX_ENV=demo) and prompt is answered with yes', async () => {
-    await prepareStubs();
-    $$.SANDBOX.stub(Global, 'getEnvironmentMode').returns(Mode.DEMO);
-    $$.SANDBOX.stub(SfCommand.prototype, 'confirm').resolves(true);
-    const grant = new LoginJwt(
-      ['-u', testData.username, '-f', 'path/to/key.json', '-i', '123456', '--json'],
-      {} as Config
-    );
-    await grant.run();
-    expect(authInfoStub.save.called);
-  });
-
-  it('should do nothing when in demo mode (SFDX_ENV=demo) and prompt is answered with no', async () => {
-    await prepareStubs();
-    $$.SANDBOX.stub(Global, 'getEnvironmentMode').returns(Mode.DEMO);
-    $$.SANDBOX.stub(SfCommand.prototype, 'confirm').resolves(false);
-    const grant = new LoginJwt(
-      ['-u', testData.username, '-f', 'path/to/key.json', '-i', '123456', '--json'],
-      {} as Config
-    );
-    await grant.run();
-    expect(authInfoStub.save.callCount).to.equal(0);
-  });
-
-  it('should ignore prompt when in demo mode (SFDX_ENV=demo) and -p is provided', async () => {
-    await prepareStubs();
-    $$.SANDBOX.stub(Global, 'getEnvironmentMode').returns(Mode.DEMO);
-    const grant = new LoginJwt(
-      ['-p', '-u', testData.username, '-f', 'path/to/key.json', '-i', '123456', '--json'],
-      {} as Config
-    );
-    await grant.run();
-    expect(authInfoStub.save.called);
   });
 });

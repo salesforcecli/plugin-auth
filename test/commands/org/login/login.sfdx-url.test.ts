@@ -6,12 +6,11 @@
  */
 
 import fs from 'node:fs/promises';
-import { AuthFields, AuthInfo, Global, Mode } from '@salesforce/core';
+import { AuthFields, AuthInfo } from '@salesforce/core';
 import { MockTestOrgData, TestContext } from '@salesforce/core/lib/testSetup.js';
 import { expect } from 'chai';
 import { Config } from '@oclif/core';
 import { StubbedType, stubInterface } from '@salesforce/ts-sinon';
-import { SfCommand } from '@salesforce/sf-plugins-core';
 import LoginSfdxUrl from '../../../../src/commands/org/login/sfdx-url.js';
 
 interface Options {
@@ -185,32 +184,5 @@ describe('org:login:sfdx-url', () => {
         setDefault: true,
       },
     ]);
-  });
-
-  it('should auth when in demo mode (SFDX_ENV=demo) and prompt is answered with yes', async () => {
-    await prepareStubs();
-    $$.SANDBOX.stub(Global, 'getEnvironmentMode').returns(Mode.DEMO);
-    $$.SANDBOX.stub(SfCommand.prototype, 'confirm').resolves(true);
-    const store = new LoginSfdxUrl(['-f', keyPathTxt, '--json'], {} as Config);
-    await store.run();
-    expect(authInfoStub.save.called);
-  });
-
-  it('should do nothing when in demo mode (SFDX_ENV=demo) and prompt is answered with no', async () => {
-    await prepareStubs();
-    $$.SANDBOX.stub(Global, 'getEnvironmentMode').returns(Mode.DEMO);
-    $$.SANDBOX.stub(SfCommand.prototype, 'confirm').resolves(false);
-    const store = new LoginSfdxUrl(['-f', keyPathTxt, '--json'], {} as Config);
-    await store.run();
-    expect(authInfoStub.save.callCount).to.equal(0);
-  });
-
-  it('should ignore prompt when in demo mode (SFDX_ENV=demo) and -p is provided', async () => {
-    await prepareStubs();
-    $$.SANDBOX.stub(Global, 'getEnvironmentMode').returns(Mode.DEMO);
-    $$.SANDBOX.stub(SfCommand.prototype, 'confirm').resolves(false);
-    const store = new LoginSfdxUrl(['-p', '-f', keyPathTxt, '--json'], {} as Config);
-    await store.run();
-    expect(authInfoStub.save.called);
   });
 });
