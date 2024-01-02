@@ -6,16 +6,85 @@
  */
 
 /* eslint-disable camelcase */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
 
-import { AuthFields, AuthInfo, DeviceOauthService } from '@salesforce/core';
+/*
+ * Copyright (c) 2023, salesforce.com, inc.
+ * All rights reserved.
+ * Licensed under the BSD 3-Clause license.
+ * For full license text, see LICENSE.txt file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+ */
+/*
+ * Copyright (c) 2023, salesforce.com, inc.
+ * All rights reserved.
+ * Licensed under the BSD 3-Clause license.
+ * For full license text, see LICENSE.txt file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+ */
+/*
+ * Copyright (c) 2023, salesforce.com, inc.
+ * All rights reserved.
+ * Licensed under the BSD 3-Clause license.
+ * For full license text, see LICENSE.txt file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+ */
+/*
+ * Copyright (c) 2023, salesforce.com, inc.
+ * All rights reserved.
+ * Licensed under the BSD 3-Clause license.
+ * For full license text, see LICENSE.txt file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+ */
+/*
+ * Copyright (c) 2023, salesforce.com, inc.
+ * All rights reserved.
+ * Licensed under the BSD 3-Clause license.
+ * For full license text, see LICENSE.txt file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+ */
+/*
+ * Copyright (c) 2023, salesforce.com, inc.
+ * All rights reserved.
+ * Licensed under the BSD 3-Clause license.
+ * For full license text, see LICENSE.txt file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+ */
+/*
+ * Copyright (c) 2023, salesforce.com, inc.
+ * All rights reserved.
+ * Licensed under the BSD 3-Clause license.
+ * For full license text, see LICENSE.txt file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+ */
+/*
+ * Copyright (c) 2023, salesforce.com, inc.
+ * All rights reserved.
+ * Licensed under the BSD 3-Clause license.
+ * For full license text, see LICENSE.txt file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+ */
+/*
+ * Copyright (c) 2023, salesforce.com, inc.
+ * All rights reserved.
+ * Licensed under the BSD 3-Clause license.
+ * For full license text, see LICENSE.txt file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+ */
+/*
+ * Copyright (c) 2023, salesforce.com, inc.
+ * All rights reserved.
+ * Licensed under the BSD 3-Clause license.
+ * For full license text, see LICENSE.txt file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+ */
+/*
+ * Copyright (c) 2023, salesforce.com, inc.
+ * All rights reserved.
+ * Licensed under the BSD 3-Clause license.
+ * For full license text, see LICENSE.txt file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+ */
+import { AuthFields, AuthInfo, DeviceOauthService, Global, Mode } from '@salesforce/core';
 import { MockTestOrgData, TestContext } from '@salesforce/core/lib/testSetup.js';
 import { StubbedType, stubInterface, stubMethod } from '@salesforce/ts-sinon';
 import { DeviceCodeResponse } from '@salesforce/core/lib/deviceOauthService.js';
 import { expect } from 'chai';
 import { Config } from '@oclif/core';
 import { SfCommand } from '@salesforce/sf-plugins-core';
-import Login from '../../../../src/commands/org/login/device.js';
-import common from '../../../../src/common.js';
+import * as td from 'testdouble';
+import type LoginDevice from '../../../../src/commands/org/login/device.js';
 interface Options {
   approvalTimesout?: boolean;
   approvalFails?: boolean;
@@ -34,6 +103,16 @@ describe('org:login:device', () => {
 
   let authFields: AuthFields;
   let authInfoStub: StubbedType<AuthInfo>;
+  let Login: typeof LoginDevice;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let confirmStub: any;
+  beforeEach(async () => {
+    confirmStub = (await td.replaceEsm('@inquirer/confirm')).default;
+    await td.replaceEsm('@inquirer/password', {}, () => Promise.resolve('1234'));
+    Login = (await import('../../../../src/commands/org/login/device.js')).default;
+  });
+
+  afterEach(() => td.reset());
 
   async function prepareStubs(options: Options = {}): Promise<void> {
     authFields = await testData.getConfig();
@@ -136,11 +215,27 @@ describe('org:login:device', () => {
 
   it('should prompt for client secret if client id is provided', async () => {
     await prepareStubs();
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    $$.SANDBOX.stub(common, 'clientSecretPrompt').resolves('1234');
     const login = new Login(['-i', 'CoffeeBeans', '--json'], {} as Config);
     const response = await login.run();
     expect(response.username).to.equal(testData.username);
+  });
+
+  describe('demo mode', () => {
+    it('should prompt for when in demo mode (SFDX_ENV=demo)', async () => {
+      await prepareStubs();
+      $$.SANDBOX.stub(Global, 'getEnvironmentMode').returns(Mode.DEMO);
+      td.when(confirmStub(), { ignoreExtraArgs: true }).thenResolve(true);
+      const login = new Login(['--json'], {} as Config);
+      const response = await login.run();
+      expect(response.username).to.equal(testData.username);
+    });
+
+    it('should exit early when prompt is answered NO', async () => {
+      $$.SANDBOX.stub(Global, 'getEnvironmentMode').returns(Mode.DEMO);
+      td.when(confirmStub(), { ignoreExtraArgs: true }).thenResolve(false);
+      const login = new Login(['--json'], {} as Config);
+      const response = await login.run();
+      expect(response).to.deep.equal({});
+    });
   });
 });
