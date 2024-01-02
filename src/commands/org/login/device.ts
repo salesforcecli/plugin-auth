@@ -5,8 +5,6 @@
  * For full license text, see LICENSE.txt file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  */
 
-
-
 import { AuthFields, AuthInfo, DeviceOauthService, Messages, OAuth2Config } from '@salesforce/core';
 import { Flags, loglevel } from '@salesforce/sf-plugins-core';
 import { DeviceCodeResponse } from '@salesforce/core/lib/deviceOauthService.js';
@@ -14,7 +12,7 @@ import { ux } from '@oclif/core';
 import { AuthBaseCommand } from '../../../authBaseCommand.js';
 import { Common } from '../../../common.js';
 
-Messages.importMessagesDirectoryFromMetaUrl(import.meta.url)
+Messages.importMessagesDirectoryFromMetaUrl(import.meta.url);
 const messages = Messages.loadMessages('@salesforce/plugin-auth', 'device.login');
 const commonMessages = Messages.loadMessages('@salesforce/plugin-auth', 'messages');
 
@@ -25,6 +23,7 @@ export default class LoginDevice extends AuthBaseCommand<DeviceLoginResult> {
   public static readonly description = messages.getMessage('description');
   public static readonly examples = messages.getMessages('examples');
   public static aliases = ['force:auth:device:login', 'auth:device:login'];
+  public static readonly deprecateAliases = true;
 
   public static readonly flags = {
     'client-id': Flags.string({

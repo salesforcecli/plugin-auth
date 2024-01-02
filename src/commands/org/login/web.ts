@@ -5,8 +5,6 @@
  * For full license text, see LICENSE.txt file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  */
 
-
-
 import open, { apps, AppName } from 'open';
 import { Flags, loglevel } from '@salesforce/sf-plugins-core';
 import { AuthFields, AuthInfo, Logger, Messages, OAuth2Config, SfError, WebOAuthServer } from '@salesforce/core';
@@ -15,7 +13,7 @@ import { Interfaces } from '@oclif/core';
 import { AuthBaseCommand } from '../../../authBaseCommand.js';
 import { Common } from '../../../common.js';
 
-Messages.importMessagesDirectoryFromMetaUrl(import.meta.url)
+Messages.importMessagesDirectoryFromMetaUrl(import.meta.url);
 const messages = Messages.loadMessages('@salesforce/plugin-auth', 'web.login');
 const commonMessages = Messages.loadMessages('@salesforce/plugin-auth', 'messages');
 
@@ -25,6 +23,7 @@ export default class LoginWeb extends AuthBaseCommand<AuthFields> {
   public static readonly examples = messages.getMessages('examples');
   public static readonly deprecateAliases = true;
   public static aliases = ['force:auth:web:login', 'auth:web:login'];
+  public static readonly deprecateAliases = true;
 
   public static readonly flags = {
     browser: Flags.string({
