@@ -22,8 +22,7 @@ export default class LoginWeb extends AuthBaseCommand<AuthFields> {
   public static readonly description = messages.getMessage('description');
   public static readonly examples = messages.getMessages('examples');
   public static readonly deprecateAliases = true;
-  public static aliases = ['force:auth:web:login', 'auth:web:login'];
-  public static readonly deprecateAliases = true;
+  public static readonly aliases = ['force:auth:web:login', 'auth:web:login'];
 
   public static readonly flags = {
     browser: Flags.string({
