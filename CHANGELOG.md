@@ -1,3 +1,13 @@
+# [3.1.0](https://github.com/salesforcecli/plugin-auth/compare/3.0.15...3.1.0) (2024-01-02)
+
+### Bug Fixes
+
+- broken links caught a doc bug ([3483914](https://github.com/salesforcecli/plugin-auth/commit/3483914fcd220cfcefedb27ecae7a42392c4f65e))
+
+### Features
+
+- deprecate aliases ([3f5d94f](https://github.com/salesforcecli/plugin-auth/commit/3f5d94fe09d3f048da2b3e8ff66e07d03ad35765))
+
 ## [3.0.15](https://github.com/salesforcecli/plugin-auth/compare/3.0.14...3.0.15) (2023-12-30)
 
 ### Bug Fixes

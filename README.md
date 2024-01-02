@@ -107,7 +107,7 @@ EXAMPLES
     $ sf org list auth
 ```
 
-_See code: [src/commands/org/list/auth.ts](https://github.com/salesforcecli/plugin-auth/blob/3.0.15/src/commands/org/list/auth.ts)_
+_See code: [src/commands/org/list/auth.ts](https://github.com/salesforcecli/plugin-auth/blob/3.1.0/src/commands/org/list/auth.ts)_
 
 ## `sf org login access-token`
 
@@ -160,7 +160,7 @@ FLAG DESCRIPTIONS
     To specify a sandbox, set --instance-url to https://MyDomainName--SandboxName.sandbox.my.salesforce.com.
 ```
 
-_See code: [src/commands/org/login/access-token.ts](https://github.com/salesforcecli/plugin-auth/blob/3.0.15/src/commands/org/login/access-token.ts)_
+_See code: [src/commands/org/login/access-token.ts](https://github.com/salesforcecli/plugin-auth/blob/3.1.0/src/commands/org/login/access-token.ts)_
 
 ## `sf org login device`
 
@@ -219,7 +219,7 @@ FLAG DESCRIPTIONS
     To specify a sandbox, set --instance-url to https://MyDomainName--SandboxName.sandbox.my.salesforce.com.
 ```
 
-_See code: [src/commands/org/login/device.ts](https://github.com/salesforcecli/plugin-auth/blob/3.0.15/src/commands/org/login/device.ts)_
+_See code: [src/commands/org/login/device.ts](https://github.com/salesforcecli/plugin-auth/blob/3.1.0/src/commands/org/login/device.ts)_
 
 ## `sf org login jwt`
 
@@ -275,7 +275,7 @@ ALIASES
   $ sf auth jwt grant
 
 EXAMPLES
-  Log into an org with username jdoe@example.org and on the default instance URL (https://login.salesforce.org). The
+  Log into an org with username jdoe@example.org and on the default instance URL (https://login.salesforce.com). The
   private key is stored in the file /Users/jdoe/JWT/server.key and the command uses the connected app with consumer
   key (client id) 04580y4051234051.
 
@@ -308,7 +308,7 @@ FLAG DESCRIPTIONS
     To specify a sandbox, set --instance-url to https://MyDomainName--SandboxName.sandbox.my.salesforce.com.
 ```
 
-_See code: [src/commands/org/login/jwt.ts](https://github.com/salesforcecli/plugin-auth/blob/3.0.15/src/commands/org/login/jwt.ts)_
+_See code: [src/commands/org/login/jwt.ts](https://github.com/salesforcecli/plugin-auth/blob/3.1.0/src/commands/org/login/jwt.ts)_
 
 ## `sf org login sfdx-url`
 
@@ -366,7 +366,7 @@ EXAMPLES
     $ sf org login sfdx-url --sfdx-url-file files/authFile.json --set-default --alias MyDefaultOrg
 ```
 
-_See code: [src/commands/org/login/sfdx-url.ts](https://github.com/salesforcecli/plugin-auth/blob/3.0.15/src/commands/org/login/sfdx-url.ts)_
+_See code: [src/commands/org/login/sfdx-url.ts](https://github.com/salesforcecli/plugin-auth/blob/3.1.0/src/commands/org/login/sfdx-url.ts)_
 
 ## `sf org login web`
 
@@ -451,7 +451,7 @@ FLAG DESCRIPTIONS
     To specify a sandbox, set --instance-url to https://MyDomainName--SandboxName.sandbox.my.salesforce.com.
 ```
 
-_See code: [src/commands/org/login/web.ts](https://github.com/salesforcecli/plugin-auth/blob/3.0.15/src/commands/org/login/web.ts)_
+_See code: [src/commands/org/login/web.ts](https://github.com/salesforcecli/plugin-auth/blob/3.1.0/src/commands/org/login/web.ts)_
 
 ## `sf org logout`
 
@@ -511,6 +511,6 @@ FLAG DESCRIPTIONS
     All orgs includes Dev Hubs, sandboxes, DE orgs, and expired, deleted, and unknown-status scratch orgs.
 ```
 
-_See code: [src/commands/org/logout.ts](https://github.com/salesforcecli/plugin-auth/blob/3.0.15/src/commands/org/logout.ts)_
+_See code: [src/commands/org/logout.ts](https://github.com/salesforcecli/plugin-auth/blob/3.1.0/src/commands/org/logout.ts)_
 
 <!-- commandsstop -->
