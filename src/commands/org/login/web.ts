@@ -9,7 +9,6 @@ import open, { apps, AppName } from 'open';
 import { Flags, SfCommand, loglevel } from '@salesforce/sf-plugins-core';
 import { AuthFields, AuthInfo, Logger, Messages, OAuth2Config, SfError, WebOAuthServer } from '@salesforce/core';
 import { Env } from '@salesforce/kit';
-import { Interfaces } from '@oclif/core';
 import common from '../../../common.js';
 
 Messages.importMessagesDirectoryFromMetaUrl(import.meta.url);
@@ -24,12 +23,12 @@ export default class LoginWeb extends SfCommand<AuthFields> {
   public static readonly aliases = ['force:auth:web:login', 'auth:web:login'];
 
   public static readonly flags = {
-    browser: Flags.string({
+    browser: Flags.option({
       char: 'b',
       summary: messages.getMessage('flags.browser.summary'),
       description: messages.getMessage('flags.browser.description'),
       options: ['chrome', 'edge', 'firefox'], // These are ones supported by "open" package
-    }),
+    })(),
     'client-id': Flags.string({
       char: 'i',
       summary: commonMessages.getMessage('flags.client-id.summary'),
@@ -72,11 +71,8 @@ export default class LoginWeb extends SfCommand<AuthFields> {
     loglevel,
   };
 
-  private flags!: Interfaces.InferredFlags<typeof LoginWeb.flags>;
-
   public async run(): Promise<AuthFields> {
     const { flags } = await this.parse(LoginWeb);
-    this.flags = flags;
     if (isSFDXContainerMode()) {
       throw new SfError(messages.getMessage('deviceWarning'), 'DEVICE_WARNING');
     }
@@ -86,11 +82,13 @@ export default class LoginWeb extends SfCommand<AuthFields> {
     const oauthConfig: OAuth2Config = {
       loginUrl: await common.resolveLoginUrl(flags['instance-url']?.href),
       clientId: flags['client-id'],
-      ...(flags['client-id'] ? { clientSecret: await common.clientSecretPrompt() } : {}),
+      ...(flags['client-id']
+        ? { clientSecret: await this.secretPrompt({ message: commonMessages.getMessage('clientSecretStdin') }) }
+        : {}),
     };
 
     try {
-      const authInfo = await this.executeLoginFlow(oauthConfig);
+      const authInfo = await this.executeLoginFlow(oauthConfig, flags.browser);
       await authInfo.handleAliasAndDefaultSettings({
         alias: flags.alias,
         setDefault: flags['set-default'],
@@ -113,10 +111,10 @@ export default class LoginWeb extends SfCommand<AuthFields> {
 
   // leave it because it's stubbed in the test
   // eslint-disable-next-line class-methods-use-this
-  private async executeLoginFlow(oauthConfig: OAuth2Config): Promise<AuthInfo> {
+  private async executeLoginFlow(oauthConfig: OAuth2Config, browser?: string): Promise<AuthInfo> {
     const oauthServer = await WebOAuthServer.create({ oauthConfig });
     await oauthServer.start();
-    const app = this.flags.browser && this.flags.browser in apps ? (this.flags.browser as AppName) : undefined;
+    const app = browser && browser in apps ? (browser as AppName) : undefined;
     const openOptions = app ? { app: { name: apps[app] }, wait: false } : { wait: false };
     await open(oauthServer.getAuthorizationUrl(), openOptions);
     return oauthServer.authorizeAndSave();

@@ -42,6 +42,8 @@ describe('org:logout', () => {
 
     if (options['target-org']) {
       $$.setConfigStubContents('Config', { contents: { 'target-org': options['target-org'] } });
+    } else {
+      $$.setConfigStubContents('Config', { contents: {} });
     }
 
     if (options.aliases) {

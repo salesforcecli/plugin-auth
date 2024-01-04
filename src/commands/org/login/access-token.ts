@@ -8,8 +8,7 @@
 import { Flags, loglevel, SfCommand } from '@salesforce/sf-plugins-core';
 import { AuthFields, AuthInfo, Messages, matchesAccessToken, SfError, StateAggregator } from '@salesforce/core';
 import { env } from '@salesforce/kit';
-import { Interfaces } from '@oclif/core';
-import common from '../../../common.js';
+import { InferredFlags } from '@oclif/core/lib/interfaces';
 
 Messages.importMessagesDirectoryFromMetaUrl(import.meta.url);
 const messages = Messages.loadMessages('@salesforce/plugin-auth', 'accesstoken.store');
@@ -64,13 +63,13 @@ export default class LoginAccessToken extends SfCommand<AuthFields> {
     loglevel,
   };
 
-  private flags!: Interfaces.InferredFlags<typeof LoginAccessToken.flags>;
+  private flags!: InferredFlags<typeof LoginAccessToken.flags>;
 
   public async run(): Promise<AuthFields> {
     const { flags } = await this.parse(LoginAccessToken);
     this.flags = flags;
     const instanceUrl = flags['instance-url'].href;
-    const accessToken = await getAccessToken();
+    const accessToken = await this.getAccessToken();
     const authInfo = await this.getUserInfo(accessToken, instanceUrl);
     return this.storeAuthFromAccessToken(authInfo);
   }
@@ -107,19 +106,22 @@ export default class LoginAccessToken extends SfCommand<AuthFields> {
     if (!this.flags['no-prompt']) {
       const stateAggregator = await StateAggregator.getInstance();
       if (await stateAggregator.orgs.exists(username)) {
-        return this.confirm(messages.getMessage('overwriteAccessTokenAuthUserFile', [username]));
+        return this.confirm({ message: messages.getMessage('overwriteAccessTokenAuthUserFile', [username]) });
       }
     }
     return true;
   }
-}
 
-const getAccessToken = async (): Promise<string> => {
-  const accessToken =
-    env.getString('SF_ACCESS_TOKEN') ?? env.getString('SFDX_ACCESS_TOKEN') ?? (await common.accessTokenPrompt());
-
-  if (!matchesAccessToken(accessToken)) {
-    throw new SfError(messages.getMessage('invalidAccessTokenFormat', [ACCESS_TOKEN_FORMAT]));
+  private async getAccessToken(): Promise<string> {
+    const accessToken =
+      env.getString('SF_ACCESS_TOKEN') ??
+      env.getString('SFDX_ACCESS_TOKEN') ??
+      (this.flags['no-prompt'] === true
+        ? '' // will throw when validating
+        : await this.secretPrompt({ message: commonMessages.getMessage('accessTokenStdin') }));
+    if (!matchesAccessToken(accessToken)) {
+      throw new SfError(messages.getMessage('invalidAccessTokenFormat', [ACCESS_TOKEN_FORMAT]));
+    }
+    return accessToken;
   }
-  return accessToken;
-};
+}

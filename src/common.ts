@@ -8,7 +8,6 @@
 import { Logger, SfdcUrl, SfProject, Messages, SfError, Global, Mode } from '@salesforce/core';
 import { getString, isObject } from '@salesforce/ts-types';
 import chalk from 'chalk';
-import password from '@inquirer/password';
 import confirm from '@inquirer/confirm';
 
 Messages.importMessagesDirectoryFromMetaUrl(import.meta.url);
@@ -44,19 +43,12 @@ const throwIfLightning = (urlString?: string): void => {
   }
 };
 
-const clientSecretPrompt = async (): Promise<string> =>
-  password({ message: chalk.dim(messages.getMessage('clientSecretStdin')) });
-const accessTokenPrompt = async (): Promise<string> =>
-  password({ message: chalk.dim(messages.getMessage('accessTokenStdin')) });
-
 const shouldExitCommand = async (noPrompt?: boolean): Promise<boolean> =>
   Boolean(noPrompt) || Global.getEnvironmentMode() !== Mode.DEMO
     ? false
     : !(await confirm({ message: chalk.dim(messages.getMessage('warnAuth', ['sf'])) }));
 
 export default {
-  clientSecretPrompt,
-  accessTokenPrompt,
   shouldExitCommand,
   resolveLoginUrl,
 };

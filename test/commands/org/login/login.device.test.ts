@@ -15,7 +15,6 @@ import { expect } from 'chai';
 import { Config } from '@oclif/core';
 import { SfCommand } from '@salesforce/sf-plugins-core';
 import Login from '../../../../src/commands/org/login/device.js';
-import common from '../../../../src/common.js';
 interface Options {
   approvalTimesout?: boolean;
   approvalFails?: boolean;
@@ -136,9 +135,7 @@ describe('org:login:device', () => {
 
   it('should prompt for client secret if client id is provided', async () => {
     await prepareStubs();
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    $$.SANDBOX.stub(common, 'clientSecretPrompt').resolves('1234');
+    $$.SANDBOX.stub(SfCommand.prototype, 'secretPrompt').resolves('1234');
     const login = new Login(['-i', 'CoffeeBeans', '--json'], {} as Config);
     const response = await login.run();
     expect(response.username).to.equal(testData.username);

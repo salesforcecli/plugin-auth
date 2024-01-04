@@ -15,7 +15,6 @@ import { assert, expect } from 'chai';
 import { Env } from '@salesforce/kit';
 import { SfCommand, Ux } from '@salesforce/sf-plugins-core';
 import LoginWeb from '../../../../src/commands/org/login/web.js';
-import common from '../../../../src/common.js';
 
 describe('org:login:web', () => {
   const $$ = new TestContext();
@@ -31,7 +30,7 @@ describe('org:login:web', () => {
     clientSecret = ''
   ): Promise<LoginWeb> {
     authFields = await testData.getConfig();
-    $$.SANDBOX.stub(common, 'clientSecretPrompt').resolves(clientSecret);
+    $$.SANDBOX.stub(SfCommand.prototype, 'secretPrompt').resolves(clientSecret);
     $$.SANDBOX.stub(SfCommand.prototype, 'confirm').resolves(promptAnswer);
 
     authInfoStub = stubInterface<AuthInfo>($$.SANDBOX, {

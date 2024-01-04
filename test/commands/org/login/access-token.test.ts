@@ -5,21 +5,23 @@
  * For full license text, see LICENSE.txt file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  */
 
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-
-import { AuthFields, AuthInfo, SfError, StateAggregator } from '@salesforce/core';
+import { AuthFields, AuthInfo, StateAggregator } from '@salesforce/core';
 import { assert, expect } from 'chai';
 import { TestContext } from '@salesforce/core/lib/testSetup.js';
-import { Env } from '@salesforce/kit';
-import { Config } from '@oclif/core';
+import { stubPrompter, stubSfCommandUx } from '@salesforce/sf-plugins-core';
+import { env } from '@salesforce/kit';
 import Store from '../../../../src/commands/org/login/access-token.js';
-import common from '../../../../src/common.js';
 
 describe('org:login:access-token', () => {
   const $$ = new TestContext();
-
-  let authFields: Required<Pick<AuthFields, 'accessToken' | 'instanceUrl' | 'loginUrl' | 'orgId' | 'username'>>;
   const accessToken = '00Dxx0000000000!xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
+  const authFields = {
+    accessToken,
+    instanceUrl: 'https://foo.bar.org.salesforce.com',
+    loginUrl: 'https://foo.bar.org.salesforce.com',
+    orgId: '00D000000000000',
+    username: 'foo@baz.org',
+  } as const satisfies AuthFields;
 
   /* eslint-disable camelcase */
   const userInfo = {
@@ -28,27 +30,10 @@ describe('org:login:access-token', () => {
     custom_domain: 'https://foo.bar.org.salesforce.com',
   };
   /* eslint-enable camelcase */
+  let stubSfCommandUxStubs: ReturnType<typeof stubSfCommandUx>;
+  let prompterStubs: ReturnType<typeof stubPrompter>;
 
-  async function createNewStoreCommand(
-    flags: string[] = [],
-    promptAnswer = accessToken,
-    authFileExists = false,
-    useSfdxAccessTokenEnvVar = false
-  ): Promise<Store> {
-    authFields = {
-      accessToken,
-      instanceUrl: 'https://foo.bar.org.salesforce.com',
-      loginUrl: 'https://foo.bar.org.salesforce.com',
-      orgId: '00D000000000000',
-      username: 'foo@baz.org',
-    };
-
-    $$.SANDBOX.stub(StateAggregator, 'getInstance').resolves({
-      // @ts-expect-error because incomplete interface
-      orgs: {
-        exists: () => Promise.resolve(authFileExists),
-      },
-    });
+  beforeEach(() => {
     // @ts-expect-error because private method
     $$.SANDBOX.stub(Store.prototype, 'saveAuthInfo').resolves(userInfo);
     $$.SANDBOX.stub(AuthInfo.prototype, 'getUsername').returns(authFields.username);
@@ -61,68 +46,87 @@ describe('org:login:access-token', () => {
     });
     // @ts-expect-error because private method
     $$.SANDBOX.stub(Store.prototype, 'getUserInfo').resolves(AuthInfo.prototype);
-    if (useSfdxAccessTokenEnvVar) {
-      $$.SANDBOX.stub(Env.prototype, 'getString').callsFake(() => accessToken);
-    }
-    const store = new Store(
-      [...new Set(['--instance-url', 'https://foo.bar.org.salesforce.com', '--no-prompt', ...flags])],
-      {} as Config
-    );
-    $$.SANDBOX.stub(common, 'accessTokenPrompt').resolves(promptAnswer);
-
-    return Promise.resolve(store);
-  }
-
-  it('should return auth fields after successful auth', async () => {
-    const store = await createNewStoreCommand(['--instance-url', 'https://foo.bar.org.salesforce.com', '--no-prompt']);
-    const result = await store.run();
-    expect(result).to.deep.equal(authFields);
+    stubSfCommandUxStubs = stubSfCommandUx($$.SANDBOX);
+    prompterStubs = stubPrompter($$.SANDBOX);
   });
 
-  it('should prompt for access token when accesstokenfile is not present', async () => {
-    const store = await createNewStoreCommand(['--instance-url', 'https://foo.bar.org.salesforce.com', '--no-prompt']);
-    const result = await store.run();
+  it('should return auth fields after successful auth', async () => {
+    prompterStubs.secret.resolves(accessToken);
+
+    const result = await Store.run(['--instance-url', 'https://foo.bar.org.salesforce.com']);
+    expect(prompterStubs.secret.callCount).to.equal(1);
+    expect(stubSfCommandUxStubs.logSuccess.callCount).to.equal(1);
     expect(result).to.deep.equal(authFields);
   });
 
   it('should show invalid access token provided as input', async () => {
-    const store = await createNewStoreCommand(
-      ['--instance-url', 'https://foo.bar.org.salesforce.com', '--no-prompt'],
-      'invalidaccesstokenformat'
-    );
+    prompterStubs.secret.resolves('invalidaccesstokenformat');
+
     try {
-      await store.run();
+      await Store.run(['--instance-url', 'https://foo.bar.org.salesforce.com']);
       assert(false, 'should throw error');
     } catch (e) {
-      const err = e as SfError;
-      expect(err.message).to.include("The access token isn't in the correct format");
+      assert(e instanceof Error);
+      expect(e.message).to.include("The access token isn't in the correct format");
     }
+    expect(prompterStubs.secret.callCount).to.equal(1);
   });
 
   it('should show that auth file already exists', async () => {
-    const store = await createNewStoreCommand(
-      ['--instance-url', 'https://foo.bar.org.salesforce.com'],
-      accessToken,
-      true
-    );
-    await store.run();
+    prompterStubs.secret.resolves(accessToken);
+    prompterStubs.confirm.resolves(false);
+    $$.SANDBOX.stub(StateAggregator, 'getInstance').resolves({
+      // @ts-expect-error because incomplete interface
+      orgs: {
+        exists: () => Promise.resolve(true),
+      },
+    });
+    const result = await Store.run(['--instance-url', 'https://foo.bar.org.salesforce.com']);
+    expect(result).to.deep.equal(authFields);
+    expect(prompterStubs.secret.callCount).to.equal(1);
+    expect(prompterStubs.confirm.callCount).to.equal(1);
   });
 
   it('should show that auth file does not already exist', async () => {
-    const store = await createNewStoreCommand(['--instance-url', 'https://foo.bar.org.salesforce.com'], accessToken);
-    const result = await store.run();
-    // prompt once; one for access token
+    prompterStubs.secret.resolves(accessToken);
+    $$.SANDBOX.stub(StateAggregator, 'getInstance').resolves({
+      // @ts-expect-error because incomplete interface
+      orgs: {
+        exists: () => Promise.resolve(false),
+      },
+    });
+    const result = await Store.run(['--instance-url', 'https://foo.bar.org.salesforce.com']);
     expect(result).to.deep.equal(authFields);
+    expect(prompterStubs.confirm.callCount).to.equal(0);
   });
+
   it('should use env var SF_ACCESS_TOKEN as input to the store command', async () => {
-    const store = await createNewStoreCommand(
-      ['--instance-url', 'https://foo.bar.org.salesforce.com'],
-      accessToken,
-      false,
-      true
-    );
-    const result = await store.run();
-    // no prompts
+    $$.SANDBOX.stub(env, 'getString')
+      .withArgs('SF_ACCESS_TOKEN')
+      .returns(accessToken)
+      .withArgs('SFDX_ACCESS_TOKEN')
+      // @ts-expect-error not sure why TS thinks a string is required.  getString can return undefined
+      .returns(undefined);
+
+    const result = await Store.run(['--instance-url', 'https://foo.bar.org.salesforce.com']);
     expect(result).to.deep.equal(authFields);
+    // no prompts needed when using Env
+    expect(prompterStubs.confirm.callCount).to.equal(0);
+    expect(prompterStubs.secret.callCount).to.equal(0);
+  });
+
+  it('should use env var SFDX_ACCESS_TOKEN as input to the store command', async () => {
+    $$.SANDBOX.stub(env, 'getString')
+      .withArgs('SFDX_ACCESS_TOKEN')
+      .returns(accessToken)
+      .withArgs('SF_ACCESS_TOKEN')
+      // @ts-expect-error not sure why TS thinks a string is required.  getString can return undefined
+      .returns(undefined);
+
+    const result = await Store.run(['--instance-url', 'https://foo.bar.org.salesforce.com']);
+    expect(result).to.deep.equal(authFields);
+    // no prompts needed when using Env
+    expect(prompterStubs.confirm.callCount).to.equal(0);
+    expect(prompterStubs.secret.callCount).to.equal(0);
   });
 });
