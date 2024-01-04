@@ -19,6 +19,7 @@ export default class LoginJwt extends SfCommand<AuthFields> {
   public static readonly description = messages.getMessage('description');
   public static readonly examples = messages.getMessages('examples');
   public static readonly aliases = ['force:auth:jwt:grant', 'auth:jwt:grant'];
+  public static readonly deprecateAliases = true;
 
   public static readonly flags = {
     username: Flags.string({

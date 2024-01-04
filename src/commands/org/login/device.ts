@@ -22,6 +22,7 @@ export default class LoginDevice extends SfCommand<DeviceLoginResult> {
   public static readonly description = messages.getMessage('description');
   public static readonly examples = messages.getMessages('examples');
   public static readonly aliases = ['force:auth:device:login', 'auth:device:login'];
+  public static readonly deprecateAliases = true;
 
   public static readonly flags = {
     'client-id': Flags.string({

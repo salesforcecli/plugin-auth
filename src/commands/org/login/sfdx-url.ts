@@ -27,6 +27,7 @@ export default class LoginSfdxUrl extends SfCommand<AuthFields> {
   public static readonly description = messages.getMessage('description', [AUTH_URL_FORMAT]);
   public static readonly examples = messages.getMessages('examples');
   public static readonly aliases = ['force:auth:sfdxurl:store', 'auth:sfdxurl:store'];
+  public static readonly deprecateAliases = true;
 
   public static readonly flags = {
     'sfdx-url-file': Flags.file({
