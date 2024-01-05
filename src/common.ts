@@ -8,7 +8,7 @@
 import { Logger, SfdcUrl, SfProject, Messages, SfError, Global, Mode } from '@salesforce/core';
 import { getString, isObject } from '@salesforce/ts-types';
 import chalk from 'chalk';
-import confirm from '@inquirer/confirm';
+import { prompts } from '@salesforce/sf-plugins-core';
 
 Messages.importMessagesDirectoryFromMetaUrl(import.meta.url);
 const messages = Messages.loadMessages('@salesforce/plugin-auth', 'messages');
@@ -46,7 +46,7 @@ const throwIfLightning = (urlString?: string): void => {
 const shouldExitCommand = async (noPrompt?: boolean): Promise<boolean> =>
   Boolean(noPrompt) || Global.getEnvironmentMode() !== Mode.DEMO
     ? false
-    : !(await confirm({ message: chalk.dim(messages.getMessage('warnAuth', ['sf'])) }));
+    : !(await prompts.confirm({ message: chalk.dim(messages.getMessage('warnAuth', ['sf'])), ms: 60_000 }));
 
 export default {
   shouldExitCommand,
