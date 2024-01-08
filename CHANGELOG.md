@@ -1,3 +1,43 @@
+## [3.1.2](https://github.com/salesforcecli/plugin-auth/compare/3.1.1...3.1.2) (2024-01-07)
+
+### Bug Fixes
+
+- **deps:** bump @salesforce/core from 6.4.2 to 6.4.4 ([7b27747](https://github.com/salesforcecli/plugin-auth/commit/7b277475380d09f75de7382cb0eb60e1ee258e6e))
+
+## [3.1.1](https://github.com/salesforcecli/plugin-auth/compare/3.1.0...3.1.1) (2024-01-06)
+
+### Bug Fixes
+
+- **deps:** bump @oclif/core from 3.15.1 to 3.16.0 ([c646c1e](https://github.com/salesforcecli/plugin-auth/commit/c646c1e6d8f86f34476b372444b525dcb9e2e157))
+
+# [3.1.0](https://github.com/salesforcecli/plugin-auth/compare/3.0.15...3.1.0) (2024-01-02)
+
+### Bug Fixes
+
+- broken links caught a doc bug ([3483914](https://github.com/salesforcecli/plugin-auth/commit/3483914fcd220cfcefedb27ecae7a42392c4f65e))
+
+### Features
+
+- deprecate aliases ([3f5d94f](https://github.com/salesforcecli/plugin-auth/commit/3f5d94fe09d3f048da2b3e8ff66e07d03ad35765))
+
+## [3.0.15](https://github.com/salesforcecli/plugin-auth/compare/3.0.14...3.0.15) (2023-12-30)
+
+### Bug Fixes
+
+- **deps:** bump @salesforce/sf-plugins-core from 5.0.12 to 5.0.13 ([0dc3ee7](https://github.com/salesforcecli/plugin-auth/commit/0dc3ee799c0861b772f18962127ccbf7a5c4d210))
+
+## [3.0.14](https://github.com/salesforcecli/plugin-auth/compare/3.0.13...3.0.14) (2023-12-24)
+
+### Bug Fixes
+
+- **deps:** bump @salesforce/sf-plugins-core from 5.0.8 to 5.0.12 ([b8bd1b3](https://github.com/salesforcecli/plugin-auth/commit/b8bd1b3c3d81c1eb96bdfc3f06efb7306aecf690))
+
+## [3.0.13](https://github.com/salesforcecli/plugin-auth/compare/3.0.12...3.0.13) (2023-12-17)
+
+### Bug Fixes
+
+- **deps:** bump @oclif/core from 3.14.1 to 3.15.0 ([35bb28a](https://github.com/salesforcecli/plugin-auth/commit/35bb28a470987d875ff9c8166ba84d06dc4f6e53))
+
 ## [3.0.12](https://github.com/salesforcecli/plugin-auth/compare/3.0.11...3.0.12) (2023-12-10)
 
 ### Bug Fixes
