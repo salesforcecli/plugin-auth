@@ -1,3 +1,9 @@
+# [3.2.0](https://github.com/salesforcecli/plugin-auth/compare/3.1.2...3.2.0) (2024-01-08)
+
+### Features
+
+- allow stdin for sfdx-url ([#886](https://github.com/salesforcecli/plugin-auth/issues/886)) ([#910](https://github.com/salesforcecli/plugin-auth/issues/910)) ([5cb67e9](https://github.com/salesforcecli/plugin-auth/commit/5cb67e9cfb37ec1fcf04fa448fb32f6f5a1dfd4b))
+
 ## [3.1.2](https://github.com/salesforcecli/plugin-auth/compare/3.1.1...3.1.2) (2024-01-07)
 
 ### Bug Fixes
