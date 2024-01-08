@@ -43,7 +43,7 @@ export default class LoginSfdxUrl extends AuthBaseCommand<AuthFields> {
       required: false,
       deprecateAliases: true,
       aliases: ['sfdxurlstdin'],
-      allowStdin: true,
+      allowStdin: 'only',
     }),
     'set-default-dev-hub': Flags.boolean({
       char: 'd',
