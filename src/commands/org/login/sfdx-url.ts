@@ -37,7 +37,6 @@ export default class LoginSfdxUrl extends AuthBaseCommand<AuthFields> {
       deprecateAliases: true,
       aliases: ['sfdxurlfile'],
       exactlyOne: ['sfdx-url-file', 'sfdx-url-stdin'],
-      exclusive: ['sfdx-url-stdin'],
     }),
     'sfdx-url-stdin': Flags.file({
       char: 'u',
@@ -47,7 +46,6 @@ export default class LoginSfdxUrl extends AuthBaseCommand<AuthFields> {
       aliases: ['sfdxurlstdin'],
       allowStdin: 'only',
       exactlyOne: ['sfdx-url-file', 'sfdx-url-stdin'],
-      exclusive: ['sfdx-url-file'],
     }),
     'set-default-dev-hub': Flags.boolean({
       char: 'd',
