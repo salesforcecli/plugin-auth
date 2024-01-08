@@ -18,7 +18,7 @@ NOTE: The "<%= config.bin %> org display --verbose" command displays the refresh
 
 You can also create a JSON file that has a top-level property named sfdxAuthUrl whose value is the authorization URL. Finally, you can create a normal text file that includes just the URL and nothing else.
 
-Alternatively, you can pipe the SFDX authorization url through standard input by using the --sfdx-url-stdin flag and providing the '-' character as the value.
+Alternatively, you can pipe the SFDX authorization URL through standard input by using the --sfdx-url-stdin flag and providing the '-' character as the value.
 
 # flags.sfdx-url-file.summary
 
