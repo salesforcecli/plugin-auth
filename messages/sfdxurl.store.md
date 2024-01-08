@@ -1,6 +1,6 @@
 # summary
 
-Authorize an org using a Salesforce DX authorization URL stored in a file.
+Authorize an org using a Salesforce DX authorization URL stored in a file or through standard input (stdin).
 
 # description
 
@@ -18,9 +18,15 @@ NOTE: The "<%= config.bin %> org display --verbose" command displays the refresh
 
 You can also create a JSON file that has a top-level property named sfdxAuthUrl whose value is the authorization URL. Finally, you can create a normal text file that includes just the URL and nothing else.
 
+Alternatively, you can pipe the SFDX authorization URL through standard input by using the --sfdx-url-stdin flag and providing the '-' character as the value.
+
 # flags.sfdx-url-file.summary
 
 Path to a file that contains the Salesforce DX authorization URL.
+
+# flags.sfdx-url-stdin.summary
+
+Specify '-' as this flag's value to pipe the Salesforce DX authorization URL through standard input (stdin).
 
 # examples
 
@@ -31,3 +37,7 @@ Path to a file that contains the Salesforce DX authorization URL.
 - Similar to previous example, but set the org as your default and give it an alias MyDefaultOrg:
 
   <%= config.bin %> <%= command.id %> --sfdx-url-file files/authFile.json --set-default --alias MyDefaultOrg
+
+- Pipe the SFDX authorization URL from stdin by specifying the '-' value.
+
+  <%= "\n $ echo url | " + config.bin %> <%= command.id %> --sfdx-url-stdin -
