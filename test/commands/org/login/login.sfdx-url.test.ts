@@ -221,7 +221,9 @@ describe('org:login:sfdx-url', () => {
       const response = await store.run();
       expect.fail(`Should have thrown an error. Response: ${JSON.stringify(response)}`);
     } catch (e) {
-      expect((e as Error).message).to.includes('Please include either the --sfdx-url-stdin or --sfdx-url-file flags.');
+      expect((e as Error).message).to.includes(
+        'Exactly one of the following must be provided: --sfdx-url-file, --sfdx-url-stdin'
+      );
     }
   });
 
