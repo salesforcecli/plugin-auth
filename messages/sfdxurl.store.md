@@ -26,7 +26,7 @@ Path to a file that contains the Salesforce DX authorization URL.
 
 # flags.sfdx-url-stdin.summary
 
-Provide '-' as the value to pipe the Salesforce DX authorization URL through standard input (stdin).
+Specify '-' as this flag's value to pipe the Salesforce DX authorization URL through standard input (stdin).
 
 # examples
 
