@@ -1,3 +1,9 @@
+# [3.3.0](https://github.com/salesforcecli/plugin-auth/compare/3.2.0...3.3.0) (2024-01-10)
+
+### Features
+
+- use new inquirer ([#902](https://github.com/salesforcecli/plugin-auth/issues/902)) ([113d56a](https://github.com/salesforcecli/plugin-auth/commit/113d56ac5cecb68f5adf89bd90c06281800943c6))
+
 # [3.2.0](https://github.com/salesforcecli/plugin-auth/compare/3.1.2...3.2.0) (2024-01-08)
 
 ### Features
