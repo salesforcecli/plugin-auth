@@ -1,3 +1,21 @@
+# [3.2.0](https://github.com/salesforcecli/plugin-auth/compare/3.1.2...3.2.0) (2024-01-08)
+
+### Features
+
+- allow stdin for sfdx-url ([#886](https://github.com/salesforcecli/plugin-auth/issues/886)) ([#910](https://github.com/salesforcecli/plugin-auth/issues/910)) ([5cb67e9](https://github.com/salesforcecli/plugin-auth/commit/5cb67e9cfb37ec1fcf04fa448fb32f6f5a1dfd4b))
+
+## [3.1.2](https://github.com/salesforcecli/plugin-auth/compare/3.1.1...3.1.2) (2024-01-07)
+
+### Bug Fixes
+
+- **deps:** bump @salesforce/core from 6.4.2 to 6.4.4 ([7b27747](https://github.com/salesforcecli/plugin-auth/commit/7b277475380d09f75de7382cb0eb60e1ee258e6e))
+
+## [3.1.1](https://github.com/salesforcecli/plugin-auth/compare/3.1.0...3.1.1) (2024-01-06)
+
+### Bug Fixes
+
+- **deps:** bump @oclif/core from 3.15.1 to 3.16.0 ([c646c1e](https://github.com/salesforcecli/plugin-auth/commit/c646c1e6d8f86f34476b372444b525dcb9e2e157))
+
 # [3.1.0](https://github.com/salesforcecli/plugin-auth/compare/3.0.15...3.1.0) (2024-01-02)
 
 ### Bug Fixes

@@ -33,9 +33,19 @@ export default class LoginSfdxUrl extends SfCommand<AuthFields> {
     'sfdx-url-file': Flags.file({
       char: 'f',
       summary: messages.getMessage('flags.sfdx-url-file.summary'),
-      required: true,
+      required: false,
       deprecateAliases: true,
       aliases: ['sfdxurlfile'],
+      exactlyOne: ['sfdx-url-file', 'sfdx-url-stdin'],
+    }),
+    'sfdx-url-stdin': Flags.file({
+      char: 'u',
+      summary: messages.getMessage('flags.sfdx-url-stdin.summary'),
+      required: false,
+      deprecateAliases: true,
+      aliases: ['sfdxurlstdin'],
+      allowStdin: 'only',
+      exactlyOne: ['sfdx-url-file', 'sfdx-url-stdin'],
     }),
     'set-default-dev-hub': Flags.boolean({
       char: 'd',
@@ -71,15 +81,21 @@ export default class LoginSfdxUrl extends SfCommand<AuthFields> {
     if (await common.shouldExitCommand(flags['no-prompt'])) return {};
 
     const authFile = flags['sfdx-url-file'];
+    const authStdin = flags['sfdx-url-stdin'];
+    let sfdxAuthUrl: string;
 
-    const sfdxAuthUrl = authFile.endsWith('.json')
-      ? await getUrlFromJson(authFile)
-      : await fs.readFile(authFile, 'utf8');
+    if (authFile) {
+      sfdxAuthUrl = authFile.endsWith('.json') ? await getUrlFromJson(authFile) : await fs.readFile(authFile, 'utf8');
 
-    if (!sfdxAuthUrl) {
-      throw new Error(
-        `Error getting the auth URL from file ${authFile}. Please ensure it meets the description shown in the documentation for this command.`
-      );
+      if (!sfdxAuthUrl) {
+        throw new Error(
+          `Error getting the auth URL from file ${authFile}. Please ensure it meets the description shown in the documentation for this command.`
+        );
+      }
+    } else if (authStdin) {
+      sfdxAuthUrl = authStdin;
+    } else {
+      throw new Error('SFDX Auth URL not found.');
     }
 
     const oauth2Options = AuthInfo.parseSfdxAuthUrl(sfdxAuthUrl);

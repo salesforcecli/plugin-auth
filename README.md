@@ -107,7 +107,7 @@ EXAMPLES
     $ sf org list auth
 ```
 
-_See code: [src/commands/org/list/auth.ts](https://github.com/salesforcecli/plugin-auth/blob/3.1.0/src/commands/org/list/auth.ts)_
+_See code: [src/commands/org/list/auth.ts](https://github.com/salesforcecli/plugin-auth/blob/3.2.0/src/commands/org/list/auth.ts)_
 
 ## `sf org login access-token`
 
@@ -160,7 +160,7 @@ FLAG DESCRIPTIONS
     To specify a sandbox, set --instance-url to https://MyDomainName--SandboxName.sandbox.my.salesforce.com.
 ```
 
-_See code: [src/commands/org/login/access-token.ts](https://github.com/salesforcecli/plugin-auth/blob/3.1.0/src/commands/org/login/access-token.ts)_
+_See code: [src/commands/org/login/access-token.ts](https://github.com/salesforcecli/plugin-auth/blob/3.2.0/src/commands/org/login/access-token.ts)_
 
 ## `sf org login device`
 
@@ -219,7 +219,7 @@ FLAG DESCRIPTIONS
     To specify a sandbox, set --instance-url to https://MyDomainName--SandboxName.sandbox.my.salesforce.com.
 ```
 
-_See code: [src/commands/org/login/device.ts](https://github.com/salesforcecli/plugin-auth/blob/3.1.0/src/commands/org/login/device.ts)_
+_See code: [src/commands/org/login/device.ts](https://github.com/salesforcecli/plugin-auth/blob/3.2.0/src/commands/org/login/device.ts)_
 
 ## `sf org login jwt`
 
@@ -308,27 +308,29 @@ FLAG DESCRIPTIONS
     To specify a sandbox, set --instance-url to https://MyDomainName--SandboxName.sandbox.my.salesforce.com.
 ```
 
-_See code: [src/commands/org/login/jwt.ts](https://github.com/salesforcecli/plugin-auth/blob/3.1.0/src/commands/org/login/jwt.ts)_
+_See code: [src/commands/org/login/jwt.ts](https://github.com/salesforcecli/plugin-auth/blob/3.2.0/src/commands/org/login/jwt.ts)_
 
 ## `sf org login sfdx-url`
 
-Authorize an org using a Salesforce DX authorization URL stored in a file.
+Authorize an org using a Salesforce DX authorization URL stored in a file or through standard input (stdin).
 
 ```
 USAGE
-  $ sf org login sfdx-url -f <value> [--json] [-d] [-s] [-a <value>]
+  $ sf org login sfdx-url [--json] [-f <value>] [-u <value>] [-d] [-s] [-a <value>]
 
 FLAGS
-  -a, --alias=<value>          Alias for the org.
-  -d, --set-default-dev-hub    Set the authenticated org as the default Dev Hub.
-  -f, --sfdx-url-file=<value>  (required) Path to a file that contains the Salesforce DX authorization URL.
-  -s, --set-default            Set the authenticated org as the default that all org-related commands run against.
+  -a, --alias=<value>           Alias for the org.
+  -d, --set-default-dev-hub     Set the authenticated org as the default Dev Hub.
+  -f, --sfdx-url-file=<value>   Path to a file that contains the Salesforce DX authorization URL.
+  -s, --set-default             Set the authenticated org as the default that all org-related commands run against.
+  -u, --sfdx-url-stdin=<value>  Specify '-' as this flag's value to pipe the Salesforce DX authorization URL through
+                                standard input (stdin).
 
 GLOBAL FLAGS
   --json  Format output as json.
 
 DESCRIPTION
-  Authorize an org using a Salesforce DX authorization URL stored in a file.
+  Authorize an org using a Salesforce DX authorization URL stored in a file or through standard input (stdin).
 
   The Salesforce DX (SFDX) authorization URL must have the format
   "force://<clientId>:<clientSecret>:<refreshToken>@<instanceUrl>". NOTE: The SFDX authorization URL uses the "force"
@@ -352,6 +354,9 @@ DESCRIPTION
   You can also create a JSON file that has a top-level property named sfdxAuthUrl whose value is the authorization URL.
   Finally, you can create a normal text file that includes just the URL and nothing else.
 
+  Alternatively, you can pipe the SFDX authorization URL through standard input by using the --sfdx-url-stdin flag and
+  providing the '-' character as the value.
+
 ALIASES
   $ sf force auth sfdxurl store
   $ sf auth sfdxurl store
@@ -364,9 +369,13 @@ EXAMPLES
   Similar to previous example, but set the org as your default and give it an alias MyDefaultOrg:
 
     $ sf org login sfdx-url --sfdx-url-file files/authFile.json --set-default --alias MyDefaultOrg
+
+  Pipe the SFDX authorization URL from stdin by specifying the '-' value.
+
+   $ echo url | sf org login sfdx-url --sfdx-url-stdin -
 ```
 
-_See code: [src/commands/org/login/sfdx-url.ts](https://github.com/salesforcecli/plugin-auth/blob/3.1.0/src/commands/org/login/sfdx-url.ts)_
+_See code: [src/commands/org/login/sfdx-url.ts](https://github.com/salesforcecli/plugin-auth/blob/3.2.0/src/commands/org/login/sfdx-url.ts)_
 
 ## `sf org login web`
 
@@ -451,7 +460,7 @@ FLAG DESCRIPTIONS
     To specify a sandbox, set --instance-url to https://MyDomainName--SandboxName.sandbox.my.salesforce.com.
 ```
 
-_See code: [src/commands/org/login/web.ts](https://github.com/salesforcecli/plugin-auth/blob/3.1.0/src/commands/org/login/web.ts)_
+_See code: [src/commands/org/login/web.ts](https://github.com/salesforcecli/plugin-auth/blob/3.2.0/src/commands/org/login/web.ts)_
 
 ## `sf org logout`
 
@@ -511,6 +520,6 @@ FLAG DESCRIPTIONS
     All orgs includes Dev Hubs, sandboxes, DE orgs, and expired, deleted, and unknown-status scratch orgs.
 ```
 
-_See code: [src/commands/org/logout.ts](https://github.com/salesforcecli/plugin-auth/blob/3.1.0/src/commands/org/logout.ts)_
+_See code: [src/commands/org/logout.ts](https://github.com/salesforcecli/plugin-auth/blob/3.2.0/src/commands/org/logout.ts)_
 
 <!-- commandsstop -->
