@@ -6,11 +6,11 @@
  */
 
 import fs from 'node:fs/promises';
-import { Flags, loglevel } from '@salesforce/sf-plugins-core';
+import { Flags, SfCommand, loglevel } from '@salesforce/sf-plugins-core';
 import { AuthFields, AuthInfo, Messages } from '@salesforce/core';
 import { AnyJson } from '@salesforce/ts-types';
 import { parseJson } from '@salesforce/kit';
-import { AuthBaseCommand } from '../../../authBaseCommand.js';
+import common from '../../../common.js';
 
 Messages.importMessagesDirectoryFromMetaUrl(import.meta.url);
 const messages = Messages.loadMessages('@salesforce/plugin-auth', 'sfdxurl.store');
@@ -22,11 +22,11 @@ type AuthJson = AnyJson & {
   result?: AnyJson & { sfdxAuthUrl: string };
   sfdxAuthUrl: string;
 };
-export default class LoginSfdxUrl extends AuthBaseCommand<AuthFields> {
+export default class LoginSfdxUrl extends SfCommand<AuthFields> {
   public static readonly summary = messages.getMessage('summary');
   public static readonly description = messages.getMessage('description', [AUTH_URL_FORMAT]);
   public static readonly examples = messages.getMessages('examples');
-  public static aliases = ['force:auth:sfdxurl:store', 'auth:sfdxurl:store'];
+  public static readonly aliases = ['force:auth:sfdxurl:store', 'auth:sfdxurl:store'];
   public static readonly deprecateAliases = true;
 
   public static readonly flags = {
@@ -78,7 +78,7 @@ export default class LoginSfdxUrl extends AuthBaseCommand<AuthFields> {
 
   public async run(): Promise<AuthFields> {
     const { flags } = await this.parse(LoginSfdxUrl);
-    if (await this.shouldExitCommand(flags['no-prompt'])) return {};
+    if (await common.shouldExitCommand(flags['no-prompt'])) return {};
 
     const authFile = flags['sfdx-url-file'];
     const authStdin = flags['sfdx-url-stdin'];

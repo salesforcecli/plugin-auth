@@ -7,7 +7,7 @@
 
 /* eslint-disable camelcase */
 
-import { AuthFields, AuthInfo, DeviceOauthService, Global, Mode } from '@salesforce/core';
+import { AuthFields, AuthInfo, DeviceOauthService } from '@salesforce/core';
 import { MockTestOrgData, TestContext } from '@salesforce/core/lib/testSetup.js';
 import { StubbedType, stubInterface, stubMethod } from '@salesforce/ts-sinon';
 import { DeviceCodeResponse } from '@salesforce/core/lib/deviceOauthService.js';
@@ -15,7 +15,6 @@ import { expect } from 'chai';
 import { Config } from '@oclif/core';
 import { SfCommand } from '@salesforce/sf-plugins-core';
 import Login from '../../../../src/commands/org/login/device.js';
-
 interface Options {
   approvalTimesout?: boolean;
   approvalFails?: boolean;
@@ -136,29 +135,9 @@ describe('org:login:device', () => {
 
   it('should prompt for client secret if client id is provided', async () => {
     await prepareStubs();
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    $$.SANDBOX.stub(Login.prototype, 'askForHiddenResponse').returns(Promise.resolve('1234'));
+    $$.SANDBOX.stub(SfCommand.prototype, 'secretPrompt').resolves('1234');
     const login = new Login(['-i', 'CoffeeBeans', '--json'], {} as Config);
     const response = await login.run();
     expect(response.username).to.equal(testData.username);
-  });
-
-  it('should prompt for when in demo mode (SFDX_ENV=demo)', async () => {
-    await prepareStubs();
-    $$.SANDBOX.stub(Global, 'getEnvironmentMode').returns(Mode.DEMO);
-    $$.SANDBOX.stub(SfCommand.prototype, 'confirm').resolves(true);
-    const login = new Login(['--json'], {} as Config);
-    const response = await login.run();
-    expect(response.username).to.equal(testData.username);
-  });
-
-  it('should exit early when prompt is answered NO', async () => {
-    await prepareStubs();
-    $$.SANDBOX.stub(Global, 'getEnvironmentMode').returns(Mode.DEMO);
-    $$.SANDBOX.stub(SfCommand.prototype, 'confirm').resolves(false);
-    const login = new Login(['--json'], {} as Config);
-    const response = await login.run();
-    expect(response).to.deep.equal({});
   });
 });

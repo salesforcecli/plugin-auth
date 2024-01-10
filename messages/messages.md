@@ -40,10 +40,6 @@ Do you want to authorize this org for use with the Salesforce CLI?
 
 Don't prompt for confirmation.
 
-# flags.disable-masking.summary
-
-Disable masking of user input; use with problematic terminals.
-
 # clientSecretStdin
 
 OAuth client secret of personal connected app? Press Enter if it's not required.

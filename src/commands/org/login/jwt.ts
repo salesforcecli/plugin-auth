@@ -5,25 +5,25 @@
  * For full license text, see LICENSE.txt file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  */
 
-import { Flags, loglevel } from '@salesforce/sf-plugins-core';
+import { Flags, SfCommand, loglevel } from '@salesforce/sf-plugins-core';
 import { AuthFields, AuthInfo, AuthRemover, Logger, Messages, SfError } from '@salesforce/core';
 import { Interfaces } from '@oclif/core';
-import { AuthBaseCommand } from '../../../authBaseCommand.js';
-import { Common } from '../../../common.js';
+import common from '../../../common.js';
 
 Messages.importMessagesDirectoryFromMetaUrl(import.meta.url);
 const messages = Messages.loadMessages('@salesforce/plugin-auth', 'jwt.grant');
 const commonMessages = Messages.loadMessages('@salesforce/plugin-auth', 'messages');
 
-export default class LoginJwt extends AuthBaseCommand<AuthFields> {
+export default class LoginJwt extends SfCommand<AuthFields> {
   public static readonly summary = messages.getMessage('summary');
   public static readonly description = messages.getMessage('description');
   public static readonly examples = messages.getMessages('examples');
-  public static aliases = ['force:auth:jwt:grant', 'auth:jwt:grant'];
+  public static readonly aliases = ['force:auth:jwt:grant', 'auth:jwt:grant'];
   public static readonly deprecateAliases = true;
 
   public static readonly flags = {
     username: Flags.string({
+      // eslint-disable-next-line sf-plugin/dash-o
       char: 'o',
       summary: messages.getMessage('flags.username.summary'),
       required: true,
@@ -87,7 +87,7 @@ export default class LoginJwt extends AuthBaseCommand<AuthFields> {
     this.flags = flags;
     let result: AuthFields = {};
 
-    if (await this.shouldExitCommand(flags['no-prompt'])) return {};
+    if (await common.shouldExitCommand(flags['no-prompt'])) return {};
 
     try {
       const authInfo = await this.initAuthInfo();
@@ -116,7 +116,7 @@ export default class LoginJwt extends AuthBaseCommand<AuthFields> {
       privateKeyFile: this.flags['jwt-key-file'],
     };
 
-    const loginUrl = await Common.resolveLoginUrl(this.flags['instance-url']?.href);
+    const loginUrl = await common.resolveLoginUrl(this.flags['instance-url']?.href);
 
     const oauth2Options = loginUrl ? Object.assign(oauth2OptionsBase, { loginUrl }) : oauth2OptionsBase;
 

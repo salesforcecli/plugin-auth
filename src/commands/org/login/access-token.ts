@@ -5,26 +5,23 @@
  * For full license text, see LICENSE.txt file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  */
 
-
-
-import { Flags, loglevel } from '@salesforce/sf-plugins-core';
+import { Flags, loglevel, SfCommand } from '@salesforce/sf-plugins-core';
 import { AuthFields, AuthInfo, Messages, matchesAccessToken, SfError, StateAggregator } from '@salesforce/core';
 import { env } from '@salesforce/kit';
-import { Interfaces } from '@oclif/core';
-import { AuthBaseCommand } from '../../../authBaseCommand.js';
+import { InferredFlags } from '@oclif/core/lib/interfaces';
 
-Messages.importMessagesDirectoryFromMetaUrl(import.meta.url)
+Messages.importMessagesDirectoryFromMetaUrl(import.meta.url);
 const messages = Messages.loadMessages('@salesforce/plugin-auth', 'accesstoken.store');
 const commonMessages = Messages.loadMessages('@salesforce/plugin-auth', 'messages');
 
 const ACCESS_TOKEN_FORMAT = '"<org id>!<accesstoken>"';
 
-export default class LoginAccessToken extends AuthBaseCommand<AuthFields> {
+export default class LoginAccessToken extends SfCommand<AuthFields> {
   public static readonly summary = messages.getMessage('summary');
   public static readonly description = messages.getMessage('description');
   public static readonly examples = messages.getMessages('examples');
   public static readonly deprecateAliases = true;
-  public static aliases = ['force:auth:accesstoken:store', 'auth:accesstoken:store'];
+  public static readonly aliases = ['force:auth:accesstoken:store', 'auth:accesstoken:store'];
 
   public static readonly flags = {
     'instance-url': Flags.url({
@@ -66,7 +63,7 @@ export default class LoginAccessToken extends AuthBaseCommand<AuthFields> {
     loglevel,
   };
 
-  private flags!: Interfaces.InferredFlags<typeof LoginAccessToken.flags>;
+  private flags!: InferredFlags<typeof LoginAccessToken.flags>;
 
   public async run(): Promise<AuthFields> {
     const { flags } = await this.parse(LoginAccessToken);
@@ -109,7 +106,7 @@ export default class LoginAccessToken extends AuthBaseCommand<AuthFields> {
     if (!this.flags['no-prompt']) {
       const stateAggregator = await StateAggregator.getInstance();
       if (await stateAggregator.orgs.exists(username)) {
-        return this.confirm(messages.getMessage('overwriteAccessTokenAuthUserFile', [username]));
+        return this.confirm({ message: messages.getMessage('overwriteAccessTokenAuthUserFile', [username]) });
       }
     }
     return true;
@@ -117,8 +114,11 @@ export default class LoginAccessToken extends AuthBaseCommand<AuthFields> {
 
   private async getAccessToken(): Promise<string> {
     const accessToken =
-      env.getString('SF_ACCESS_TOKEN') ?? env.getString('SFDX_ACCESS_TOKEN') ?? (await this.askForAccessToken());
-
+      env.getString('SF_ACCESS_TOKEN') ??
+      env.getString('SFDX_ACCESS_TOKEN') ??
+      (this.flags['no-prompt'] === true
+        ? '' // will throw when validating
+        : await this.secretPrompt({ message: commonMessages.getMessage('accessTokenStdin') }));
     if (!matchesAccessToken(accessToken)) {
       throw new SfError(messages.getMessage('invalidAccessTokenFormat', [ACCESS_TOKEN_FORMAT]));
     }

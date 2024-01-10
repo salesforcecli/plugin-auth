@@ -6,11 +6,10 @@
  */
 
 import { AuthFields, AuthInfo, DeviceOauthService, Messages, OAuth2Config } from '@salesforce/core';
-import { Flags, loglevel } from '@salesforce/sf-plugins-core';
+import { Flags, SfCommand, loglevel } from '@salesforce/sf-plugins-core';
 import { DeviceCodeResponse } from '@salesforce/core/lib/deviceOauthService.js';
 import { ux } from '@oclif/core';
-import { AuthBaseCommand } from '../../../authBaseCommand.js';
-import { Common } from '../../../common.js';
+import common from '../../../common.js';
 
 Messages.importMessagesDirectoryFromMetaUrl(import.meta.url);
 const messages = Messages.loadMessages('@salesforce/plugin-auth', 'device.login');
@@ -18,11 +17,11 @@ const commonMessages = Messages.loadMessages('@salesforce/plugin-auth', 'message
 
 export type DeviceLoginResult = (AuthFields & DeviceCodeResponse) | Record<string, never>;
 
-export default class LoginDevice extends AuthBaseCommand<DeviceLoginResult> {
+export default class LoginDevice extends SfCommand<DeviceLoginResult> {
   public static readonly summary = messages.getMessage('summary');
   public static readonly description = messages.getMessage('description');
   public static readonly examples = messages.getMessages('examples');
-  public static aliases = ['force:auth:device:login', 'auth:device:login'];
+  public static readonly aliases = ['force:auth:device:login', 'auth:device:login'];
   public static readonly deprecateAliases = true;
 
   public static readonly flags = {
@@ -57,21 +56,15 @@ export default class LoginDevice extends AuthBaseCommand<DeviceLoginResult> {
       deprecateAliases: true,
       aliases: ['setalias'],
     }),
-    'disable-masking': Flags.boolean({
-      summary: commonMessages.getMessage('flags.disable-masking.summary'),
-      hidden: true,
-      deprecateAliases: true,
-      aliases: ['disablemasking'],
-    }),
     loglevel,
   };
 
   public async run(): Promise<DeviceLoginResult> {
     const { flags } = await this.parse(LoginDevice);
-    if (await this.shouldExitCommand(false)) return {};
+    if (await common.shouldExitCommand(false)) return {};
 
     const oauthConfig: OAuth2Config = {
-      loginUrl: await Common.resolveLoginUrl(flags['instance-url']?.href),
+      loginUrl: await common.resolveLoginUrl(flags['instance-url']?.href),
       clientId: flags['client-id'],
     };
 
