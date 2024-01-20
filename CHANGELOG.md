@@ -1,3 +1,9 @@
+## [3.3.3](https://github.com/salesforcecli/plugin-auth/compare/3.3.2...3.3.3) (2024-01-20)
+
+### Bug Fixes
+
+- **deps:** bump @salesforce/sf-plugins-core from 7.1.1 to 7.1.3 ([f314f80](https://github.com/salesforcecli/plugin-auth/commit/f314f801820580dc9c0cbaffff507c0c7c9a5e59))
+
 ## [3.3.2](https://github.com/salesforcecli/plugin-auth/compare/3.3.1...3.3.2) (2024-01-14)
 
 ### Bug Fixes
