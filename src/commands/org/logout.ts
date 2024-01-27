@@ -134,10 +134,14 @@ const promptForOrgsToRemove = async (orgAuths: OrgAuthorization[], all: boolean)
         loop: true,
       });
 
-const getOrgConfirmationMessage = (selectedOrgs: OrgAuthorization[], originalOrgCount: number): string =>
-  selectedOrgs.length === originalOrgCount
+const getOrgConfirmationMessage = (selectedOrgs: OrgAuthorization[], originalOrgCount: number): string => {
+  if (selectedOrgs.length === 1) {
+    return messages.getMessage('prompt.confirm.single', [selectedOrgs[0].username]);
+  }
+  return selectedOrgs.length === originalOrgCount
     ? messages.getMessage('prompt.confirm-all')
     : messages.getMessage('prompt.confirm', [selectedOrgs.length, selectedOrgs.length > 1 ? 's' : '']);
+};
 
 /** A whole bunch of custom formatting to make the list look nicer */
 const buildChoices = (orgAuths: OrgAuthorization[], all: boolean): Array<Choice | Separator> => {
