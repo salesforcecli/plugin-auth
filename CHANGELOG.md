@@ -1,3 +1,9 @@
+## [3.3.6](https://github.com/salesforcecli/plugin-auth/compare/3.3.5...3.3.6) (2024-01-29)
+
+### Bug Fixes
+
+- logout confirmation messages ([#923](https://github.com/salesforcecli/plugin-auth/issues/923)) ([1da578d](https://github.com/salesforcecli/plugin-auth/commit/1da578dc6aad64498f6275760b8df532b2e5845d))
+
 ## [3.3.5](https://github.com/salesforcecli/plugin-auth/compare/3.3.4...3.3.5) (2024-01-28)
 
 ### Bug Fixes
