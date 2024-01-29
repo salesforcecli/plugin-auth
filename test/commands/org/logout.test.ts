@@ -5,12 +5,15 @@
  * For full license text, see LICENSE.txt file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  */
 
-import { AuthRemover, ConfigContents, Global, Mode } from '@salesforce/core';
+import { AuthRemover, ConfigContents, Global, Mode, Messages } from '@salesforce/core';
 import { MockTestOrgData, TestContext } from '@salesforce/core/lib/testSetup.js';
 import { expect } from 'chai';
 import { Config } from '@oclif/core';
-import { SfCommand } from '@salesforce/sf-plugins-core';
+import { stubPrompter } from '@salesforce/sf-plugins-core';
 import Logout from '../../../src/commands/org/logout.js';
+
+Messages.importMessagesDirectoryFromMetaUrl(import.meta.url);
+const messages = Messages.loadMessages('@salesforce/plugin-auth', 'logout');
 
 interface Options {
   authFiles?: string[];
@@ -28,12 +31,12 @@ describe('org:logout', () => {
   const testOrg1 = new MockTestOrgData();
   const testOrg2 = new MockTestOrgData();
   const testOrg3 = new MockTestOrgData();
-
+  let promptStub: ReturnType<typeof stubPrompter>;
   let authRemoverSpy: sinon.SinonSpy;
 
   async function prepareStubs(options: Options = {}): Promise<ConfigContents> {
     const authInfo = await testOrg1.getConfig();
-
+    promptStub = stubPrompter($$.SANDBOX);
     authRemoverSpy = $$.SANDBOX.spy(AuthRemover.prototype, 'removeAuth');
 
     if (!options.authInfoConfigDoesNotExist) {
@@ -110,12 +113,23 @@ describe('org:logout', () => {
     }
   });
 
-  it('should do nothing when prompt is answered with no', async () => {
-    await prepareStubs();
-    $$.SANDBOX.stub(SfCommand.prototype, 'confirm').resolves(false);
-    const logout = new Logout(['-o', testOrg1.username], {} as Config);
-    const response = await logout.run();
-    expect(response).to.deep.equal([]);
+  describe('prompts', () => {
+    it('shows correct prompt for single org', async () => {
+      await prepareStubs();
+      promptStub.confirm.resolves(false);
+      const logout = new Logout(['-o', testOrg1.username], {} as Config);
+      await logout.run();
+      expect(promptStub.confirm.args[0][0].message).to.equal(
+        messages.getMessage('prompt.confirm.single', [testOrg1.username])
+      );
+    });
+    it('should do nothing when prompt is answered with no', async () => {
+      await prepareStubs();
+      promptStub.confirm.resolves(false);
+      const logout = new Logout(['-o', testOrg1.username], {} as Config);
+      const response = await logout.run();
+      expect(response).to.deep.equal([]);
+    });
   });
 
   it('should remove auth when alias is specified', async () => {
