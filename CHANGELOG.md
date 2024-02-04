@@ -1,3 +1,9 @@
+## [3.3.9](https://github.com/salesforcecli/plugin-auth/compare/3.3.8...3.3.9) (2024-02-04)
+
+### Bug Fixes
+
+- **deps:** bump @inquirer/select from 1.3.1 to 1.3.3 ([f426355](https://github.com/salesforcecli/plugin-auth/commit/f426355c8846ca3c8e938d2928726261e073ea46))
+
 ## [3.3.8](https://github.com/salesforcecli/plugin-auth/compare/3.3.7...3.3.8) (2024-02-04)
 
 ### Bug Fixes
