@@ -1,3 +1,9 @@
+## [3.3.10](https://github.com/salesforcecli/plugin-auth/compare/3.3.9...3.3.10) (2024-02-06)
+
+### Bug Fixes
+
+- update help after "-" no longer required for --sfdx-url-stdin ([5e7adcf](https://github.com/salesforcecli/plugin-auth/commit/5e7adcfeb22abbc99991e1ec3407f9914ace708c))
+
 ## [3.3.9](https://github.com/salesforcecli/plugin-auth/compare/3.3.8...3.3.9) (2024-02-04)
 
 ### Bug Fixes
