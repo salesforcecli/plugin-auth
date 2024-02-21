@@ -1,3 +1,9 @@
+## [3.3.13](https://github.com/salesforcecli/plugin-auth/compare/3.3.12...3.3.13) (2024-02-21)
+
+### Bug Fixes
+
+- **deps:** bump ip from 2.0.0 to 2.0.1 ([e73966d](https://github.com/salesforcecli/plugin-auth/commit/e73966d57de74877a6473e4d53ab564292497b82))
+
 ## [3.3.12](https://github.com/salesforcecli/plugin-auth/compare/3.3.11...3.3.12) (2024-02-18)
 
 ### Bug Fixes
