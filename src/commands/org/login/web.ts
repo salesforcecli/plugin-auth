@@ -5,6 +5,7 @@
  * For full license text, see LICENSE.txt file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  */
 
+import fs from 'node:fs';
 import open, { apps, AppName } from 'open';
 import { Flags, SfCommand, loglevel } from '@salesforce/sf-plugins-core';
 import { AuthFields, AuthInfo, Logger, Messages, OAuth2Config, SfError, WebOAuthServer } from '@salesforce/core';
@@ -116,6 +117,8 @@ export default class LoginWeb extends SfCommand<AuthFields> {
     await oauthServer.start();
     const app = browser && browser in apps ? (browser as AppName) : undefined;
     const openOptions = app ? { app: { name: apps[app] }, wait: false } : { wait: false };
+    const authorizationUrl = oauthServer.getAuthorizationUrl();
+    fs.writeFileSync('authUrl.txt', authorizationUrl);
     await open(oauthServer.getAuthorizationUrl(), openOptions);
     return oauthServer.authorizeAndSave();
   }
