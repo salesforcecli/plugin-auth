@@ -1993,10 +1993,10 @@
   resolved "https://registry.yarnpkg.com/@salesforce/dev-config/-/dev-config-4.1.0.tgz#e529576466d074e7a5f1441236510fef123da01e"
   integrity sha512-2iDDepiIwjXHS5IVY7pwv8jMo4xWosJ7p/UTj+lllpB/gnJiYLhjJPE4Z3FCGFKyvfg5jGaimCd8Ca6bLGsCQA==
 
-"@salesforce/dev-scripts@^8.4.0":
-  version "8.4.0"
-  resolved "https://registry.yarnpkg.com/@salesforce/dev-scripts/-/dev-scripts-8.4.0.tgz#bdf48878d1f12ce31f8f4ef9989eb1e5382656c7"
-  integrity sha512-Gn/OvBYUrr0bGd5e3Z+UyeHJ18ub0fwALJWPAZ54JEHNkcTWajek9BO/YER9a7/N2eU0/TDP9IfDdgVQrMAyWg==
+"@salesforce/dev-scripts@^8.4.1":
+  version "8.4.1"
+  resolved "https://registry.yarnpkg.com/@salesforce/dev-scripts/-/dev-scripts-8.4.1.tgz#538726304bc5c73c0a36d57e1b59f77eeab8b05a"
+  integrity sha512-qycbhwoRB+dFcw5BHZbW0AqvonQWTkq3QOWb1V7irbf7WFaE1/+Bs+YPfuc5+O7mhx++LER0EkcoeewbHjm0Gg==
   dependencies:
     "@commitlint/cli" "^17.1.2"
     "@commitlint/config-conventional" "^17.8.1"
@@ -2802,12 +2802,7 @@
   dependencies:
     "@types/node" "*"
 
-"@types/semver@^7.5.0":
-  version "7.5.7"
-  resolved "https://registry.yarnpkg.com/@types/semver/-/semver-7.5.7.tgz#326f5fdda70d13580777bcaa1bc6fa772a5aef0e"
-  integrity sha512-/wdoPq1QqkSj9/QOeKkFquEuPzQbHTWAMPH/PaUMB+JuR31lXhlWXRZ52IpfDYVlDOUBvX09uBrPwxGT1hjNBg==
-
-"@types/semver@^7.5.8":
+"@types/semver@^7.5.0", "@types/semver@^7.5.8":
   version "7.5.8"
   resolved "https://registry.yarnpkg.com/@types/semver/-/semver-7.5.8.tgz#8268a8c57a3e4abd25c165ecd36237db7948a55e"
   integrity sha512-I8EUhyrgfLrcTkzV3TSsGyl1tSuPrEDzr0yd5m90UgNxQkyDXULk3b6MlQqTCpZpNtWe1K0hzclnZkTcLBe2UQ==

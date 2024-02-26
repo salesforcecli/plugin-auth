@@ -18,7 +18,7 @@
   "devDependencies": {
     "@oclif/plugin-command-snapshot": "^5.0.9",
     "@salesforce/cli-plugins-testkit": "^5.1.9",
-    "@salesforce/dev-scripts": "^8.4.0",
+    "@salesforce/dev-scripts": "^8.4.1",
     "@salesforce/plugin-command-reference": "^3.0.67",
     "@salesforce/ts-sinon": "^1.4.19",
     "eslint-plugin-sf-plugin": "^1.17.3",
@@ -102,7 +102,7 @@
     "format": "wireit",
     "link-check": "wireit",
     "lint": "wireit",
-    "postpack": "sf-clean",
+    "postpack": "sf-clean --ignore-signing-artifacts",
     "prepack": "sf-prepack",
     "prepare": "sf-install",
     "reformat": "prettier --config .prettierrc --write './*.{js,json,md}' './**/*.{ts,json,md}'",
