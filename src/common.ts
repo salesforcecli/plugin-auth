@@ -34,7 +34,8 @@ const getLoginUrl = async (logger: Logger): Promise<string> => {
   }
 };
 const throwIfLightning = (urlString: string): void => {
-  if (new SfdcUrl(urlString).isLightningDomain()) {
+  const url = new SfdcUrl(urlString);
+  if (url.isLightningDomain() || (url.isInternalUrl() && url.origin.includes('.lightning.'))) {
     throw new SfError(messages.getMessage('lightningInstanceUrl'), 'LightningDomain', [
       messages.getMessage('flags.instance-url.description'),
     ]);
