@@ -15,28 +15,26 @@ const messages = Messages.loadMessages('@salesforce/plugin-auth', 'messages');
 
 const resolveLoginUrl = async (instanceUrl?: string): Promise<string> => {
   const logger = await Logger.child('Common', { tag: 'resolveLoginUrl' });
-  if (instanceUrl) {
-    throwIfLightning(instanceUrl);
-    return instanceUrl;
-  }
-  let loginUrl: string;
-  try {
-    const project = await SfProject.resolve();
-    const projectJson = await project.resolveProjectConfig();
-    loginUrl = getString(projectJson, 'sfdcLoginUrl', SfdcUrl.PRODUCTION);
-  } catch (err) {
-    const message: string = (isObject(err) ? Reflect.get(err, 'message') ?? err : err) as string;
-    logger.debug(`error occurred while trying to determine loginUrl: ${message}`);
-    loginUrl = SfdcUrl.PRODUCTION;
-  }
+  const loginUrl = instanceUrl ?? (await getLoginUrl(logger));
   throwIfLightning(loginUrl);
-
   logger.debug(`loginUrl: ${loginUrl}`);
   return loginUrl;
 };
 
-const throwIfLightning = (urlString?: string): void => {
-  if (urlString?.match(/\.lightning\..*force\.com/)) {
+/** try to get url from project if there is one, otherwise use the default production URL  */
+const getLoginUrl = async (logger: Logger): Promise<string> => {
+  try {
+    const project = await SfProject.resolve();
+    const projectJson = await project.resolveProjectConfig();
+    return getString(projectJson, 'sfdcLoginUrl', SfdcUrl.PRODUCTION);
+  } catch (err) {
+    const message: string = (isObject(err) ? Reflect.get(err, 'message') ?? err : err) as string;
+    logger.debug(`error occurred while trying to determine loginUrl: ${message}`);
+    return SfdcUrl.PRODUCTION;
+  }
+};
+const throwIfLightning = (urlString: string): void => {
+  if (new SfdcUrl(urlString).isLightningDomain()) {
     throw new SfError(messages.getMessage('lightningInstanceUrl'), 'LightningDomain', [
       messages.getMessage('flags.instance-url.description'),
     ]);
