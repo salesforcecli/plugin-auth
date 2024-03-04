@@ -72,8 +72,10 @@ describe('Doctor diagnostics', () => {
 
     expect(addPluginDataStub.callCount, 'Expected doctor.addPluginData() to be called once').to.equal(1);
     expect(addPluginDataStub.args[0][0]).to.equal(pluginName);
+    // The generic keychain is used on Windows necessarily, so expect true rather
+    // than using the value of process.env.SF_USE_GENERIC_UNIX_KEYCHAIN
     expect(addPluginDataStub.args[0][1]).to.deep.equal({
-      isUsingGenericKeychain: false,
+      isUsingGenericKeychain: process.platform === 'win32' || false,
       sfCryptoV2Support: false,
       cryptoVersion: 'unknown',
       sfCryptoV2: undefined,
@@ -95,8 +97,10 @@ describe('Doctor diagnostics', () => {
 
     expect(addPluginDataStub.callCount, 'Expected doctor.addPluginData() to be called once').to.equal(1);
     expect(addPluginDataStub.args[0][0]).to.equal(pluginName);
+    // The generic keychain is used on Windows necessarily, so expect true rather
+    // than using the value of process.env.SF_USE_GENERIC_UNIX_KEYCHAIN
     expect(addPluginDataStub.args[0][1]).to.deep.equal({
-      isUsingGenericKeychain: false,
+      isUsingGenericKeychain: process.platform === 'win32' || false,
       sfCryptoV2Support: true,
       cryptoVersion: 'unknown',
       sfCryptoV2: undefined,
