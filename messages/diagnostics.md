@@ -1,6 +1,6 @@
 # sfCryptoV2Support
 
-This CLI does not yet support v2 crypto. All plugins and libraries must use at least version 6.5.1 of `@salesforce/core` to support v2 crypto. This will not cause a problem with CLI authentication unless a v2 crypto key has been generated.
+This CLI does not yet support v2 crypto. All plugins and libraries must use at least version 6.7.0 of `@salesforce/core` to support v2 crypto. This will not cause a problem with CLI authentication unless a v2 crypto key has been generated.
 
 # sfCryptoV2Unstable
 

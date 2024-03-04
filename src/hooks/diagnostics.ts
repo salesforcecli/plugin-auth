@@ -55,8 +55,7 @@ type NpmExplanation = {
 const cryptoVersionTest = async (doctor: SfDoctor): Promise<void> => {
   getLogger().debug('Running Crypto Version tests');
 
-  const diagnosis = doctor.getDiagnosis();
-  const sfCryptoV2Support = await supportsCliV2Crypto(diagnosis);
+  const sfCryptoV2Support = await supportsCliV2Crypto(doctor);
   let cryptoVersion: 'unknown' | 'v1' | 'v2' = 'unknown';
 
   const sfCryptoV2 = process.env.SF_CRYPTO_V2;
@@ -121,24 +120,68 @@ const cryptoVersionTest = async (doctor: SfDoctor): Promise<void> => {
   }
 };
 
-// Inspect CLI install to ensure all versions of `@salesforce/core` can support v2 crypto.
-const supportsCliV2Crypto = async (diagnosis: SfDoctorDiagnosis): Promise<boolean> => {
-  let v2CryptoSupport = false;
+// Inspect CLI install and plugins to ensure all versions of `@salesforce/core` can support v2 crypto.
+// This uses `npm explain @salesforce/core` to ensure all versions are greater than 6.6.0.
+const supportsCliV2Crypto = async (doctor: SfDoctor): Promise<boolean> => {
+  const diagnosis: SfDoctorDiagnosis = doctor.getDiagnosis();
+  let coreSupportsV2 = false;
+  let pluginsSupportV2 = false;
+  let linksSupportsV2 = false;
 
   const exec = util.promisify(childProcess.exec);
 
-  try {
-    const { root } = diagnosis.cliConfig;
-    if (root?.length) {
+  const { root, dataDir } = diagnosis.cliConfig;
+  // check core CLI
+  if (root?.length) {
+    try {
       const { stdout } = await exec('npm explain @salesforce/core --json', { cwd: root });
       const coreExplanation = JSON.parse(stdout) as NpmExplanation[];
-      // All entries must be greater than version 6.5.1
-      v2CryptoSupport = coreExplanation.every((exp) => exp?.version > '6.5.1');
+      coreSupportsV2 = coreExplanation.every((exp) => exp?.version > '6.6.0');
+    } catch (e: unknown) {
+      const errMsg = e instanceof Error ? e.message : isString(e) ? e : 'unknown';
+      getLogger().debug(`Cannot determine CLI v2 crypto core support due to: ${errMsg}`);
     }
-  } catch (e: unknown) {
-    const errMsg = e instanceof Error ? e.message : isString(e) ? e : 'unknown';
-    getLogger().debug(`Cannot determine CLI v2 crypto support due to: ${errMsg}`);
+  }
+  // check installed plugins
+  if (dataDir?.length) {
+    try {
+      const { stdout } = await exec('npm explain @salesforce/core --json', { cwd: dataDir });
+      const pluginsExplanation = JSON.parse(stdout) as NpmExplanation[];
+      pluginsSupportV2 = pluginsExplanation?.length ? pluginsExplanation.every((exp) => exp?.version > '6.6.0') : true;
+    } catch (e: unknown) {
+      const errMsg = e instanceof Error ? e.message : isString(e) ? e : 'unknown';
+      if (errMsg.includes('No dependencies found matching @salesforce/core')) {
+        pluginsSupportV2 = true;
+      } else {
+        getLogger().debug(`Cannot determine CLI v2 crypto installed plugins support due to: ${errMsg}`);
+      }
+    }
+  }
+  // check linked plugins
+  const pluginVersions = diagnosis?.versionDetail?.pluginVersions;
+  const linkedPlugins = pluginVersions.filter((pv) => pv.includes('(link)'));
+  if (linkedPlugins?.length) {
+    try {
+      const coreVersionChecks = await Promise.all(
+        linkedPlugins.map(async (pluginEntry) => {
+          // last entry is the path. E.g., "auth 3.3.17 (link) /Users/me/dev/plugin-auth",
+          const pluginPath = pluginEntry.split(' ')?.pop();
+          if (pluginPath?.length) {
+            const { stdout } = await exec('npm explain @salesforce/core --json', { cwd: pluginPath });
+            const linksExplanation = JSON.parse(stdout) as NpmExplanation[];
+            return linksExplanation?.every((exp) => exp?.version > '6.6.0');
+          }
+          return true;
+        })
+      );
+      linksSupportsV2 = !coreVersionChecks.includes(false);
+    } catch (e: unknown) {
+      const errMsg = e instanceof Error ? e.message : isString(e) ? e : 'unknown';
+      getLogger().debug(`Cannot determine CLI v2 crypto linked plugins support due to: ${errMsg}`);
+    }
+  } else {
+    linksSupportsV2 = true;
   }
 
-  return v2CryptoSupport;
+  return coreSupportsV2 && pluginsSupportV2 && linksSupportsV2;
 };

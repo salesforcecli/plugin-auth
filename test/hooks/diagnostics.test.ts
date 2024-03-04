@@ -18,7 +18,7 @@ const pluginName = '@salesforce/plugin-auth';
 Messages.importMessagesDirectoryFromMetaUrl(import.meta.url);
 const messages = Messages.loadMessages(pluginName, 'diagnostics');
 
-describe.only('Doctor diagnostics', () => {
+describe('Doctor diagnostics', () => {
   const sandbox = new TestContext().SANDBOX;
 
   const key64 = '3e33abf2880f9ce618108343e98298183e33abf2880f9ce618108343e9829818';
@@ -36,7 +36,10 @@ describe.only('Doctor diagnostics', () => {
   beforeEach(() => {
     doctorStubbedType = stubInterface<SfDoctor>(sandbox, {
       getDiagnosis: () => ({
-        cliConfig: { root: 'rootPath' },
+        cliConfig: { root: 'rootPath', dataDir: 'dataDir/path' },
+        versionDetail: {
+          pluginVersions: ['my-plugin 3.3.17 (link) /Users/me/dev/my-plugin'],
+        },
       }),
     });
     doctorMock = fromStub(doctorStubbedType);
@@ -86,9 +89,8 @@ describe.only('Doctor diagnostics', () => {
   });
 
   it('should pass when CLI supports v2 crypto', async () => {
-    sandbox.stub(util, 'promisify').returns(() => ({ stdout: JSON.stringify([{ version: '6.5.5' }]) }));
+    sandbox.stub(util, 'promisify').returns(() => ({ stdout: JSON.stringify([{ version: '6.7.0' }]) }));
     process.env.SF_USE_GENERIC_UNIX_KEYCHAIN = 'false';
-
     await hook({ doctor: doctorMock });
 
     expect(addPluginDataStub.callCount, 'Expected doctor.addPluginData() to be called once').to.equal(1);
@@ -140,7 +142,7 @@ describe.only('Doctor diagnostics', () => {
   });
 
   it('should pass when v2 crypto is used with v2 crypto CLI support', async () => {
-    sandbox.stub(util, 'promisify').returns(() => ({ stdout: JSON.stringify([{ version: '6.5.5' }]) }));
+    sandbox.stub(util, 'promisify').returns(() => ({ stdout: JSON.stringify([{ version: '6.7.0' }]) }));
     process.env.SF_USE_GENERIC_UNIX_KEYCHAIN = 'true';
     sandbox.stub(fs, 'readFileSync').returns(JSON.stringify({ key: key64 }));
 
@@ -169,7 +171,7 @@ describe.only('Doctor diagnostics', () => {
   });
 
   it('should warn when (known) v1 crypto is used with SF_CRYPTO_V2=true and v2 crypto CLI support', async () => {
-    sandbox.stub(util, 'promisify').returns(() => ({ stdout: JSON.stringify([{ version: '6.5.5' }]) }));
+    sandbox.stub(util, 'promisify').returns(() => ({ stdout: JSON.stringify([{ version: '6.7.0' }]) }));
     process.env.SF_USE_GENERIC_UNIX_KEYCHAIN = 'true';
     process.env.SF_CRYPTO_V2 = 'true';
     sandbox.stub(fs, 'readFileSync').returns(JSON.stringify({ key: key32 }));
@@ -195,7 +197,7 @@ describe.only('Doctor diagnostics', () => {
   });
 
   it('should pass when (known) v1 crypto is used without SF_CRYPTO_V2', async () => {
-    sandbox.stub(util, 'promisify').returns(() => ({ stdout: JSON.stringify([{ version: '6.5.5' }]) }));
+    sandbox.stub(util, 'promisify').returns(() => ({ stdout: JSON.stringify([{ version: '6.7.0' }]) }));
     process.env.SF_USE_GENERIC_UNIX_KEYCHAIN = 'true';
     sandbox.stub(fs, 'readFileSync').returns(JSON.stringify({ key: key32 }));
 
