@@ -1,3 +1,9 @@
+## [3.3.21](https://github.com/salesforcecli/plugin-auth/compare/3.3.20...3.3.21) (2024-03-05)
+
+### Bug Fixes
+
+- adds a bit of formatting, as requested by MyDomain writer ([3f55cf0](https://github.com/salesforcecli/plugin-auth/commit/3f55cf051b224ed308ebf7ec9f6bb98880fc40ec))
+
 ## [3.3.20](https://github.com/salesforcecli/plugin-auth/compare/3.3.19...3.3.20) (2024-03-03)
 
 ### Bug Fixes
