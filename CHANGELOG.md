@@ -1,3 +1,9 @@
+## [3.3.23](https://github.com/salesforcecli/plugin-auth/compare/3.3.22...3.3.23) (2024-03-12)
+
+### Bug Fixes
+
+- bump to new major version of the open lib ([#968](https://github.com/salesforcecli/plugin-auth/issues/968)) ([c6e6d67](https://github.com/salesforcecli/plugin-auth/commit/c6e6d67f85fb16974d1ce033d4d5cfce04129959))
+
 ## [3.3.22](https://github.com/salesforcecli/plugin-auth/compare/3.3.21...3.3.22) (2024-03-09)
 
 ### Bug Fixes
