@@ -22,7 +22,7 @@
     "@salesforce/plugin-command-reference": "^3.0.70",
     "@salesforce/ts-sinon": "^1.4.19",
     "eslint-plugin-sf-plugin": "^1.17.3",
-    "oclif": "^4.5.2",
+    "oclif": "^4.5.5",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.2"
   },
