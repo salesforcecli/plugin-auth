@@ -1,3 +1,39 @@
+## [3.3.26](https://github.com/salesforcecli/plugin-auth/compare/3.3.25...3.3.26) (2024-03-17)
+
+### Bug Fixes
+
+- **deps:** bump @salesforce/core from 6.7.0 to 6.7.1 ([e90a591](https://github.com/salesforcecli/plugin-auth/commit/e90a591d4322db042af5d8debf73db56333767aa))
+
+## [3.3.25](https://github.com/salesforcecli/plugin-auth/compare/3.3.24...3.3.25) (2024-03-17)
+
+### Bug Fixes
+
+- **deps:** bump @salesforce/sf-plugins-core from 7.1.14 to 7.1.15 ([f46ee69](https://github.com/salesforcecli/plugin-auth/commit/f46ee6975e3858a2a268100742bcd8ea8bc9184b))
+
+## [3.3.24](https://github.com/salesforcecli/plugin-auth/compare/3.3.23...3.3.24) (2024-03-16)
+
+### Bug Fixes
+
+- **deps:** bump @oclif/core from 3.23.0 to 3.25.2 ([065cabc](https://github.com/salesforcecli/plugin-auth/commit/065cabc4bf6044c711517374b82617d517990873))
+
+## [3.3.23](https://github.com/salesforcecli/plugin-auth/compare/3.3.22...3.3.23) (2024-03-12)
+
+### Bug Fixes
+
+- bump to new major version of the open lib ([#968](https://github.com/salesforcecli/plugin-auth/issues/968)) ([c6e6d67](https://github.com/salesforcecli/plugin-auth/commit/c6e6d67f85fb16974d1ce033d4d5cfce04129959))
+
+## [3.3.22](https://github.com/salesforcecli/plugin-auth/compare/3.3.21...3.3.22) (2024-03-09)
+
+### Bug Fixes
+
+- **deps:** bump @oclif/core from 3.20.0 to 3.23.0 ([2c26b00](https://github.com/salesforcecli/plugin-auth/commit/2c26b001dd957e92e0249fe7928ab34767b87319))
+
+## [3.3.21](https://github.com/salesforcecli/plugin-auth/compare/3.3.20...3.3.21) (2024-03-05)
+
+### Bug Fixes
+
+- adds a bit of formatting, as requested by MyDomain writer ([3f55cf0](https://github.com/salesforcecli/plugin-auth/commit/3f55cf051b224ed308ebf7ec9f6bb98880fc40ec))
+
 ## [3.3.20](https://github.com/salesforcecli/plugin-auth/compare/3.3.19...3.3.20) (2024-03-03)
 
 ### Bug Fixes

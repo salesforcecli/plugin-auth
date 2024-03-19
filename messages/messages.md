@@ -22,9 +22,9 @@ URL of the instance that the org lives on.
 
 If you specify an --instance-url value, this value overrides the sfdcLoginUrl value in your sfdx-project.json file.
 
-To specify a My Domain URL, use the format https://yourcompanyname.my.salesforce.com.
+To specify a My Domain URL, use the format "https://<MyDomainName>.my.salesforce.com".
 
-To specify a sandbox, set --instance-url to https://MyDomainName--SandboxName.sandbox.my.salesforce.com.
+To specify a sandbox, set --instance-url to "https://<MyDomainName>--<SandboxName>.sandbox.my.salesforce.com".
 
 # authorizeCommandSuccess
 
