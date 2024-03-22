@@ -1,3 +1,9 @@
+## [3.3.27](https://github.com/salesforcecli/plugin-auth/compare/3.3.26...3.3.27) (2024-03-22)
+
+### Bug Fixes
+
+- bump salesforce/core ([#975](https://github.com/salesforcecli/plugin-auth/issues/975)) ([e8ce3f7](https://github.com/salesforcecli/plugin-auth/commit/e8ce3f70baeaffaafaf3778ce6d34fc0476e8b5d))
+
 ## [3.3.26](https://github.com/salesforcecli/plugin-auth/compare/3.3.25...3.3.26) (2024-03-17)
 
 ### Bug Fixes
