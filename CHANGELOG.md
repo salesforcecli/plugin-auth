@@ -1,3 +1,9 @@
+# [3.4.0](https://github.com/salesforcecli/plugin-auth/compare/3.3.27...3.4.0) (2024-03-25)
+
+### Features
+
+- lightning url check from sfdx-core ([#955](https://github.com/salesforcecli/plugin-auth/issues/955)) ([c5921ec](https://github.com/salesforcecli/plugin-auth/commit/c5921ec7b495ae94a828c607865d3a8be43b8bf1))
+
 ## [3.3.27](https://github.com/salesforcecli/plugin-auth/compare/3.3.26...3.3.27) (2024-03-22)
 
 ### Bug Fixes
