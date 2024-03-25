@@ -1,18 +1,15 @@
 [
   {
-    "command": "org:list:auth",
-    "plugin": "@salesforce/plugin-auth",
-    "flags": ["json", "loglevel"],
     "alias": ["force:auth:list", "auth:list"],
+    "command": "org:list:auth",
+    "flagAliases": [],
     "flagChars": [],
-    "flagAliases": []
+    "flags": ["flags-dir", "json", "loglevel"],
+    "plugin": "@salesforce/plugin-auth"
   },
   {
-    "command": "org:login:access-token",
-    "plugin": "@salesforce/plugin-auth",
-    "flags": ["alias", "instance-url", "json", "loglevel", "no-prompt", "set-default", "set-default-dev-hub"],
     "alias": ["force:auth:accesstoken:store", "auth:accesstoken:store"],
-    "flagChars": ["a", "d", "p", "r", "s"],
+    "command": "org:login:access-token",
     "flagAliases": [
       "instanceurl",
       "noprompt",
@@ -20,41 +17,47 @@
       "setdefaultdevhub",
       "setdefaultdevhubusername",
       "setdefaultusername"
-    ]
+    ],
+    "flagChars": ["a", "d", "p", "r", "s"],
+    "flags": [
+      "alias",
+      "flags-dir",
+      "instance-url",
+      "json",
+      "loglevel",
+      "no-prompt",
+      "set-default",
+      "set-default-dev-hub"
+    ],
+    "plugin": "@salesforce/plugin-auth"
   },
   {
-    "command": "org:login:device",
-    "plugin": "@salesforce/plugin-auth",
-    "flags": ["alias", "client-id", "instance-url", "json", "loglevel", "set-default", "set-default-dev-hub"],
     "alias": ["force:auth:device:login", "auth:device:login"],
-    "flagChars": ["a", "d", "i", "r", "s"],
+    "command": "org:login:device",
     "flagAliases": [
       "clientid",
-      "disablemasking",
       "instanceurl",
       "setalias",
       "setdefaultdevhub",
       "setdefaultdevhubusername",
       "setdefaultusername"
-    ]
-  },
-  {
-    "command": "org:login:jwt",
-    "plugin": "@salesforce/plugin-auth",
+    ],
+    "flagChars": ["a", "d", "i", "r", "s"],
     "flags": [
       "alias",
       "client-id",
+      "flags-dir",
       "instance-url",
       "json",
-      "jwt-key-file",
       "loglevel",
-      "no-prompt",
       "set-default",
-      "set-default-dev-hub",
-      "username"
+      "set-default-dev-hub"
     ],
+    "plugin": "@salesforce/plugin-auth"
+  },
+  {
     "alias": ["force:auth:jwt:grant", "auth:jwt:grant"],
-    "flagChars": ["a", "d", "f", "i", "o", "p", "r", "s"],
+    "command": "org:login:jwt",
     "flagAliases": [
       "clientid",
       "instanceurl",
@@ -68,23 +71,26 @@
       "setdefaultusername",
       "u",
       "v"
-    ]
-  },
-  {
-    "command": "org:login:sfdx-url",
-    "plugin": "@salesforce/plugin-auth",
+    ],
+    "flagChars": ["a", "d", "f", "i", "o", "p", "r", "s"],
     "flags": [
       "alias",
+      "client-id",
+      "flags-dir",
+      "instance-url",
       "json",
+      "jwt-key-file",
       "loglevel",
       "no-prompt",
       "set-default",
       "set-default-dev-hub",
-      "sfdx-url-file",
-      "sfdx-url-stdin"
+      "username"
     ],
+    "plugin": "@salesforce/plugin-auth"
+  },
+  {
     "alias": ["force:auth:sfdxurl:store", "auth:sfdxurl:store"],
-    "flagChars": ["a", "d", "f", "p", "s", "u"],
+    "command": "org:login:sfdx-url",
     "flagAliases": [
       "noprompt",
       "setalias",
@@ -93,27 +99,26 @@
       "setdefaultusername",
       "sfdxurlfile",
       "sfdxurlstdin"
-    ]
-  },
-  {
-    "command": "org:login:web",
-    "plugin": "@salesforce/plugin-auth",
+    ],
+    "flagChars": ["a", "d", "f", "p", "s", "u"],
     "flags": [
       "alias",
-      "browser",
-      "client-id",
-      "instance-url",
+      "flags-dir",
       "json",
       "loglevel",
       "no-prompt",
       "set-default",
-      "set-default-dev-hub"
+      "set-default-dev-hub",
+      "sfdx-url-file",
+      "sfdx-url-stdin"
     ],
+    "plugin": "@salesforce/plugin-auth"
+  },
+  {
     "alias": ["force:auth:web:login", "auth:web:login"],
-    "flagChars": ["a", "b", "d", "i", "p", "r", "s"],
+    "command": "org:login:web",
     "flagAliases": [
       "clientid",
-      "disablemasking",
       "instanceurl",
       "l",
       "noprompt",
@@ -122,14 +127,28 @@
       "setdefaultdevhubusername",
       "setdefaultusername",
       "v"
-    ]
+    ],
+    "flagChars": ["a", "b", "d", "i", "p", "r", "s"],
+    "flags": [
+      "alias",
+      "browser",
+      "client-id",
+      "flags-dir",
+      "instance-url",
+      "json",
+      "loglevel",
+      "no-prompt",
+      "set-default",
+      "set-default-dev-hub"
+    ],
+    "plugin": "@salesforce/plugin-auth"
   },
   {
-    "command": "org:logout",
-    "plugin": "@salesforce/plugin-auth",
-    "flags": ["all", "json", "loglevel", "no-prompt", "target-org"],
     "alias": ["force:auth:logout", "auth:logout"],
+    "command": "org:logout",
+    "flagAliases": ["noprompt", "targetusername", "u"],
     "flagChars": ["a", "o", "p"],
-    "flagAliases": ["noprompt", "targetusername", "u"]
+    "flags": ["all", "flags-dir", "json", "loglevel", "no-prompt", "target-org"],
+    "plugin": "@salesforce/plugin-auth"
   }
 ]
