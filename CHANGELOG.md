@@ -1,3 +1,9 @@
+# [3.5.0](https://github.com/salesforcecli/plugin-auth/compare/3.4.0...3.5.0) (2024-03-25)
+
+### Features
+
+- bump sf-plugins-core ([#982](https://github.com/salesforcecli/plugin-auth/issues/982)) ([41ef0c6](https://github.com/salesforcecli/plugin-auth/commit/41ef0c647ddad841fbe59ded20dab71c3b804c61))
+
 # [3.4.0](https://github.com/salesforcecli/plugin-auth/compare/3.3.27...3.4.0) (2024-03-25)
 
 ### Features
