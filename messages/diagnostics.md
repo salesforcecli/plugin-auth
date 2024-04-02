@@ -8,4 +8,4 @@ Your current installation of Salesforce CLI, including all the plugins you've li
 
 # sfCryptoV2Desired
 
-SF_CRYPTO_V2=true is set but v1 crypto is actually in use. Your Salesforce CLI installation supports using v2 crypto. If you desire this behavior, follow the instructions in the documentation (provide link).
+SF_CRYPTO_V2=true is set in your environment, but you're actually using v1 crypto. Your Salesforce CLI installation supports using v2 crypto. If you desire this behavior, follow the instructions in the documentation (provide link).
