@@ -5,6 +5,7 @@
  * For full license text, see LICENSE.txt file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  */
 import childProcess from 'node:child_process';
+import { ExecOptions, PromiseWithChild } from 'node:child_process';
 import util from 'node:util';
 import { join } from 'node:path';
 import fs from 'node:fs';
@@ -14,6 +15,7 @@ import { asString, isString } from '@salesforce/ts-types';
 import { parseJsonMap } from '@salesforce/kit';
 
 type HookFunction = (options: { doctor: SfDoctor }) => Promise<[void]>;
+type PromisifiedExec = (command: string, options?: ExecOptions) => PromiseWithChild<{ stdout: string; stderr: string }>;
 
 let logger: Logger;
 const getLogger = (): Logger => {
@@ -27,9 +29,19 @@ const pluginName = '@salesforce/plugin-auth';
 Messages.importMessagesDirectoryFromMetaUrl(import.meta.url);
 const messages = Messages.loadMessages(pluginName, 'diagnostics');
 
+let exec: PromisifiedExec;
+
 export const hook: HookFunction = async (options) => {
   getLogger().debug(`Running SfDoctor diagnostics for ${pluginName}`);
-  return Promise.all([cryptoVersionTest(options.doctor)]);
+  exec = util.promisify(childProcess.exec);
+  try {
+    await exec('npm -v');
+    return await Promise.all([cryptoVersionTest(options.doctor)]);
+  } catch (e: unknown) {
+    const errMsg = e instanceof Error ? e.message : isString(e) ? e : 'unknown';
+    getLogger().warn(`Unable to run SfDoctor diagnostics for ${pluginName} due to: ${errMsg}`);
+    return Promise.resolve([undefined]);
+  }
 };
 
 type NpmExplanationDeps = {
@@ -127,8 +139,6 @@ const supportsCliV2Crypto = async (doctor: SfDoctor): Promise<boolean> => {
   let coreSupportsV2 = false;
   let pluginsSupportV2 = false;
   let linksSupportsV2 = false;
-
-  const exec = util.promisify(childProcess.exec);
 
   const { root, dataDir } = diagnosis.cliConfig;
   // check core CLI

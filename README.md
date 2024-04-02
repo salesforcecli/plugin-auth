@@ -84,10 +84,11 @@ List authorization information about the orgs you created or logged into.
 
 ```
 USAGE
-  $ sf org list auth [--json]
+  $ sf org list auth [--json] [--flags-dir <value>]
 
 GLOBAL FLAGS
-  --json  Format output as json.
+  --flags-dir=<value>  Import flag values from a directory.
+  --json               Format output as json.
 
 DESCRIPTION
   List authorization information about the orgs you created or logged into.
@@ -107,7 +108,7 @@ EXAMPLES
     $ sf org list auth
 ```
 
-_See code: [src/commands/org/list/auth.ts](https://github.com/salesforcecli/plugin-auth/blob/3.3.26/src/commands/org/list/auth.ts)_
+_See code: [src/commands/org/list/auth.ts](https://github.com/salesforcecli/plugin-auth/blob/3.5.1/src/commands/org/list/auth.ts)_
 
 ## `sf org login access-token`
 
@@ -115,7 +116,7 @@ Authorize an org using an existing Salesforce access token.
 
 ```
 USAGE
-  $ sf org login access-token -r <value> [--json] [-d] [-s] [-a <value>] [-p]
+  $ sf org login access-token -r <value> [--json] [--flags-dir <value>] [-d] [-s] [-a <value>] [-p]
 
 FLAGS
   -a, --alias=<value>         Alias for the org.
@@ -125,7 +126,8 @@ FLAGS
   -s, --set-default           Set the authenticated org as the default that all org-related commands run against.
 
 GLOBAL FLAGS
-  --json  Format output as json.
+  --flags-dir=<value>  Import flag values from a directory.
+  --json               Format output as json.
 
 DESCRIPTION
   Authorize an org using an existing Salesforce access token.
@@ -160,7 +162,7 @@ FLAG DESCRIPTIONS
     To specify a sandbox, set --instance-url to "https://<MyDomainName>--<SandboxName>.sandbox.my.salesforce.com".
 ```
 
-_See code: [src/commands/org/login/access-token.ts](https://github.com/salesforcecli/plugin-auth/blob/3.3.26/src/commands/org/login/access-token.ts)_
+_See code: [src/commands/org/login/access-token.ts](https://github.com/salesforcecli/plugin-auth/blob/3.5.1/src/commands/org/login/access-token.ts)_
 
 ## `sf org login device`
 
@@ -168,7 +170,7 @@ Authorize an org using a device code.
 
 ```
 USAGE
-  $ sf org login device [--json] [-i <value>] [-r <value>] [-d] [-s] [-a <value>]
+  $ sf org login device [--json] [--flags-dir <value>] [-i <value>] [-r <value>] [-d] [-s] [-a <value>]
 
 FLAGS
   -a, --alias=<value>         Alias for the org.
@@ -178,7 +180,8 @@ FLAGS
   -s, --set-default           Set the authenticated org as the default that all org-related commands run against.
 
 GLOBAL FLAGS
-  --json  Format output as json.
+  --flags-dir=<value>  Import flag values from a directory.
+  --json               Format output as json.
 
 DESCRIPTION
   Authorize an org using a device code.
@@ -219,7 +222,7 @@ FLAG DESCRIPTIONS
     To specify a sandbox, set --instance-url to "https://<MyDomainName>--<SandboxName>.sandbox.my.salesforce.com".
 ```
 
-_See code: [src/commands/org/login/device.ts](https://github.com/salesforcecli/plugin-auth/blob/3.3.26/src/commands/org/login/device.ts)_
+_See code: [src/commands/org/login/device.ts](https://github.com/salesforcecli/plugin-auth/blob/3.5.1/src/commands/org/login/device.ts)_
 
 ## `sf org login jwt`
 
@@ -227,7 +230,8 @@ Log in to a Salesforce org using a JSON web token (JWT).
 
 ```
 USAGE
-  $ sf org login jwt -o <value> -f <value> -i <value> [--json] [-r <value>] [-d] [-s] [-a <value>]
+  $ sf org login jwt -o <value> -f <value> -i <value> [--json] [--flags-dir <value>] [-r <value>] [-d] [-s] [-a
+    <value>]
 
 FLAGS
   -a, --alias=<value>         Alias for the org.
@@ -239,7 +243,8 @@ FLAGS
   -s, --set-default           Set the authenticated org as the default that all org-related commands run against.
 
 GLOBAL FLAGS
-  --json  Format output as json.
+  --flags-dir=<value>  Import flag values from a directory.
+  --json               Format output as json.
 
 DESCRIPTION
   Log in to a Salesforce org using a JSON web token (JWT).
@@ -308,7 +313,7 @@ FLAG DESCRIPTIONS
     To specify a sandbox, set --instance-url to "https://<MyDomainName>--<SandboxName>.sandbox.my.salesforce.com".
 ```
 
-_See code: [src/commands/org/login/jwt.ts](https://github.com/salesforcecli/plugin-auth/blob/3.3.26/src/commands/org/login/jwt.ts)_
+_See code: [src/commands/org/login/jwt.ts](https://github.com/salesforcecli/plugin-auth/blob/3.5.1/src/commands/org/login/jwt.ts)_
 
 ## `sf org login sfdx-url`
 
@@ -316,7 +321,7 @@ Authorize an org using a Salesforce DX authorization URL stored in a file or thr
 
 ```
 USAGE
-  $ sf org login sfdx-url [--json] [-f <value>] [-u <value>] [-d] [-s] [-a <value>]
+  $ sf org login sfdx-url [--json] [--flags-dir <value>] [-f <value>] [-u <value>] [-d] [-s] [-a <value>]
 
 FLAGS
   -a, --alias=<value>           Alias for the org.
@@ -326,7 +331,8 @@ FLAGS
   -u, --sfdx-url-stdin=<value>  Pipe the Salesforce DX authorization URL through standard input (stdin).
 
 GLOBAL FLAGS
-  --json  Format output as json.
+  --flags-dir=<value>  Import flag values from a directory.
+  --json               Format output as json.
 
 DESCRIPTION
   Authorize an org using a Salesforce DX authorization URL stored in a file or through standard input (stdin).
@@ -373,7 +379,7 @@ EXAMPLES
    $ echo url | sf org login sfdx-url --sfdx-url-stdin
 ```
 
-_See code: [src/commands/org/login/sfdx-url.ts](https://github.com/salesforcecli/plugin-auth/blob/3.3.26/src/commands/org/login/sfdx-url.ts)_
+_See code: [src/commands/org/login/sfdx-url.ts](https://github.com/salesforcecli/plugin-auth/blob/3.5.1/src/commands/org/login/sfdx-url.ts)_
 
 ## `sf org login web`
 
@@ -381,7 +387,8 @@ Log in to a Salesforce org using the web server flow.
 
 ```
 USAGE
-  $ sf org login web [--json] [-b chrome|edge|firefox] [-i <value>] [-r <value>] [-d] [-s] [-a <value>]
+  $ sf org login web [--json] [--flags-dir <value>] [-b chrome|edge|firefox] [-i <value>] [-r <value>] [-d] [-s]
+    [-a <value>]
 
 FLAGS
   -a, --alias=<value>         Alias for the org.
@@ -393,7 +400,8 @@ FLAGS
   -s, --set-default           Set the authenticated org as the default that all org-related commands run against.
 
 GLOBAL FLAGS
-  --json  Format output as json.
+  --flags-dir=<value>  Import flag values from a directory.
+  --json               Format output as json.
 
 DESCRIPTION
   Log in to a Salesforce org using the web server flow.
@@ -458,7 +466,7 @@ FLAG DESCRIPTIONS
     To specify a sandbox, set --instance-url to "https://<MyDomainName>--<SandboxName>.sandbox.my.salesforce.com".
 ```
 
-_See code: [src/commands/org/login/web.ts](https://github.com/salesforcecli/plugin-auth/blob/3.3.26/src/commands/org/login/web.ts)_
+_See code: [src/commands/org/login/web.ts](https://github.com/salesforcecli/plugin-auth/blob/3.5.1/src/commands/org/login/web.ts)_
 
 ## `sf org logout`
 
@@ -466,7 +474,7 @@ Log out of a Salesforce org.
 
 ```
 USAGE
-  $ sf org logout [--json] [-a | -o <value>] [-p]
+  $ sf org logout [--json] [--flags-dir <value>] [-a | -o <value>] [-p]
 
 FLAGS
   -a, --all                 Include all authenticated orgs.
@@ -474,7 +482,8 @@ FLAGS
   -p, --no-prompt           Don't prompt for confirmation.
 
 GLOBAL FLAGS
-  --json  Format output as json.
+  --flags-dir=<value>  Import flag values from a directory.
+  --json               Format output as json.
 
 DESCRIPTION
   Log out of a Salesforce org.
@@ -518,6 +527,6 @@ FLAG DESCRIPTIONS
     All orgs includes Dev Hubs, sandboxes, DE orgs, and expired, deleted, and unknown-status scratch orgs.
 ```
 
-_See code: [src/commands/org/logout.ts](https://github.com/salesforcecli/plugin-auth/blob/3.3.26/src/commands/org/logout.ts)_
+_See code: [src/commands/org/logout.ts](https://github.com/salesforcecli/plugin-auth/blob/3.5.1/src/commands/org/logout.ts)_
 
 <!-- commandsstop -->

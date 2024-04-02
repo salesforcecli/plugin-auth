@@ -1,3 +1,27 @@
+## [3.5.1](https://github.com/salesforcecli/plugin-auth/compare/3.5.0...3.5.1) (2024-03-30)
+
+### Bug Fixes
+
+- **deps:** bump @salesforce/kit from 3.0.15 to 3.1.0 ([7f03441](https://github.com/salesforcecli/plugin-auth/commit/7f03441ff3068e0a72177b620c3e28176fb86d73))
+
+# [3.5.0](https://github.com/salesforcecli/plugin-auth/compare/3.4.0...3.5.0) (2024-03-25)
+
+### Features
+
+- bump sf-plugins-core ([#982](https://github.com/salesforcecli/plugin-auth/issues/982)) ([41ef0c6](https://github.com/salesforcecli/plugin-auth/commit/41ef0c647ddad841fbe59ded20dab71c3b804c61))
+
+# [3.4.0](https://github.com/salesforcecli/plugin-auth/compare/3.3.27...3.4.0) (2024-03-25)
+
+### Features
+
+- lightning url check from sfdx-core ([#955](https://github.com/salesforcecli/plugin-auth/issues/955)) ([c5921ec](https://github.com/salesforcecli/plugin-auth/commit/c5921ec7b495ae94a828c607865d3a8be43b8bf1))
+
+## [3.3.27](https://github.com/salesforcecli/plugin-auth/compare/3.3.26...3.3.27) (2024-03-22)
+
+### Bug Fixes
+
+- bump salesforce/core ([#975](https://github.com/salesforcecli/plugin-auth/issues/975)) ([e8ce3f7](https://github.com/salesforcecli/plugin-auth/commit/e8ce3f70baeaffaafaf3778ce6d34fc0476e8b5d))
+
 ## [3.3.26](https://github.com/salesforcecli/plugin-auth/compare/3.3.25...3.3.26) (2024-03-17)
 
 ### Bug Fixes
