@@ -15,7 +15,7 @@ import Logout from '../../../src/commands/org/logout.js';
 Messages.importMessagesDirectoryFromMetaUrl(import.meta.url);
 const messages = Messages.loadMessages('@salesforce/plugin-auth', 'logout');
 
-interface Options {
+type Options = {
   authFiles?: string[];
   'target-org'?: string;
   'target-dev-hub'?: string;
