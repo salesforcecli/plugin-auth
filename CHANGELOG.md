@@ -1,3 +1,9 @@
+## [3.5.2](https://github.com/salesforcecli/plugin-auth/compare/3.5.1...3.5.2) (2024-04-05)
+
+### Bug Fixes
+
+- add doctor diagnostic tests for v2 crypto ([#939](https://github.com/salesforcecli/plugin-auth/issues/939)) ([961fdac](https://github.com/salesforcecli/plugin-auth/commit/961fdacd8d246b3e1b4966c1655200cc20752221))
+
 ## [3.5.1](https://github.com/salesforcecli/plugin-auth/compare/3.5.0...3.5.1) (2024-03-30)
 
 ### Bug Fixes
