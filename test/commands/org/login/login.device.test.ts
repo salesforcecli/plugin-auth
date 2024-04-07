@@ -15,7 +15,7 @@ import { expect } from 'chai';
 import { Config } from '@oclif/core';
 import { SfCommand } from '@salesforce/sf-plugins-core';
 import Login from '../../../../src/commands/org/login/device.js';
-interface Options {
+type Options = {
   approvalTimesout?: boolean;
   approvalFails?: boolean;
 }

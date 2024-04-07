@@ -12,7 +12,7 @@ import { expect } from 'chai';
 import { Config } from '@oclif/core';
 import LoginJwt from '../../../../src/commands/org/login/jwt.js';
 
-interface Options {
+type Options = {
   authInfoCreateFails?: boolean;
   existingAuth?: boolean;
 }
