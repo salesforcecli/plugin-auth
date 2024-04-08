@@ -19,7 +19,13 @@ import LoginWeb from '../../../../src/commands/org/login/web.js';
 describe('org:login:web', () => {
   const $$ = new TestContext();
   const testData = new MockTestOrgData();
-  const config = stubInterface<Config>($$.SANDBOX, {});
+  const config = stubInterface<Config>($$.SANDBOX, {
+    runHook: async () =>
+      Promise.resolve({
+        successes: [],
+        failures: [],
+      }),
+  });
   let authFields: AuthFields;
   let authInfoStub: StubbedType<AuthInfo>;
   let uxStub: StubbedType<Ux>;

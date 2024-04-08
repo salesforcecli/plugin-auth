@@ -12,13 +12,12 @@ import { MockTestOrgData, TestContext } from '@salesforce/core/lib/testSetup.js'
 import { StubbedType, stubInterface, stubMethod } from '@salesforce/ts-sinon';
 import { DeviceCodeResponse } from '@salesforce/core/lib/deviceOauthService.js';
 import { expect } from 'chai';
-import { Config } from '@oclif/core';
-import { SfCommand } from '@salesforce/sf-plugins-core';
+import { SfCommand, stubUx } from '@salesforce/sf-plugins-core';
 import Login from '../../../../src/commands/org/login/device.js';
 type Options = {
   approvalTimesout?: boolean;
   approvalFails?: boolean;
-}
+};
 
 describe('org:login:device', () => {
   const $$ = new TestContext();
@@ -65,42 +64,39 @@ describe('org:login:device', () => {
 
     stubMethod($$.SANDBOX, AuthInfo, 'create').resolves(authInfoStub);
     await $$.stubAuths(testData);
+    stubUx($$.SANDBOX);
+    stubMethod($$.SANDBOX, SfCommand.prototype, 'logSuccess');
   }
 
   it('should return auth fields', async () => {
     await prepareStubs();
-    const login = new Login(['--json'], {} as Config);
-    const response = await login.run();
+    const response = await Login.run(['--json']);
     expect(response.username).to.equal(testData.username);
   });
 
   it('should return auth fields with instance url', async () => {
     await prepareStubs();
-    const login = new Login(['-r', 'https://login.salesforce.com', '--json'], {} as Config);
-    const response = await login.run();
+    const response = await Login.run(['-r', 'https://login.salesforce.com', '--json']);
     expect(response.username).to.equal(testData.username);
   });
 
   it('should set alias when -a is provided', async () => {
     await prepareStubs();
-    const login = new Login(['-a', 'MyAlias', '--json'], {} as Config);
-    const response = await login.run();
+    const response = await Login.run(['-a', 'MyAlias', '--json']);
     expect(response.username).to.equal(testData.username);
     expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
   });
 
   it('should set target-org when -s is provided', async () => {
     await prepareStubs();
-    const login = new Login(['-s', '--json'], {} as Config);
-    const response = await login.run();
+    const response = await Login.run(['-s', '--json']);
     expect(response.username).to.equal(testData.username);
     expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
   });
 
   it('should set target-dev-hub when -d is provided', async () => {
     await prepareStubs();
-    const login = new Login(['-d', '--json'], {} as Config);
-    const response = await login.run();
+    const response = await Login.run(['-d', '--json']);
     expect(response.username).to.equal(testData.username);
     expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
   });
@@ -109,17 +105,15 @@ describe('org:login:device', () => {
     await prepareStubs();
     const styledHeaderSpy = $$.SANDBOX.spy(SfCommand.prototype, 'styledHeader');
     const logSpy = $$.SANDBOX.spy(SfCommand.prototype, 'log');
-    const login = new Login([], {} as Config);
-    await login.run();
+    await Login.run([]);
     expect(styledHeaderSpy.calledOnce).to.be.true;
     expect(logSpy.callCount).to.be.greaterThan(0);
   });
 
   it('should gracefully handle approval timeout', async () => {
     await prepareStubs({ approvalTimesout: true });
-    const login = new Login(['--json'], {} as Config);
     try {
-      const response = await login.run();
+      const response = await Login.run(['--json']);
       expect.fail(`should have thrown: ${JSON.stringify(response)}`);
     } catch (e) {
       expect((e as Error).name).to.equal('polling timeout');
@@ -128,16 +122,14 @@ describe('org:login:device', () => {
 
   it('should gracefully handle failed approval', async () => {
     await prepareStubs({ approvalFails: true });
-    const login = new Login(['--json'], {} as Config);
-    const response = await login.run();
+    const response = await Login.run(['--json']);
     expect(response).to.deep.equal({});
   });
 
   it('should prompt for client secret if client id is provided', async () => {
     await prepareStubs();
     $$.SANDBOX.stub(SfCommand.prototype, 'secretPrompt').resolves('1234');
-    const login = new Login(['-i', 'CoffeeBeans', '--json'], {} as Config);
-    const response = await login.run();
+    const response = await Login.run(['-i', 'CoffeeBeans', '--json']);
     expect(response.username).to.equal(testData.username);
   });
 });
