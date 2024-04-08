@@ -9,7 +9,7 @@ import { AuthFields, AuthInfo, SfError } from '@salesforce/core';
 import { MockTestOrgData, TestContext } from '@salesforce/core/lib/testSetup.js';
 import { StubbedType, stubInterface } from '@salesforce/ts-sinon';
 import { expect } from 'chai';
-import { Config } from '@oclif/core';
+import { stubUx } from '@salesforce/sf-plugins-core';
 import LoginJwt from '../../../../src/commands/org/login/jwt.js';
 
 interface Options {
@@ -49,35 +49,36 @@ describe('org:login:jwt', () => {
       // @ts-ignore
       $$.SANDBOX.stub(AuthInfo, 'create').resolves(authInfoStub);
     }
+
+    stubUx($$.SANDBOX);
   }
 
   it('should return auth fields', async () => {
     await prepareStubs();
-    const grant = new LoginJwt(
-      ['-u', testData.username, '-f', 'path/to/key.json', '-i', '123456', '--json'],
-      {} as Config
-    );
-    const response = await grant.run();
+    const response = await LoginJwt.run(['-u', testData.username, '-f', 'path/to/key.json', '-i', '123456', '--json']);
     expect(response.username).to.equal(testData.username);
   });
 
   it('should set alias when -a is provided', async () => {
     await prepareStubs();
-    const grant = new LoginJwt(
-      ['-u', testData.username, '-f', 'path/to/key.json', '-i', '123456', '-a', 'MyAlias', '--json'],
-      {} as Config
-    );
-    await grant.run();
+    await LoginJwt.run(['-u', testData.username, '-f', 'path/to/key.json', '-i', '123456', '-a', 'MyAlias', '--json']);
     expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
   });
 
   it('should set target-org to alias when -s and -a are provided', async () => {
     await prepareStubs();
-    const grant = new LoginJwt(
-      ['-u', testData.username, '-f', 'path/to/key.json', '-i', '123456', '-a', 'MyAlias', '-s', '--json'],
-      {} as Config
-    );
-    await grant.run();
+    await LoginJwt.run([
+      '-u',
+      testData.username,
+      '-f',
+      'path/to/key.json',
+      '-i',
+      '123456',
+      '-a',
+      'MyAlias',
+      '-s',
+      '--json',
+    ]);
     expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
     expect(authInfoStub.handleAliasAndDefaultSettings.args[0]).to.deep.equal([
       {
@@ -90,11 +91,7 @@ describe('org:login:jwt', () => {
 
   it('should set target-org to username when -s is provided', async () => {
     await prepareStubs();
-    const grant = new LoginJwt(
-      ['-u', testData.username, '-f', 'path/to/key.json', '-i', '123456', '-s', '--json'],
-      {} as Config
-    );
-    await grant.run();
+    await LoginJwt.run(['-u', testData.username, '-f', 'path/to/key.json', '-i', '123456', '-s', '--json']);
     expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
     expect(authInfoStub.handleAliasAndDefaultSettings.args[0]).to.deep.equal([
       {
@@ -107,11 +104,18 @@ describe('org:login:jwt', () => {
 
   it('should set target-dev-hub to alias when -d and -a are provided', async () => {
     await prepareStubs();
-    const grant = new LoginJwt(
-      ['-u', testData.username, '-f', 'path/to/key.json', '-i', '123456', '-a', 'MyAlias', '-d', '--json'],
-      {} as Config
-    );
-    await grant.run();
+    await LoginJwt.run([
+      '-u',
+      testData.username,
+      '-f',
+      'path/to/key.json',
+      '-i',
+      '123456',
+      '-a',
+      'MyAlias',
+      '-d',
+      '--json',
+    ]);
     expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
     expect(authInfoStub.handleAliasAndDefaultSettings.args[0]).to.deep.equal([
       {
@@ -124,11 +128,7 @@ describe('org:login:jwt', () => {
 
   it('should set target-dev-hub to username when -d is provided', async () => {
     await prepareStubs();
-    const grant = new LoginJwt(
-      ['-u', testData.username, '-f', 'path/to/key.json', '-i', '123456', '-d', '--json'],
-      {} as Config
-    );
-    await grant.run();
+    await LoginJwt.run(['-u', testData.username, '-f', 'path/to/key.json', '-i', '123456', '-d', '--json']);
     expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
     expect(authInfoStub.handleAliasAndDefaultSettings.args[0]).to.deep.equal([
       {
@@ -141,11 +141,7 @@ describe('org:login:jwt', () => {
 
   it('should set target-org and target-dev-hub to username when -d and -s are provided', async () => {
     await prepareStubs();
-    const grant = new LoginJwt(
-      ['-u', testData.username, '-f', 'path/to/key.json', '-i', '123456', '-d', '-s', '--json'],
-      {} as Config
-    );
-    await grant.run();
+    await LoginJwt.run(['-u', testData.username, '-f', 'path/to/key.json', '-i', '123456', '-d', '-s', '--json']);
     expect(authInfoStub.setAlias.callCount).to.equal(0);
     expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
     expect(authInfoStub.handleAliasAndDefaultSettings.args[0]).to.deep.equal([
@@ -159,11 +155,19 @@ describe('org:login:jwt', () => {
 
   it('should set target-org and target-dev-hub to alias when -a, -d, and -s are provided', async () => {
     await prepareStubs();
-    const grant = new LoginJwt(
-      ['-u', testData.username, '-f', 'path/to/key.json', '-i', '123456', '-d', '-s', '-a', 'MyAlias', '--json'],
-      {} as Config
-    );
-    await grant.run();
+    await LoginJwt.run([
+      '-u',
+      testData.username,
+      '-f',
+      'path/to/key.json',
+      '-i',
+      '123456',
+      '-d',
+      '-s',
+      '-a',
+      'MyAlias',
+      '--json',
+    ]);
     expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
     expect(authInfoStub.handleAliasAndDefaultSettings.args[0]).to.deep.equal([
       {
@@ -176,12 +180,8 @@ describe('org:login:jwt', () => {
 
   it('should throw an error when client id is invalid', async () => {
     await prepareStubs({ authInfoCreateFails: true });
-    const grant = new LoginJwt(
-      ['-u', testData.username, '-f', 'path/to/key.json', '-i', '123456INVALID', '--json'],
-      {} as Config
-    );
     try {
-      await grant.run();
+      await LoginJwt.run(['-u', testData.username, '-f', 'path/to/key.json', '-i', '123456INVALID', '--json']);
       expect.fail('Should have thrown an error');
     } catch (e) {
       expect((e as Error).message).to.include('We encountered a JSON web token error');
@@ -190,12 +190,8 @@ describe('org:login:jwt', () => {
 
   it('should not throw an error when the authorization already exists', async () => {
     await prepareStubs({ existingAuth: true });
-    const grant = new LoginJwt(
-      ['-u', testData.username, '-f', 'path/to/key.json', '-i', '123456', '--json'],
-      {} as Config
-    );
     try {
-      await grant.run();
+      await LoginJwt.run(['-u', testData.username, '-f', 'path/to/key.json', '-i', '123456', '--json']);
     } catch (e) {
       expect.fail('Should not have thrown an error');
     }

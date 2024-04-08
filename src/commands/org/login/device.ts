@@ -8,7 +8,6 @@
 import { AuthFields, AuthInfo, DeviceOauthService, Messages, OAuth2Config } from '@salesforce/core';
 import { Flags, SfCommand, loglevel } from '@salesforce/sf-plugins-core';
 import { DeviceCodeResponse } from '@salesforce/core/lib/deviceOauthService.js';
-import { ux } from '@oclif/core';
 import common from '../../../common.js';
 
 Messages.importMessagesDirectoryFromMetaUrl(import.meta.url);
@@ -72,7 +71,7 @@ export default class LoginDevice extends SfCommand<DeviceLoginResult> {
     const loginData = await deviceOauthService.requestDeviceLogin();
 
     if (this.jsonEnabled()) {
-      ux.log(JSON.stringify(loginData, null, 2));
+      this.log(JSON.stringify(loginData, null, 2));
     } else {
       this.styledHeader(messages.getMessage('actionRequired'));
       this.log(messages.getMessage('enterCode', [loginData.user_code, loginData.verification_uri]));
