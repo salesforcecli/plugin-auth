@@ -17,7 +17,7 @@
     "open": "^10.1.0"
   },
   "devDependencies": {
-    "@oclif/plugin-command-snapshot": "^5.1.2",
+    "@oclif/plugin-command-snapshot": "^5.1.4",
     "@salesforce/cli-plugins-testkit": "^5.1.12",
     "@salesforce/dev-scripts": "^8.5.0",
     "@salesforce/plugin-command-reference": "^3.0.75",
