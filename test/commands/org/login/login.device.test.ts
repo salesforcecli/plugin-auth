@@ -14,10 +14,10 @@ import { DeviceCodeResponse } from '@salesforce/core/lib/deviceOauthService.js';
 import { expect } from 'chai';
 import { SfCommand, stubUx } from '@salesforce/sf-plugins-core';
 import Login from '../../../../src/commands/org/login/device.js';
-interface Options {
+type Options = {
   approvalTimesout?: boolean;
   approvalFails?: boolean;
-}
+};
 
 describe('org:login:device', () => {
   const $$ = new TestContext();

@@ -12,10 +12,10 @@ import { expect } from 'chai';
 import { stubUx } from '@salesforce/sf-plugins-core';
 import LoginJwt from '../../../../src/commands/org/login/jwt.js';
 
-interface Options {
+type Options = {
   authInfoCreateFails?: boolean;
   existingAuth?: boolean;
-}
+};
 
 describe('org:login:jwt', () => {
   const $$ = new TestContext();

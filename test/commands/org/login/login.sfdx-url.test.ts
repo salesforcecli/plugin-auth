@@ -13,11 +13,11 @@ import { StubbedType, stubInterface, stubMethod } from '@salesforce/ts-sinon';
 import { stubUx } from '@salesforce/sf-plugins-core';
 import LoginSfdxUrl from '../../../../src/commands/org/login/sfdx-url.js';
 
-interface Options {
+type Options = {
   authInfoCreateFails?: boolean;
   existingAuth?: boolean;
   fileDoesNotExist?: boolean;
-}
+};
 
 describe('org:login:sfdx-url', () => {
   const $$ = new TestContext();
