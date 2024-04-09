@@ -1,3 +1,9 @@
+## [3.5.5](https://github.com/salesforcecli/plugin-auth/compare/3.5.4...3.5.5) (2024-04-09)
+
+### Bug Fixes
+
+- don't do deep imports from sfdx-core ([#998](https://github.com/salesforcecli/plugin-auth/issues/998)) ([7f4c87c](https://github.com/salesforcecli/plugin-auth/commit/7f4c87c6313b054e179a43595463176b336d1165))
+
 ## [3.5.4](https://github.com/salesforcecli/plugin-auth/compare/3.5.3...3.5.4) (2024-04-08)
 
 ### Bug Fixes
