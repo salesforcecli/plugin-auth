@@ -1,3 +1,9 @@
+# [3.6.0](https://github.com/salesforcecli/plugin-auth/compare/3.5.6...3.6.0) (2024-04-10)
+
+### Features
+
+- core7, jsforce-node ([f47cc83](https://github.com/salesforcecli/plugin-auth/commit/f47cc835c99e930d5ef7f9948866c82513afd56e))
+
 ## [3.5.6](https://github.com/salesforcecli/plugin-auth/compare/3.5.5...3.5.6) (2024-04-10)
 
 ### Bug Fixes
