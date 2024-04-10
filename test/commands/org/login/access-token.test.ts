@@ -7,7 +7,7 @@
 
 import { AuthFields, AuthInfo, StateAggregator } from '@salesforce/core';
 import { assert, expect } from 'chai';
-import { TestContext } from '@salesforce/core/lib/testSetup.js';
+import { TestContext } from '@salesforce/core/testSetup';
 import { stubPrompter, stubSfCommandUx } from '@salesforce/sf-plugins-core';
 import { env } from '@salesforce/kit';
 import Store from '../../../../src/commands/org/login/access-token.js';

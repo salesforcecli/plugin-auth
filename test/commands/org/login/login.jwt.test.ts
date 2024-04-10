@@ -6,7 +6,7 @@
  */
 
 import { AuthFields, AuthInfo, SfError } from '@salesforce/core';
-import { MockTestOrgData, TestContext } from '@salesforce/core/lib/testSetup.js';
+import { MockTestOrgData, TestContext } from '@salesforce/core/testSetup';
 import { StubbedType, stubInterface } from '@salesforce/ts-sinon';
 import { expect } from 'chai';
 import { stubUx } from '@salesforce/sf-plugins-core';

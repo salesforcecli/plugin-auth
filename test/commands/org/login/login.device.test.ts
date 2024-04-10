@@ -8,7 +8,7 @@
 /* eslint-disable camelcase */
 
 import { type AuthFields, AuthInfo, type DeviceCodeResponse, DeviceOauthService } from '@salesforce/core';
-import { MockTestOrgData, TestContext } from '@salesforce/core/lib/testSetup.js';
+import { MockTestOrgData, TestContext } from '@salesforce/core/testSetup';
 import { StubbedType, stubInterface, stubMethod } from '@salesforce/ts-sinon';
 import { expect } from 'chai';
 import { SfCommand, stubUx } from '@salesforce/sf-plugins-core';
