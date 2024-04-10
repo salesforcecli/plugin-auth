@@ -40,4 +40,4 @@ Pipe the Salesforce DX authorization URL through standard input (stdin).
 
 - Pipe the SFDX authorization URL from stdin:
 
-  <%= "\n $ echo url | " + config.bin %> <%= command.id %> --sfdx-url-stdin
+  $ echo url | sf <%= command.id %> --sfdx-url-stdin
