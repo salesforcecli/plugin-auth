@@ -7,7 +7,7 @@
 
 import fs from 'node:fs/promises';
 import { AuthFields, AuthInfo } from '@salesforce/core';
-import { MockTestOrgData, TestContext } from '@salesforce/core/lib/testSetup.js';
+import { MockTestOrgData, TestContext } from '@salesforce/core/testSetup';
 import { expect } from 'chai';
 import { StubbedType, stubInterface, stubMethod } from '@salesforce/ts-sinon';
 import { stubUx } from '@salesforce/sf-plugins-core';

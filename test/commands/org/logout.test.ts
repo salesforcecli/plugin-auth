@@ -6,7 +6,7 @@
  */
 
 import { AuthRemover, ConfigContents, Global, Mode, Messages } from '@salesforce/core';
-import { MockTestOrgData, TestContext } from '@salesforce/core/lib/testSetup.js';
+import { MockTestOrgData, TestContext } from '@salesforce/core/testSetup';
 import { expect } from 'chai';
 import { stubPrompter, stubUx } from '@salesforce/sf-plugins-core';
 import Logout from '../../../src/commands/org/logout.js';
