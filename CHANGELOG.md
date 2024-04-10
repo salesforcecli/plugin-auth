@@ -1,3 +1,9 @@
+## [3.5.6](https://github.com/salesforcecli/plugin-auth/compare/3.5.5...3.5.6) (2024-04-10)
+
+### Bug Fixes
+
+- typo in piping URL example ([#999](https://github.com/salesforcecli/plugin-auth/issues/999)) ([c100cfb](https://github.com/salesforcecli/plugin-auth/commit/c100cfb130951d9ea346947e391b0082b65d2aaf))
+
 ## [3.5.5](https://github.com/salesforcecli/plugin-auth/compare/3.5.4...3.5.5) (2024-04-09)
 
 ### Bug Fixes
