@@ -1,3 +1,9 @@
+## [3.6.1](https://github.com/salesforcecli/plugin-auth/compare/3.6.0...3.6.1) (2024-04-11)
+
+### Bug Fixes
+
+- **deps:** bump plugin-info for doctor ([#1001](https://github.com/salesforcecli/plugin-auth/issues/1001)) ([337ac8e](https://github.com/salesforcecli/plugin-auth/commit/337ac8ea1767d0de3ed782f2779347b9a021862e))
+
 # [3.6.0](https://github.com/salesforcecli/plugin-auth/compare/3.5.6...3.6.0) (2024-04-10)
 
 ### Features
