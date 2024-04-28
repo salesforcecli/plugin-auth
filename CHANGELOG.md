@@ -1,3 +1,9 @@
+## [3.6.5](https://github.com/salesforcecli/plugin-auth/compare/3.6.4...3.6.5) (2024-04-28)
+
+### Bug Fixes
+
+- **deps:** bump @salesforce/sf-plugins-core from 9.0.1 to 9.0.5 ([18a711e](https://github.com/salesforcecli/plugin-auth/commit/18a711e5234e821fe270fc01d6fc7a71c456a402))
+
 ## [3.6.4](https://github.com/salesforcecli/plugin-auth/compare/3.6.3...3.6.4) (2024-04-27)
 
 ### Bug Fixes
