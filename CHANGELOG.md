@@ -1,3 +1,9 @@
+## [3.6.6](https://github.com/salesforcecli/plugin-auth/compare/3.6.5...3.6.6) (2024-05-03)
+
+### Bug Fixes
+
+- **deps:** bump ejs from 3.1.9 to 3.1.10 ([c04f696](https://github.com/salesforcecli/plugin-auth/commit/c04f69602f945754d69e1d5e48ceeb3d0bca2ef6))
+
 ## [3.6.5](https://github.com/salesforcecli/plugin-auth/compare/3.6.4...3.6.5) (2024-04-28)
 
 ### Bug Fixes
