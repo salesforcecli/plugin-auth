@@ -1,3 +1,9 @@
+## [3.6.12](https://github.com/salesforcecli/plugin-auth/compare/3.6.11...3.6.12) (2024-05-17)
+
+### Bug Fixes
+
+- keep original error and fail the diagnostic test ([6aeaeff](https://github.com/salesforcecli/plugin-auth/commit/6aeaeffdb4f6bd61e6e022311c25e7b78f98e6b1))
+
 ## [3.6.11](https://github.com/salesforcecli/plugin-auth/compare/3.6.10...3.6.11) (2024-05-12)
 
 ### Bug Fixes
