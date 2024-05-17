@@ -64,7 +64,7 @@ describe('Doctor diagnostics', () => {
     sandbox.restore();
   });
 
-  it('should warn when CLI does not support v2 crypto', async () => {
+  it('should fail when CLI does not support v2 crypto', async () => {
     sandbox.stub(util, 'promisify').returns(() => ({ stdout: JSON.stringify([{ version: '6.5.0' }]) }));
     process.env.SF_USE_GENERIC_UNIX_KEYCHAIN = 'false';
 
@@ -86,7 +86,7 @@ describe('Doctor diagnostics', () => {
     expect(lifecycleEmitStub.args[0][0]).to.equal('Doctor:diagnostic');
     expect(lifecycleEmitStub.args[0][1]).to.deep.equal({
       testName: `[${pluginName}] CLI supports v2 crypto`,
-      status: 'warn',
+      status: 'fail',
     });
   });
 
@@ -135,7 +135,7 @@ describe('Doctor diagnostics', () => {
     expect(lifecycleEmitStub.args[0][0]).to.equal('Doctor:diagnostic');
     expect(lifecycleEmitStub.args[0][1]).to.deep.equal({
       testName: `[${pluginName}] CLI supports v2 crypto`,
-      status: 'warn',
+      status: 'fail',
     });
     expect(addSuggestionStub.args[1][0]).to.equal(messages.getMessage('sfCryptoV2Unstable'));
     expect(lifecycleEmitStub.args[1][0]).to.equal('Doctor:diagnostic');
