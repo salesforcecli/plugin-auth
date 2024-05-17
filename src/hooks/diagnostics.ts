@@ -100,7 +100,7 @@ const cryptoVersionTest = async (doctor: SfDoctor): Promise<void> => {
   const testName1 = `[${pluginName}] CLI supports v2 crypto`;
   let status1 = 'pass';
   if (!sfCryptoV2Support) {
-    status1 = 'warn';
+    status1 = 'fail';
     doctor.addSuggestion(messages.getMessage('sfCryptoV2Support'));
   }
   void Lifecycle.getInstance().emit('Doctor:diagnostic', { testName: testName1, status: status1 });

@@ -102,8 +102,8 @@ export default class LoginWeb extends SfCommand<AuthFields> {
       return fields;
     } catch (err) {
       Logger.childFromRoot('LoginWebCommand').debug(err);
-      if (err instanceof Error && err.name === 'AuthCodeExchangeError') {
-        throw new SfError(messages.getMessage('invalidClientId', [err.message]), undefined, undefined, err);
+      if (err instanceof SfError && err.name === 'AuthCodeExchangeError') {
+        err.message = messages.getMessage('invalidClientId', [err.message]);
       }
       throw err;
     }
