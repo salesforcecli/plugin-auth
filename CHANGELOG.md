@@ -1,3 +1,9 @@
+## [3.6.17](https://github.com/salesforcecli/plugin-auth/compare/3.6.16...3.6.17) (2024-06-01)
+
+### Bug Fixes
+
+- **deps:** bump plugins-core and inquirer ([#1044](https://github.com/salesforcecli/plugin-auth/issues/1044)) ([b74d9c9](https://github.com/salesforcecli/plugin-auth/commit/b74d9c9181f811cd60b2fc7caa75a11ce0b79686))
+
 ## [3.6.16](https://github.com/salesforcecli/plugin-auth/compare/3.6.15...3.6.16) (2024-05-26)
 
 ### Bug Fixes
