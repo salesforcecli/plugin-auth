@@ -1,3 +1,9 @@
+## [3.6.18](https://github.com/salesforcecli/plugin-auth/compare/3.6.17...3.6.18) (2024-06-06)
+
+### Bug Fixes
+
+- **deps:** devScripts update for oclif-4 ([#1052](https://github.com/salesforcecli/plugin-auth/issues/1052)) ([ef87e60](https://github.com/salesforcecli/plugin-auth/commit/ef87e601e424558d4e1c1bf9f040738cb1d2ca23))
+
 ## [3.6.17](https://github.com/salesforcecli/plugin-auth/compare/3.6.16...3.6.17) (2024-06-01)
 
 ### Bug Fixes
