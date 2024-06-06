@@ -8,7 +8,7 @@
 import { Flags, loglevel, SfCommand } from '@salesforce/sf-plugins-core';
 import { AuthFields, AuthInfo, Messages, matchesAccessToken, SfError, StateAggregator } from '@salesforce/core';
 import { env } from '@salesforce/kit';
-import { InferredFlags } from '@oclif/core/lib/interfaces';
+import { InferredFlags } from '@oclif/core/interfaces';
 
 Messages.importMessagesDirectoryFromMetaUrl(import.meta.url);
 const messages = Messages.loadMessages('@salesforce/plugin-auth', 'accesstoken.store');
