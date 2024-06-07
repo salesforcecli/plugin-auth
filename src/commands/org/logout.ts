@@ -17,8 +17,7 @@ import {
   OrgConfigProperties,
 } from '@salesforce/core';
 import checkbox, { Separator } from '@inquirer/checkbox';
-import { Flags, loglevel, SfCommand } from '@salesforce/sf-plugins-core';
-import chalk from 'chalk';
+import { Flags, loglevel, SfCommand, StandardColors } from '@salesforce/sf-plugins-core';
 
 Messages.importMessagesDirectoryFromMetaUrl(import.meta.url);
 const messages = Messages.loadMessages('@salesforce/plugin-auth', 'logout');
@@ -173,16 +172,16 @@ const buildChoices = (orgAuths: OrgAuthorization[], all: boolean): Array<Choice 
     .map((orgAuth) => {
       const aliasString = (orgAuth.aliases ? orgAuth.aliases.join(',') : '').padEnd(maxAliasLength, ' ');
       const configString = (orgAuth.configs ? orgAuth.configs.join(',') : '').padEnd(maxConfigLength, ' ');
-      const typeString = chalk.dim(
+      const typeString = StandardColors.info(
         (orgAuth.isScratchOrg ? 'Scratch' : orgAuth.isDevHub ? 'DevHub' : orgAuth.isSandbox ? 'Sandbox' : '').padEnd(
           maxTypeLength,
           ' '
         )
       );
       // username - aliases - configs
-      const key = `${chalk.bold(
-        orgAuth.username.padEnd(maxUsernameLength)
-      )} | ${typeString} | ${aliasString} | ${chalk.yellowBright(configString)}`;
+      const key = `${orgAuth.username.padEnd(
+        maxUsernameLength
+      )} | ${typeString} | ${aliasString} | ${StandardColors.warning(configString)}`;
       return { name: key, value: orgAuth, checked: all, short: `${os.EOL}${orgAuth.username}` };
     })
     .sort((a, b) => a.value.username.localeCompare(b.value.username));
