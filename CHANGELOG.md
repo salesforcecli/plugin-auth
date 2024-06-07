@@ -1,3 +1,9 @@
+## [3.6.19](https://github.com/salesforcecli/plugin-auth/compare/3.6.18...3.6.19) (2024-06-07)
+
+### Bug Fixes
+
+- **deps:** remove chalk ([#1053](https://github.com/salesforcecli/plugin-auth/issues/1053)) ([4fb1bcf](https://github.com/salesforcecli/plugin-auth/commit/4fb1bcf2435ba7d57078de5d2fd549a216a0d202))
+
 ## [3.6.18](https://github.com/salesforcecli/plugin-auth/compare/3.6.17...3.6.18) (2024-06-06)
 
 ### Bug Fixes
