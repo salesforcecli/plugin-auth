@@ -1680,12 +1680,12 @@
     wordwrap "^1.0.0"
     wrap-ansi "^7.0.0"
 
-"@oclif/plugin-command-snapshot@^5.2.0":
-  version "5.2.0"
-  resolved "https://registry.yarnpkg.com/@oclif/plugin-command-snapshot/-/plugin-command-snapshot-5.2.0.tgz#315ec592f43faf417dbd6dc5af03c21cf06e5f35"
-  integrity sha512-F4vba5e25dLkPGVgkPnyNnXX1DVSewTzQJUGtI2bvdV+RMwvKa3p2qT3tOI1Dwbo1uTHNjQSMN9OF3+iy7Ok8Q==
+"@oclif/plugin-command-snapshot@^5.2.1":
+  version "5.2.1"
+  resolved "https://registry.yarnpkg.com/@oclif/plugin-command-snapshot/-/plugin-command-snapshot-5.2.1.tgz#f570ffc2c7f46f56654b42231ad27785bd228299"
+  integrity sha512-Qzz4OLjmaB0uVVHe5TMVsyd412+racLRbnWsi54PIQQN68vfcLTHwiDoFTTgSkCkbraMxsPbjsxazcqXhUcSxQ==
   dependencies:
-    "@oclif/core" "^4.0.0-beta.13"
+    "@oclif/core" "^4"
     ansis "^3.2.0"
     globby "^14.0.1"
     just-diff "^5.2.0"
