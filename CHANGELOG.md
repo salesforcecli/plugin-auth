@@ -1,3 +1,9 @@
+## [3.6.20](https://github.com/salesforcecli/plugin-auth/compare/3.6.19...3.6.20) (2024-06-09)
+
+### Bug Fixes
+
+- **deps:** bump @salesforce/core from 7.3.10 to 7.3.12 ([d711e7d](https://github.com/salesforcecli/plugin-auth/commit/d711e7d8aaeb0b94240c70b67dfebdcec5b27984))
+
 ## [3.6.19](https://github.com/salesforcecli/plugin-auth/compare/3.6.18...3.6.19) (2024-06-07)
 
 ### Bug Fixes
