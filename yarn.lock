@@ -1481,7 +1481,7 @@
   resolved "https://registry.yarnpkg.com/@inquirer/figures/-/figures-1.0.3.tgz#1227cc980f88e6d6ab85abadbf164f5038041edd"
   integrity sha512-ErXXzENMH5pJt5/ssXV0DfWUZqly8nGzf0UcBV9xTnP+KyffE2mqyxIMBrZ8ijQck2nU0TQm40EQB53YreyWHw==
 
-"@inquirer/input@^2.1.6", "@inquirer/input@^2.1.9":
+"@inquirer/input@^2.1.8", "@inquirer/input@^2.1.9":
   version "2.1.9"
   resolved "https://registry.yarnpkg.com/@inquirer/input/-/input-2.1.9.tgz#ac47671bfdfb0ae99411c644aadf783ae946e168"
   integrity sha512-1xTCHmIe48x9CG1+8glAHrVVdH+QfYhzgBUbgyoVpp5NovnXgRcjSn/SNulepxf9Ol8HDq3gzw3ZCAUr+h1Eyg==
@@ -1623,7 +1623,7 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@oclif/core@^3.26.2", "@oclif/core@^3.26.5", "@oclif/core@^3.26.6":
+"@oclif/core@^3.26.2", "@oclif/core@^3.26.6":
   version "3.26.6"
   resolved "https://registry.yarnpkg.com/@oclif/core/-/core-3.26.6.tgz#f371868cfa0fe150a6547e6af98b359065d2f971"
   integrity sha512-+FiTw1IPuJTF9tSAlTsY8bGK4sgthehjz7c2SvYdgQncTkxI2xvUch/8QpjNYGLEmUneNygvYMRBax2KJcLccA==
@@ -1827,17 +1827,17 @@
     debug "^4.3.4"
     handlebars "^4.7.8"
 
-"@salesforce/plugin-info@^3.3.1":
-  version "3.3.1"
-  resolved "https://registry.yarnpkg.com/@salesforce/plugin-info/-/plugin-info-3.3.1.tgz#1c05c6874b9723c2fd443c0e41a59cebae725660"
-  integrity sha512-3NsU82lBSRhPDzaskJ1d+/v0pGVyzn0XhexrOXd8c64I5p39FqTbGfjF95g1sMmEYPH2V7UPy6yyaD/eolq9hA==
+"@salesforce/plugin-info@^3.3.5":
+  version "3.3.5"
+  resolved "https://registry.yarnpkg.com/@salesforce/plugin-info/-/plugin-info-3.3.5.tgz#59a5a9e5e0509e4dc846c7e0c9177f86fe7a67ad"
+  integrity sha512-KveT3o2mXdcvt8T2J0Pb7wzwvAPOqHvxO/+xu6GTceMWQfpA0H0hx3awwXF0keY4Ek6fLHgzIfmnCjCoxp6y6w==
   dependencies:
-    "@inquirer/input" "^2.1.6"
+    "@inquirer/input" "^2.1.8"
     "@jsforce/jsforce-node" "^3.2.0"
-    "@oclif/core" "^3.26.5"
+    "@oclif/core" "^4"
     "@salesforce/core" "^7.3.9"
     "@salesforce/kit" "^3.1.0"
-    "@salesforce/sf-plugins-core" "^9.0.7"
+    "@salesforce/sf-plugins-core" "^10.0.0"
     got "^13.0.0"
     marked "^4.3.0"
     marked-terminal "^4.2.0"
@@ -1873,7 +1873,7 @@
     string-width "^7.1.0"
     terminal-link "^3.0.0"
 
-"@salesforce/sf-plugins-core@^9.0.13", "@salesforce/sf-plugins-core@^9.0.7":
+"@salesforce/sf-plugins-core@^9.0.13":
   version "9.1.1"
   resolved "https://registry.yarnpkg.com/@salesforce/sf-plugins-core/-/sf-plugins-core-9.1.1.tgz#8818fdb23e0f174d9e6dded0cf34a88be5e3cc44"
   integrity sha512-5d4vGLqb1NZoHvDpuTu96TsFg/lexdnQNWC0h7GhOqxikJBpxk6P1DEbk9HrZWL18Gs1YXO9OCj2g8nKqbIC/Q==
