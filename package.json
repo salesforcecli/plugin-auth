@@ -8,7 +8,7 @@
     "@inquirer/checkbox": "^2.3.5",
     "@inquirer/select": "^2.3.5",
     "@oclif/core": "^4",
-    "@salesforce/core": "^7.3.9",
+    "@salesforce/core": "^7.3.12",
     "@salesforce/kit": "^3.1.1",
     "@salesforce/plugin-info": "^3.3.1",
     "@salesforce/sf-plugins-core": "^10.0.0",
