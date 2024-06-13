@@ -1,3 +1,9 @@
+## [3.6.22](https://github.com/salesforcecli/plugin-auth/compare/3.6.21...3.6.22) (2024-06-13)
+
+### Bug Fixes
+
+- **deps:** bump braces from 3.0.2 to 3.0.3 ([baf64f4](https://github.com/salesforcecli/plugin-auth/commit/baf64f46b73b9f1ddb6896a46f75e6fcfd4c469c))
+
 ## [3.6.21](https://github.com/salesforcecli/plugin-auth/compare/3.6.20...3.6.21) (2024-06-09)
 
 ### Bug Fixes
