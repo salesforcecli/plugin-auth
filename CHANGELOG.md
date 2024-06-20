@@ -1,3 +1,9 @@
+## [3.6.24](https://github.com/salesforcecli/plugin-auth/compare/3.6.23...3.6.24) (2024-06-20)
+
+### Bug Fixes
+
+- updates from devScripts ([#1069](https://github.com/salesforcecli/plugin-auth/issues/1069)) ([c4c7f59](https://github.com/salesforcecli/plugin-auth/commit/c4c7f59f0cdbc96fb2dca988e473cc0508560db3))
+
 ## [3.6.23](https://github.com/salesforcecli/plugin-auth/compare/3.6.22...3.6.23) (2024-06-16)
 
 ### Bug Fixes
