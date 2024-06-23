@@ -1,3 +1,9 @@
+## [3.6.27](https://github.com/salesforcecli/plugin-auth/compare/3.6.26...3.6.27) (2024-06-23)
+
+### Bug Fixes
+
+- **deps:** bump @salesforce/sf-plugins-core from 11.1.1 to 11.1.2 ([f06196d](https://github.com/salesforcecli/plugin-auth/commit/f06196d9f4c254b750c4308e7300444d2ee5d2f9))
+
 ## [3.6.26](https://github.com/salesforcecli/plugin-auth/compare/3.6.25...3.6.26) (2024-06-23)
 
 ### Bug Fixes
