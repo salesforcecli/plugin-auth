@@ -1,3 +1,9 @@
+## [3.6.37](https://github.com/salesforcecli/plugin-auth/compare/3.6.36...3.6.37) (2024-07-17)
+
+### Bug Fixes
+
+- message contains old SFDX\_ env var ([c40328d](https://github.com/salesforcecli/plugin-auth/commit/c40328dc33f976e2fc50f72b3e5acd39353d806f))
+
 ## [3.6.36](https://github.com/salesforcecli/plugin-auth/compare/3.6.35...3.6.36) (2024-07-14)
 
 ### Bug Fixes
