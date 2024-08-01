@@ -56,4 +56,19 @@ describe('org:login:jwt NUTs', () => {
     const output = getString(result, 'shellOutput.stdout');
     expect(output).to.include(`Successfully authorized ${username} with org ID`);
   });
+
+  it('should throw correct error for JwtAuthError', () => {
+    const command = `org:login:jwt -d -o ${username} -i incorrect -f ${jwtKey} -r ${instanceUrl} --json`;
+    const json = execCmd(command).jsonOutput;
+    expect(json).to.have.property('name', 'JwtGrantError');
+    expect(json).to.have.property('exitCode', 1);
+    expect(json)
+      .to.have.property('message')
+      .and.include(
+        'We encountered a JSON web token error, which is likely not an issue with Salesforce CLI. Here’s the error: JwtAuthError::Error authenticating with JWT.'
+      );
+    expect(json).to.have.property('stack').and.include('client identifier invalid');
+    expect(json).to.have.property('cause').and.include('SfError [JwtAuthError]: Error authenticating with JWT.');
+    expect(json).to.have.property('cause').and.include('at AuthInfo.authJwt');
+  });
 });
