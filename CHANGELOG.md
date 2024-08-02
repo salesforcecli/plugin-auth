@@ -1,3 +1,9 @@
+## [3.6.40](https://github.com/salesforcecli/plugin-auth/compare/3.6.39...3.6.40) (2024-08-02)
+
+### Bug Fixes
+
+- wrap JwtGrantErrors ([#1109](https://github.com/salesforcecli/plugin-auth/issues/1109)) ([79e4df6](https://github.com/salesforcecli/plugin-auth/commit/79e4df6e3cc4529dafb924fa1ae229060dbd4110))
+
 ## [3.6.39](https://github.com/salesforcecli/plugin-auth/compare/3.6.38...3.6.39) (2024-07-28)
 
 ### Bug Fixes
