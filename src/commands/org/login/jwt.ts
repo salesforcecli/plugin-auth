@@ -99,10 +99,12 @@ export default class LoginJwt extends SfCommand<AuthFields> {
       result = authInfo.getFields(true);
       await AuthInfo.identifyPossibleScratchOrgs(result, authInfo);
     } catch (err) {
-      if (!(err instanceof Error)) {
-        throw err;
-      }
-      throw messages.createError('JwtGrantError', [err.message]);
+      const msg = err instanceof Error ? `${err.name}::${err.message}` : typeof err === 'string' ? err : 'UNKNOWN';
+      throw SfError.create({
+        message: messages.getMessage('JwtGrantError', [msg]),
+        name: 'JwtGrantError',
+        ...(err instanceof Error ? { cause: err } : {}),
+      });
     }
 
     const successMsg = commonMessages.getMessage('authorizeCommandSuccess', [result.username, result.orgId]);
