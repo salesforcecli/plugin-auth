@@ -1,3 +1,9 @@
+## [3.6.42](https://github.com/salesforcecli/plugin-auth/compare/3.6.41...3.6.42) (2024-08-03)
+
+### Bug Fixes
+
+- **deps:** bump @salesforce/kit from 3.1.6 to 3.2.0 ([214d869](https://github.com/salesforcecli/plugin-auth/commit/214d86979078f308de0444b77da20590b8e72eef))
+
 ## [3.6.41](https://github.com/salesforcecli/plugin-auth/compare/3.6.40...3.6.41) (2024-08-03)
 
 ### Bug Fixes
