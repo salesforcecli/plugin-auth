@@ -6,7 +6,7 @@
   "bugs": "https://github.com/forcedotcom/cli/issues",
   "dependencies": {
     "@inquirer/checkbox": "^2.4.5",
-    "@inquirer/select": "^2.4.2",
+    "@inquirer/select": "^2.4.5",
     "@oclif/core": "^4",
     "@salesforce/core": "^8.2.7",
     "@salesforce/kit": "^3.2.0",
