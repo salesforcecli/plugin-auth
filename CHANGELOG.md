@@ -1,3 +1,9 @@
+## [3.6.45](https://github.com/salesforcecli/plugin-auth/compare/3.6.44...3.6.45) (2024-08-10)
+
+### Bug Fixes
+
+- **deps:** bump @inquirer/select from 2.4.5 to 2.4.7 ([8ad8744](https://github.com/salesforcecli/plugin-auth/commit/8ad8744e19ebd35105dcb0a8d72c906dd25d38b9))
+
 ## [3.6.44](https://github.com/salesforcecli/plugin-auth/compare/3.6.43...3.6.44) (2024-08-04)
 
 ### Bug Fixes
