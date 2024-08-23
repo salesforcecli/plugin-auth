@@ -82,6 +82,7 @@ export default class LoginWeb extends SfCommand<AuthFields> {
     const oauthConfig: OAuth2Config = {
       loginUrl: await common.resolveLoginUrl(flags['instance-url']?.href),
       clientId: flags['client-id'],
+      redirectUri: process.env.SF_AUTH_REDIRECT_URL ?? undefined,
       ...(flags['client-id']
         ? { clientSecret: await this.secretPrompt({ message: commonMessages.getMessage('clientSecretStdin') }) }
         : {}),
