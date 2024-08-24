@@ -1,3 +1,9 @@
+## [3.6.49](https://github.com/salesforcecli/plugin-auth/compare/3.6.48...3.6.49) (2024-08-24)
+
+### Bug Fixes
+
+- **deps:** bump micromatch from 4.0.5 to 4.0.8 ([a14bb78](https://github.com/salesforcecli/plugin-auth/commit/a14bb786820f05c46c55e991ef8b5d3830a9f19e))
+
 ## [3.6.48](https://github.com/salesforcecli/plugin-auth/compare/3.6.47...3.6.48) (2024-08-18)
 
 ### Bug Fixes
