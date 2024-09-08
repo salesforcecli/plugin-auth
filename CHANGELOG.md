@@ -1,3 +1,9 @@
+## [3.6.56](https://github.com/salesforcecli/plugin-auth/compare/3.6.55...3.6.56) (2024-09-08)
+
+### Bug Fixes
+
+- **deps:** bump @inquirer/checkbox from 2.4.7 to 2.5.0 ([5687ce5](https://github.com/salesforcecli/plugin-auth/commit/5687ce5b93a3a7ff19feebdd697f9cf1d5524914))
+
 ## [3.6.55](https://github.com/salesforcecli/plugin-auth/compare/3.6.54...3.6.55) (2024-09-07)
 
 ### Bug Fixes
