@@ -89,13 +89,13 @@ export default class LoginSfdxUrl extends SfCommand<AuthFields> {
 
       if (!sfdxAuthUrl) {
         throw new Error(
-          `Error getting the auth URL from file ${authFile}. Please ensure it meets the description shown in the documentation for this command.`
+          `Error getting the SFDX authorization URL from file ${authFile}. Ensure it meets the description shown in the documentation (--help) for this command.`
         );
       }
     } else if (authStdin) {
       sfdxAuthUrl = authStdin;
     } else {
-      throw new Error('SFDX Auth URL not found.');
+      throw new Error('SFDX authorization URL not found.');
     }
 
     const oauth2Options = AuthInfo.parseSfdxAuthUrl(sfdxAuthUrl);

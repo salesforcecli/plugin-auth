@@ -92,7 +92,7 @@ describe('org:login:sfdx-url', () => {
       const response = await LoginSfdxUrl.run(['-f', keyPathJson, '--json']);
       expect.fail(`Should have thrown an error. Response: ${JSON.stringify(response)}`);
     } catch (e) {
-      expect((e as Error).message).to.includes('Error getting the auth URL from file');
+      expect((e as Error).message).to.includes('Error getting the SFDX authorization URL from file');
     }
   });
 
