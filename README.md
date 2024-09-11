@@ -108,7 +108,7 @@ EXAMPLES
     $ sf org list auth
 ```
 
-_See code: [src/commands/org/list/auth.ts](https://github.com/salesforcecli/plugin-auth/blob/3.6.56/src/commands/org/list/auth.ts)_
+_See code: [src/commands/org/list/auth.ts](https://github.com/salesforcecli/plugin-auth/blob/3.6.57/src/commands/org/list/auth.ts)_
 
 ## `sf org login access-token`
 
@@ -162,7 +162,7 @@ FLAG DESCRIPTIONS
     To specify a sandbox, set --instance-url to "https://<MyDomainName>--<SandboxName>.sandbox.my.salesforce.com".
 ```
 
-_See code: [src/commands/org/login/access-token.ts](https://github.com/salesforcecli/plugin-auth/blob/3.6.56/src/commands/org/login/access-token.ts)_
+_See code: [src/commands/org/login/access-token.ts](https://github.com/salesforcecli/plugin-auth/blob/3.6.57/src/commands/org/login/access-token.ts)_
 
 ## `sf org login device`
 
@@ -222,7 +222,7 @@ FLAG DESCRIPTIONS
     To specify a sandbox, set --instance-url to "https://<MyDomainName>--<SandboxName>.sandbox.my.salesforce.com".
 ```
 
-_See code: [src/commands/org/login/device.ts](https://github.com/salesforcecli/plugin-auth/blob/3.6.56/src/commands/org/login/device.ts)_
+_See code: [src/commands/org/login/device.ts](https://github.com/salesforcecli/plugin-auth/blob/3.6.57/src/commands/org/login/device.ts)_
 
 ## `sf org login jwt`
 
@@ -313,7 +313,7 @@ FLAG DESCRIPTIONS
     To specify a sandbox, set --instance-url to "https://<MyDomainName>--<SandboxName>.sandbox.my.salesforce.com".
 ```
 
-_See code: [src/commands/org/login/jwt.ts](https://github.com/salesforcecli/plugin-auth/blob/3.6.56/src/commands/org/login/jwt.ts)_
+_See code: [src/commands/org/login/jwt.ts](https://github.com/salesforcecli/plugin-auth/blob/3.6.57/src/commands/org/login/jwt.ts)_
 
 ## `sf org login sfdx-url`
 
@@ -337,10 +337,15 @@ GLOBAL FLAGS
 DESCRIPTION
   Authorize an org using a Salesforce DX authorization URL stored in a file or through standard input (stdin).
 
-  The Salesforce DX (SFDX) authorization URL must have the format
-  "force://<clientId>:<clientSecret>:<refreshToken>@<instanceUrl>". NOTE: The SFDX authorization URL uses the "force"
-  protocol, and not "http" or "https". Also, the "instanceUrl" inside the SFDX authorization URL doesn't include the
-  protocol ("https://").
+  You use the Salesforce DX (SFDX) authorization URL to authorize Salesforce CLI to connect to a target org. The URL
+  contains the required data to accomplish the authorization, such as the client ID, client secret, and instance URL.
+  You must specify the SFDX authorization URL in this format:
+  "force://<clientId>:<clientSecret>:<refreshToken>@<instanceUrl>". Replace <clientId>, <clientSecret>, <refreshToken>,
+  and <instanceUrl> with the values specific to your target org. For <instanceUrl>, don't include a protocol (such as
+  "https://"). Note that although the SFDX authorization URL starts with "force://", it has nothing to do with the
+  actual authorization. Salesforce CLI always communicates with your org using HTTPS.
+
+  To see an example of an SFDX authorization URL, run "org display --verbose" on an org.
 
   You have three options when creating the authorization file. The easiest option is to redirect the output of the "sf
   org display --verbose --json" command into a file. For example, using an org with alias my-org that you've already
@@ -378,7 +383,7 @@ EXAMPLES
   $ echo url | sf org login sfdx-url --sfdx-url-stdin
 ```
 
-_See code: [src/commands/org/login/sfdx-url.ts](https://github.com/salesforcecli/plugin-auth/blob/3.6.56/src/commands/org/login/sfdx-url.ts)_
+_See code: [src/commands/org/login/sfdx-url.ts](https://github.com/salesforcecli/plugin-auth/blob/3.6.57/src/commands/org/login/sfdx-url.ts)_
 
 ## `sf org login web`
 
@@ -465,7 +470,7 @@ FLAG DESCRIPTIONS
     To specify a sandbox, set --instance-url to "https://<MyDomainName>--<SandboxName>.sandbox.my.salesforce.com".
 ```
 
-_See code: [src/commands/org/login/web.ts](https://github.com/salesforcecli/plugin-auth/blob/3.6.56/src/commands/org/login/web.ts)_
+_See code: [src/commands/org/login/web.ts](https://github.com/salesforcecli/plugin-auth/blob/3.6.57/src/commands/org/login/web.ts)_
 
 ## `sf org logout`
 
@@ -526,6 +531,6 @@ FLAG DESCRIPTIONS
     All orgs includes Dev Hubs, sandboxes, DE orgs, and expired, deleted, and unknown-status scratch orgs.
 ```
 
-_See code: [src/commands/org/logout.ts](https://github.com/salesforcecli/plugin-auth/blob/3.6.56/src/commands/org/logout.ts)_
+_See code: [src/commands/org/logout.ts](https://github.com/salesforcecli/plugin-auth/blob/3.6.57/src/commands/org/logout.ts)_
 
 <!-- commandsstop -->

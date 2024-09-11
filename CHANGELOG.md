@@ -1,3 +1,10 @@
+## [3.6.57](https://github.com/salesforcecli/plugin-auth/compare/3.6.56...3.6.57) (2024-09-11)
+
+### Bug Fixes
+
+- clarify the --help for "org login sfdx-url" ([639b6d7](https://github.com/salesforcecli/plugin-auth/commit/639b6d7cb940d202335b7a893c6afcc2e9ec5144))
+- update the test ([f26d416](https://github.com/salesforcecli/plugin-auth/commit/f26d416c05160ba8fffe55a91df96a17a54e1d87))
+
 ## [3.6.56](https://github.com/salesforcecli/plugin-auth/compare/3.6.55...3.6.56) (2024-09-08)
 
 ### Bug Fixes
