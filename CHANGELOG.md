@@ -1,3 +1,9 @@
+## [3.6.62](https://github.com/salesforcecli/plugin-auth/compare/3.6.61...3.6.62) (2024-09-23)
+
+### Bug Fixes
+
+- use SF envs for container mode ([#1157](https://github.com/salesforcecli/plugin-auth/issues/1157)) ([dc000ac](https://github.com/salesforcecli/plugin-auth/commit/dc000acb821b80d21f31d06ac3217fc50e39f3e1))
+
 ## [3.6.61](https://github.com/salesforcecli/plugin-auth/compare/3.6.60...3.6.61) (2024-09-22)
 
 ### Bug Fixes
