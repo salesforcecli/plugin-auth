@@ -73,7 +73,7 @@ export default class LoginWeb extends SfCommand<AuthFields> {
 
   public async run(): Promise<AuthFields> {
     const { flags } = await this.parse(LoginWeb);
-    if (isSFDXContainerMode()) {
+    if (isContainerMode()) {
       throw new SfError(messages.getMessage('deviceWarning'), 'DEVICE_WARNING');
     }
 
@@ -121,7 +121,7 @@ export default class LoginWeb extends SfCommand<AuthFields> {
   }
 }
 
-const isSFDXContainerMode = (): boolean => {
+const isContainerMode = (): boolean => {
   const env = new Env();
-  return env.getBoolean('SFDX_CONTAINER_MODE');
+  return env.getBoolean('SF_CONTAINER_MODE', env.getBoolean('SFDX_CONTAINER_MODE'));
 };
