@@ -115,6 +115,16 @@ describe('org:login:web', () => {
       expect(err.name).to.equal('DEVICE_WARNING');
     }
   });
+  it('should throw device warning error when in container mode (SF_CONTAINER_MODE)', async () => {
+    stubMethod($$.SANDBOX, Env.prototype, 'getBoolean').withArgs('SF_CONTAINER_MODE').returns(true);
+    const login = await createNewLoginCommand([], false, undefined);
+    try {
+      await login.run();
+    } catch (error) {
+      const err = error as SfError;
+      expect(err.name).to.equal('DEVICE_WARNING');
+    }
+  });
 
   it('should prompt for client secret when clientid is present', async () => {
     const login = await createNewLoginCommand(['--client-id', 'CoffeeBeans'], false, undefined);
