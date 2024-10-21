@@ -1511,10 +1511,10 @@
     http-call "^5.2.2"
     lodash "^4.17.21"
 
-"@oclif/table@^0.1.20":
-  version "0.1.20"
-  resolved "https://registry.yarnpkg.com/@oclif/table/-/table-0.1.20.tgz#024a2eafec3824f70493db95a11f43446ebd8446"
-  integrity sha512-4zrGeBO7cjsnY9z30bDO6+kPZHXol5ZVsxP6lDKDeanLmkasEZt4btZhVfwyyZaWM22UXb1BDPeYX77r8+VWrw==
+"@oclif/table@^0.1.24":
+  version "0.1.24"
+  resolved "https://registry.yarnpkg.com/@oclif/table/-/table-0.1.24.tgz#97cc9fc0e65cf4ceb7628084c73eb6ca30bf19b1"
+  integrity sha512-HC5lIdy8Q0crW+ImJhzux3lQ2UobcDM//Tw4+HjTcYi9xzgy1hnKQZ7mYSofgRO42bwN7iZulaLvb8dG1giz0g==
   dependencies:
     "@oclif/core" "^4"
     "@types/react" "^18.3.11"
@@ -1630,7 +1630,7 @@
     debug "^4.3.7"
     handlebars "^4.7.8"
 
-"@salesforce/plugin-info@^3.4.9":
+"@salesforce/plugin-info@^3.4.12":
   version "3.4.13"
   resolved "https://registry.yarnpkg.com/@salesforce/plugin-info/-/plugin-info-3.4.13.tgz#61800dbbd45b4e90d9c835e8cefd37321c192953"
   integrity sha512-nKyDyDFytwzXbj0jhjjrsMpku6qpj08t3ljir9v/OfGIk+9M7SRrPPnxZmwNzqCAR3uJDyitNGCDiQVyD4ndAA==
@@ -1676,15 +1676,15 @@
     string-width "^7.2.0"
     terminal-link "^3.0.0"
 
-"@salesforce/sf-plugins-core@^12":
-  version "12.0.1"
-  resolved "https://registry.yarnpkg.com/@salesforce/sf-plugins-core/-/sf-plugins-core-12.0.1.tgz#05f40c58b637e29e69b61e3e77f43f58650b1a10"
-  integrity sha512-Wr3fNemz/sXKq5SglblavbMhHXXDr7+qBQDtkWtx1BvmcArjwgDq19eVbxPpYnJEo7ceq0ARr9RMQ6PvvQHDXg==
+"@salesforce/sf-plugins-core@^12.0.4":
+  version "12.0.4"
+  resolved "https://registry.yarnpkg.com/@salesforce/sf-plugins-core/-/sf-plugins-core-12.0.4.tgz#b78aa0747ab0b861268bf72b2743217a6b0275c5"
+  integrity sha512-fIzr6AZbeY5mqFfDHPyN09eVH0qYkkKVf2jB375YaWZZ8WKTqtYQnwaKd3Gi9asggvMKnmI91ov6aFGKCdA1qg==
   dependencies:
     "@inquirer/confirm" "^3.1.22"
     "@inquirer/password" "^2.2.0"
     "@oclif/core" "^4.0.27"
-    "@oclif/table" "^0.1.20"
+    "@oclif/table" "^0.1.24"
     "@salesforce/core" "^8.5.1"
     "@salesforce/kit" "^3.2.3"
     "@salesforce/ts-types" "^2.0.12"
