@@ -1,3 +1,9 @@
+## [3.6.70](https://github.com/salesforcecli/plugin-auth/compare/3.6.69...3.6.70) (2024-10-21)
+
+### Bug Fixes
+
+- update auth table and dependencies ([#1173](https://github.com/salesforcecli/plugin-auth/issues/1173)) ([ff3343f](https://github.com/salesforcecli/plugin-auth/commit/ff3343fa5f199966deaffd48fd373371e6f1331b))
+
 ## [3.6.69](https://github.com/salesforcecli/plugin-auth/compare/3.6.68...3.6.69) (2024-10-20)
 
 ### Bug Fixes
