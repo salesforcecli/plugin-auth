@@ -38,7 +38,6 @@ export default class ListAuth extends SfCommand<AuthListResults> {
       });
 
       const hasErrors = auths.filter((auth) => !!auth.error).length > 0;
-      this.styledHeader('authenticated orgs');
 
       this.table({
         data: mappedAuths,
@@ -46,10 +45,11 @@ export default class ListAuth extends SfCommand<AuthListResults> {
           { key: 'alias', name: 'ALIAS' },
           { key: 'username', name: 'USERNAME' },
           { key: 'orgId', name: 'ORG ID' },
-          { key: 'instanceUrl', name: 'AUTH METHOD' },
+          { key: 'instanceUrl', name: 'INSTANCE URL' },
           { key: 'oauthMethod', name: 'AUTH METHOD' },
-          hasErrors ? { key: 'error', name: 'ERROR' } : 'error',
         ],
+        title: 'authenticated orgs',
+        ...(hasErrors ? { error: { header: 'ERROR' } } : {}),
       });
       return mappedAuths;
     } catch (err) {
