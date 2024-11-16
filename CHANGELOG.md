@@ -1,3 +1,9 @@
+## [3.6.74](https://github.com/salesforcecli/plugin-auth/compare/3.6.73...3.6.74) (2024-11-16)
+
+### Bug Fixes
+
+- **deps:** bump cross-spawn from 7.0.3 to 7.0.5 ([4e30dda](https://github.com/salesforcecli/plugin-auth/commit/4e30dda303e2f11b233c36e04649f085d9e85cb0))
+
 ## [3.6.73](https://github.com/salesforcecli/plugin-auth/compare/3.6.72...3.6.73) (2024-11-10)
 
 ### Bug Fixes
