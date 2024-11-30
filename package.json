@@ -1,7 +1,7 @@
 {
   "name": "@salesforce/plugin-auth",
   "description": "plugin for sf auth commands",
-  "version": "3.6.77",
+  "version": "3.6.78",
   "author": "Salesforce",
   "bugs": "https://github.com/forcedotcom/cli/issues",
   "dependencies": {
