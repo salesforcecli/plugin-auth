@@ -1949,10 +1949,10 @@
     debug "^4.4.0"
     handlebars "^4.7.8"
 
-"@salesforce/plugin-info@^3.4.27":
-  version "3.4.27"
-  resolved "https://registry.yarnpkg.com/@salesforce/plugin-info/-/plugin-info-3.4.27.tgz#c12ca9a303575d0c329a3e1381c03269f7572786"
-  integrity sha512-AwYPfWhxK/Ht01/RusbWD/jT5YKuVaQaMsx2Y50KIFdtLuIkn9dzjwOnM0ktTbjVu5xSUxoHvBpOYlQV9gxsLg==
+"@salesforce/plugin-info@^3.4.29":
+  version "3.4.29"
+  resolved "https://registry.yarnpkg.com/@salesforce/plugin-info/-/plugin-info-3.4.29.tgz#6a5b7fd0c0066949d5de970a0684731ea782a72a"
+  integrity sha512-uaZZWTj1GqAqfiJGIaMPYv4m9JuVaRi80f2JGYkkZ0gRoei4L/nkueWyQe9U0DPHCFfGO9zEMb3uJALqgwTf3Q==
   dependencies:
     "@inquirer/input" "^2.3.0"
     "@jsforce/jsforce-node" "^3.6.3"
