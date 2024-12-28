@@ -1,3 +1,9 @@
+## [3.6.85](https://github.com/salesforcecli/plugin-auth/compare/3.6.84...3.6.85) (2024-12-28)
+
+### Bug Fixes
+
+- **deps:** bump @salesforce/plugin-info from 3.4.29 to 3.4.30 ([cbf6a12](https://github.com/salesforcecli/plugin-auth/commit/cbf6a1246650bca3e2275de776815fab488707cf))
+
 ## [3.6.84](https://github.com/salesforcecli/plugin-auth/compare/3.6.83...3.6.84) (2024-12-22)
 
 ### Bug Fixes
