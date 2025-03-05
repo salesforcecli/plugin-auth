@@ -116,7 +116,12 @@ export default class LoginWeb extends SfCommand<AuthFields> {
     await oauthServer.start();
     const app = browser && browser in apps ? (browser as AppName) : undefined;
     const openOptions = app ? { app: { name: apps[app] }, wait: false } : { wait: false };
-    await open(oauthServer.getAuthorizationUrl(), openOptions);
+    const childProcess = await open(oauthServer.getAuthorizationUrl(), openOptions);
+    childProcess.on('exit', (code) => {
+      if (code && code > 0) {
+        throw messages.createError('error.cannotOpenBrowser', [app], [app]);
+      }
+    });
     return oauthServer.authorizeAndSave();
   }
 }
