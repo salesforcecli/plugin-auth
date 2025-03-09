@@ -21,7 +21,7 @@
     "@salesforce/dev-scripts": "^10.2.12",
     "@salesforce/plugin-command-reference": "^3.1.45",
     "@salesforce/ts-sinon": "^1.4.30",
-    "eslint-plugin-sf-plugin": "^1.20.14",
+    "eslint-plugin-sf-plugin": "^1.20.15",
     "oclif": "^4.17.30",
     "ts-node": "^10.9.2",
     "typescript": "^5.5.4"
