@@ -52,8 +52,8 @@ Invalid client credentials. Verify the OAuth client secret and ID. %s
 
 # error.cannotOpenBrowser
 
-Unable to open %s.
+Unable to open the browser you specified (%s).
 
 # error.cannotOpenBrowser.actions
 
-- Ensure %s is installed.
+- Ensure that %s is installed on your computer. Or specify a different browser using the --browser flag.
