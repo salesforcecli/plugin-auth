@@ -71,6 +71,8 @@ export default class LoginWeb extends SfCommand<AuthFields> {
     loglevel,
   };
 
+  private logger = Logger.childFromRoot(this.constructor.name);
+
   public async run(): Promise<AuthFields> {
     const { flags } = await this.parse(LoginWeb);
     if (isContainerMode()) {
@@ -116,7 +118,26 @@ export default class LoginWeb extends SfCommand<AuthFields> {
     await oauthServer.start();
     const app = browser && browser in apps ? (browser as AppName) : undefined;
     const openOptions = app ? { app: { name: apps[app] }, wait: false } : { wait: false };
-    await open(oauthServer.getAuthorizationUrl(), openOptions);
+    this.logger.debug(`Opening browser ${app ?? ''}`);
+    // the following `childProcess` wrapper is needed to catch when `open` fails to open a browser.
+    await open(oauthServer.getAuthorizationUrl(), openOptions).then(
+      (childProcess) =>
+        new Promise((resolve, reject) => {
+          // https://nodejs.org/api/child_process.html#event-exit
+          childProcess.on('exit', (code) => {
+            if (code && code > 0) {
+              this.logger.debug(`Failed to open browser ${app ?? ''}`);
+              reject(messages.createError('error.cannotOpenBrowser', [app], [app]));
+            }
+            // If the process exited, code is the final exit code of the process, otherwise null.
+            // resolve on null just to be safe, worst case the browser didn't open and the CLI just hangs.
+            if (code === null || code === 0) {
+              this.logger.debug(`Successfully opened browser ${app ?? ''}`);
+              resolve(childProcess);
+            }
+          });
+        })
+    );
     return oauthServer.authorizeAndSave();
   }
 }

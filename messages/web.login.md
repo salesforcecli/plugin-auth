@@ -49,3 +49,11 @@ If you don’t specify --browser, the command uses your default browser. The exa
 # invalidClientId
 
 Invalid client credentials. Verify the OAuth client secret and ID. %s
+
+# error.cannotOpenBrowser
+
+Unable to open the browser you specified (%s).
+
+# error.cannotOpenBrowser.actions
+
+- Ensure that %s is installed on your computer. Or specify a different browser using the --browser flag.
