@@ -1,3 +1,9 @@
+## [3.6.104](https://github.com/salesforcecli/plugin-auth/compare/3.6.103...3.6.104) (2025-03-10)
+
+### Bug Fixes
+
+- **web login:** throw if can't open browser W-17969693 ([#1260](https://github.com/salesforcecli/plugin-auth/issues/1260)) ([9a5eedb](https://github.com/salesforcecli/plugin-auth/commit/9a5eedbf8f23f942d192bf76b922763468ad94c4))
+
 ## [3.6.103](https://github.com/salesforcecli/plugin-auth/compare/3.6.102...3.6.103) (2025-03-09)
 
 ### Bug Fixes
