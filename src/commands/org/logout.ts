@@ -35,7 +35,7 @@ export default class Logout extends SfCommand<AuthLogoutResults> {
   public static readonly aliases = ['force:auth:logout', 'auth:logout'];
 
   public static readonly flags = {
-    'target-org': Flags.string({
+    'target-org': Flags.optionalOrg({
       summary: messages.getMessage('flags.target-org.summary'),
       char: 'o',
       aliases: ['targetusername', 'u'],
@@ -82,15 +82,17 @@ export default class Logout extends SfCommand<AuthLogoutResults> {
       ? await AuthInfo.listAllAuthorizations()
       : targetUsername
       ? (await AuthInfo.listAllAuthorizations()).filter(
-          (orgAuth) => orgAuth.username === targetUsername || !!orgAuth.aliases?.includes(targetUsername)
+          (orgAuth) =>
+            orgAuth.username === targetUsername.getUsername() ||
+            !!orgAuth.aliases?.includes(targetUsername.getUsername() as string)
         )
       : [];
 
     if (orgAuths.length === 0) {
       if (flags['target-org']) {
         // user specified a target org but it was not resolved, issue success message and return
-        this.logSuccess(messages.getMessage('logoutOrgCommandSuccess', [flags['target-org']]));
-        return [flags['target-org']];
+        this.logSuccess(messages.getMessage('logoutOrgCommandSuccess', [flags['target-org'].getUsername() as string]));
+        return [flags['target-org'].getUsername() as string];
       }
       this.info(messages.getMessage('noOrgsFound'));
       return [];
