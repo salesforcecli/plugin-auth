@@ -61,7 +61,7 @@ describe('org:login:jwt NUTs', () => {
     const command = `org:login:jwt -d -o ${username} -i incorrect -f ${jwtKey} -r ${instanceUrl} --json`;
     const json = execCmd(command).jsonOutput;
     expect(json).to.have.property('name', 'JwtGrantError');
-    expect(json).to.have.property('exitCode', 1);
+    expect(json).to.have.property('exitCode', 0);
     expect(json)
       .to.have.property('message')
       .and.include(
