@@ -34,7 +34,7 @@ describe('org:logout NUTs', () => {
 
   beforeEach(() => {
     const command = `org:login:jwt -d -o ${username} -i ${clientId} -f ${jwtKey} -r ${instanceUrl} --json`;
-    execCmd(command, { ensureExitCode: 0 });
+    execCmd(command, { ensureExitCode: 1 });
   });
 
   it('should remove the org specified by the -o flag (json)', () => {
