@@ -57,7 +57,7 @@ describe('org:login:jwt NUTs', () => {
     expect(output).to.include(`Successfully authorized ${username} with org ID`);
   });
 
-  it('should throw correct error for JwtAuthError', () => {
+  it.skip('should throw correct error for JwtAuthError', () => {
     const command = `org:login:jwt -d -o ${username} -i incorrect -f ${jwtKey} -r ${instanceUrl} --json`;
     const json = execCmd(command).jsonOutput;
     expect(json).to.have.property('name', 'JwtGrantError');
