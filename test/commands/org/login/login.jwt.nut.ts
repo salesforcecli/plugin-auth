@@ -36,7 +36,7 @@ describe('org:login:jwt NUTs', () => {
   });
 
   afterEach(() => {
-    execCmd(`auth:logout -p -o ${username}`, { ensureExitCode: 1 });
+    execCmd(`auth:logout -p -o ${username}`, { ensureExitCode: 0 });
   });
 
   it('should authorize an org using jwt (json)', () => {
