@@ -55,7 +55,7 @@ describe('org:login:jwt NUTs', () => {
     execCmd(`auth:logout -p -o ${username}`, { ensureExitCode: 0 });
   });
 
-  it.skip('should throw correct error for JwtAuthError', () => {
+  it('should throw correct error for JwtAuthError', () => {
     const command = `org:login:jwt -d -o ${username} -i incorrect -f ${jwtKey} -r ${instanceUrl} --json`;
     const json = execCmd(command).jsonOutput;
     expect(json).to.have.property('name', 'JwtGrantError');
