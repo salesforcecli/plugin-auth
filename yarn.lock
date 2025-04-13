@@ -1608,7 +1608,7 @@
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
 
-"@jsforce/jsforce-node@^3.6.6", "@jsforce/jsforce-node@^3.7.0":
+"@jsforce/jsforce-node@^3.7.0":
   version "3.7.0"
   resolved "https://registry.yarnpkg.com/@jsforce/jsforce-node/-/jsforce-node-3.7.0.tgz#aaa317eef3207489db90498f79e96c5bd9f53469"
   integrity sha512-v9pc3lPM5RMuB81Gasz5/NKcjktE1LLEACRFopB9LiXRafb4K9bStSMl3nLEHq7+OFdtxfQB3Sx2rYXJGG4DKw==
@@ -1852,13 +1852,13 @@
     debug "^4.4.0"
     handlebars "^4.7.8"
 
-"@salesforce/plugin-info@^3.4.50":
-  version "3.4.50"
-  resolved "https://registry.yarnpkg.com/@salesforce/plugin-info/-/plugin-info-3.4.50.tgz#2717e5ea82828e2c51815aa01eada38c4632d298"
-  integrity sha512-2nD8yzCxdQJg5qtYZJxTqM+jLHtr1mqF9DjPJT/cimHmcTP08rIhdZpJQM+tPcRapVqsIUq/L6biSF3Q4PGo6A==
+"@salesforce/plugin-info@^3.4.52":
+  version "3.4.52"
+  resolved "https://registry.yarnpkg.com/@salesforce/plugin-info/-/plugin-info-3.4.52.tgz#e7fc5cca53dea78b59115811badb07d502e7285f"
+  integrity sha512-AJiZXeNpNFS21fMIyYRrKP/mRryM2OrdKQnuhgsLgWa3wfTFGEIeSgo8WlmGOVbC+Rdr+oOxA8DAX+Yx8Jr+fQ==
   dependencies:
     "@inquirer/input" "^2.3.0"
-    "@jsforce/jsforce-node" "^3.6.6"
+    "@jsforce/jsforce-node" "^3.7.0"
     "@oclif/core" "^4"
     "@salesforce/core" "^8.8.6"
     "@salesforce/kit" "^3.2.3"
