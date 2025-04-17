@@ -35,6 +35,10 @@ describe('org:login:jwt NUTs', () => {
     await testSession?.clean();
   });
 
+  afterEach(() => {
+    execCmd(`auth:logout -p -o ${username}`, { ensureExitCode: 0 });
+  });
+
   it('should authorize an org using jwt (json)', () => {
     const command = `org:login:jwt -d -o ${username} -i ${clientId} -f ${jwtKey} -r ${instanceUrl} --json`;
     const json = execCmd<AuthFields>(command, { ensureExitCode: 0 }).jsonOutput?.result as AuthFields;
@@ -44,7 +48,6 @@ describe('org:login:jwt NUTs', () => {
     expectUrlToExist(json, 'loginUrl');
     expect(json.privateKey).to.equal(path.join(testSession.homeDir, 'jwtKey'));
     expect(json.username).to.equal(username);
-    execCmd(`auth:logout -p -o ${username}`, { ensureExitCode: 0 });
   });
 
   it('should authorize an org using jwt (human readable)', () => {
@@ -52,7 +55,6 @@ describe('org:login:jwt NUTs', () => {
     const result = execCmd(command, { ensureExitCode: 0 });
     const output = getString(result, 'shellOutput.stdout');
     expect(output).to.include(`Successfully authorized ${username} with org ID`);
-    execCmd(`auth:logout -p -o ${username}`, { ensureExitCode: 0 });
   });
 
   it('should throw correct error for JwtAuthError', () => {

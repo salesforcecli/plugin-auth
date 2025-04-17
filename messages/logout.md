@@ -79,3 +79,7 @@ You must specify a target-org (or default target-org config is set) or use --all
 # noOrgSpecifiedWithJson
 
 You must specify a target-org (or default target-org config is set) or use --all flag when using the --json flag.
+
+# warning.NoAuthFoundForTargetOrg
+
+No authenticated org found with the username or alias of %s.
