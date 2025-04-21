@@ -88,6 +88,7 @@ export default class Logout extends SfCommand<AuthLogoutResults> {
 
     if (orgAuths.length === 0) {
       if (flags['target-org']) {
+        this.warn(messages.createWarning('warning.NoAuthFoundForTargetOrg', [flags['target-org']]));
         // user specified a target org but it was not resolved, issue success message and return
         this.logSuccess(messages.getMessage('logoutOrgCommandSuccess', [flags['target-org']]));
         return [flags['target-org']];

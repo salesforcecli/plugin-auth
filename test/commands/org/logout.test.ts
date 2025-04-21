@@ -151,7 +151,7 @@ describe('org:logout', () => {
     expect(response).to.deep.equal([testOrg1.username]);
   });
 
-  it('should not fail when the auth file does not exist', async () => {
+  it('should fail when the auth file does not exist', async () => {
     await prepareStubs({
       'target-org': testOrg2.username,
       aliases: { TestAlias: testOrg1.username },
