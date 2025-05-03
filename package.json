@@ -13,7 +13,7 @@
     "@salesforce/plugin-info": "^3.4.54",
     "@salesforce/sf-plugins-core": "^12.2.1",
     "@salesforce/ts-types": "^2.0.11",
-    "open": "^10.1.1"
+    "open": "^10.1.2"
   },
   "devDependencies": {
     "@oclif/plugin-command-snapshot": "^5.2.38",
