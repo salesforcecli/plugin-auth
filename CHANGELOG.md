@@ -1,3 +1,9 @@
+## [3.6.117](https://github.com/salesforcecli/plugin-auth/compare/3.6.116...3.6.117) (2025-05-04)
+
+### Bug Fixes
+
+- **deps:** bump open from 10.1.1 to 10.1.2 ([bd086bb](https://github.com/salesforcecli/plugin-auth/commit/bd086bb9522ac3718c22566bb61ce81060527b7c))
+
 ## [3.6.116](https://github.com/salesforcecli/plugin-auth/compare/3.6.115...3.6.116) (2025-05-03)
 
 ### Bug Fixes
