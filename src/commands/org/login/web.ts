@@ -69,6 +69,15 @@ export default class LoginWeb extends SfCommand<AuthFields> {
       aliases: ['noprompt'],
     }),
     loglevel,
+    // TODO: flag name is too generic, rename before final review
+    app: Flags.string({
+      summary: messages.getMessage('flags.app.summary'),
+      dependsOn: ['username'],
+    }),
+    username: Flags.string({
+      summary: messages.getMessage('flags.username.summary'),
+      dependsOn: ['app'],
+    }),
   };
 
   private logger = Logger.childFromRoot(this.constructor.name);
@@ -80,6 +89,28 @@ export default class LoginWeb extends SfCommand<AuthFields> {
     }
 
     if (await common.shouldExitCommand(flags['no-prompt'])) return {};
+
+    // Add ca/eca to already existing auth info.
+    if (flags.app && flags.username) {
+      // 1. get username authinfo
+      const userAuthInfo = await AuthInfo.create({
+        username: flags.username,
+      });
+
+      const authFields = userAuthInfo.getFields(true);
+
+      // 2. web-auth and save name, clientId, accessToken, and refreshToken in `apps` object
+      const oauthConfig: OAuth2Config = {
+        // TODO: handle clientSecret prompt
+        loginUrl: authFields.loginUrl,
+        clientId: flags['client-id'],
+      };
+
+      await this.executeLoginFlow(oauthConfig, flags.browser, flags.app, flags.username);
+
+      // TODO: add successful app auth msg
+      return userAuthInfo.getFields(true);
+    }
 
     const oauthConfig: OAuth2Config = {
       loginUrl: await common.resolveLoginUrl(flags['instance-url']?.href),
@@ -113,8 +144,19 @@ export default class LoginWeb extends SfCommand<AuthFields> {
 
   // leave it because it's stubbed in the test
   // eslint-disable-next-line class-methods-use-this
-  private async executeLoginFlow(oauthConfig: OAuth2Config, browser?: string): Promise<AuthInfo> {
-    const oauthServer = await WebOAuthServer.create({ oauthConfig });
+  private async executeLoginFlow(
+    oauthConfig: OAuth2Config,
+    browser?: string,
+    // TODO: rename
+    capp?: string,
+    username?: string
+  ): Promise<AuthInfo> {
+    // TODO: document how this works:
+    // 1st case: new user, server creates auth file with new creds
+    // 2nd case: existing auth file, server gets tokens and adds it to the file
+    //
+    // WebOAuthServer types should block any other combination of object params.
+    const oauthServer = await WebOAuthServer.create({ oauthConfig, app: capp, username });
     await oauthServer.start();
     const app = browser && browser in apps ? (browser as AppName) : undefined;
     const openOptions = app ? { app: { name: apps[app] }, wait: false } : { wait: false };

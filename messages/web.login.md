@@ -42,6 +42,14 @@ Browser in which to open the org.
 
 If you don’t specify --browser, the command uses your default browser. The exact names of the browser applications differ depending on the operating system you're on; check your documentation for details.
 
+# flags.app.summary
+
+Name of the connected app or external client app.
+
+# flags.username.summary
+
+Username of the user logging in.
+
 # deviceWarning
 
 "<%= config.bin %> <%= command.id %>" doesn't work when authorizing to a headless environment. Use "<%= config.bin %> org login device" instead.
