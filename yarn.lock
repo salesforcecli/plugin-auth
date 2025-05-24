@@ -1688,7 +1688,7 @@
     strip-ansi "6.0.1"
     ts-retry-promise "^0.8.1"
 
-"@salesforce/core@^8.10.0", "@salesforce/core@^8.10.1", "@salesforce/core@^8.10.3", "@salesforce/core@^8.11.1", "@salesforce/core@^8.5.1", "@salesforce/core@^8.8.0":
+"@salesforce/core@^8.10.0", "@salesforce/core@^8.10.1", "@salesforce/core@^8.10.3", "@salesforce/core@^8.11.0", "@salesforce/core@^8.11.1", "@salesforce/core@^8.5.1", "@salesforce/core@^8.8.0":
   version "8.11.1"
   resolved "https://registry.yarnpkg.com/@salesforce/core/-/core-8.11.1.tgz#d680118f7671de0a102b4c2fe66235203ea6443f"
   integrity sha512-plu13EOxApJBCdGKwbE8bMOrxB5YTnHKGVaBjAk2Mli2M0ADh+q3qn8eedYDG24oViFNcV+sjfjbamQpLNCclA==
@@ -1770,15 +1770,15 @@
     debug "^4.4.0"
     handlebars "^4.7.8"
 
-"@salesforce/plugin-info@^3.4.60":
-  version "3.4.60"
-  resolved "https://registry.yarnpkg.com/@salesforce/plugin-info/-/plugin-info-3.4.60.tgz#a5f5f73e0906c076fa3be8d065085b10b48d5059"
-  integrity sha512-Eh2KxfW3nE5E5ms8HukI+lY7LbZKF5LfvoUp8fLrKrRFE1rfey6jW2IKQeyrJYlOwtdAHg9sUg5dC41MCAwdVg==
+"@salesforce/plugin-info@^3.4.63":
+  version "3.4.63"
+  resolved "https://registry.yarnpkg.com/@salesforce/plugin-info/-/plugin-info-3.4.63.tgz#2a1086e65be85818954539db2c7cbf11c057449c"
+  integrity sha512-plwyA+/P5r3DggVA5a2B9ZY+G4bAJK56fQ0wgPqw1Q3EXXxeTYUyvj4FKeJYn9wfSJjEpn9LY5tME0LAwvKTwQ==
   dependencies:
     "@inquirer/input" "^2.3.0"
     "@jsforce/jsforce-node" "^3.8.1"
     "@oclif/core" "^4"
-    "@salesforce/core" "^8.10.3"
+    "@salesforce/core" "^8.11.0"
     "@salesforce/kit" "^3.2.3"
     "@salesforce/sf-plugins-core" "^12"
     got "^13.0.0"
@@ -1786,7 +1786,7 @@
     marked-terminal "^4.2.0"
     open "^10.1.2"
     proxy-agent "^6.5.0"
-    semver "^7.7.1"
+    semver "^7.7.2"
 
 "@salesforce/prettier-config@^0.0.3":
   version "0.0.3"
@@ -7193,10 +7193,10 @@ semver@^6.0.0, semver@^6.3.1:
   resolved "https://registry.yarnpkg.com/semver/-/semver-6.3.1.tgz#556d2ef8689146e46dcea4bfdd095f3434dffcb4"
   integrity sha512-BR7VvDCVHO+q2xBEWskxS6DJE1qRnb7DxzUrogb71CWoSficBxYsiAGd+Kl0mmq/MprG9yArRkyrQxTO6XjMzA==
 
-semver@^7.3.4, semver@^7.3.5, semver@^7.5.3, semver@^7.5.4, semver@^7.6.0, semver@^7.6.3, semver@^7.7.1:
-  version "7.7.1"
-  resolved "https://registry.yarnpkg.com/semver/-/semver-7.7.1.tgz#abd5098d82b18c6c81f6074ff2647fd3e7220c9f"
-  integrity sha512-hlq8tAfn0m/61p4BVRcPzIGr6LKiMwo4VM6dGi6pt4qcRkmNzTcWq6eCEjEh+qXjkMDvPlOFFSGwQjoEa6gyMA==
+semver@^7.3.4, semver@^7.3.5, semver@^7.5.3, semver@^7.5.4, semver@^7.6.0, semver@^7.6.3, semver@^7.7.1, semver@^7.7.2:
+  version "7.7.2"
+  resolved "https://registry.yarnpkg.com/semver/-/semver-7.7.2.tgz#67d99fdcd35cec21e6f8b87a7fd515a33f982b58"
+  integrity sha512-RF0Fw+rO5AMf9MAyaRXI4AV0Ulj5lMHqVxxdSgiVbixSCXoEmmX/jk0CuJw4+3SqroYO9VoUh+HcuJivvtJemA==
 
 sentence-case@^3.0.4:
   version "3.0.4"
