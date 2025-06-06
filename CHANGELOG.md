@@ -1,3 +1,81 @@
+## [3.6.126](https://github.com/salesforcecli/plugin-auth/compare/3.6.125...3.6.126) (2025-06-01)
+
+### Bug Fixes
+
+- **deps:** bump @salesforce/plugin-info from 3.4.63 to 3.4.65 ([287a7b7](https://github.com/salesforcecli/plugin-auth/commit/287a7b762eb6a407d5e332b08db4099525d5dd06))
+
+## [3.6.125](https://github.com/salesforcecli/plugin-auth/compare/3.6.124...3.6.125) (2025-05-31)
+
+### Bug Fixes
+
+- **deps:** bump @salesforce/core from 8.11.1 to 8.11.4 ([54e7a2e](https://github.com/salesforcecli/plugin-auth/commit/54e7a2e460c28a422bec82bfae4f79d34dc91ad4))
+
+## [3.6.124](https://github.com/salesforcecli/plugin-auth/compare/3.6.123...3.6.124) (2025-05-25)
+
+### Bug Fixes
+
+- **deps:** bump @salesforce/plugin-info from 3.4.60 to 3.4.63 ([86e7827](https://github.com/salesforcecli/plugin-auth/commit/86e78278217d753d427e25275550a13170308b69))
+
+## [3.6.123](https://github.com/salesforcecli/plugin-auth/compare/3.6.122...3.6.123) (2025-05-24)
+
+### Bug Fixes
+
+- **deps:** bump @salesforce/core from 8.11.0 to 8.11.1 ([7898257](https://github.com/salesforcecli/plugin-auth/commit/78982571fe13f05e14cab5a18408f032ae500fc4))
+
+## [3.6.122](https://github.com/salesforcecli/plugin-auth/compare/3.6.121...3.6.122) (2025-05-18)
+
+### Bug Fixes
+
+- **deps:** bump @salesforce/plugin-info from 3.4.59 to 3.4.60 ([3871637](https://github.com/salesforcecli/plugin-auth/commit/3871637d0e55d5d808ec5bb4bae8eaca4cde72f7))
+
+## [3.6.121](https://github.com/salesforcecli/plugin-auth/compare/3.6.120...3.6.121) (2025-05-17)
+
+### Bug Fixes
+
+- **deps:** bump @salesforce/sf-plugins-core from 12.2.1 to 12.2.2 ([abad080](https://github.com/salesforcecli/plugin-auth/commit/abad080dd278552adc9aef3f4428bcd67345f1d8))
+
+## [3.6.120](https://github.com/salesforcecli/plugin-auth/compare/3.6.119...3.6.120) (2025-05-11)
+
+### Bug Fixes
+
+- **deps:** bump @salesforce/plugin-info from 3.4.54 to 3.4.59 ([1e72a9c](https://github.com/salesforcecli/plugin-auth/commit/1e72a9c2e7ab999b5e32030e2ead3a682798fa2f))
+
+## [3.6.119](https://github.com/salesforcecli/plugin-auth/compare/3.6.118...3.6.119) (2025-05-10)
+
+### Bug Fixes
+
+- **deps:** bump @salesforce/core from 8.10.1 to 8.10.3 ([12a71be](https://github.com/salesforcecli/plugin-auth/commit/12a71be940eff325d83d08b245da8dd11ed9c0b6))
+
+## [3.6.118](https://github.com/salesforcecli/plugin-auth/compare/3.6.117...3.6.118) (2025-05-04)
+
+### Bug Fixes
+
+- **deps:** bump @oclif/core from 4.2.10 to 4.3.0 ([db44448](https://github.com/salesforcecli/plugin-auth/commit/db444486ff4dac59dc47853f1e2779218056c12f))
+
+## [3.6.117](https://github.com/salesforcecli/plugin-auth/compare/3.6.116...3.6.117) (2025-05-04)
+
+### Bug Fixes
+
+- **deps:** bump open from 10.1.1 to 10.1.2 ([bd086bb](https://github.com/salesforcecli/plugin-auth/commit/bd086bb9522ac3718c22566bb61ce81060527b7c))
+
+## [3.6.116](https://github.com/salesforcecli/plugin-auth/compare/3.6.115...3.6.116) (2025-05-03)
+
+### Bug Fixes
+
+- **deps:** bump @salesforce/core from 8.10.0 to 8.10.1 ([5bb73cd](https://github.com/salesforcecli/plugin-auth/commit/5bb73cd1d6b3498961dbf312b476d69a63c74ea1))
+
+## [3.6.115](https://github.com/salesforcecli/plugin-auth/compare/3.6.114...3.6.115) (2025-04-27)
+
+### Bug Fixes
+
+- **deps:** bump @salesforce/core from 8.9.1 to 8.10.0 ([0d323e1](https://github.com/salesforcecli/plugin-auth/commit/0d323e17c0c2f51258b2c473afb5dd7fd1caccce))
+
+## [3.6.114](https://github.com/salesforcecli/plugin-auth/compare/3.6.113...3.6.114) (2025-04-27)
+
+### Bug Fixes
+
+- **deps:** bump @salesforce/plugin-info from 3.4.52 to 3.4.54 ([c9f955c](https://github.com/salesforcecli/plugin-auth/commit/c9f955c2c46d2e63b3c996837e05512668fffad1))
+
 ## [3.6.113](https://github.com/salesforcecli/plugin-auth/compare/3.6.112...3.6.113) (2025-04-20)
 
 ### Bug Fixes

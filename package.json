@@ -1,28 +1,28 @@
 {
   "name": "@salesforce/plugin-auth",
   "description": "plugin for sf auth commands",
-  "version": "3.6.113",
+  "version": "3.6.126",
   "author": "Salesforce",
   "bugs": "https://github.com/forcedotcom/cli/issues",
   "dependencies": {
     "@inquirer/checkbox": "^2.5.0",
     "@inquirer/select": "^2.5.0",
     "@oclif/core": "^4",
-    "@salesforce/core": "^8.9.1",
+    "@salesforce/core": "^8.11.4",
     "@salesforce/kit": "^3.2.3",
-    "@salesforce/plugin-info": "^3.4.52",
-    "@salesforce/sf-plugins-core": "^12.2.1",
+    "@salesforce/plugin-info": "^3.4.65",
+    "@salesforce/sf-plugins-core": "^12.2.2",
     "@salesforce/ts-types": "^2.0.11",
-    "open": "^10.1.1"
+    "open": "^10.1.2"
   },
   "devDependencies": {
-    "@oclif/plugin-command-snapshot": "^5.2.38",
+    "@oclif/plugin-command-snapshot": "^5.2.40",
     "@salesforce/cli-plugins-testkit": "^5.3.39",
     "@salesforce/dev-scripts": "^11.0.2",
-    "@salesforce/plugin-command-reference": "^3.1.49",
+    "@salesforce/plugin-command-reference": "^3.1.54",
     "@salesforce/ts-sinon": "^1.4.30",
-    "eslint-plugin-sf-plugin": "^1.20.19",
-    "oclif": "^4.17.44",
+    "eslint-plugin-sf-plugin": "^1.20.24",
+    "oclif": "^4.17.46",
     "ts-node": "^10.9.2",
     "typescript": "^5.5.4"
   },
