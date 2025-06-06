@@ -69,7 +69,6 @@ export default class LoginWeb extends SfCommand<AuthFields> {
       aliases: ['noprompt'],
     }),
     loglevel,
-    // TODO: flag name is too generic, rename before final review
     app: Flags.string({
       summary: messages.getMessage('flags.app.summary'),
       dependsOn: ['username'],
@@ -77,6 +76,9 @@ export default class LoginWeb extends SfCommand<AuthFields> {
     username: Flags.string({
       summary: messages.getMessage('flags.username.summary'),
       dependsOn: ['app'],
+    }),
+    scopes: Flags.string({
+      summary: messages.getMessage('flags.scopes.summary'),
     }),
   };
 
@@ -104,9 +106,10 @@ export default class LoginWeb extends SfCommand<AuthFields> {
         // TODO: handle clientSecret prompt
         loginUrl: authFields.loginUrl,
         clientId: flags['client-id'],
+        ...{ clientSecret: await this.secretPrompt({ message: commonMessages.getMessage('clientSecretStdin') }) },
       };
 
-      await this.executeLoginFlow(oauthConfig, flags.browser, flags.app, flags.username);
+      await this.executeLoginFlow(oauthConfig, flags.browser, flags.app, flags.username, flags.scopes);
 
       // TODO: add successful app auth msg
       return userAuthInfo.getFields(true);
@@ -147,20 +150,25 @@ export default class LoginWeb extends SfCommand<AuthFields> {
   private async executeLoginFlow(
     oauthConfig: OAuth2Config,
     browser?: string,
-    // TODO: rename
-    capp?: string,
-    username?: string
+    app?: string,
+    username?: string,
+    scopes?: string
   ): Promise<AuthInfo> {
-    // TODO: document how this works:
-    // 1st case: new user, server creates auth file with new creds
-    // 2nd case: existing auth file, server gets tokens and adds it to the file
-    //
-    // WebOAuthServer types should block any other combination of object params.
-    const oauthServer = await WebOAuthServer.create({ oauthConfig, app: capp, username });
+    // The server handles 2 possible auth scenarios:
+    // a. 1st time auth, creates auth file.
+    // b. Add CA/ECA to existing auth.
+    const oauthServer = await WebOAuthServer.create({
+      oauthConfig: {
+        ...oauthConfig,
+        scope: scopes,
+      },
+      app,
+      username,
+    });
     await oauthServer.start();
-    const app = browser && browser in apps ? (browser as AppName) : undefined;
-    const openOptions = app ? { app: { name: apps[app] }, wait: false } : { wait: false };
-    this.logger.debug(`Opening browser ${app ?? ''}`);
+    const browserApp = browser && browser in apps ? (browser as AppName) : undefined;
+    const openOptions = browserApp ? { app: { name: apps[browserApp] }, wait: false } : { wait: false };
+    this.logger.debug(`Opening browser ${browserApp ?? ''}`);
     // the following `childProcess` wrapper is needed to catch when `open` fails to open a browser.
     await open(oauthServer.getAuthorizationUrl(), openOptions).then(
       (childProcess) =>
@@ -168,13 +176,13 @@ export default class LoginWeb extends SfCommand<AuthFields> {
           // https://nodejs.org/api/child_process.html#event-exit
           childProcess.on('exit', (code) => {
             if (code && code > 0) {
-              this.logger.debug(`Failed to open browser ${app ?? ''}`);
-              reject(messages.createError('error.cannotOpenBrowser', [app], [app]));
+              this.logger.debug(`Failed to open browser ${browserApp ?? ''}`);
+              reject(messages.createError('error.cannotOpenBrowser', [browserApp], [browserApp]));
             }
             // If the process exited, code is the final exit code of the process, otherwise null.
             // resolve on null just to be safe, worst case the browser didn't open and the CLI just hangs.
             if (code === null || code === 0) {
-              this.logger.debug(`Successfully opened browser ${app ?? ''}`);
+              this.logger.debug(`Successfully opened browser ${browserApp ?? ''}`);
               resolve(childProcess);
             }
           });

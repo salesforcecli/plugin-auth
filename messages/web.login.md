@@ -50,6 +50,10 @@ Name of the connected app or external client app.
 
 Username of the user logging in.
 
+# flags.scopes.summary
+
+Authentication scopes to request.
+
 # deviceWarning
 
 "<%= config.bin %> <%= command.id %>" doesn't work when authorizing to a headless environment. Use "<%= config.bin %> org login device" instead.

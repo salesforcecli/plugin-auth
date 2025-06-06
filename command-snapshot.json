@@ -131,6 +131,7 @@
     "flagChars": ["a", "b", "d", "i", "p", "r", "s"],
     "flags": [
       "alias",
+      "app",
       "browser",
       "client-id",
       "flags-dir",
@@ -138,8 +139,10 @@
       "json",
       "loglevel",
       "no-prompt",
+      "scopes",
       "set-default",
-      "set-default-dev-hub"
+      "set-default-dev-hub",
+      "username"
     ],
     "plugin": "@salesforce/plugin-auth"
   },
