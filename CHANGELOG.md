@@ -1,3 +1,9 @@
+## [3.6.127](https://github.com/salesforcecli/plugin-auth/compare/3.6.126...3.6.127) (2025-06-06)
+
+### Reverts
+
+- Revert "chore: bump core" ([bfc66ac](https://github.com/salesforcecli/plugin-auth/commit/bfc66ac256b82b2a8f91be8774d07566998722bb))
+
 ## [3.6.126](https://github.com/salesforcecli/plugin-auth/compare/3.6.125...3.6.126) (2025-06-01)
 
 ### Bug Fixes
