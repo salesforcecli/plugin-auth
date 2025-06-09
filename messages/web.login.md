@@ -54,6 +54,10 @@ Username of the user logging in.
 
 Authentication scopes to request.
 
+# linkedApp
+
+Successfully linked "%s" app to %s.
+
 # deviceWarning
 
 "<%= config.bin %> <%= command.id %>" doesn't work when authorizing to a headless environment. Use "<%= config.bin %> org login device" instead.

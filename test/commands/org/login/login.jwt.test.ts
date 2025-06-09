@@ -178,7 +178,7 @@ describe('org:login:jwt', () => {
     ]);
   });
 
-  it.only('should throw an error when client id is invalid', async () => {
+  it('should throw an error when client id is invalid', async () => {
     await prepareStubs({ authInfoCreateFails: true });
     try {
       await LoginJwt.run(['-u', testData.username, '-f', 'path/to/key.json', '-i', '123456INVALID', '--json']);

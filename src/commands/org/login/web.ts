@@ -103,7 +103,6 @@ export default class LoginWeb extends SfCommand<AuthFields> {
 
       // 2. web-auth and save name, clientId, accessToken, and refreshToken in `apps` object
       const oauthConfig: OAuth2Config = {
-        // TODO: handle clientSecret prompt
         loginUrl: authFields.loginUrl,
         clientId: flags['client-id'],
         ...{ clientSecret: await this.secretPrompt({ message: commonMessages.getMessage('clientSecretStdin') }) },
@@ -111,7 +110,7 @@ export default class LoginWeb extends SfCommand<AuthFields> {
 
       await this.executeLoginFlow(oauthConfig, flags.browser, flags.app, flags.username, flags.scopes);
 
-      // TODO: add successful app auth msg
+      this.logSuccess(messages.getMessage('linkedApp', [flags.app, flags.username]));
       return userAuthInfo.getFields(true);
     }
 
