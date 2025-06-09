@@ -1,3 +1,21 @@
+## [3.6.129](https://github.com/salesforcecli/plugin-auth/compare/3.6.128...3.6.129) (2025-06-08)
+
+### Bug Fixes
+
+- **deps:** bump @oclif/core from 4.3.0 to 4.3.2 ([c308d07](https://github.com/salesforcecli/plugin-auth/commit/c308d075e0a2a406ce51ceed3b090e7c021c1694))
+
+## [3.6.128](https://github.com/salesforcecli/plugin-auth/compare/3.6.127...3.6.128) (2025-06-07)
+
+### Bug Fixes
+
+- **deps:** bump @salesforce/core from 8.11.4 to 8.12.0 ([59a05a5](https://github.com/salesforcecli/plugin-auth/commit/59a05a5118c5658dc0b5805ee2efe8e1f00b7e33))
+
+## [3.6.127](https://github.com/salesforcecli/plugin-auth/compare/3.6.126...3.6.127) (2025-06-06)
+
+### Reverts
+
+- Revert "chore: bump core" ([bfc66ac](https://github.com/salesforcecli/plugin-auth/commit/bfc66ac256b82b2a8f91be8774d07566998722bb))
+
 ## [3.6.126](https://github.com/salesforcecli/plugin-auth/compare/3.6.125...3.6.126) (2025-06-01)
 
 ### Bug Fixes

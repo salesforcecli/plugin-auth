@@ -1,7 +1,7 @@
 {
   "name": "@salesforce/plugin-auth",
   "description": "plugin for sf auth commands",
-  "version": "3.6.126",
+  "version": "3.6.129",
   "author": "Salesforce",
   "bugs": "https://github.com/forcedotcom/cli/issues",
   "dependencies": {
@@ -16,13 +16,13 @@
     "open": "^10.1.2"
   },
   "devDependencies": {
-    "@oclif/plugin-command-snapshot": "^5.2.40",
+    "@oclif/plugin-command-snapshot": "^5.3.0",
     "@salesforce/cli-plugins-testkit": "^5.3.39",
     "@salesforce/dev-scripts": "^11.0.2",
     "@salesforce/plugin-command-reference": "^3.1.54",
     "@salesforce/ts-sinon": "^1.4.30",
     "eslint-plugin-sf-plugin": "^1.20.24",
-    "oclif": "^4.17.46",
+    "oclif": "^4.18.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.5.4"
   },
