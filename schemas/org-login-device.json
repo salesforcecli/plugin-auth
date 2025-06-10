@@ -22,7 +22,7 @@
             "verification_uri": {
               "type": "string"
             },
-            "apps": {
+            "clientApps": {
               "type": "object",
               "additionalProperties": {
                 "type": "object",

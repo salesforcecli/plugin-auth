@@ -69,13 +69,14 @@ export default class LoginWeb extends SfCommand<AuthFields> {
       aliases: ['noprompt'],
     }),
     loglevel,
-    app: Flags.string({
-      summary: messages.getMessage('flags.app.summary'),
+    'client-app': Flags.string({
+      char: 'c',
+      summary: messages.getMessage('flags.client-app.summary'),
       dependsOn: ['username'],
     }),
     username: Flags.string({
       summary: messages.getMessage('flags.username.summary'),
-      dependsOn: ['app'],
+      dependsOn: ['client-app'],
     }),
     scopes: Flags.string({
       summary: messages.getMessage('flags.scopes.summary'),
@@ -93,7 +94,7 @@ export default class LoginWeb extends SfCommand<AuthFields> {
     if (await common.shouldExitCommand(flags['no-prompt'])) return {};
 
     // Add ca/eca to already existing auth info.
-    if (flags.app && flags.username) {
+    if (flags['client-app'] && flags.username) {
       // 1. get username authinfo
       const userAuthInfo = await AuthInfo.create({
         username: flags.username,
@@ -108,9 +109,9 @@ export default class LoginWeb extends SfCommand<AuthFields> {
         ...{ clientSecret: await this.secretPrompt({ message: commonMessages.getMessage('clientSecretStdin') }) },
       };
 
-      await this.executeLoginFlow(oauthConfig, flags.browser, flags.app, flags.username, flags.scopes);
+      await this.executeLoginFlow(oauthConfig, flags.browser, flags['client-app'], flags.username, flags.scopes);
 
-      this.logSuccess(messages.getMessage('linkedApp', [flags.app, flags.username]));
+      this.logSuccess(messages.getMessage('linkedClientApp', [flags['client-app'], flags.username]));
       return userAuthInfo.getFields(true);
     }
 
@@ -161,7 +162,7 @@ export default class LoginWeb extends SfCommand<AuthFields> {
         ...oauthConfig,
         scope: scopes,
       },
-      app,
+      clientApp: app,
       username,
     });
     await oauthServer.start();

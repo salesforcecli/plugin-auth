@@ -128,11 +128,11 @@
       "setdefaultusername",
       "v"
     ],
-    "flagChars": ["a", "b", "d", "i", "p", "r", "s"],
+    "flagChars": ["a", "b", "c", "d", "i", "p", "r", "s"],
     "flags": [
       "alias",
-      "app",
       "browser",
+      "client-app",
       "client-id",
       "flags-dir",
       "instance-url",

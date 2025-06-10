@@ -42,21 +42,21 @@ Browser in which to open the org.
 
 If you don’t specify --browser, the command uses your default browser. The exact names of the browser applications differ depending on the operating system you're on; check your documentation for details.
 
-# flags.app.summary
+# flags.client-app.summary
 
-Name of the connected app or external client app.
+Name of the connected app or external client app to link to the user.
 
 # flags.username.summary
 
-Username of the user logging in.
+Username to link client app to.
 
 # flags.scopes.summary
 
 Authentication scopes to request.
 
-# linkedApp
+# linkedClientApp
 
-Successfully linked "%s" app to %s.
+Successfully linked "%s" client app to %s.
 
 # deviceWarning
 

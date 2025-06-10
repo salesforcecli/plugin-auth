@@ -5,7 +5,7 @@
     "AuthFields": {
       "type": "object",
       "properties": {
-        "apps": {
+        "clientApps": {
           "type": "object",
           "additionalProperties": {
             "type": "object",
