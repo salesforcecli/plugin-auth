@@ -41,6 +41,11 @@ export default class Logout extends SfCommand<AuthLogoutResults> {
       aliases: ['targetusername', 'u'],
       deprecateAliases: true,
     }),
+    'client-app': Flags.string({
+      char: 'c',
+      summary: messages.getMessage('flags.client-app.summary'),
+      dependsOn: ['target-org'],
+    }),
     all: Flags.boolean({
       char: 'a',
       summary: messages.getMessage('flags.all.summary'),
@@ -59,6 +64,7 @@ export default class Logout extends SfCommand<AuthLogoutResults> {
     loglevel,
   };
 
+  // eslint-disable-next-line complexity
   public async run(): Promise<AuthLogoutResults> {
     const { flags } = await this.parse(Logout);
     const targetUsername =
@@ -68,6 +74,10 @@ export default class Logout extends SfCommand<AuthLogoutResults> {
     // if no-prompt, there must be a resolved target-org or --all
     if (flags['no-prompt'] && !targetUsername && !flags.all) {
       throw messages.createError('noOrgSpecifiedWithNoPrompt');
+    }
+
+    if (flags['client-app']) {
+      return this.logoutClientApp(flags['client-app'], targetUsername);
     }
 
     if (this.jsonEnabled() && !targetUsername && !flags.all) {
@@ -112,6 +122,38 @@ export default class Logout extends SfCommand<AuthLogoutResults> {
       this.info(messages.getMessage('noOrgsSelected'));
       return [];
     }
+  }
+
+  private async logoutClientApp(clientApp: string, username: string): Promise<string[]> {
+    const authInfo = await AuthInfo.create({
+      username,
+    });
+
+    const authFields = authInfo.getFields(true);
+    if (!authFields.clientApps) {
+      throw messages.createError('error.noLinkedApps', [username]);
+    }
+
+    if (authFields.clientApps && !(clientApp in authFields.clientApps)) {
+      throw messages.createError('error.invalidClientApp', [username, clientApp]);
+    }
+
+    // if logging out of the last client app, remove the whole `clientApps` object from the auth fields
+    if (Object.keys(authFields.clientApps).length === 1) {
+      await authInfo.save({
+        clientApps: undefined,
+      });
+    } else {
+      // just remove the specific client app entry
+      delete authFields.clientApps[clientApp];
+
+      await authInfo.save({
+        clientApps: authFields.clientApps,
+      });
+    }
+
+    this.logSuccess(messages.getMessage('logoutClientAppSuccess', [clientApp, username]));
+    return [clientApp];
   }
 
   /** Warning about logging out of a scratch org and losing access to it  */

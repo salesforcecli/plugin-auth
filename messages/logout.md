@@ -40,9 +40,25 @@ Include all authenticated orgs.
 
 All orgs includes Dev Hubs, sandboxes, DE orgs, and expired, deleted, and unknown-status scratch orgs.
 
+# flags.client-app.summary
+
+Client app to log out of.
+
 # logoutOrgCommandSuccess
 
 Successfully logged out of orgs: %s
+
+# logoutClientAppSuccess
+
+Successfully logged out of "%s" client app for user %s.
+
+# error.noLinkedApps
+
+%s does not have any client app linked.
+
+# error.invalidClientApp
+
+%s does not have a client app named "%s" linked.
 
 # noOrgsFound
 
@@ -82,6 +98,6 @@ You must specify a target-org (or default target-org config is set) or use --all
 
 # warning.NoAuthFoundForTargetOrg
 
-No authenticated org found with the %s username or alias. 
+No authenticated org found with the %s username or alias.
 
 NOTE: Starting September 2025, this warning will be converted to an error. As a result, the exit code when you try to log out of an unauthenticated org will change from 0 to 1.

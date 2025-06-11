@@ -150,8 +150,8 @@
     "alias": ["force:auth:logout", "auth:logout"],
     "command": "org:logout",
     "flagAliases": ["noprompt", "targetusername", "u"],
-    "flagChars": ["a", "o", "p"],
-    "flags": ["all", "flags-dir", "json", "loglevel", "no-prompt", "target-org"],
+    "flagChars": ["a", "c", "o", "p"],
+    "flags": ["all", "client-app", "flags-dir", "json", "loglevel", "no-prompt", "target-org"],
     "plugin": "@salesforce/plugin-auth"
   }
 ]
