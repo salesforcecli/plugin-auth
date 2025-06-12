@@ -69,6 +69,18 @@ export default class LoginWeb extends SfCommand<AuthFields> {
       aliases: ['noprompt'],
     }),
     loglevel,
+    'client-app': Flags.string({
+      char: 'c',
+      summary: messages.getMessage('flags.client-app.summary'),
+      dependsOn: ['username'],
+    }),
+    username: Flags.string({
+      summary: messages.getMessage('flags.username.summary'),
+      dependsOn: ['client-app'],
+    }),
+    scopes: Flags.string({
+      summary: messages.getMessage('flags.scopes.summary'),
+    }),
   };
 
   private logger = Logger.childFromRoot(this.constructor.name);
@@ -80,6 +92,28 @@ export default class LoginWeb extends SfCommand<AuthFields> {
     }
 
     if (await common.shouldExitCommand(flags['no-prompt'])) return {};
+
+    // Add ca/eca to already existing auth info.
+    if (flags['client-app'] && flags.username) {
+      // 1. get username authinfo
+      const userAuthInfo = await AuthInfo.create({
+        username: flags.username,
+      });
+
+      const authFields = userAuthInfo.getFields(true);
+
+      // 2. web-auth and save name, clientId, accessToken, and refreshToken in `apps` object
+      const oauthConfig: OAuth2Config = {
+        loginUrl: authFields.loginUrl,
+        clientId: flags['client-id'],
+        ...{ clientSecret: await this.secretPrompt({ message: commonMessages.getMessage('clientSecretStdin') }) },
+      };
+
+      await this.executeLoginFlow(oauthConfig, flags.browser, flags['client-app'], flags.username, flags.scopes);
+
+      this.logSuccess(messages.getMessage('linkedClientApp', [flags['client-app'], flags.username]));
+      return userAuthInfo.getFields(true);
+    }
 
     const oauthConfig: OAuth2Config = {
       loginUrl: await common.resolveLoginUrl(flags['instance-url']?.href),
@@ -113,12 +147,28 @@ export default class LoginWeb extends SfCommand<AuthFields> {
 
   // leave it because it's stubbed in the test
   // eslint-disable-next-line class-methods-use-this
-  private async executeLoginFlow(oauthConfig: OAuth2Config, browser?: string): Promise<AuthInfo> {
-    const oauthServer = await WebOAuthServer.create({ oauthConfig });
+  private async executeLoginFlow(
+    oauthConfig: OAuth2Config,
+    browser?: string,
+    app?: string,
+    username?: string,
+    scopes?: string
+  ): Promise<AuthInfo> {
+    // The server handles 2 possible auth scenarios:
+    // a. 1st time auth, creates auth file.
+    // b. Add CA/ECA to existing auth.
+    const oauthServer = await WebOAuthServer.create({
+      oauthConfig: {
+        ...oauthConfig,
+        scope: scopes,
+      },
+      clientApp: app,
+      username,
+    });
     await oauthServer.start();
-    const app = browser && browser in apps ? (browser as AppName) : undefined;
-    const openOptions = app ? { app: { name: apps[app] }, wait: false } : { wait: false };
-    this.logger.debug(`Opening browser ${app ?? ''}`);
+    const browserApp = browser && browser in apps ? (browser as AppName) : undefined;
+    const openOptions = browserApp ? { app: { name: apps[browserApp] }, wait: false } : { wait: false };
+    this.logger.debug(`Opening browser ${browserApp ?? ''}`);
     // the following `childProcess` wrapper is needed to catch when `open` fails to open a browser.
     await open(oauthServer.getAuthorizationUrl(), openOptions).then(
       (childProcess) =>
@@ -126,13 +176,13 @@ export default class LoginWeb extends SfCommand<AuthFields> {
           // https://nodejs.org/api/child_process.html#event-exit
           childProcess.on('exit', (code) => {
             if (code && code > 0) {
-              this.logger.debug(`Failed to open browser ${app ?? ''}`);
-              reject(messages.createError('error.cannotOpenBrowser', [app], [app]));
+              this.logger.debug(`Failed to open browser ${browserApp ?? ''}`);
+              reject(messages.createError('error.cannotOpenBrowser', [browserApp], [browserApp]));
             }
             // If the process exited, code is the final exit code of the process, otherwise null.
             // resolve on null just to be safe, worst case the browser didn't open and the CLI just hangs.
             if (code === null || code === 0) {
-              this.logger.debug(`Successfully opened browser ${app ?? ''}`);
+              this.logger.debug(`Successfully opened browser ${browserApp ?? ''}`);
               resolve(childProcess);
             }
           });

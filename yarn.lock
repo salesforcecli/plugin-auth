@@ -1688,10 +1688,10 @@
     strip-ansi "6.0.1"
     ts-retry-promise "^0.8.1"
 
-"@salesforce/core@^8.10.0", "@salesforce/core@^8.11.0", "@salesforce/core@^8.11.1", "@salesforce/core@^8.11.2", "@salesforce/core@^8.12.0", "@salesforce/core@^8.5.1", "@salesforce/core@^8.8.0":
-  version "8.12.0"
-  resolved "https://registry.yarnpkg.com/@salesforce/core/-/core-8.12.0.tgz#a458cc3e39f4e7df57d94f0deaaa0fd0660b18c9"
-  integrity sha512-LJIjoQ3UQJ1r/xxdQcaG5bU8MfxeO/LJhrfK/7LZeHVtp1iOIgedbwPuVNzTzYciDWh8elborarrPM4uWjtu5g==
+"@salesforce/core@^8.10.0", "@salesforce/core@^8.11.0", "@salesforce/core@^8.11.1", "@salesforce/core@^8.11.2", "@salesforce/core@^8.13.0", "@salesforce/core@^8.5.1", "@salesforce/core@^8.8.0":
+  version "8.13.0"
+  resolved "https://registry.yarnpkg.com/@salesforce/core/-/core-8.13.0.tgz#ffc00a776c60a401d4385abfeb6cd7fee0d90f3b"
+  integrity sha512-FyAn0UGa93D0N++8poeJt7yEaWQH++qxrv/Wf4TjNaUCLoh19g57lrXuos3qDJPr8Ut4x6QjVxEc49XLy+vBkw==
   dependencies:
     "@jsforce/jsforce-node" "^3.8.2"
     "@salesforce/kit" "^3.2.2"
@@ -2248,21 +2248,7 @@
     "@smithy/types" "^4.2.0"
     tslib "^2.6.2"
 
-"@smithy/signature-v4@^5.0.2":
-  version "5.0.2"
-  resolved "https://registry.yarnpkg.com/@smithy/signature-v4/-/signature-v4-5.0.2.tgz#363854e946fbc5bc206ff82e79ada5d5c14be640"
-  integrity sha512-Mz+mc7okA73Lyz8zQKJNyr7lIcHLiPYp0+oiqiMNc/t7/Kf2BENs5d63pEj7oPqdjaum6g0Fc8wC78dY1TgtXw==
-  dependencies:
-    "@smithy/is-array-buffer" "^4.0.0"
-    "@smithy/protocol-http" "^5.1.0"
-    "@smithy/types" "^4.2.0"
-    "@smithy/util-hex-encoding" "^4.0.0"
-    "@smithy/util-middleware" "^4.0.2"
-    "@smithy/util-uri-escape" "^4.0.0"
-    "@smithy/util-utf8" "^4.0.0"
-    tslib "^2.6.2"
-
-"@smithy/signature-v4@^5.1.0":
+"@smithy/signature-v4@^5.0.2", "@smithy/signature-v4@^5.1.0":
   version "5.1.0"
   resolved "https://registry.yarnpkg.com/@smithy/signature-v4/-/signature-v4-5.1.0.tgz#2c56e5b278482b04383d84ea2c07b7f0a8eb8f63"
   integrity sha512-4t5WX60sL3zGJF/CtZsUQTs3UrZEDO2P7pEaElrekbLqkWPYkgqNW1oeiNYC6xXifBnT9dVBOnNQRvOE9riU9w==

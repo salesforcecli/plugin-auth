@@ -128,18 +128,21 @@
       "setdefaultusername",
       "v"
     ],
-    "flagChars": ["a", "b", "d", "i", "p", "r", "s"],
+    "flagChars": ["a", "b", "c", "d", "i", "p", "r", "s"],
     "flags": [
       "alias",
       "browser",
+      "client-app",
       "client-id",
       "flags-dir",
       "instance-url",
       "json",
       "loglevel",
       "no-prompt",
+      "scopes",
       "set-default",
-      "set-default-dev-hub"
+      "set-default-dev-hub",
+      "username"
     ],
     "plugin": "@salesforce/plugin-auth"
   },
@@ -147,8 +150,8 @@
     "alias": ["force:auth:logout", "auth:logout"],
     "command": "org:logout",
     "flagAliases": ["noprompt", "targetusername", "u"],
-    "flagChars": ["a", "o", "p"],
-    "flags": ["all", "flags-dir", "json", "loglevel", "no-prompt", "target-org"],
+    "flagChars": ["a", "c", "o", "p"],
+    "flags": ["all", "client-app", "flags-dir", "json", "loglevel", "no-prompt", "target-org"],
     "plugin": "@salesforce/plugin-auth"
   }
 ]

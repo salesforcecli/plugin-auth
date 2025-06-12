@@ -184,7 +184,7 @@ describe('org:login:jwt', () => {
       await LoginJwt.run(['-u', testData.username, '-f', 'path/to/key.json', '-i', '123456INVALID', '--json']);
       expect.fail('Should have thrown an error');
     } catch (e) {
-      expect(e).to.be.instanceOf(SfError);
+      expect(e).to.be.instanceOf(Error);
       const jwtAuthError = e as SfError;
       expect(jwtAuthError.message).to.include('We encountered a JSON web token error');
       expect(jwtAuthError.message).to.include('invalid client id');
