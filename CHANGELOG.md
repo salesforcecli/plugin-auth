@@ -1,3 +1,9 @@
+# [3.7.0](https://github.com/salesforcecli/plugin-auth/compare/3.6.129...3.7.0) (2025-06-12)
+
+### Features
+
+- `org login web` support for multi auth W-18394868 ([#1306](https://github.com/salesforcecli/plugin-auth/issues/1306)) ([a20e043](https://github.com/salesforcecli/plugin-auth/commit/a20e04396d6a31654419798a8d4cb692bdc26ced)), closes [#1322](https://github.com/salesforcecli/plugin-auth/issues/1322)
+
 ## [3.6.129](https://github.com/salesforcecli/plugin-auth/compare/3.6.128...3.6.129) (2025-06-08)
 
 ### Bug Fixes
