@@ -54,7 +54,7 @@ Username of the already-authenticated user to link to the connected app or exter
 
 # flags.scopes.summary
 
-Authentication (OAuth) scopes to request. Specify the short name of the scope and separate multiple scopes with spaces, such as "refresh_token web".
+Authentication (OAuth) scopes to request. Use the scope's short name; specify multiple scopes using just one flag instance and separated by spaces: --scopes "sfap_api chatbot_api". 
 
 # linkedClientApp
 
