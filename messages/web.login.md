@@ -32,9 +32,9 @@ You can also use this command to link one or more connected or external client a
 
   <%= config.bin %> <%= command.id %> --instance-url https://MyDomainName--SandboxName.sandbox.my.salesforce.com --set-default --browser chrome
 
-- Use your own connected app by specifying its consumer key (also called client ID):
+- Use your own connected app by specifying its consumer key (also called client ID) and specify additional OAuth scopes:
 
-  <%= config.bin %> <%= command.id %> --instance-url https://MyDomainName--SandboxName.sandbox.my.salesforce.com --set-default --browser chrome --client-id 04580y4051234051
+  <%= config.bin %> <%= command.id %> --instance-url https://MyDomainName--SandboxName.sandbox.my.salesforce.com --set-default --browser chrome --client-id 04580y4051234051 --scopes "sfap_api chatbot_api"
 
 # flags.browser.summary
 
