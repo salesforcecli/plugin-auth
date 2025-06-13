@@ -54,7 +54,7 @@ Username of the already-authenticated user to link to the connected app or exter
 
 # flags.scopes.summary
 
-Authentication (OAuth) scopes to request from the linked connected app or external client app. Specify the short name of the scope, such as "refresh_token".
+Authentication (OAuth) scopes to request. Specify the short name of the scope and separate multiple scopes with spaces, such as "refresh_token web".
 
 # linkedClientApp
 
