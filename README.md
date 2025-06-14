@@ -108,7 +108,7 @@ EXAMPLES
     $ sf org list auth
 ```
 
-_See code: [src/commands/org/list/auth.ts](https://github.com/salesforcecli/plugin-auth/blob/3.7.0/src/commands/org/list/auth.ts)_
+_See code: [src/commands/org/list/auth.ts](https://github.com/salesforcecli/plugin-auth/blob/3.7.1/src/commands/org/list/auth.ts)_
 
 ## `sf org login access-token`
 
@@ -162,7 +162,7 @@ FLAG DESCRIPTIONS
     To specify a sandbox, set --instance-url to "https://<MyDomainName>--<SandboxName>.sandbox.my.salesforce.com".
 ```
 
-_See code: [src/commands/org/login/access-token.ts](https://github.com/salesforcecli/plugin-auth/blob/3.7.0/src/commands/org/login/access-token.ts)_
+_See code: [src/commands/org/login/access-token.ts](https://github.com/salesforcecli/plugin-auth/blob/3.7.1/src/commands/org/login/access-token.ts)_
 
 ## `sf org login device`
 
@@ -222,7 +222,7 @@ FLAG DESCRIPTIONS
     To specify a sandbox, set --instance-url to "https://<MyDomainName>--<SandboxName>.sandbox.my.salesforce.com".
 ```
 
-_See code: [src/commands/org/login/device.ts](https://github.com/salesforcecli/plugin-auth/blob/3.7.0/src/commands/org/login/device.ts)_
+_See code: [src/commands/org/login/device.ts](https://github.com/salesforcecli/plugin-auth/blob/3.7.1/src/commands/org/login/device.ts)_
 
 ## `sf org login jwt`
 
@@ -313,7 +313,7 @@ FLAG DESCRIPTIONS
     To specify a sandbox, set --instance-url to "https://<MyDomainName>--<SandboxName>.sandbox.my.salesforce.com".
 ```
 
-_See code: [src/commands/org/login/jwt.ts](https://github.com/salesforcecli/plugin-auth/blob/3.7.0/src/commands/org/login/jwt.ts)_
+_See code: [src/commands/org/login/jwt.ts](https://github.com/salesforcecli/plugin-auth/blob/3.7.1/src/commands/org/login/jwt.ts)_
 
 ## `sf org login sfdx-url`
 
@@ -383,7 +383,7 @@ EXAMPLES
   $ echo url | sf org login sfdx-url --sfdx-url-stdin
 ```
 
-_See code: [src/commands/org/login/sfdx-url.ts](https://github.com/salesforcecli/plugin-auth/blob/3.7.0/src/commands/org/login/sfdx-url.ts)_
+_See code: [src/commands/org/login/sfdx-url.ts](https://github.com/salesforcecli/plugin-auth/blob/3.7.1/src/commands/org/login/sfdx-url.ts)_
 
 ## `sf org login web`
 
@@ -398,13 +398,18 @@ FLAGS
   -a, --alias=<value>         Alias for the org.
   -b, --browser=<option>      Browser in which to open the org.
                               <options: chrome|edge|firefox>
-  -c, --client-app=<value>    Name of the connected app or external client app to link to the user.
+  -c, --client-app=<value>    Name to give to the link between the connected app or external client and the
+                              already-authenticated user. You can specify any string you want. Must be used with
+                              --username.
   -d, --set-default-dev-hub   Set the authenticated org as the default Dev Hub.
   -i, --client-id=<value>     OAuth client ID (also called consumer key) of your custom connected app.
   -r, --instance-url=<value>  URL of the instance that the org lives on.
   -s, --set-default           Set the authenticated org as the default that all org-related commands run against.
-      --scopes=<value>        Authentication scopes to request.
-      --username=<value>      Username to link client app to.
+      --scopes=<value>        Authentication (OAuth) scopes to request. Use the scope's short name; specify multiple
+                              scopes using just one flag instance and separated by spaces: --scopes "sfap_api
+                              chatbot_api".
+      --username=<value>      Username of the already-authenticated user to link to the connected app or external client
+                              app. Must be used with --client-app.
 
 GLOBAL FLAGS
   --flags-dir=<value>  Import flag values from a directory.
@@ -430,6 +435,15 @@ DESCRIPTION
   digital certificate. Make note of the consumer key (also called cliend id) that’s generated for you. Then specify the
   consumer key with the --client-id flag.
 
+  You can also use this command to link one or more connected or external client apps in an org to an
+  already-authenticated user. Then Salesforce CLI commands that have API-specific requirements, such as new OAuth scopes
+  or JWT-based access tokens, can use these custom client apps rather than the default one. To create the link, you use
+  the --client-app flag to give the link a name and the --username flag to specify the already-authenticated user. Use
+  the --scopes flag to add OAuth scopes if required. After you create the link, you then use the --client-app value in
+  the other command that has the API-specific requirements. An example of a command that uses this feature is "agent
+  preview"; see the "Preview an Agent" section in the "Agentforce Developer Guide" for details and examples.
+  (https://developer.salesforce.com/docs/einstein/genai/guide/agent-dx-preview.html)
+
 ALIASES
   $ sf force auth web login
   $ sf auth web login
@@ -453,10 +467,11 @@ EXAMPLES
     $ sf org login web --instance-url https://MyDomainName--SandboxName.sandbox.my.salesforce.com --set-default \
       --browser chrome
 
-  Use your own connected app by specifying its consumer key (also called client ID):
+  Use your own connected app by specifying its consumer key (also called client ID) and specify additional OAuth
+  scopes:
 
     $ sf org login web --instance-url https://MyDomainName--SandboxName.sandbox.my.salesforce.com --set-default \
-      --browser chrome --client-id 04580y4051234051
+      --browser chrome --client-id 04580y4051234051 --scopes "sfap_api chatbot_api"
 
 FLAG DESCRIPTIONS
   -b, --browser=chrome|edge|firefox  Browser in which to open the org.
@@ -473,7 +488,7 @@ FLAG DESCRIPTIONS
     To specify a sandbox, set --instance-url to "https://<MyDomainName>--<SandboxName>.sandbox.my.salesforce.com".
 ```
 
-_See code: [src/commands/org/login/web.ts](https://github.com/salesforcecli/plugin-auth/blob/3.7.0/src/commands/org/login/web.ts)_
+_See code: [src/commands/org/login/web.ts](https://github.com/salesforcecli/plugin-auth/blob/3.7.1/src/commands/org/login/web.ts)_
 
 ## `sf org logout`
 
@@ -539,6 +554,6 @@ FLAG DESCRIPTIONS
     All orgs includes Dev Hubs, sandboxes, DE orgs, and expired, deleted, and unknown-status scratch orgs.
 ```
 
-_See code: [src/commands/org/logout.ts](https://github.com/salesforcecli/plugin-auth/blob/3.7.0/src/commands/org/logout.ts)_
+_See code: [src/commands/org/logout.ts](https://github.com/salesforcecli/plugin-auth/blob/3.7.1/src/commands/org/logout.ts)_
 
 <!-- commandsstop -->

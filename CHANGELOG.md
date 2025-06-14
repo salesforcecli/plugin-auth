@@ -1,3 +1,9 @@
+## [3.7.1](https://github.com/salesforcecli/plugin-auth/compare/3.7.0...3.7.1) (2025-06-14)
+
+### Bug Fixes
+
+- **deps:** bump @oclif/core from 4.3.2 to 4.3.3 ([481640d](https://github.com/salesforcecli/plugin-auth/commit/481640d5cf13b149114b29cdf0dfe736c9dfc181))
+
 # [3.7.0](https://github.com/salesforcecli/plugin-auth/compare/3.6.129...3.7.0) (2025-06-12)
 
 ### Features
