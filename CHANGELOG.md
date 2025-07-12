@@ -1,3 +1,9 @@
+## [3.7.7](https://github.com/salesforcecli/plugin-auth/compare/3.7.6...3.7.7) (2025-07-12)
+
+### Bug Fixes
+
+- **deps:** bump @salesforce/core from 8.17.0 to 8.18.1 ([ce6201b](https://github.com/salesforcecli/plugin-auth/commit/ce6201bfda5a48df0fa72e307b86ac8a2f15a552))
+
 ## [3.7.6](https://github.com/salesforcecli/plugin-auth/compare/3.7.5...3.7.6) (2025-07-06)
 
 ### Bug Fixes
