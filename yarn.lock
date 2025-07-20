@@ -1807,15 +1807,15 @@
     debug "^4.4.1"
     handlebars "^4.7.8"
 
-"@salesforce/plugin-info@^3.4.72":
-  version "3.4.72"
-  resolved "https://registry.yarnpkg.com/@salesforce/plugin-info/-/plugin-info-3.4.72.tgz#49a7fc5824ac299f075dc056c5e7e40428db691a"
-  integrity sha512-cg0UlJpArywslqriFuIhcghiFdpWtHld65pYQzrFXDFqrLeiS+CYDeOdjcFtp+F6nKElmm07q7LxKYDeO2CzLQ==
+"@salesforce/plugin-info@^3.4.73":
+  version "3.4.73"
+  resolved "https://registry.yarnpkg.com/@salesforce/plugin-info/-/plugin-info-3.4.73.tgz#d8bef12bcda3133bc0af7091c6e449d031775918"
+  integrity sha512-REspJvUoRPR4Y0nR172pMB0B+LeMhjmJM77MQMujnAaUBH/8gX+IV8C9iqpDtRP9BbCxVDtmfozHJwboCtHKIg==
   dependencies:
     "@inquirer/input" "^2.3.0"
     "@jsforce/jsforce-node" "^3.9.1"
     "@oclif/core" "^4"
-    "@salesforce/core" "^8.15.0"
+    "@salesforce/core" "^8.18.1"
     "@salesforce/kit" "^3.2.3"
     "@salesforce/sf-plugins-core" "^12"
     got "^13.0.0"
