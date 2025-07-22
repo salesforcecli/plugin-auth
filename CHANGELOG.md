@@ -1,3 +1,9 @@
+## [3.7.11](https://github.com/salesforcecli/plugin-auth/compare/3.7.10...3.7.11) (2025-07-22)
+
+### Bug Fixes
+
+- **deps:** bump form-data from 4.0.0 to 4.0.4 ([aa44ac5](https://github.com/salesforcecli/plugin-auth/commit/aa44ac5d89002c73f3477e5bd620be42aaa25899))
+
 ## [3.7.10](https://github.com/salesforcecli/plugin-auth/compare/3.7.9...3.7.10) (2025-07-20)
 
 ### Bug Fixes
