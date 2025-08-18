@@ -28,6 +28,8 @@ export default class LoginDevice extends SfCommand<DeviceLoginResult> {
   public static readonly examples = messages.getMessages('examples');
   public static readonly aliases = ['force:auth:device:login', 'auth:device:login'];
   public static readonly deprecateAliases = true;
+  public static readonly hidden = true;
+  public static readonly deprecated = true;
 
   public static readonly flags = {
     'client-id': Flags.string({
@@ -79,6 +81,8 @@ export default class LoginDevice extends SfCommand<DeviceLoginResult> {
     if (this.jsonEnabled()) {
       new Ux().log(JSON.stringify(loginData, null, 2));
     } else {
+      this.log();
+      this.warn('Device Oauth flow is deprecated and will be removed mid January 2026\n');
       this.styledHeader(messages.getMessage('actionRequired'));
       this.log(messages.getMessage('enterCode', [loginData.user_code, loginData.verification_uri]));
       this.log();
