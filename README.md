@@ -72,7 +72,6 @@ sfdx plugins
 
 - [`sf org list auth`](#sf-org-list-auth)
 - [`sf org login access-token`](#sf-org-login-access-token)
-- [`sf org login device`](#sf-org-login-device)
 - [`sf org login jwt`](#sf-org-login-jwt)
 - [`sf org login sfdx-url`](#sf-org-login-sfdx-url)
 - [`sf org login web`](#sf-org-login-web)
@@ -108,7 +107,7 @@ EXAMPLES
     $ sf org list auth
 ```
 
-_See code: [src/commands/org/list/auth.ts](https://github.com/salesforcecli/plugin-auth/blob/3.7.19/src/commands/org/list/auth.ts)_
+_See code: [src/commands/org/list/auth.ts](https://github.com/salesforcecli/plugin-auth/blob/3.8.0/src/commands/org/list/auth.ts)_
 
 ## `sf org login access-token`
 
@@ -162,67 +161,7 @@ FLAG DESCRIPTIONS
     To specify a sandbox, set --instance-url to "https://<MyDomainName>--<SandboxName>.sandbox.my.salesforce.com".
 ```
 
-_See code: [src/commands/org/login/access-token.ts](https://github.com/salesforcecli/plugin-auth/blob/3.7.19/src/commands/org/login/access-token.ts)_
-
-## `sf org login device`
-
-Authorize an org using a device code.
-
-```
-USAGE
-  $ sf org login device [--json] [--flags-dir <value>] [-i <value>] [-r <value>] [-d] [-s] [-a <value>]
-
-FLAGS
-  -a, --alias=<value>         Alias for the org.
-  -d, --set-default-dev-hub   Set the authenticated org as the default Dev Hub.
-  -i, --client-id=<value>     OAuth client ID (also called consumer key) of your custom connected app.
-  -r, --instance-url=<value>  URL of the instance that the org lives on.
-  -s, --set-default           Set the authenticated org as the default that all org-related commands run against.
-
-GLOBAL FLAGS
-  --flags-dir=<value>  Import flag values from a directory.
-  --json               Format output as json.
-
-DESCRIPTION
-  Authorize an org using a device code.
-
-  Use this command to allow a device to connect to an org.
-
-  When you run this command, it first displays an 8-digit device code and the URL for verifying the code on your org.
-  The default instance URL is https://login.salesforce.com, so if the org you're authorizing is on a different instance,
-  use the --instance-url. The command waits while you complete the verification. Open a browser and navigate to the
-  displayed verification URL, enter the code, then click Connect. If you aren't already logged into your org, log in,
-  and then you're prompted to allow the device to connect to the org. After you successfully authorize the org, you can
-  close the browser window.
-
-ALIASES
-  $ sf force auth device login
-  $ sf auth device login
-
-EXAMPLES
-  Authorize an org using a device code, give the org the alias TestOrg1, and set it as your default Dev Hub org:
-
-    $ sf org login device --set-default-dev-hub --alias TestOrg1
-
-  Authorize an org in which you've created a custom connected app with the specified client ID (consumer key):
-
-    $ sf org login device --client-id <OAuth client id>
-
-  Authorize a sandbox org with the specified instance URL:
-
-    $ sf org login device --instance-url https://MyDomainName--SandboxName.sandbox.my.salesforce.com
-
-FLAG DESCRIPTIONS
-  -r, --instance-url=<value>  URL of the instance that the org lives on.
-
-    If you specify an --instance-url value, this value overrides the sfdcLoginUrl value in your sfdx-project.json file.
-
-    To specify a My Domain URL, use the format "https://<MyDomainName>.my.salesforce.com".
-
-    To specify a sandbox, set --instance-url to "https://<MyDomainName>--<SandboxName>.sandbox.my.salesforce.com".
-```
-
-_See code: [src/commands/org/login/device.ts](https://github.com/salesforcecli/plugin-auth/blob/3.7.19/src/commands/org/login/device.ts)_
+_See code: [src/commands/org/login/access-token.ts](https://github.com/salesforcecli/plugin-auth/blob/3.8.0/src/commands/org/login/access-token.ts)_
 
 ## `sf org login jwt`
 
@@ -313,7 +252,7 @@ FLAG DESCRIPTIONS
     To specify a sandbox, set --instance-url to "https://<MyDomainName>--<SandboxName>.sandbox.my.salesforce.com".
 ```
 
-_See code: [src/commands/org/login/jwt.ts](https://github.com/salesforcecli/plugin-auth/blob/3.7.19/src/commands/org/login/jwt.ts)_
+_See code: [src/commands/org/login/jwt.ts](https://github.com/salesforcecli/plugin-auth/blob/3.8.0/src/commands/org/login/jwt.ts)_
 
 ## `sf org login sfdx-url`
 
@@ -383,7 +322,7 @@ EXAMPLES
   $ echo url | sf org login sfdx-url --sfdx-url-stdin
 ```
 
-_See code: [src/commands/org/login/sfdx-url.ts](https://github.com/salesforcecli/plugin-auth/blob/3.7.19/src/commands/org/login/sfdx-url.ts)_
+_See code: [src/commands/org/login/sfdx-url.ts](https://github.com/salesforcecli/plugin-auth/blob/3.8.0/src/commands/org/login/sfdx-url.ts)_
 
 ## `sf org login web`
 
@@ -488,7 +427,7 @@ FLAG DESCRIPTIONS
     To specify a sandbox, set --instance-url to "https://<MyDomainName>--<SandboxName>.sandbox.my.salesforce.com".
 ```
 
-_See code: [src/commands/org/login/web.ts](https://github.com/salesforcecli/plugin-auth/blob/3.7.19/src/commands/org/login/web.ts)_
+_See code: [src/commands/org/login/web.ts](https://github.com/salesforcecli/plugin-auth/blob/3.8.0/src/commands/org/login/web.ts)_
 
 ## `sf org logout`
 
@@ -554,6 +493,6 @@ FLAG DESCRIPTIONS
     All orgs includes Dev Hubs, sandboxes, DE orgs, and expired, deleted, and unknown-status scratch orgs.
 ```
 
-_See code: [src/commands/org/logout.ts](https://github.com/salesforcecli/plugin-auth/blob/3.7.19/src/commands/org/logout.ts)_
+_See code: [src/commands/org/logout.ts](https://github.com/salesforcecli/plugin-auth/blob/3.8.0/src/commands/org/logout.ts)_
 
 <!-- commandsstop -->

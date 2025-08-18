@@ -1,3 +1,9 @@
+# [3.8.0](https://github.com/salesforcecli/plugin-auth/compare/3.7.19...3.8.0) (2025-08-18)
+
+### Features
+
+- deprecate and hide org login device ([#1363](https://github.com/salesforcecli/plugin-auth/issues/1363)) ([4a0db1e](https://github.com/salesforcecli/plugin-auth/commit/4a0db1e73cf10a7e4b503bd739ed4aed267b062e))
+
 ## [3.7.19](https://github.com/salesforcecli/plugin-auth/compare/3.7.18...3.7.19) (2025-08-17)
 
 ### Bug Fixes
