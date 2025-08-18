@@ -1,3 +1,9 @@
+## [3.8.1](https://github.com/salesforcecli/plugin-auth/compare/3.8.0...3.8.1) (2025-08-18)
+
+### Bug Fixes
+
+- bump core dependency to 8.20.0 ([e0198f2](https://github.com/salesforcecli/plugin-auth/commit/e0198f206d8a3ca0b620e2877c8d362a87606a7d))
+
 # [3.8.0](https://github.com/salesforcecli/plugin-auth/compare/3.7.19...3.8.0) (2025-08-18)
 
 ### Features
