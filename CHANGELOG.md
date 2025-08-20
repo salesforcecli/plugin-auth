@@ -1,3 +1,10 @@
+## [3.8.2](https://github.com/salesforcecli/plugin-auth/compare/3.8.1...3.8.2) (2025-08-20)
+
+### Bug Fixes
+
+- update device message and allow code builder ([488dd15](https://github.com/salesforcecli/plugin-auth/commit/488dd15bc9291a5f34bf812f2aeb2c57618c7ceb))
+- update tests ([63d58bc](https://github.com/salesforcecli/plugin-auth/commit/63d58bcaef8b9148b04eebb8c21d9e3b09c09773))
+
 ## [3.8.1](https://github.com/salesforcecli/plugin-auth/compare/3.8.0...3.8.1) (2025-08-18)
 
 ### Bug Fixes
