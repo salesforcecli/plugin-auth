@@ -50,19 +50,19 @@ Name to give to the link between the connected app or external client and the al
 
 # flags.username.summary
 
-Username of the already-authenticated user to link to the connected app or external client app. Must be used with --client-app. 
+Username of the already-authenticated user to link to the connected app or external client app. Must be used with --client-app.
 
 # flags.scopes.summary
 
-Authentication (OAuth) scopes to request. Use the scope's short name; specify multiple scopes using just one flag instance and separated by spaces: --scopes "sfap_api chatbot_api". 
+Authentication (OAuth) scopes to request. Use the scope's short name; specify multiple scopes using just one flag instance and separated by spaces: --scopes "sfap_api chatbot_api".
 
 # linkedClientApp
 
 Successfully linked "%s" client app to %s.
 
-# deviceWarning
+# error.headlessWebAuth
 
-"<%= config.bin %> <%= command.id %>" doesn't work when authorizing to a headless environment. Use "<%= config.bin %> org login device" instead.
+"<%= config.bin %> <%= command.id %>" not supported when authorizing to a headless environment. Use another OAuth flow (e.g., JWT Bearer Flow).
 
 # invalidClientId
 

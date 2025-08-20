@@ -110,9 +110,10 @@ describe('org:login:web', () => {
     const login = await createNewLoginCommand([], false, undefined);
     try {
       await login.run();
+      assert(false, 'should throw error');
     } catch (error) {
       const err = error as SfError;
-      expect(err.name).to.equal('DEVICE_WARNING');
+      expect(err.name).to.equal('SfError');
     }
   });
   it('should throw device warning error when in container mode (SF_CONTAINER_MODE)', async () => {
@@ -120,9 +121,10 @@ describe('org:login:web', () => {
     const login = await createNewLoginCommand([], false, undefined);
     try {
       await login.run();
+      assert(false, 'should throw error');
     } catch (error) {
       const err = error as SfError;
-      expect(err.name).to.equal('DEVICE_WARNING');
+      expect(err.name).to.equal('SfError');
     }
   });
 

@@ -88,7 +88,7 @@ export default class LoginWeb extends SfCommand<AuthFields> {
   public async run(): Promise<AuthFields> {
     const { flags } = await this.parse(LoginWeb);
     if (isContainerMode()) {
-      throw new SfError(messages.getMessage('deviceWarning'), 'DEVICE_WARNING');
+      throw new SfError(messages.getMessage('error.headlessWebAuth'));
     }
 
     if (await common.shouldExitCommand(flags['no-prompt'])) return {};
@@ -194,5 +194,7 @@ export default class LoginWeb extends SfCommand<AuthFields> {
 
 const isContainerMode = (): boolean => {
   const env = new Env();
-  return env.getBoolean('SF_CONTAINER_MODE', env.getBoolean('SFDX_CONTAINER_MODE'));
+  const containerMode = env.getBoolean('SF_CONTAINER_MODE') || env.getBoolean('SFDX_CONTAINER_MODE');
+  const codeBuilder = env.getBoolean('CODE_BUILDER');
+  return containerMode && !codeBuilder;
 };
