@@ -194,7 +194,7 @@ export default class LoginWeb extends SfCommand<AuthFields> {
 
 const isContainerMode = (): boolean => {
   const env = new Env();
-  const containerMode = env.getBoolean('SF_CONTAINER_MODE', env.getBoolean('SFDX_CONTAINER_MODE'));
+  const containerMode = env.getBoolean('SF_CONTAINER_MODE') || env.getBoolean('SFDX_CONTAINER_MODE');
   const codeBuilder = env.getBoolean('CODE_BUILDER');
   return containerMode && !codeBuilder;
 };
