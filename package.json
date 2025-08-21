@@ -1,14 +1,14 @@
 {
   "name": "@salesforce/plugin-auth",
   "description": "plugin for sf auth commands",
-  "version": "3.8.2-cb.1",
+  "version": "3.8.2-cb.2",
   "author": "Salesforce",
   "bugs": "https://github.com/forcedotcom/cli/issues",
   "dependencies": {
     "@inquirer/checkbox": "^2.5.0",
     "@inquirer/select": "^2.5.0",
     "@oclif/core": "^4",
-    "@salesforce/core": "8.20.1-cb.1",
+    "@salesforce/core": "8.21.1-cb.0",
     "@salesforce/kit": "^3.2.3",
     "@salesforce/plugin-info": "^3.4.80",
     "@salesforce/sf-plugins-core": "^12.2.4",
