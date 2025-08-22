@@ -98,6 +98,6 @@ You must specify a target-org (or default target-org config is set) or use --all
 
 You must specify a target-org (or default target-org config is set) or use --all flag when using the --json flag.
 
-# noOrgFoundForTarget
+# noAuthFoundForTargetOrg
 
 No authenticated org found with the %s username or alias.
