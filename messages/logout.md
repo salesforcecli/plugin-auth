@@ -44,7 +44,7 @@ All orgs includes Dev Hubs, sandboxes, DE orgs, and expired, deleted, and unknow
 
 # flags.client-app.summary
 
-Client app to log out of. 
+Client app to log out of.
 
 # logoutOrgCommandSuccess
 
@@ -98,8 +98,6 @@ You must specify a target-org (or default target-org config is set) or use --all
 
 You must specify a target-org (or default target-org config is set) or use --all flag when using the --json flag.
 
-# warning.NoAuthFoundForTargetOrg
+# noOrgFoundForTarget
 
 No authenticated org found with the %s username or alias.
-
-NOTE: Starting September 2025, this warning will be converted to an error. As a result, the exit code when you try to log out of an unauthenticated org will change from 0 to 1.
