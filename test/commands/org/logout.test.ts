@@ -161,7 +161,7 @@ describe('org:logout', () => {
       await Logout.run(['-p', '-o', testOrg1.username, '--json']);
       expect.fail('Expected error to be thrown');
     } catch (e) {
-      expect((e as Error).name).to.equal('NoOrgFoundForTargetError');
+      expect((e as Error).name).to.equal('NoAuthFoundForTargetOrgError');
       expect((e as Error).message).to.include('No authenticated org found');
     }
   });
