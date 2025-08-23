@@ -1822,32 +1822,7 @@
     strip-ansi "6.0.1"
     ts-retry-promise "^0.8.1"
 
-"@salesforce/core@^8.18.5", "@salesforce/core@^8.18.7", "@salesforce/core@^8.19.1", "@salesforce/core@^8.5.1", "@salesforce/core@^8.8.0":
-  version "8.19.1"
-  resolved "https://registry.yarnpkg.com/@salesforce/core/-/core-8.19.1.tgz#300b37db32e29a7b1055091cc13d04a6ccc4d8c1"
-  integrity sha512-HPJxus0W4S1aoT4Qn6mG2s9Ik/mZ59rXNUFc2c+BgEAs28khbZOLR2uiZYexNpXIIZnCrSbb+v1t8IW/idIyCA==
-  dependencies:
-    "@jsforce/jsforce-node" "^3.10.1"
-    "@salesforce/kit" "^3.2.2"
-    "@salesforce/schemas" "^1.9.1"
-    "@salesforce/ts-types" "^2.0.11"
-    ajv "^8.17.1"
-    change-case "^4.1.2"
-    fast-levenshtein "^3.0.0"
-    faye "^1.4.0"
-    form-data "^4.0.4"
-    js2xmlparser "^4.0.1"
-    jsonwebtoken "9.0.2"
-    jszip "3.10.1"
-    memfs "^4.30.1"
-    pino "^9.7.0"
-    pino-abstract-transport "^1.2.0"
-    pino-pretty "^11.3.0"
-    proper-lockfile "^4.1.2"
-    semver "^7.6.3"
-    ts-retry-promise "^0.8.1"
-
-"@salesforce/core@^8.20.0":
+"@salesforce/core@^8.18.7", "@salesforce/core@^8.19.1", "@salesforce/core@^8.20.0", "@salesforce/core@^8.5.1", "@salesforce/core@^8.8.0":
   version "8.20.0"
   resolved "https://registry.yarnpkg.com/@salesforce/core/-/core-8.20.0.tgz#3a63ae04a9fd70ac10123013d3cbf7488a798033"
   integrity sha512-WZoab9aHDbYXUh4nO+91PNLHpiPfK408qjn3l6Sbgck2d0bzYkW5wOmuv5D5yWrEybs9kGosrW/e9liKPGmgng==
@@ -4334,12 +4309,12 @@ eslint-plugin-jsdoc@^46.10.1:
     semver "^7.5.4"
     spdx-expression-parse "^4.0.0"
 
-eslint-plugin-sf-plugin@^1.20.30:
-  version "1.20.30"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-sf-plugin/-/eslint-plugin-sf-plugin-1.20.30.tgz#34d83312ebbb4af2e0595cfc0e51bbe972449b56"
-  integrity sha512-fhOg19KHGfr8lnzSxTXaG16qeokdoVgxYtQAt+Uc4HBF8idoF2cTzsP70O2MI54CKxoo0U0DeqiEgxPkhsKQsg==
+eslint-plugin-sf-plugin@^1.20.31:
+  version "1.20.31"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-sf-plugin/-/eslint-plugin-sf-plugin-1.20.31.tgz#d655ea3bf2f41376021d93612ee1e99c28415b3d"
+  integrity sha512-vFVhmiUVbiqvbD6wa/+O0xNHNhP+zlNMlDEHDNelKwNzEKnI8lrL5CzJKsKOw1r9aa0iEEUuaaHplRUeanflGQ==
   dependencies:
-    "@salesforce/core" "^8.18.5"
+    "@salesforce/core" "^8.19.1"
     "@typescript-eslint/utils" "^7.18.0"
 
 eslint-plugin-unicorn@^50.0.1:
