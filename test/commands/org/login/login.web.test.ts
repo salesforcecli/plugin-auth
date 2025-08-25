@@ -105,27 +105,34 @@ describe('org:login:web', () => {
     expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
   });
 
-  it('should throw device warning error when in container mode (SFDX_CONTAINER_MODE)', async () => {
+  it('should throw headless auth error when in container mode (SFDX_CONTAINER_MODE)', async () => {
     stubMethod($$.SANDBOX, Env.prototype, 'getBoolean').withArgs('SFDX_CONTAINER_MODE').returns(true);
     const login = await createNewLoginCommand([], false, undefined);
     try {
       await login.run();
-      assert(false, 'should throw error');
+      assert(false, 'should throw headless auth error');
     } catch (error) {
       const err = error as SfError;
       expect(err.name).to.equal('SfError');
     }
   });
-  it('should throw device warning error when in container mode (SF_CONTAINER_MODE)', async () => {
+  it('should throw headless auth error when in container mode (SF_CONTAINER_MODE)', async () => {
     stubMethod($$.SANDBOX, Env.prototype, 'getBoolean').withArgs('SF_CONTAINER_MODE').returns(true);
     const login = await createNewLoginCommand([], false, undefined);
     try {
       await login.run();
-      assert(false, 'should throw error');
+      assert(false, 'should throw headless auth error');
     } catch (error) {
       const err = error as SfError;
       expect(err.name).to.equal('SfError');
     }
+  });
+
+  it('should NOT throw headless auth error for CODE_BUILDER auth', async () => {
+    stubMethod($$.SANDBOX, Env.prototype, 'getBoolean').withArgs('CODE_BUILDER').returns(true);
+    const login = await createNewLoginCommand([], false, undefined);
+    const result = await login.run();
+    expect(result).to.deep.equal(authFields);
   });
 
   it('should prompt for client secret when clientid is present', async () => {
