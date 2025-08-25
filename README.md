@@ -108,9 +108,14 @@ EXAMPLES
 ```
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 _See code: [src/commands/org/list/auth.ts](https://github.com/salesforcecli/plugin-auth/blob/3.8.2-cb.4/src/commands/org/list/auth.ts)_
 =======
 _See code: [src/commands/org/list/auth.ts](https://github.com/salesforcecli/plugin-auth/blob/3.8.2/src/commands/org/list/auth.ts)_
+=======
+_See code: [src/commands/org/list/auth.ts](https://github.com/salesforcecli/plugin-auth/blob/3.8.4/src/commands/org/list/auth.ts)_
+
+> > > > > > > main
 
 > > > > > > > main
 
@@ -167,9 +172,14 @@ FLAG DESCRIPTIONS
 ```
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 _See code: [src/commands/org/login/access-token.ts](https://github.com/salesforcecli/plugin-auth/blob/3.8.2-cb.4/src/commands/org/login/access-token.ts)_
 =======
 _See code: [src/commands/org/login/access-token.ts](https://github.com/salesforcecli/plugin-auth/blob/3.8.2/src/commands/org/login/access-token.ts)_
+=======
+_See code: [src/commands/org/login/access-token.ts](https://github.com/salesforcecli/plugin-auth/blob/3.8.4/src/commands/org/login/access-token.ts)_
+
+> > > > > > > main
 
 > > > > > > > main
 
@@ -263,9 +273,14 @@ FLAG DESCRIPTIONS
 ```
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 _See code: [src/commands/org/login/jwt.ts](https://github.com/salesforcecli/plugin-auth/blob/3.8.2-cb.4/src/commands/org/login/jwt.ts)_
 =======
 _See code: [src/commands/org/login/jwt.ts](https://github.com/salesforcecli/plugin-auth/blob/3.8.2/src/commands/org/login/jwt.ts)_
+=======
+_See code: [src/commands/org/login/jwt.ts](https://github.com/salesforcecli/plugin-auth/blob/3.8.4/src/commands/org/login/jwt.ts)_
+
+> > > > > > > main
 
 > > > > > > > main
 
@@ -338,9 +353,14 @@ EXAMPLES
 ```
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 _See code: [src/commands/org/login/sfdx-url.ts](https://github.com/salesforcecli/plugin-auth/blob/3.8.2-cb.4/src/commands/org/login/sfdx-url.ts)_
 =======
 _See code: [src/commands/org/login/sfdx-url.ts](https://github.com/salesforcecli/plugin-auth/blob/3.8.2/src/commands/org/login/sfdx-url.ts)_
+=======
+_See code: [src/commands/org/login/sfdx-url.ts](https://github.com/salesforcecli/plugin-auth/blob/3.8.4/src/commands/org/login/sfdx-url.ts)_
+
+> > > > > > > main
 
 > > > > > > > main
 
@@ -448,9 +468,14 @@ FLAG DESCRIPTIONS
 ```
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 _See code: [src/commands/org/login/web.ts](https://github.com/salesforcecli/plugin-auth/blob/3.8.2-cb.4/src/commands/org/login/web.ts)_
 =======
 _See code: [src/commands/org/login/web.ts](https://github.com/salesforcecli/plugin-auth/blob/3.8.2/src/commands/org/login/web.ts)_
+=======
+_See code: [src/commands/org/login/web.ts](https://github.com/salesforcecli/plugin-auth/blob/3.8.4/src/commands/org/login/web.ts)_
+
+> > > > > > > main
 
 > > > > > > > main
 
@@ -519,9 +544,14 @@ FLAG DESCRIPTIONS
 ```
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 _See code: [src/commands/org/logout.ts](https://github.com/salesforcecli/plugin-auth/blob/3.8.2-cb.4/src/commands/org/logout.ts)_
 =======
 _See code: [src/commands/org/logout.ts](https://github.com/salesforcecli/plugin-auth/blob/3.8.2/src/commands/org/logout.ts)_
+=======
+_See code: [src/commands/org/logout.ts](https://github.com/salesforcecli/plugin-auth/blob/3.8.4/src/commands/org/logout.ts)_
+
+> > > > > > > main
 
 > > > > > > > main
 
