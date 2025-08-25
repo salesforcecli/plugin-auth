@@ -1,21 +1,91 @@
+# [3.9.0](https://github.com/salesforcecli/plugin-auth/compare/3.8.4...3.9.0) (2025-08-25)
+
+## [3.8.2-cb.4](https://github.com/salesforcecli/plugin-auth/compare/3.8.2-cb.3...3.8.2-cb.4) (2025-08-22)
+
+### Bug Fixes
+
+- update to latest core for cb ([8a0aca8](https://github.com/salesforcecli/plugin-auth/commit/8a0aca87968d210b37ebd2f7421c472a6b4d934d))
+
+## [3.8.2-cb.3](https://github.com/salesforcecli/plugin-auth/compare/3.8.2-cb.1...3.8.2-cb.3) (2025-08-21)
+
+### Bug Fixes
+
+- updated core ([d0eace3](https://github.com/salesforcecli/plugin-auth/commit/d0eace3667dfa93ce84b260834413f0dd2e64913))
+
+## [3.8.2-cb.1](https://github.com/salesforcecli/plugin-auth/compare/3.8.2-cb.0...3.8.2-cb.1) (2025-08-21)
+
+### Bug Fixes
+
+- bump core dep ([0a58472](https://github.com/salesforcecli/plugin-auth/commit/0a584727a4b739cf67d495f7f7b333cf277b569a))
+
+## [3.8.2-cb.0](https://github.com/salesforcecli/plugin-auth/compare/3.8.2...3.8.2-cb.0) (2025-08-20)
+
+### Bug Fixes
+
+- use cb version of core ([152ce04](https://github.com/salesforcecli/plugin-auth/commit/152ce04756a798c99eec8d71ad9716d54a37b815))
+
+## [3.8.2-dev-cb.0](https://github.com/salesforcecli/plugin-auth/compare/3.8.1...3.8.2-dev-cb.0) (2025-08-19)
+
+### Features
+
+- support code builder web auth ([d4abeb2](https://github.com/salesforcecli/plugin-auth/commit/d4abeb23ca7098e5f7a8e456409c09b932cfab90))
+
 ## [3.8.4](https://github.com/salesforcecli/plugin-auth/compare/3.8.3...3.8.4) (2025-08-24)
 
 ### Bug Fixes
 
 - **deps:** bump @salesforce/plugin-info from 3.4.80 to 3.4.81 ([65b555a](https://github.com/salesforcecli/plugin-auth/commit/65b555a4c6f26c0ec8e6a4ac9f5269ea0d846f74))
 
-## [3.8.3](https://github.com/salesforcecli/plugin-auth/compare/3.8.2...3.8.3) (2025-08-24)
+## [3.8.3](https://github.com/salesforcecli/plugin-auth/compare/3.8.2-cb.4...3.8.3) (2025-08-24)
 
 ### Bug Fixes
 
 - **deps:** bump @salesforce/core from 8.20.0 to 8.21.2 ([9f6aba2](https://github.com/salesforcecli/plugin-auth/commit/9f6aba20c39239ec3d3a9a0060d914aa8aeb686b))
 
-## [3.8.2](https://github.com/salesforcecli/plugin-auth/compare/3.8.1...3.8.2) (2025-08-20)
+## [3.8.2](https://github.com/salesforcecli/plugin-auth/compare/3.8.2-dev-cb.0...3.8.2) (2025-08-20)
+
+## [3.8.2-cb.4](https://github.com/salesforcecli/plugin-auth/compare/3.8.2-cb.3...3.8.2-cb.4) (2025-08-22)
+
+### Bug Fixes
+
+- update to latest core for cb ([8a0aca8](https://github.com/salesforcecli/plugin-auth/commit/8a0aca87968d210b37ebd2f7421c472a6b4d934d))
+
+## [3.8.2-cb.3](https://github.com/salesforcecli/plugin-auth/compare/3.8.2-cb.1...3.8.2-cb.3) (2025-08-21)
+
+### Bug Fixes
+
+- updated core ([d0eace3](https://github.com/salesforcecli/plugin-auth/commit/d0eace3667dfa93ce84b260834413f0dd2e64913))
+
+## [3.8.2-cb.1](https://github.com/salesforcecli/plugin-auth/compare/3.8.2-cb.0...3.8.2-cb.1) (2025-08-21)
+
+### Bug Fixes
+
+- bump core dep ([0a58472](https://github.com/salesforcecli/plugin-auth/commit/0a584727a4b739cf67d495f7f7b333cf277b569a))
+
+## [3.8.2-cb.0](https://github.com/salesforcecli/plugin-auth/compare/3.8.2...3.8.2-cb.0) (2025-08-20)
+
+### Bug Fixes
+
+- use cb version of core ([152ce04](https://github.com/salesforcecli/plugin-auth/commit/152ce04756a798c99eec8d71ad9716d54a37b815))
+
+## [3.8.2-dev-cb.0](https://github.com/salesforcecli/plugin-auth/compare/3.8.1...3.8.2-dev-cb.0) (2025-08-19)
+
+### Features
+
+- support code builder web auth ([d4abeb2](https://github.com/salesforcecli/plugin-auth/commit/d4abeb23ca7098e5f7a8e456409c09b932cfab90))
+
+## [3.8.2](https://github.com/salesforcecli/plugin-auth/compare/3.8.2-dev-cb.0...3.8.2) (2025-08-20)
 
 ### Bug Fixes
 
 - update device message and allow code builder ([488dd15](https://github.com/salesforcecli/plugin-auth/commit/488dd15bc9291a5f34bf812f2aeb2c57618c7ceb))
 - update tests ([63d58bc](https://github.com/salesforcecli/plugin-auth/commit/63d58bcaef8b9148b04eebb8c21d9e3b09c09773))
+
+## [3.8.2-dev-cb.0](https://github.com/salesforcecli/plugin-auth/compare/3.8.1...3.8.2-dev-cb.0) (2025-08-19)
+
+### Features
+
+- support code builder web auth ([d4abeb2](https://github.com/salesforcecli/plugin-auth/commit/d4abeb23ca7098e5f7a8e456409c09b932cfab90))
 
 ## [3.8.1](https://github.com/salesforcecli/plugin-auth/compare/3.8.0...3.8.1) (2025-08-18)
 
