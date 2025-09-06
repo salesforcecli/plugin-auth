@@ -9,7 +9,7 @@
     "@inquirer/select": "^2.5.0",
     "@oclif/core": "^4",
     "@salesforce/core": "8.22.0",
-    "@salesforce/kit": "^3.2.3",
+    "@salesforce/kit": "^3.2.4",
     "@salesforce/plugin-info": "^3.4.83",
     "@salesforce/sf-plugins-core": "^12.2.4",
     "@salesforce/ts-types": "^2.0.11",
