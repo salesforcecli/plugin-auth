@@ -1,3 +1,12 @@
+## [3.9.5](https://github.com/salesforcecli/plugin-auth/compare/3.9.4...3.9.5) (2025-09-10)
+
+### Bug Fixes
+
+- remove warning and throw error ([4fff10d](https://github.com/salesforcecli/plugin-auth/commit/4fff10dfade5bcdba6143fa83666ddd861adfb04))
+- rename message title ([b9cd466](https://github.com/salesforcecli/plugin-auth/commit/b9cd4663223d42a0b9c5b2f225553f64b20c8e18))
+- update NUT ([a511957](https://github.com/salesforcecli/plugin-auth/commit/a5119574cef663430015176173f87d9d4c353786))
+- update test ([4e18265](https://github.com/salesforcecli/plugin-auth/commit/4e182654ffb835ddde939b9478f3acbcdcfc6b2e))
+
 ## [3.9.4](https://github.com/salesforcecli/plugin-auth/compare/3.9.3...3.9.4) (2025-09-07)
 
 ### Bug Fixes
