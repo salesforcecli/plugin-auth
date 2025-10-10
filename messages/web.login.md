@@ -62,7 +62,7 @@ Successfully linked "%s" client app to %s.
 
 # error.headlessWebAuth
 
-"org login web" is not supported when authorizing to a headless environment. Use another OAuth flow (e.g., JWT Bearer Flow).
+"org login web" isn't supported when authorizing in a headless environment. Use another OAuth flow, such as the JWT Bearer Flow with the "org login jwt" command.
 
 # invalidClientId
 
