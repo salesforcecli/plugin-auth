@@ -1,3 +1,10 @@
+## [3.9.10](https://github.com/salesforcecli/plugin-auth/compare/3.9.9...3.9.10) (2025-10-10)
+
+### Bug Fixes
+
+- command bin and id not replaced in errors ([794d56f](https://github.com/salesforcecli/plugin-auth/commit/794d56f6661486e008ca7f8f73d7cb48170d73d1))
+- suggestions ([0e415b4](https://github.com/salesforcecli/plugin-auth/commit/0e415b4d052401b8d9fcbd720784b282648f6c1c))
+
 ## [3.9.9](https://github.com/salesforcecli/plugin-auth/compare/3.9.8...3.9.9) (2025-09-28)
 
 ### Bug Fixes
