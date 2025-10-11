@@ -10,7 +10,7 @@
     "@oclif/core": "^4",
     "@salesforce/core": "8.23.2",
     "@salesforce/kit": "^3.2.4",
-    "@salesforce/plugin-info": "^3.4.88",
+    "@salesforce/plugin-info": "^3.4.89",
     "@salesforce/sf-plugins-core": "^12.2.4",
     "@salesforce/ts-types": "^2.0.11",
     "open": "^10.2.0"
