@@ -1720,9 +1720,9 @@
     fastq "^1.6.0"
 
 "@oclif/core@^4", "@oclif/core@^4.0.27", "@oclif/core@^4.5.2", "@oclif/core@^4.5.3", "@oclif/core@^4.5.5":
-  version "4.5.6"
-  resolved "https://registry.yarnpkg.com/@oclif/core/-/core-4.5.6.tgz#44671b5bafbc96ceeadd448da85f3b0eb0b16b41"
-  integrity sha512-FmmA6a2+GwhRtULNB9G+YZp2Whi/mgCjNC1EaHGMEztnlM4Je3wRmbAraucSsHsycSgihnm2MtcmudI+8xo8Lw==
+  version "4.7.2"
+  resolved "https://registry.yarnpkg.com/@oclif/core/-/core-4.7.2.tgz#9ebf36b4693500685956f3405c55526d191aa5ef"
+  integrity sha512-AmZnhEnyD7bFxmzEKRaOEr0kzonmwIip72eWZPWB5+7D9ayHa/QFX08zhaQT9eOo0//ed64v5p5QZIbYCbQaJQ==
   dependencies:
     ansi-escapes "^4.3.2"
     ansis "^3.17.0"
@@ -8746,16 +8746,7 @@ wrap-ansi@^8.1.0:
     string-width "^5.0.1"
     strip-ansi "^7.0.1"
 
-wrap-ansi@^9.0.0:
-  version "9.0.0"
-  resolved "https://registry.yarnpkg.com/wrap-ansi/-/wrap-ansi-9.0.0.tgz#1a3dc8b70d85eeb8398ddfb1e4a02cd186e58b3e"
-  integrity sha512-G8ura3S+3Z2G+mkgNRq8dqaFZAuxfsxpBB8OCTGRTCtp+l/v9nbFNmCUP1BZMts3G1142MsZfn6eeUKrr4PD1Q==
-  dependencies:
-    ansi-styles "^6.2.1"
-    string-width "^7.0.0"
-    strip-ansi "^7.1.0"
-
-wrap-ansi@^9.0.2:
+wrap-ansi@^9.0.0, wrap-ansi@^9.0.2:
   version "9.0.2"
   resolved "https://registry.yarnpkg.com/wrap-ansi/-/wrap-ansi-9.0.2.tgz#956832dea9494306e6d209eb871643bb873d7c98"
   integrity sha512-42AtmgqjV+X1VpdOfyTGOYRi0/zsoLqtXQckTmqTeybT+BDIbM/Guxo7x3pE2vtpr1ok6xRqM9OpBe+Jyoqyww==
