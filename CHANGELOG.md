@@ -1,3 +1,9 @@
+## [3.9.17](https://github.com/salesforcecli/plugin-auth/compare/3.9.16...3.9.17) (2025-10-28)
+
+### Bug Fixes
+
+- bump sfdx-core ([35d1dd0](https://github.com/salesforcecli/plugin-auth/commit/35d1dd0324b98d07be0a5c5d4c70cf3c7bb18886))
+
 ## [3.9.16](https://github.com/salesforcecli/plugin-auth/compare/3.9.15...3.9.16) (2025-10-26)
 
 ### Bug Fixes
