@@ -133,7 +133,7 @@ export default class LoginWeb extends SfCommand<AuthFields> {
     };
 
     try {
-      const authInfo = await this.executeLoginFlow(oauthConfig, flags.browser);
+      const authInfo = await this.executeLoginFlow(oauthConfig, flags.browser, flags.scopes);
       await authInfo.handleAliasAndDefaultSettings({
         alias: flags.alias,
         setDefault: flags['set-default'],
