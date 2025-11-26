@@ -170,4 +170,133 @@ describe('org:login:web', () => {
       expect(err.message).to.include('error!');
     }
   });
+
+  it('should pass scopes flag to executeLoginFlow when scopes are provided', async () => {
+    authFields = await testData.getConfig();
+    $$.SANDBOX.stub(SfCommand.prototype, 'secretPrompt').resolves('');
+    $$.SANDBOX.stub(SfCommand.prototype, 'confirm').resolves(false);
+
+    authInfoStub = stubInterface<AuthInfo>($$.SANDBOX, {
+      getFields: () => authFields,
+    });
+
+    // Create the stub and capture it for verification
+    const executeLoginFlowStub = stubMethod($$.SANDBOX, LoginWeb.prototype, 'executeLoginFlow').resolves(authInfoStub);
+    $$.SANDBOX.stub(AuthInfo, 'listAllAuthorizations').resolves([]);
+
+    // @ts-ignore
+    const login = new LoginWeb(['--scopes', 'api web refresh_token'], config);
+    // @ts-ignore because protected member
+    login.ux = uxStub;
+    // @ts-ignore because protected member
+    login.flags = { noprompt: true, scopes: 'api web refresh_token' };
+
+    await login.run();
+
+    // Verify that executeLoginFlow was called with the scopes parameter
+    expect(executeLoginFlowStub.callCount).to.equal(1);
+    const callArgs = executeLoginFlowStub.getCall(0).args;
+    expect(callArgs[2]).to.equal('api web refresh_token'); // scopes should be the 3rd argument
+  });
+
+  it('should pass undefined scopes to executeLoginFlow when scopes flag is not provided', async () => {
+    authFields = await testData.getConfig();
+    $$.SANDBOX.stub(SfCommand.prototype, 'secretPrompt').resolves('');
+    $$.SANDBOX.stub(SfCommand.prototype, 'confirm').resolves(false);
+
+    authInfoStub = stubInterface<AuthInfo>($$.SANDBOX, {
+      getFields: () => authFields,
+    });
+
+    // Create the stub and capture it for verification
+    const executeLoginFlowStub = stubMethod($$.SANDBOX, LoginWeb.prototype, 'executeLoginFlow').resolves(authInfoStub);
+    $$.SANDBOX.stub(AuthInfo, 'listAllAuthorizations').resolves([]);
+
+    // @ts-ignore
+    const login = new LoginWeb([], config);
+    // @ts-ignore because protected member
+    login.ux = uxStub;
+    // @ts-ignore because protected member
+    login.flags = { noprompt: true };
+
+    await login.run();
+
+    // Verify that executeLoginFlow was called without scopes (undefined)
+    expect(executeLoginFlowStub.callCount).to.equal(1);
+    const callArgs = executeLoginFlowStub.getCall(0).args;
+    expect(callArgs[2]).to.be.undefined; // scopes should be undefined when not provided
+  });
+
+  it('should pass scopes flag to executeLoginFlow when linking client-app with scopes', async () => {
+    authFields = await testData.getConfig();
+    $$.SANDBOX.stub(SfCommand.prototype, 'secretPrompt').resolves('client-secret');
+    $$.SANDBOX.stub(SfCommand.prototype, 'confirm').resolves(false);
+
+    authInfoStub = stubInterface<AuthInfo>($$.SANDBOX, {
+      getFields: () => authFields,
+    });
+
+    // Create the stub and capture it for verification
+    const executeLoginFlowStub = stubMethod($$.SANDBOX, LoginWeb.prototype, 'executeLoginFlow').resolves(authInfoStub);
+    // @ts-ignore
+    $$.SANDBOX.stub(AuthInfo, 'create').resolves(authInfoStub);
+    $$.SANDBOX.stub(AuthInfo, 'listAllAuthorizations').resolves([]);
+
+    // @ts-ignore
+    const login = new LoginWeb(['--client-app', 'MyApp', '--username', 'test@example.com', '--scopes', 'api web'], config);
+    // @ts-ignore because protected member
+    login.ux = uxStub;
+    // @ts-ignore because protected member
+    login.flags = {
+      noprompt: true,
+      'client-app': 'MyApp',
+      username: 'test@example.com',
+      scopes: 'api web',
+    };
+
+    await login.run();
+
+    // Verify that executeLoginFlow was called with the correct parameters
+    expect(executeLoginFlowStub.callCount).to.equal(1);
+    const callArgs = executeLoginFlowStub.getCall(0).args;
+    expect(callArgs[2]).to.equal('MyApp'); // client-app should be the 3rd argument
+    expect(callArgs[3]).to.equal('test@example.com'); // username should be the 4th argument
+    expect(callArgs[4]).to.equal('api web'); // scopes should be the 5th argument
+  });
+
+  it('should pass undefined scopes to executeLoginFlow when linking client-app without scopes', async () => {
+    authFields = await testData.getConfig();
+    $$.SANDBOX.stub(SfCommand.prototype, 'secretPrompt').resolves('client-secret');
+    $$.SANDBOX.stub(SfCommand.prototype, 'confirm').resolves(false);
+
+    authInfoStub = stubInterface<AuthInfo>($$.SANDBOX, {
+      getFields: () => authFields,
+    });
+
+    // Create the stub and capture it for verification
+    const executeLoginFlowStub = stubMethod($$.SANDBOX, LoginWeb.prototype, 'executeLoginFlow').resolves(authInfoStub);
+    // @ts-ignore
+    $$.SANDBOX.stub(AuthInfo, 'create').resolves(authInfoStub);
+    $$.SANDBOX.stub(AuthInfo, 'listAllAuthorizations').resolves([]);
+
+    // @ts-ignore
+    const login = new LoginWeb(['--client-app', 'MyApp', '--username', 'test@example.com'], config);
+    // @ts-ignore because protected member
+    login.ux = uxStub;
+    // @ts-ignore because protected member
+    login.flags = {
+      noprompt: true,
+      'client-app': 'MyApp',
+      username: 'test@example.com',
+    };
+
+    await login.run();
+
+    // Verify that executeLoginFlow was called with the correct parameters
+    expect(executeLoginFlowStub.callCount).to.equal(1);
+    const callArgs = executeLoginFlowStub.getCall(0).args;
+    expect(callArgs[2]).to.equal('MyApp'); // client-app should be the 3rd argument
+    expect(callArgs[3]).to.equal('test@example.com'); // username should be the 4th argument
+    expect(callArgs[4]).to.be.undefined; // scopes should be undefined when not provided
+  });
 });
