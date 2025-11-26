@@ -1,3 +1,9 @@
+## [3.9.20](https://github.com/salesforcecli/plugin-auth/compare/3.9.19...3.9.20) (2025-11-26)
+
+### Bug Fixes
+
+- **web:** respect `--scopes` in both auth scenarios ([0a02af3](https://github.com/salesforcecli/plugin-auth/commit/0a02af3c2afd102d7bf6d0ced31f5fe28086e2f8))
+
 ## [3.9.19](https://github.com/salesforcecli/plugin-auth/compare/3.9.18...3.9.19) (2025-11-09)
 
 ### Bug Fixes
