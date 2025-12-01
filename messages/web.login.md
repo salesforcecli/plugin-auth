@@ -56,6 +56,10 @@ Username of the already-authenticated user to link to the connected app or exter
 
 Authentication (OAuth) scopes to request. Use the scope's short name; specify multiple scopes using just one flag instance and separated by spaces: --scopes "sfap_api chatbot_api".
 
+# flags.scopes.invalidFormat
+
+The --scopes flag must be a space-separated list (example: "api web").
+
 # linkedClientApp
 
 Successfully linked "%s" client app to %s.
