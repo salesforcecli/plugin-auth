@@ -242,9 +242,9 @@ describe('org:login:web', () => {
     $$.SANDBOX.stub(AuthInfo, 'create').resolves(authInfoStub);
     $$.SANDBOX.stub(AuthInfo, 'listAllAuthorizations').resolves([]);
 
-    // @ts-ignore
     const login = new LoginWeb(
       ['--client-app', 'MyApp', '--username', 'test@example.com', '--scopes', 'api web'],
+      // @ts-ignore
       config
     );
     // @ts-ignore because protected member
