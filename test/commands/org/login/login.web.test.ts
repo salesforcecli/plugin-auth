@@ -23,7 +23,7 @@ import { StubbedType, stubInterface, stubMethod } from '@salesforce/ts-sinon';
 import { assert, expect } from 'chai';
 import { Env } from '@salesforce/kit';
 import { SfCommand, Ux } from '@salesforce/sf-plugins-core';
-import LoginWeb from '../../../../src/commands/org/login/web.js';
+import LoginWeb, { ExecuteLoginFlowParams } from '../../../../src/commands/org/login/web.js';
 
 describe('org:login:web', () => {
   const $$ = new TestContext();
@@ -195,8 +195,8 @@ describe('org:login:web', () => {
 
     // Verify that executeLoginFlow was called with the scopes parameter
     expect(executeLoginFlowStub.callCount).to.equal(1);
-    const callArgs = executeLoginFlowStub.getCall(0).args;
-    expect(callArgs[2]).to.equal('api web refresh_token'); // scopes should be the 3rd argument
+    const callArgs = executeLoginFlowStub.getCall(0).args[0] as ExecuteLoginFlowParams;
+    expect(callArgs.scopes).to.equal('api web refresh_token'); // scopes should be present in the object
   });
 
   it('should pass undefined scopes to executeLoginFlow when scopes flag is not provided', async () => {
@@ -223,8 +223,8 @@ describe('org:login:web', () => {
 
     // Verify that executeLoginFlow was called without scopes (undefined)
     expect(executeLoginFlowStub.callCount).to.equal(1);
-    const callArgs = executeLoginFlowStub.getCall(0).args;
-    expect(callArgs[2]).to.be.undefined; // scopes should be undefined when not provided
+    const callArgs = executeLoginFlowStub.getCall(0).args[0] as ExecuteLoginFlowParams;
+    expect(callArgs.scopes).to.be.undefined;
   });
 
   it('should pass scopes flag to executeLoginFlow when linking client-app with scopes', async () => {
@@ -242,8 +242,11 @@ describe('org:login:web', () => {
     $$.SANDBOX.stub(AuthInfo, 'create').resolves(authInfoStub);
     $$.SANDBOX.stub(AuthInfo, 'listAllAuthorizations').resolves([]);
 
-    // @ts-ignore
-    const login = new LoginWeb(['--client-app', 'MyApp', '--username', 'test@example.com', '--scopes', 'api web'], config);
+    const login = new LoginWeb(
+      ['--client-app', 'MyApp', '--username', 'test@example.com', '--scopes', 'api web'],
+      // @ts-ignore
+      config
+    );
     // @ts-ignore because protected member
     login.ux = uxStub;
     // @ts-ignore because protected member
@@ -258,10 +261,10 @@ describe('org:login:web', () => {
 
     // Verify that executeLoginFlow was called with the correct parameters
     expect(executeLoginFlowStub.callCount).to.equal(1);
-    const callArgs = executeLoginFlowStub.getCall(0).args;
-    expect(callArgs[2]).to.equal('MyApp'); // client-app should be the 3rd argument
-    expect(callArgs[3]).to.equal('test@example.com'); // username should be the 4th argument
-    expect(callArgs[4]).to.equal('api web'); // scopes should be the 5th argument
+    const callArgs = executeLoginFlowStub.getCall(0).args[0] as ExecuteLoginFlowParams;
+    expect(callArgs.clientApp?.name).to.equal('MyApp');
+    expect(callArgs.clientApp?.username).to.equal('test@example.com');
+    expect(callArgs.scopes).to.equal('api web');
   });
 
   it('should pass undefined scopes to executeLoginFlow when linking client-app without scopes', async () => {
@@ -294,9 +297,9 @@ describe('org:login:web', () => {
 
     // Verify that executeLoginFlow was called with the correct parameters
     expect(executeLoginFlowStub.callCount).to.equal(1);
-    const callArgs = executeLoginFlowStub.getCall(0).args;
-    expect(callArgs[2]).to.equal('MyApp'); // client-app should be the 3rd argument
-    expect(callArgs[3]).to.equal('test@example.com'); // username should be the 4th argument
-    expect(callArgs[4]).to.be.undefined; // scopes should be undefined when not provided
+    const callArgs = executeLoginFlowStub.getCall(0).args[0] as ExecuteLoginFlowParams;
+    expect(callArgs.clientApp?.name).to.equal('MyApp');
+    expect(callArgs.clientApp?.username).to.equal('test@example.com');
+    expect(callArgs.scopes).to.be.undefined;
   });
 });

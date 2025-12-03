@@ -24,6 +24,12 @@ Messages.importMessagesDirectoryFromMetaUrl(import.meta.url);
 const messages = Messages.loadMessages('@salesforce/plugin-auth', 'web.login');
 const commonMessages = Messages.loadMessages('@salesforce/plugin-auth', 'messages');
 
+export type ExecuteLoginFlowParams = {
+  oauthConfig: OAuth2Config;
+  browser?: string;
+  scopes?: string;
+} & ({ clientApp: { name: string; username: string } } | { clientApp?: undefined });
+
 export default class LoginWeb extends SfCommand<AuthFields> {
   public static readonly summary = messages.getMessage('summary');
   public static readonly description = messages.getMessage('description');
@@ -89,6 +95,12 @@ export default class LoginWeb extends SfCommand<AuthFields> {
     }),
     scopes: Flags.string({
       summary: messages.getMessage('flags.scopes.summary'),
+      parse: async (input: string) => {
+        if (input.includes(',')) {
+          throw new SfError(messages.getMessage('flags.scopes.invalidFormat'));
+        }
+        return Promise.resolve(input);
+      },
     }),
   };
 
@@ -118,7 +130,12 @@ export default class LoginWeb extends SfCommand<AuthFields> {
         ...{ clientSecret: await this.secretPrompt({ message: commonMessages.getMessage('clientSecretStdin') }) },
       };
 
-      await this.executeLoginFlow(oauthConfig, flags.browser, flags['client-app'], flags.username, flags.scopes);
+      await this.executeLoginFlow({
+        oauthConfig,
+        browser: flags.browser,
+        clientApp: { name: flags['client-app'], username: flags.username },
+        scopes: flags.scopes,
+      });
 
       this.logSuccess(messages.getMessage('linkedClientApp', [flags['client-app'], flags.username]));
       return userAuthInfo.getFields(true);
@@ -133,7 +150,12 @@ export default class LoginWeb extends SfCommand<AuthFields> {
     };
 
     try {
-      const authInfo = await this.executeLoginFlow(oauthConfig, flags.browser, flags.scopes);
+      const authInfo = await this.executeLoginFlow({
+        oauthConfig,
+        browser: flags.browser,
+        clientApp: undefined,
+        scopes: flags.scopes,
+      });
       await authInfo.handleAliasAndDefaultSettings({
         alias: flags.alias,
         setDefault: flags['set-default'],
@@ -156,13 +178,12 @@ export default class LoginWeb extends SfCommand<AuthFields> {
 
   // leave it because it's stubbed in the test
   // eslint-disable-next-line class-methods-use-this
-  private async executeLoginFlow(
-    oauthConfig: OAuth2Config,
-    browser?: string,
-    app?: string,
-    username?: string,
-    scopes?: string
-  ): Promise<AuthInfo> {
+  private async executeLoginFlow({
+    oauthConfig,
+    browser,
+    clientApp,
+    scopes,
+  }: ExecuteLoginFlowParams): Promise<AuthInfo> {
     // The server handles 2 possible auth scenarios:
     // a. 1st time auth, creates auth file.
     // b. Add CA/ECA to existing auth.
@@ -171,8 +192,8 @@ export default class LoginWeb extends SfCommand<AuthFields> {
         ...oauthConfig,
         scope: scopes,
       },
-      clientApp: app,
-      username,
+      clientApp: clientApp?.name,
+      username: clientApp?.username,
     });
     await oauthServer.start();
     const browserApp = browser && browser in apps ? (browser as AppName) : undefined;
