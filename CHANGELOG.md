@@ -1,3 +1,9 @@
+## [3.9.22](https://github.com/salesforcecli/plugin-auth/compare/3.9.21...3.9.22) (2025-12-03)
+
+### Bug Fixes
+
+- **web:** refactor logic/fix scopes ([3b8d50d](https://github.com/salesforcecli/plugin-auth/commit/3b8d50dfae5929a50e30e977a869e4b3f4dcbaac))
+
 ## [3.9.21](https://github.com/salesforcecli/plugin-auth/compare/3.9.20...3.9.21) (2025-11-29)
 
 ### Bug Fixes
