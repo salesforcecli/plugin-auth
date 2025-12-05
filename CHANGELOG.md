@@ -1,3 +1,9 @@
+## [3.9.23](https://github.com/salesforcecli/plugin-auth/compare/3.9.22...3.9.23) (2025-12-05)
+
+### Bug Fixes
+
+- **deps:** bump jws from 3.2.2 to 3.2.3 ([30e9c7e](https://github.com/salesforcecli/plugin-auth/commit/30e9c7e067017ca8a939681e900f046901a38627))
+
 ## [3.9.22](https://github.com/salesforcecli/plugin-auth/compare/3.9.21...3.9.22) (2025-12-03)
 
 ### Bug Fixes
