@@ -1,7 +1,7 @@
 {
   "name": "@salesforce/plugin-auth",
   "description": "plugin for sf auth commands",
-  "version": "3.9.26",
+  "version": "4.0.0",
   "author": "Salesforce",
   "bugs": "https://github.com/forcedotcom/cli/issues",
   "dependencies": {
@@ -75,9 +75,6 @@
               },
               "access-token": {
                 "description": "authorize an org using an access token"
-              },
-              "device": {
-                "description": "authorize an org using a device code"
               }
             }
           },
