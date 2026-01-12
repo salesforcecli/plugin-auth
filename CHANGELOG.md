@@ -1,3 +1,15 @@
+# [4.1.0](https://github.com/salesforcecli/plugin-auth/compare/3.9.26...4.1.0) (2026-01-12)
+
+### Bug Fixes
+
+- remove messages file for device login ([ef04a7f](https://github.com/salesforcecli/plugin-auth/commit/ef04a7f37f265184f2c2506386401f960be4c301))
+
+### Features
+
+- remove command and tests for org login device ([7540420](https://github.com/salesforcecli/plugin-auth/commit/7540420a89bbfe2e0530a2b21b5da1c7b3b70e16))
+- remove device flow login command ([4e88d4e](https://github.com/salesforcecli/plugin-auth/commit/4e88d4ef76ce2bab69862c4dd9e3b5caccb3ec21))
+- update the snapshot again and bump the plugin to a new major version ([23c71df](https://github.com/salesforcecli/plugin-auth/commit/23c71df8e6caa25771249597e1b2640772d149cb))
+
 ## [3.9.26](https://github.com/salesforcecli/plugin-auth/compare/3.9.25...3.9.26) (2025-12-13)
 
 ### Bug Fixes
