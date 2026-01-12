@@ -32,6 +32,30 @@
     "plugin": "@salesforce/plugin-auth"
   },
   {
+    "alias": ["force:auth:device:login", "auth:device:login"],
+    "command": "org:login:device",
+    "flagAliases": [
+      "clientid",
+      "instanceurl",
+      "setalias",
+      "setdefaultdevhub",
+      "setdefaultdevhubusername",
+      "setdefaultusername"
+    ],
+    "flagChars": ["a", "d", "i", "r", "s"],
+    "flags": [
+      "alias",
+      "client-id",
+      "flags-dir",
+      "instance-url",
+      "json",
+      "loglevel",
+      "set-default",
+      "set-default-dev-hub"
+    ],
+    "plugin": "@salesforce/plugin-auth"
+  },
+  {
     "alias": ["force:auth:jwt:grant", "auth:jwt:grant"],
     "command": "org:login:jwt",
     "flagAliases": [
