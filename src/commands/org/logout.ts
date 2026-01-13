@@ -24,6 +24,7 @@ import {
   Mode,
   OrgAuthorization,
   OrgConfigProperties,
+  SfError,
 } from '@salesforce/core';
 import checkbox, { Separator } from '@inquirer/checkbox';
 import { Flags, loglevel, SfCommand, StandardColors } from '@salesforce/sf-plugins-core';
@@ -122,7 +123,17 @@ export default class Logout extends SfCommand<AuthLogoutResults> {
     if (skipPrompt || (await this.confirm({ message: getOrgConfirmationMessage(selectedOrgs, orgAuths.length) }))) {
       const remover = await AuthRemover.create();
       const loggedOutUsernames = selectedOrgs.map((org) => org.username);
-      await Promise.all(loggedOutUsernames.map((username) => remover.removeAuth(username)));
+      try {
+        await processInBatches(loggedOutUsernames, 10, (username) => remover.removeAuth(username));
+      } catch (error) {
+        const err = SfError.wrap(error);
+        if (err.code === 'ELOCKED' && 'file' in err) {
+          const lockedFile = err.file as string;
+          err.setData(lockedFile);
+          err.message = `${err.message} (file: ${lockedFile})`;
+        }
+        throw err;
+      }
       this.logSuccess(messages.getMessage('logoutOrgCommandSuccess', [loggedOutUsernames.join(os.EOL)]));
       return loggedOutUsernames;
     } else {
@@ -190,6 +201,26 @@ const getOrgConfirmationMessage = (selectedOrgs: OrgAuthorization[], originalOrg
   return selectedOrgs.length === originalOrgCount
     ? messages.getMessage('prompt.confirm-all')
     : messages.getMessage('prompt.confirm', [selectedOrgs.length, selectedOrgs.length > 1 ? 's' : '']);
+};
+
+/**
+ * Process items in batches to reduce lock contention on shared files.
+ * This is particularly important on Windows where file locking is stricter.
+ *
+ * @param items Array of items to process
+ * @param batchSize Number of items to process concurrently in each batch
+ * @param processor Function to process each item
+ */
+const processInBatches = async <T>(
+  items: T[],
+  batchSize: number,
+  processor: (item: T) => Promise<void>
+): Promise<void> => {
+  for (let i = 0; i < items.length; i += batchSize) {
+    const batch = items.slice(i, i + batchSize);
+    // eslint-disable-next-line no-await-in-loop
+    await Promise.all(batch.map(processor));
+  }
 };
 
 /** A whole bunch of custom formatting to make the list look nicer */
