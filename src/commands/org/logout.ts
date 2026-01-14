@@ -127,8 +127,8 @@ export default class Logout extends SfCommand<AuthLogoutResults> {
         await processInBatches(loggedOutUsernames, 10, (username) => remover.removeAuth(username));
       } catch (error) {
         const err = SfError.wrap(error);
-        if (err.code === 'ELOCKED' && 'file' in err) {
-          const lockedFile = err.file as string;
+        if (err.code === 'ELOCKED' && error && typeof error === 'object' && 'file' in error) {
+          const lockedFile = error.file as string;
           err.setData(lockedFile);
           err.message = `${err.message} (file: ${lockedFile})`;
         }
