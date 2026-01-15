@@ -1,3 +1,9 @@
+## [4.1.1](https://github.com/salesforcecli/plugin-auth/compare/4.1.0...4.1.1) (2026-01-15)
+
+### Bug Fixes
+
+- batch org logouts @W-20891183 ([#1437](https://github.com/salesforcecli/plugin-auth/issues/1437)) ([8e49f5f](https://github.com/salesforcecli/plugin-auth/commit/8e49f5f70c6848d493e0d7c462997ac7534902f3))
+
 # [4.1.0](https://github.com/salesforcecli/plugin-auth/compare/3.9.26...4.1.0) (2026-01-12)
 
 ### Bug Fixes
