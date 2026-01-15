@@ -174,4 +174,104 @@ describe('org:logout', () => {
       expect((e as Error).message).to.include('No authenticated org found');
     }
   });
+
+  describe('batch processing', () => {
+    beforeEach(() => {
+      authRemoverSpy = $$.SANDBOX.spy(AuthRemover.prototype, 'removeAuth');
+      stubUx($$.SANDBOX);
+    });
+
+    it('should process removals in batches of 10', async () => {
+      // Create 25 test orgs to test batch processing
+      const testOrgs = Array.from({ length: 25 }, () => new MockTestOrgData());
+      await $$.stubAuths(...testOrgs);
+      $$.setConfigStubContents('Config', { contents: {} });
+
+      const response = await Logout.run(['-p', '-a', '--json']);
+      expect(response).to.have.length(25);
+      expect(authRemoverSpy.callCount).to.equal(25);
+      // Verify all usernames are in the response
+      const usernames = testOrgs.map((org) => org.username);
+      expect(response).to.have.members(usernames);
+    });
+
+    it('should handle exactly 10 orgs in a single batch', async () => {
+      const testOrgs = Array.from({ length: 10 }, () => new MockTestOrgData());
+      await $$.stubAuths(...testOrgs);
+      $$.setConfigStubContents('Config', { contents: {} });
+
+      const response = await Logout.run(['-p', '-a', '--json']);
+      expect(response).to.have.length(10);
+      expect(authRemoverSpy.callCount).to.equal(10);
+    });
+  });
+
+  describe('ELOCKED error handling', () => {
+    it('should enrich ELOCKED error with file information', async () => {
+      await prepareStubs({ 'target-org': testOrg1.username });
+      const lockedFile = '/path/to/alias.json';
+      // Create an error that mimics proper-lockfile ELOCKED error structure
+      const elockedError = Object.assign(new Error('Lock file is already being held'), {
+        code: 'ELOCKED',
+        file: lockedFile,
+      });
+
+      // Stub removeAuth to throw ELOCKED error
+      authRemoverSpy.restore();
+      $$.SANDBOX.stub(AuthRemover.prototype, 'removeAuth').rejects(elockedError);
+
+      try {
+        await Logout.run(['-p', '--json']);
+        expect.fail('Expected error to be thrown');
+      } catch (e) {
+        const error = e as Error & { code?: string; data?: string; file?: string };
+        expect(error.code).to.equal('ELOCKED');
+        expect(error.data).to.equal(lockedFile);
+        expect(error.message).to.include('Lock file is already being held');
+        expect(error.message).to.include(`(file: ${lockedFile})`);
+      }
+    });
+
+    it('should handle ELOCKED error without file property', async () => {
+      await prepareStubs({ 'target-org': testOrg1.username });
+      const elockedError = new Error('Lock file is already being held') as Error & { code?: string };
+      elockedError.code = 'ELOCKED';
+
+      // Stub removeAuth to throw ELOCKED error without file property
+      authRemoverSpy.restore();
+      $$.SANDBOX.stub(AuthRemover.prototype, 'removeAuth').rejects(elockedError);
+
+      try {
+        await Logout.run(['-p', '--json']);
+        expect.fail('Expected error to be thrown');
+      } catch (e) {
+        const error = e as Error & { code?: string };
+        expect(error.code).to.equal('ELOCKED');
+        expect(error.message).to.include('Lock file is already being held');
+        // Should not have file in message if file property doesn't exist
+        expect(error.message).to.not.include('(file:');
+      }
+    });
+
+    it('should re-throw non-ELOCKED errors unchanged', async () => {
+      await prepareStubs({ 'target-org': testOrg1.username });
+      const otherError = new Error('Some other error') as Error & { code?: string };
+      otherError.code = 'ESOMEOTHER';
+
+      // Stub removeAuth to throw a different error
+      authRemoverSpy.restore();
+      $$.SANDBOX.stub(AuthRemover.prototype, 'removeAuth').rejects(otherError);
+
+      try {
+        await Logout.run(['-p', '--json']);
+        expect.fail('Expected error to be thrown');
+      } catch (e) {
+        const error = e as Error & { code?: string };
+        expect(error.code).to.equal('ESOMEOTHER');
+        expect(error.message).to.equal('Some other error');
+        // Should not have file information appended
+        expect(error.message).to.not.include('(file:');
+      }
+    });
+  });
 });
