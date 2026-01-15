@@ -1567,6 +1567,31 @@
     ts-retry-promise "^0.8.1"
     zod "^4.1.12"
 
+"@salesforce/core@^8.24.2":
+  version "8.24.2"
+  resolved "https://registry.yarnpkg.com/@salesforce/core/-/core-8.24.2.tgz#04ac4725065851a471abbad0ec2ea8f0391b68d8"
+  integrity sha512-1CC4q123FYDF0IGRKLF4cWuodYkHKcKI9RurHCPzrEIHU28C2gYePi9gfujKJlhRdqskPMwQ3Q2EtfQQdS4wtQ==
+  dependencies:
+    "@jsforce/jsforce-node" "^3.10.10"
+    "@salesforce/kit" "^3.2.4"
+    "@salesforce/ts-types" "^2.0.12"
+    ajv "^8.17.1"
+    change-case "^4.1.2"
+    fast-levenshtein "^3.0.0"
+    faye "^1.4.1"
+    form-data "^4.0.4"
+    js2xmlparser "^4.0.1"
+    jsonwebtoken "9.0.3"
+    jszip "3.10.1"
+    memfs "^4.30.1"
+    pino "^9.7.0"
+    pino-abstract-transport "^1.2.0"
+    pino-pretty "^11.3.0"
+    proper-lockfile "^4.1.2"
+    semver "^7.7.3"
+    ts-retry-promise "^0.8.1"
+    zod "^4.1.12"
+
 "@salesforce/dev-config@^4.3.1":
   version "4.3.1"
   resolved "https://registry.yarnpkg.com/@salesforce/dev-config/-/dev-config-4.3.1.tgz#4dac8245df79d675258b50e1d24e8c636eaa5e10"
