@@ -15,15 +15,13 @@
  */
 
 import { Flags, loglevel, SfCommand } from '@salesforce/sf-plugins-core';
-import { AuthFields, AuthInfo, Messages, matchesAccessToken, SfError, StateAggregator } from '@salesforce/core';
+import { AuthFields, AuthInfo, Messages, StateAggregator } from '@salesforce/core';
 import { env } from '@salesforce/kit';
 import { InferredFlags } from '@oclif/core/interfaces';
 
 Messages.importMessagesDirectoryFromMetaUrl(import.meta.url);
 const messages = Messages.loadMessages('@salesforce/plugin-auth', 'accesstoken.store');
 const commonMessages = Messages.loadMessages('@salesforce/plugin-auth', 'messages');
-
-const ACCESS_TOKEN_FORMAT = '"<org id>!<accesstoken>"';
 
 export default class LoginAccessToken extends SfCommand<AuthFields> {
   public static readonly summary = messages.getMessage('summary');
@@ -122,15 +120,12 @@ export default class LoginAccessToken extends SfCommand<AuthFields> {
   }
 
   private async getAccessToken(): Promise<string> {
-    const accessToken =
+    return (
       env.getString('SF_ACCESS_TOKEN') ??
       env.getString('SFDX_ACCESS_TOKEN') ??
       (this.flags['no-prompt'] === true
         ? '' // will throw when validating
-        : await this.secretPrompt({ message: commonMessages.getMessage('accessTokenStdin') }));
-    if (!matchesAccessToken(accessToken)) {
-      throw new SfError(messages.getMessage('invalidAccessTokenFormat', [ACCESS_TOKEN_FORMAT]));
-    }
-    return accessToken;
+        : await this.secretPrompt({ message: commonMessages.getMessage('accessTokenStdin') }))
+    );
   }
 }

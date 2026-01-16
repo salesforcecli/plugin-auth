@@ -15,7 +15,7 @@
  */
 
 import { AuthFields, AuthInfo, StateAggregator } from '@salesforce/core';
-import { assert, expect } from 'chai';
+import { expect } from 'chai';
 import { TestContext } from '@salesforce/core/testSetup';
 import { stubPrompter, stubSfCommandUx } from '@salesforce/sf-plugins-core';
 import { env } from '@salesforce/kit';
@@ -66,19 +66,6 @@ describe('org:login:access-token', () => {
     expect(prompterStubs.secret.callCount).to.equal(1);
     expect(stubSfCommandUxStubs.logSuccess.callCount).to.equal(1);
     expect(result).to.deep.equal(authFields);
-  });
-
-  it('should show invalid access token provided as input', async () => {
-    prompterStubs.secret.resolves('invalidaccesstokenformat');
-
-    try {
-      await Store.run(['--instance-url', 'https://foo.bar.org.salesforce.com']);
-      assert(false, 'should throw error');
-    } catch (e) {
-      assert(e instanceof Error);
-      expect(e.message).to.include("The access token isn't in the correct format");
-    }
-    expect(prompterStubs.secret.callCount).to.equal(1);
   });
 
   it('should show that auth file already exists', async () => {
