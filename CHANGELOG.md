@@ -1,3 +1,9 @@
+## [4.1.4](https://github.com/salesforcecli/plugin-auth/compare/4.1.3...4.1.4) (2026-01-24)
+
+### Bug Fixes
+
+- **deps:** bump @salesforce/core from 8.24.3 to 8.25.0 ([432524c](https://github.com/salesforcecli/plugin-auth/commit/432524c9dc576ccb7d772ae208c751e76c795461))
+
 ## [4.1.3](https://github.com/salesforcecli/plugin-auth/compare/4.1.2...4.1.3) (2026-01-22)
 
 ### Bug Fixes
