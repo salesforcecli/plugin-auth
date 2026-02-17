@@ -1,3 +1,9 @@
+## [4.1.6](https://github.com/salesforcecli/plugin-auth/compare/4.1.5...4.1.6) (2026-02-17)
+
+### Bug Fixes
+
+- enable PDP events via o11y for PFT ([00cdb80](https://github.com/salesforcecli/plugin-auth/commit/00cdb808c3ee2931a5e0b12a4bbec63dc42452c6))
+
 ## [4.1.5](https://github.com/salesforcecli/plugin-auth/compare/4.1.4...4.1.5) (2026-02-07)
 
 ### Bug Fixes
