@@ -125,7 +125,8 @@ export default class LoginWeb extends SfCommand<AuthFields> {
     const codeBuilderState = env.getString(CODE_BUILDER_STATE_ENV_VAR);
     if (codeBuilderState) {
       const verificationCode = getVerificationCode(codeBuilderState);
-      this.logSuccess(messages.getMessage('verificationCode', [verificationCode]));
+
+      this.log(messages.getMessage('verificationCode', [verificationCode]));
     }
 
     if (await common.shouldExitCommand(flags['no-prompt'])) return {};

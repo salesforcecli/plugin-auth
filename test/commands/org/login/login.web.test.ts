@@ -315,15 +315,15 @@ describe('org:login:web', () => {
 
     $$.SANDBOX.stub(Env.prototype, 'getBoolean').returns(false); // Prevent container mode checks
 
-    const logSuccessStub = stubMethod($$.SANDBOX, SfCommand.prototype, 'logSuccess');
+    const logStub = stubMethod($$.SANDBOX, SfCommand.prototype, 'log');
 
     const login = await createNewLoginCommand([], false, undefined);
     await login.run();
 
-    // Verify that logSuccess was called with the verification code message
+    // Verify that log was called with the verification code message
     const verificationCode = getVerificationCode(codeBuilderState);
-    expect(logSuccessStub.callCount).to.be.greaterThan(0);
-    const calls = logSuccessStub.getCalls();
+    expect(logStub.callCount).to.be.greaterThan(0);
+    const calls = logStub.getCalls();
     const verificationCodeCall = calls.find(
       (call) => typeof call.args[0] === 'string' && call.args[0].includes(verificationCode)
     );
