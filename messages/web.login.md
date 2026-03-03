@@ -82,4 +82,4 @@ Unable to open the browser you specified (%s).
 
 # verificationCode
 
-- Your verification code is %s. Enter this in the browser window that just opened. SECURITY NOTE: Only enter this PIN if you initiated this login.
+- Your verification code is %s. Enter this in the browser window that just opened. SECURITY NOTE: Enter this PIN only if you initiated this login.
