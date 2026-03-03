@@ -14,11 +14,19 @@
  * limitations under the License.
  */
 
+import { createHash } from 'node:crypto';
 import open, { apps, AppName } from 'open';
 import { Flags, SfCommand, loglevel } from '@salesforce/sf-plugins-core';
 import { AuthFields, AuthInfo, Logger, Messages, OAuth2Config, SfError, WebOAuthServer } from '@salesforce/core';
 import { Env } from '@salesforce/kit';
 import common from '../../../common.js';
+
+export const CODE_BUILDER_STATE_ENV_VAR = 'CODE_BUILDER_STATE';
+
+export const getVerificationCode = (codeBuilderState: string): string => {
+  const hash = createHash('sha256').update(codeBuilderState, 'utf8').digest('hex');
+  return hash.substring(0, 4);
+};
 
 Messages.importMessagesDirectoryFromMetaUrl(import.meta.url);
 const messages = Messages.loadMessages('@salesforce/plugin-auth', 'web.login');
@@ -110,6 +118,14 @@ export default class LoginWeb extends SfCommand<AuthFields> {
     const { flags } = await this.parse(LoginWeb);
     if (isContainerMode()) {
       throw new SfError(messages.getMessage('error.headlessWebAuth'));
+    }
+
+    // Display verification code for Code Builder mode if env is set
+    const env = new Env();
+    const codeBuilderState = env.getString(CODE_BUILDER_STATE_ENV_VAR);
+    if (codeBuilderState) {
+      const verificationCode = getVerificationCode(codeBuilderState);
+      this.logSuccess(messages.getMessage('verificationCode', [verificationCode]));
     }
 
     if (await common.shouldExitCommand(flags['no-prompt'])) return {};
