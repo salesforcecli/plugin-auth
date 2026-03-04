@@ -1,3 +1,16 @@
+# [4.2.0](https://github.com/salesforcecli/plugin-auth/compare/4.1.8...4.2.0) (2026-03-04)
+
+### Bug Fixes
+
+- change logSuccess to log ([0cca002](https://github.com/salesforcecli/plugin-auth/commit/0cca00222933f154039ac53dbb1e8711193e7432))
+- update test ([0929645](https://github.com/salesforcecli/plugin-auth/commit/09296450f149e4172fe2b89218a593c63a81a277))
+- update the message ([005c91e](https://github.com/salesforcecli/plugin-auth/commit/005c91e397da74de4403ac015a03af7da7653f6c))
+
+### Features
+
+- add display message in CodeBuilderMode ([f11ea44](https://github.com/salesforcecli/plugin-auth/commit/f11ea44fb1bb97f80dade93c9d4fd99be6454e69))
+- add test for env set/unset ([2ac408a](https://github.com/salesforcecli/plugin-auth/commit/2ac408a8ab85f219515116e69dc519b7ead8113b))
+
 ## [4.1.8](https://github.com/salesforcecli/plugin-auth/compare/4.1.7...4.1.8) (2026-02-28)
 
 ### Bug Fixes
