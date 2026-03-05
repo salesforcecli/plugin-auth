@@ -17,15 +17,21 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
 import { Config } from '@oclif/core';
-import { AuthFields, AuthInfo, SfError } from '@salesforce/core';
+import { AuthFields, AuthInfo, SfError, Messages } from '@salesforce/core';
 import { MockTestOrgData, TestContext } from '@salesforce/core/testSetup';
 import { StubbedType, stubInterface, stubMethod } from '@salesforce/ts-sinon';
 import { assert, expect } from 'chai';
 import { Env } from '@salesforce/kit';
 import { SfCommand, Ux } from '@salesforce/sf-plugins-core';
-import LoginWeb, { ExecuteLoginFlowParams } from '../../../../src/commands/org/login/web.js';
+import LoginWeb, {
+  ExecuteLoginFlowParams,
+  CODE_BUILDER_STATE_ENV_VAR,
+  getVerificationCode,
+} from '../../../../src/commands/org/login/web.js';
 
 describe('org:login:web', () => {
+  Messages.importMessagesDirectoryFromMetaUrl(import.meta.url);
+  const messages = Messages.loadMessages('@salesforce/plugin-auth', 'web.login');
   const $$ = new TestContext();
   const testData = new MockTestOrgData();
   const config = stubInterface<Config>($$.SANDBOX, {
@@ -301,5 +307,52 @@ describe('org:login:web', () => {
     expect(callArgs.clientApp?.name).to.equal('MyApp');
     expect(callArgs.clientApp?.username).to.equal('test@example.com');
     expect(callArgs.scopes).to.be.undefined;
+  });
+
+  it('should display verification code when CODE_BUILDER_STATE env var is set', async () => {
+    const codeBuilderState = 'CODE_BUILDER_STATE';
+    const envStub = $$.SANDBOX.stub(Env.prototype, 'getString');
+    envStub.withArgs(CODE_BUILDER_STATE_ENV_VAR).returns(codeBuilderState);
+    envStub.returns(''); // Default for other calls
+
+    $$.SANDBOX.stub(Env.prototype, 'getBoolean').returns(false); // Prevent container mode checks
+
+    const logStub = stubMethod($$.SANDBOX, SfCommand.prototype, 'log');
+
+    const login = await createNewLoginCommand([], false, undefined);
+    await login.run();
+
+    // Verify that log was called with the verification code message
+    const verificationCode = getVerificationCode(codeBuilderState);
+    const calls = logStub.getCalls();
+    const verificationCodeCall = calls.find(
+      (call) => typeof call.args[0] === 'string' && call.args[0].includes(verificationCode)
+    );
+    expect(verificationCodeCall).to.exist;
+    expect(verificationCode).to.match(/^[0-9a-f]{4}$/);
+    expect(verificationCodeCall?.args[0]).to.include(messages.getMessage('verificationCode', [verificationCode]));
+  });
+
+  it('should not display verification code when CODE_BUILDER_STATE env var is not set', async () => {
+    const envStub = stubMethod($$.SANDBOX, Env.prototype, 'getString');
+    envStub.withArgs('CODE_BUILDER_STATE').returns(undefined);
+    envStub.returns('');
+
+    $$.SANDBOX.stub(Env.prototype, 'getBoolean').returns(false); // Prevent container mode checks
+
+    const logStub = $$.SANDBOX.stub(SfCommand.prototype, 'log');
+    const logSuccessStub = $$.SANDBOX.stub(SfCommand.prototype, 'logSuccess');
+
+    const login = await createNewLoginCommand([], false, undefined);
+    await login.run();
+
+    // Verify that log was NOT called for verification code
+    expect(logStub.callCount).to.equal(0);
+    const calls = logSuccessStub.getCalls();
+    const verificationCodeCall = calls.find(
+      (call) => call.args[0]?.includes('verification code') || call.args[0]?.includes('Enter this')
+    );
+    expect(verificationCodeCall).to.not.exist;
+    expect(logSuccessStub.callCount).to.equal(1);
   });
 });

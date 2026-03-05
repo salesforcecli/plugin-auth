@@ -79,3 +79,7 @@ Unable to open the browser you specified (%s).
 # error.cannotOpenBrowser.actions
 
 - Ensure that %s is installed on your computer. Or specify a different browser using the --browser flag.
+
+# verificationCode
+
+- Your verification code is %s. Enter this in the browser window that just opened. SECURITY NOTE: Enter this PIN only if you initiated this login.
