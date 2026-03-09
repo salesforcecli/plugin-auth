@@ -1,7 +1,7 @@
 {
   "name": "@salesforce/plugin-auth",
   "description": "plugin for sf auth commands",
-  "version": "4.2.2-cb.0",
+  "version": "4.2.2",
   "author": "Salesforce",
   "bugs": "https://github.com/forcedotcom/cli/issues",
   "enableO11y": true,
@@ -18,7 +18,7 @@
     "open": "^10.2.0"
   },
   "devDependencies": {
-    "@oclif/plugin-command-snapshot": "^5.3.9",
+    "@oclif/plugin-command-snapshot": "^5.3.10",
     "@salesforce/cli-plugins-testkit": "^5.3.41",
     "@salesforce/dev-scripts": "^11.0.4",
     "@salesforce/plugin-command-reference": "^3.1.81",
