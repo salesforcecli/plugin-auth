@@ -1,8 +1,28 @@
-## [4.2.2](https://github.com/salesforcecli/plugin-auth/compare/4.2.1...4.2.2) (2026-03-07)
+# [4.3.0](https://github.com/salesforcecli/plugin-auth/compare/4.2.2...4.3.0) (2026-03-09)
+
+### Bug Fixes
+
+- revert back message ([70ddeff](https://github.com/salesforcecli/plugin-auth/commit/70ddeff04c851245487e65e0167c925862e5d9aa))
+- update the message VC ([d36c593](https://github.com/salesforcecli/plugin-auth/commit/d36c59330ed36a754fba0197213427efddba4eff))
+- update the message web.login ([1bb0df3](https://github.com/salesforcecli/plugin-auth/commit/1bb0df378ed447a5ef9f06c66295ac29dfbd76d1))
+
+## [4.2.2-cb.0](https://github.com/salesforcecli/plugin-auth/compare/4.2.1...4.2.2-cb.0) (2026-03-04)
+
+### Features
+
+- add display message ([68d6ffe](https://github.com/salesforcecli/plugin-auth/commit/68d6ffe82335974d40387222d164b4cabdebbc2a))
+
+## [4.2.2](https://github.com/salesforcecli/plugin-auth/compare/4.2.2-cb.0...4.2.2) (2026-03-07)
 
 ### Bug Fixes
 
 - **deps:** bump @oclif/core from 4.8.2 to 4.8.3 ([8662ec5](https://github.com/salesforcecli/plugin-auth/commit/8662ec50c921820314f311f1df05cbbdae46a045))
+
+## [4.2.2-cb.0](https://github.com/salesforcecli/plugin-auth/compare/4.2.1...4.2.2-cb.0) (2026-03-04)
+
+### Features
+
+- add display message ([68d6ffe](https://github.com/salesforcecli/plugin-auth/commit/68d6ffe82335974d40387222d164b4cabdebbc2a))
 
 ## [4.2.1](https://github.com/salesforcecli/plugin-auth/compare/4.2.0...4.2.1) (2026-03-04)
 
