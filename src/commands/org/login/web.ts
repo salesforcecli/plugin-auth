@@ -21,16 +21,16 @@ import { AuthFields, AuthInfo, Logger, Messages, OAuth2Config, SfError, WebOAuth
 import { Env } from '@salesforce/kit';
 import common from '../../../common.js';
 
+Messages.importMessagesDirectoryFromMetaUrl(import.meta.url);
+const messages = Messages.loadMessages('@salesforce/plugin-auth', 'web.login');
+const commonMessages = Messages.loadMessages('@salesforce/plugin-auth', 'messages');
+
 export const CODE_BUILDER_STATE_ENV_VAR = 'CODE_BUILDER_STATE';
 
 export const getVerificationCode = (codeBuilderState: string): string => {
   const hash = createHash('sha256').update(codeBuilderState, 'utf8').digest('hex');
   return hash.substring(0, 4);
 };
-
-Messages.importMessagesDirectoryFromMetaUrl(import.meta.url);
-const messages = Messages.loadMessages('@salesforce/plugin-auth', 'web.login');
-const commonMessages = Messages.loadMessages('@salesforce/plugin-auth', 'messages');
 
 export type ExecuteLoginFlowParams = {
   oauthConfig: OAuth2Config;

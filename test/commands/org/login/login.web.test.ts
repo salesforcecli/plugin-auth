@@ -350,7 +350,7 @@ describe('org:login:web', () => {
     expect(logStub.callCount).to.equal(0);
     const calls = logSuccessStub.getCalls();
     const verificationCodeCall = calls.find(
-      (call) => call.args[0]?.includes('verification code') || call.args[0]?.includes('Enter this')
+      (call) => call.args[0]?.includes('Verification Code') || call.args[0]?.includes('If prompted')
     );
     expect(verificationCodeCall).to.not.exist;
     expect(logSuccessStub.callCount).to.equal(1);
