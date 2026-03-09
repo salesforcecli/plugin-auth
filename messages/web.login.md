@@ -79,3 +79,7 @@ Unable to open the browser you specified (%s).
 # error.cannotOpenBrowser.actions
 
 - Ensure that %s is installed on your computer. Or specify a different browser using the --browser flag.
+
+# verificationCode
+
+- Verification Code: %s — If prompted, enter this code in your browser window.
