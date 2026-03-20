@@ -1,3 +1,9 @@
+## [4.3.2](https://github.com/salesforcecli/plugin-auth/compare/4.3.1...4.3.2) (2026-03-20)
+
+### Bug Fixes
+
+- **deps:** bump flatted from 3.3.1 to 3.4.2 ([b32ae90](https://github.com/salesforcecli/plugin-auth/commit/b32ae90b2ebf56bcd365ed6ce7f03050bb7cfab5))
+
 ## [4.3.1](https://github.com/salesforcecli/plugin-auth/compare/4.3.0...4.3.1) (2026-03-14)
 
 ### Bug Fixes
