@@ -1,3 +1,9 @@
+## [4.3.3](https://github.com/salesforcecli/plugin-auth/compare/4.3.2...4.3.3) (2026-03-27)
+
+### Bug Fixes
+
+- **deps:** bump handlebars from 4.7.8 to 4.7.9 ([e2ce679](https://github.com/salesforcecli/plugin-auth/commit/e2ce679e01e0a33c6b000c3feb5043021b804a43))
+
 ## [4.3.2](https://github.com/salesforcecli/plugin-auth/compare/4.3.1...4.3.2) (2026-03-20)
 
 ### Bug Fixes
