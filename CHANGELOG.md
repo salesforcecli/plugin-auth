@@ -1,3 +1,9 @@
+## [4.3.4](https://github.com/salesforcecli/plugin-auth/compare/4.3.3...4.3.4) (2026-04-04)
+
+### Bug Fixes
+
+- **deps:** bump lodash from 4.17.23 to 4.18.1 ([88c4e10](https://github.com/salesforcecli/plugin-auth/commit/88c4e10f381a2c0637327ff39cc01a51e153a7fd))
+
 ## [4.3.3](https://github.com/salesforcecli/plugin-auth/compare/4.3.2...4.3.3) (2026-03-27)
 
 ### Bug Fixes
