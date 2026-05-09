@@ -1,3 +1,9 @@
+## [4.3.10](https://github.com/salesforcecli/plugin-auth/compare/4.3.9...4.3.10) (2026-05-09)
+
+### Bug Fixes
+
+- **deps:** bump basic-ftp from 5.3.0 to 5.3.1 ([3c7f7b9](https://github.com/salesforcecli/plugin-auth/commit/3c7f7b9cabf500c7713155071fee6eb0fb0cc677))
+
 ## [4.3.9](https://github.com/salesforcecli/plugin-auth/compare/4.3.8...4.3.9) (2026-05-09)
 
 ### Bug Fixes
