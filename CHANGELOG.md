@@ -1,3 +1,9 @@
+## [4.3.9](https://github.com/salesforcecli/plugin-auth/compare/4.3.8...4.3.9) (2026-05-09)
+
+### Bug Fixes
+
+- **deps:** bump fast-xml-builder from 1.1.4 to 1.2.0 ([f835c83](https://github.com/salesforcecli/plugin-auth/commit/f835c83a24c354c98872795ac1da2b185d25f883))
+
 ## [4.3.8](https://github.com/salesforcecli/plugin-auth/compare/4.3.7...4.3.8) (2026-05-09)
 
 ### Bug Fixes
