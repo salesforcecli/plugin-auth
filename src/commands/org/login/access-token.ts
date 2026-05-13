@@ -19,12 +19,15 @@ import { AuthFields, AuthInfo, Messages, matchesAccessToken, SfError, StateAggre
 import { env } from '@salesforce/kit';
 import { InferredFlags } from '@oclif/core/interfaces';
 
+export type SafeAuthFields = Omit<AuthFields, 'clientApps' | 'accessToken' | 'privateKey' | 'refreshToken'>;
+
 Messages.importMessagesDirectoryFromMetaUrl(import.meta.url);
 const messages = Messages.loadMessages('@salesforce/plugin-auth', 'accesstoken.store');
 const commonMessages = Messages.loadMessages('@salesforce/plugin-auth', 'messages');
 
 const ACCESS_TOKEN_FORMAT = '"<org id>!<accesstoken>"';
 
+// TODO: once SF_TEMP_SHOW_SECRETS is removed, change the return type to SafeAuthFields
 export default class LoginAccessToken extends SfCommand<AuthFields> {
   public static readonly summary = messages.getMessage('summary');
   public static readonly description = messages.getMessage('description');
@@ -98,7 +101,13 @@ export default class LoginAccessToken extends SfCommand<AuthFields> {
       ]);
       this.logSuccess(successMsg);
     }
-    return authInfo.getFields(true);
+    const fields = authInfo.getFields(true);
+    if (env.getBoolean('SF_TEMP_SHOW_SECRETS', false)) {
+      return fields;
+    }
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { clientApps, accessToken, privateKey, refreshToken, ...safeFields } = fields;
+    return safeFields;
   }
 
   private async saveAuthInfo(authInfo: AuthInfo): Promise<void> {

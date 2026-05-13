@@ -19,7 +19,7 @@ import { assert, expect } from 'chai';
 import { TestContext } from '@salesforce/core/testSetup';
 import { stubPrompter, stubSfCommandUx } from '@salesforce/sf-plugins-core';
 import { env } from '@salesforce/kit';
-import Store from '../../../../src/commands/org/login/access-token.js';
+import Store, { SafeAuthFields } from '../../../../src/commands/org/login/access-token.js';
 
 describe('org:login:access-token', () => {
   const $$ = new TestContext();
@@ -31,6 +31,12 @@ describe('org:login:access-token', () => {
     orgId: '00D000000000000',
     username: 'foo@baz.org',
   } as const satisfies AuthFields;
+  const safeAuthFields = {
+    instanceUrl: 'https://foo.bar.org.salesforce.com',
+    loginUrl: 'https://foo.bar.org.salesforce.com',
+    orgId: '00D000000000000',
+    username: 'foo@baz.org',
+  } as const satisfies SafeAuthFields;
 
   /* eslint-disable camelcase */
   const userInfo = {
@@ -65,7 +71,7 @@ describe('org:login:access-token', () => {
     const result = await Store.run(['--instance-url', 'https://foo.bar.org.salesforce.com']);
     expect(prompterStubs.secret.callCount).to.equal(1);
     expect(stubSfCommandUxStubs.logSuccess.callCount).to.equal(1);
-    expect(result).to.deep.equal(authFields);
+    expect(result).to.deep.equal(safeAuthFields);
   });
 
   it('should show invalid access token provided as input', async () => {
@@ -91,7 +97,7 @@ describe('org:login:access-token', () => {
       },
     });
     const result = await Store.run(['--instance-url', 'https://foo.bar.org.salesforce.com']);
-    expect(result).to.deep.equal(authFields);
+    expect(result).to.deep.equal(safeAuthFields);
     expect(prompterStubs.secret.callCount).to.equal(1);
     expect(prompterStubs.confirm.callCount).to.equal(1);
   });
@@ -105,7 +111,7 @@ describe('org:login:access-token', () => {
       },
     });
     const result = await Store.run(['--instance-url', 'https://foo.bar.org.salesforce.com']);
-    expect(result).to.deep.equal(authFields);
+    expect(result).to.deep.equal(safeAuthFields);
     expect(prompterStubs.confirm.callCount).to.equal(0);
   });
 
@@ -118,7 +124,7 @@ describe('org:login:access-token', () => {
       .returns(undefined);
 
     const result = await Store.run(['--instance-url', 'https://foo.bar.org.salesforce.com']);
-    expect(result).to.deep.equal(authFields);
+    expect(result).to.deep.equal(safeAuthFields);
     // no prompts needed when using Env
     expect(prompterStubs.confirm.callCount).to.equal(0);
     expect(prompterStubs.secret.callCount).to.equal(0);
@@ -133,7 +139,7 @@ describe('org:login:access-token', () => {
       .returns(undefined);
 
     const result = await Store.run(['--instance-url', 'https://foo.bar.org.salesforce.com']);
-    expect(result).to.deep.equal(authFields);
+    expect(result).to.deep.equal(safeAuthFields);
     // no prompts needed when using Env
     expect(prompterStubs.confirm.callCount).to.equal(0);
     expect(prompterStubs.secret.callCount).to.equal(0);
