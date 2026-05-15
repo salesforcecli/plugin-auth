@@ -1,3 +1,10 @@
+## [4.3.12](https://github.com/salesforcecli/plugin-auth/compare/4.3.11...4.3.12) (2026-05-15)
+
+### Bug Fixes
+
+- bumped plugin-info ([0b0b610](https://github.com/salesforcecli/plugin-auth/commit/0b0b610b9902238158a5a39339a5f76b537cbdb2))
+- bumping plugin-command-reference ([92cc89d](https://github.com/salesforcecli/plugin-auth/commit/92cc89d12d305d86e0d2dfe943cba3b1a8f3b591))
+
 ## [4.3.11](https://github.com/salesforcecli/plugin-auth/compare/4.3.10...4.3.11) (2026-05-15)
 
 ### Bug Fixes
