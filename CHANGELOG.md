@@ -1,3 +1,9 @@
+## [4.3.11](https://github.com/salesforcecli/plugin-auth/compare/4.3.10...4.3.11) (2026-05-15)
+
+### Bug Fixes
+
+- bumping cli-plugins-testkit version ([b9e3e52](https://github.com/salesforcecli/plugin-auth/commit/b9e3e524236f269e41f0e78185f218d936082ce5))
+
 ## [4.3.10](https://github.com/salesforcecli/plugin-auth/compare/4.3.9...4.3.10) (2026-05-09)
 
 ### Bug Fixes
