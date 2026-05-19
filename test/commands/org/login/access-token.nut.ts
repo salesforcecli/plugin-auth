@@ -17,7 +17,7 @@ import { execCmd, TestSession, prepareForJwt } from '@salesforce/cli-plugins-tes
 import { expect } from 'chai';
 import { Env } from '@salesforce/kit';
 import { ensureString, getString } from '@salesforce/ts-types';
-import { AuthFields } from '@salesforce/core';
+import { AuthFields, AuthInfo } from '@salesforce/core';
 import { expectOrgIdToExist, expectUrlToExist } from '../../../testHelper.js';
 
 let testSession: TestSession;
@@ -40,11 +40,9 @@ describe('org:login:access-token NUTs', () => {
       `org:login:jwt -f ${jwtKeyFilePath} -i ${clientId} -o ${username} --set-default-dev-hub --instance-url ${instanceUrl} --json`,
       { ensureExitCode: 0 }
     );
-    // Get the real access token using the dedicated show command
-    const tokenRes = execCmd<{ accessToken: string }>(`org:auth:show-access-token -o ${username} --json`, {
-      ensureExitCode: 0,
-    });
-    accessToken = tokenRes.jsonOutput?.result.accessToken as string;
+    // Get the real access token from the auth file directly
+    const authInfo = await AuthInfo.create({ username });
+    accessToken = authInfo.getFields(true).accessToken!;
     env.setString('SF_ACCESS_TOKEN', accessToken);
     execCmd(`auth:logout -p -o ${username}`, { ensureExitCode: 0 });
   });
