@@ -142,17 +142,16 @@ export default class LoginWeb extends SfCommand<AuthFields> {
     if (await common.shouldExitCommand(flags['no-prompt'])) return {};
 
     // Add ca/eca to already existing auth info.
+    // TODO: deprecate Client App login until use-case arises.
     if (flags['client-app'] && flags.username) {
       // 1. get username authinfo
       const userAuthInfo = await AuthInfo.create({
         username: flags.username,
       });
 
-      const authFields = userAuthInfo.getFields(true);
-
       // 2. web-auth and save name, clientId, accessToken, and refreshToken in `apps` object
       const oauthConfig: OAuth2Config = {
-        loginUrl: authFields.loginUrl,
+        loginUrl: userAuthInfo.getFields().loginUrl,
         clientId: flags['client-id'],
         ...{ clientSecret: await this.secretPrompt({ message: commonMessages.getMessage('clientSecretStdin') }) },
       };

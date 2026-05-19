@@ -104,7 +104,7 @@ export default class LoginAccessToken extends SfCommand<AuthFields> {
       await this.saveAuthInfo(authInfo);
       const successMsg = commonMessages.getMessage('authorizeCommandSuccess', [
         authInfo.getUsername(),
-        authInfo.getFields(true).orgId,
+        authInfo.getFields().orgId,
       ]);
       this.logSuccess(successMsg);
     }
