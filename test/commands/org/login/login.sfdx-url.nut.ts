@@ -18,12 +18,7 @@ import { expect } from 'chai';
 import { Env } from '@salesforce/kit';
 import { ensureString, getString } from '@salesforce/ts-types';
 import { AuthFields } from '@salesforce/core';
-import {
-  expectAccessTokenToExist,
-  expectOrgIdToExist,
-  expectPropsToExist,
-  expectUrlToExist,
-} from '../../../testHelper.js';
+import { expectOrgIdToExist, expectUrlToExist } from '../../../testHelper.js';
 
 let testSession: TestSession;
 
@@ -51,8 +46,8 @@ describe('org:login:sfdx-url NUTs', () => {
     const command = `org:login:sfdx-url -d -f ${authUrl} --json`;
     const json = execCmd<AuthFields>(command, { ensureExitCode: 0 }).jsonOutput?.result as AuthFields;
 
-    expectPropsToExist(json, 'refreshToken');
-    expectAccessTokenToExist(json);
+    expect(json.accessToken).to.include('[REDACTED]');
+    expect(json.refreshToken).to.be.undefined;
     expectOrgIdToExist(json);
     expectUrlToExist(json, 'instanceUrl');
     expectUrlToExist(json, 'loginUrl');

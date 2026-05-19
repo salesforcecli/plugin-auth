@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
-import { Logger, SfdcUrl, SfProject, Messages, SfError, Global, Mode } from '@salesforce/core';
+import { AuthFields, envVars, Logger, SfdcUrl, SfProject, Messages, SfError, Global, Mode } from '@salesforce/core';
 import { getString, isObject } from '@salesforce/ts-types';
 import { prompts, StandardColors } from '@salesforce/sf-plugins-core';
 
 Messages.importMessagesDirectoryFromMetaUrl(import.meta.url);
 const messages = Messages.loadMessages('@salesforce/plugin-auth', 'messages');
+const secretsMessages = Messages.loadMessages('@salesforce/plugin-auth', 'secrets-redacted');
 
 const resolveLoginUrl = async (instanceUrl?: string): Promise<string> => {
   const logger = await Logger.child('Common', { tag: 'resolveLoginUrl' });
@@ -55,7 +56,23 @@ const shouldExitCommand = async (noPrompt?: boolean): Promise<boolean> =>
     ? false
     : !(await prompts.confirm({ message: StandardColors.info(messages.getMessage('warnAuth', ['sf'])), ms: 60_000 }));
 
+// TODO: Remove env var workaround
+const redactAuthFields = (fields: AuthFields): AuthFields => {
+  const showSecretsEnvVarIsSet = envVars.getBoolean('SF_TEMP_SHOW_SECRETS', false);
+  if (showSecretsEnvVarIsSet) return fields;
+
+  const redactedAccessToken = secretsMessages.getMessage('redacted.accessToken');
+  return {
+    ...fields,
+    accessToken: fields.accessToken ? redactedAccessToken : undefined,
+    refreshToken: undefined,
+    clientSecret: undefined,
+    password: undefined,
+  };
+};
+
 export default {
   shouldExitCommand,
   resolveLoginUrl,
+  redactAuthFields,
 };

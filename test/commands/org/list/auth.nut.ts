@@ -17,7 +17,7 @@ import { execCmd, TestSession } from '@salesforce/cli-plugins-testkit';
 import { expect } from 'chai';
 import { Env } from '@salesforce/kit';
 import { ensureString, getString } from '@salesforce/ts-types';
-import { expectUrlToExist, expectOrgIdToExist, expectAccessTokenToExist } from '../../../testHelper.js';
+import { expectUrlToExist, expectOrgIdToExist } from '../../../testHelper.js';
 import { AuthListResults } from '../../../../src/commands/org/list/auth.js';
 
 describe('org:list:auth NUTs', () => {
@@ -43,7 +43,7 @@ describe('org:list:auth NUTs', () => {
     const json = execCmd<AuthListResults>('org:list:auth --json', { ensureExitCode: 0 }).jsonOutput
       ?.result as AuthListResults;
     const auth = json[0];
-    expectAccessTokenToExist(auth);
+    expect(auth.accessToken).to.include('[REDACTED]');
     expectOrgIdToExist(auth);
     expectUrlToExist(auth, 'instanceUrl');
     expect(auth.username).to.equal(username);

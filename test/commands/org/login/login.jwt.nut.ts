@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import * as path from 'node:path';
+import path from 'node:path';
 import { execCmd, TestSession, prepareForJwt } from '@salesforce/cli-plugins-testkit';
 import { expect } from 'chai';
 import { Env } from '@salesforce/kit';
 import { ensureString, getString } from '@salesforce/ts-types';
 import { AuthFields } from '@salesforce/core';
-import { expectUrlToExist, expectOrgIdToExist, expectAccessTokenToExist } from '../../../testHelper.js';
+import { expectUrlToExist, expectOrgIdToExist } from '../../../testHelper.js';
 
 let testSession: TestSession;
 
@@ -47,7 +47,7 @@ describe('org:login:jwt NUTs', () => {
   it('should authorize an org using jwt (json)', () => {
     const command = `org:login:jwt -d -o ${username} -i ${clientId} -f ${jwtKey} -r ${instanceUrl} --json`;
     const json = execCmd<AuthFields>(command, { ensureExitCode: 0 }).jsonOutput?.result as AuthFields;
-    expectAccessTokenToExist(json);
+    expect(json.accessToken).to.include('[REDACTED]');
     expectOrgIdToExist(json);
     expectUrlToExist(json, 'instanceUrl');
     expectUrlToExist(json, 'loginUrl');

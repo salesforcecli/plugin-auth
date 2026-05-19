@@ -17,13 +17,23 @@
 import { createHash } from 'node:crypto';
 import open, { apps, AppName } from 'open';
 import { Flags, SfCommand, loglevel } from '@salesforce/sf-plugins-core';
-import { AuthFields, AuthInfo, Logger, Messages, OAuth2Config, SfError, WebOAuthServer } from '@salesforce/core';
+import {
+  AuthFields,
+  AuthInfo,
+  envVars,
+  Logger,
+  Messages,
+  OAuth2Config,
+  SfError,
+  WebOAuthServer,
+} from '@salesforce/core';
 import { Env } from '@salesforce/kit';
 import common from '../../../common.js';
 
 Messages.importMessagesDirectoryFromMetaUrl(import.meta.url);
 const messages = Messages.loadMessages('@salesforce/plugin-auth', 'web.login');
 const commonMessages = Messages.loadMessages('@salesforce/plugin-auth', 'messages');
+const secretsMessages = Messages.loadMessages('@salesforce/plugin-auth', 'secrets-redacted');
 
 export const CODE_BUILDER_STATE_ENV_VAR = 'CODE_BUILDER_STATE';
 
@@ -132,17 +142,16 @@ export default class LoginWeb extends SfCommand<AuthFields> {
     if (await common.shouldExitCommand(flags['no-prompt'])) return {};
 
     // Add ca/eca to already existing auth info.
+    // TODO: deprecate Client App login until use-case arises.
     if (flags['client-app'] && flags.username) {
       // 1. get username authinfo
       const userAuthInfo = await AuthInfo.create({
         username: flags.username,
       });
 
-      const authFields = userAuthInfo.getFields(true);
-
       // 2. web-auth and save name, clientId, accessToken, and refreshToken in `apps` object
       const oauthConfig: OAuth2Config = {
-        loginUrl: authFields.loginUrl,
+        loginUrl: userAuthInfo.getFields().loginUrl,
         clientId: flags['client-id'],
         ...{ clientSecret: await this.secretPrompt({ message: commonMessages.getMessage('clientSecretStdin') }) },
       };
@@ -155,7 +164,17 @@ export default class LoginWeb extends SfCommand<AuthFields> {
       });
 
       this.logSuccess(messages.getMessage('linkedClientApp', [flags['client-app'], flags.username]));
-      return userAuthInfo.getFields(true);
+
+      // TODO: Remove env var workaround
+      if (this.jsonEnabled()) {
+        if (envVars.getBoolean('SF_TEMP_SHOW_SECRETS', false)) {
+          this.warn(secretsMessages.getMessage('temp.envVarIsSet', ['sf org login web']));
+        } else {
+          this.warn(secretsMessages.getMessage('temp.envVarWorkaround', ['sf org login web']));
+        }
+      }
+
+      return common.redactAuthFields(userAuthInfo.getFields(true));
     }
 
     const oauthConfig: OAuth2Config = {
@@ -183,7 +202,17 @@ export default class LoginWeb extends SfCommand<AuthFields> {
 
       const successMsg = commonMessages.getMessage('authorizeCommandSuccess', [fields.username, fields.orgId]);
       this.logSuccess(successMsg);
-      return fields;
+
+      // TODO: Remove env var workaround
+      if (this.jsonEnabled()) {
+        if (envVars.getBoolean('SF_TEMP_SHOW_SECRETS', false)) {
+          this.warn(secretsMessages.getMessage('temp.envVarIsSet', ['sf org login web']));
+        } else {
+          this.warn(secretsMessages.getMessage('temp.envVarWorkaround', ['sf org login web']));
+        }
+      }
+
+      return common.redactAuthFields(fields);
     } catch (err) {
       Logger.childFromRoot('LoginWebCommand').debug(err);
       if (err instanceof SfError && err.name === 'AuthCodeExchangeError') {

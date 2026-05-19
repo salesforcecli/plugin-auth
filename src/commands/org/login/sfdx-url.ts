@@ -16,7 +16,7 @@
 
 import fs from 'node:fs/promises';
 import { Flags, SfCommand, loglevel } from '@salesforce/sf-plugins-core';
-import { AuthFields, AuthInfo, Messages } from '@salesforce/core';
+import { AuthFields, AuthInfo, envVars, Messages } from '@salesforce/core';
 import { AnyJson } from '@salesforce/ts-types';
 import { parseJson } from '@salesforce/kit';
 import common from '../../../common.js';
@@ -24,6 +24,7 @@ import common from '../../../common.js';
 Messages.importMessagesDirectoryFromMetaUrl(import.meta.url);
 const messages = Messages.loadMessages('@salesforce/plugin-auth', 'sfdxurl.store');
 const commonMessages = Messages.loadMessages('@salesforce/plugin-auth', 'messages');
+const secretsMessages = Messages.loadMessages('@salesforce/plugin-auth', 'secrets-redacted');
 
 const AUTH_URL_FORMAT = 'force://<clientId>:<clientSecret>:<refreshToken>@<instanceUrl>';
 
@@ -118,13 +119,22 @@ export default class LoginSfdxUrl extends SfCommand<AuthFields> {
       setDefaultDevHub: flags['set-default-dev-hub'],
     });
 
-    // ensure the clientSecret field... even if it is empty
-    const result = { clientSecret: '', ...authInfo.getFields(true) };
+    const result = authInfo.getFields(true);
     await AuthInfo.identifyPossibleScratchOrgs(result, authInfo);
 
     const successMsg = commonMessages.getMessage('authorizeCommandSuccess', [result.username, result.orgId]);
     this.logSuccess(successMsg);
-    return result;
+
+    // TODO: Remove env var workaround
+    if (this.jsonEnabled()) {
+      if (envVars.getBoolean('SF_TEMP_SHOW_SECRETS', false)) {
+        this.warn(secretsMessages.getMessage('temp.envVarIsSet', ['sf org login sfdx-url']));
+      } else {
+        this.warn(secretsMessages.getMessage('temp.envVarWorkaround', ['sf org login sfdx-url']));
+      }
+    }
+
+    return common.redactAuthFields(result);
   }
 }
 

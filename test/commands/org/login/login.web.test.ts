@@ -90,13 +90,19 @@ describe('org:login:web', () => {
   it('should return auth fields after successful auth', async () => {
     const login = await createNewLoginCommand([], false, undefined);
     const result = await login.run();
-    expect(result).to.deep.equal(authFields);
+    expect(result.accessToken).to.include('[REDACTED]');
+    expect(result.refreshToken).to.be.undefined;
+    expect(result.clientSecret).to.be.undefined;
+    expect(result.username).to.equal(authFields.username);
   });
 
   it('should set alias', async () => {
     const login = await createNewLoginCommand(['--alias', 'MyAlias'], false, undefined);
     const result = await login.run();
-    expect(result).to.deep.equal(authFields);
+    expect(result.accessToken).to.include('[REDACTED]');
+    expect(result.refreshToken).to.be.undefined;
+    expect(result.clientSecret).to.be.undefined;
+    expect(result.username).to.equal(authFields.username);
     expect(authInfoStub.handleAliasAndDefaultSettings.args[0]).to.deep.equal([
       {
         alias: 'MyAlias',
@@ -109,14 +115,20 @@ describe('org:login:web', () => {
   it('should set target-org', async () => {
     const login = await createNewLoginCommand(['--set-default'], false, undefined);
     const result = await login.run();
-    expect(result).to.deep.equal(authFields);
+    expect(result.accessToken).to.include('[REDACTED]');
+    expect(result.refreshToken).to.be.undefined;
+    expect(result.clientSecret).to.be.undefined;
+    expect(result.username).to.equal(authFields.username);
     expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
   });
 
   it('should set target-dev-hub', async () => {
     const login = await createNewLoginCommand(['--set-default-dev-hub'], false, undefined);
     const result = await login.run();
-    expect(result).to.deep.equal(authFields);
+    expect(result.accessToken).to.include('[REDACTED]');
+    expect(result.refreshToken).to.be.undefined;
+    expect(result.clientSecret).to.be.undefined;
+    expect(result.username).to.equal(authFields.username);
     expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
   });
 
@@ -147,7 +159,10 @@ describe('org:login:web', () => {
     stubMethod($$.SANDBOX, Env.prototype, 'getBoolean').withArgs('CODE_BUILDER').returns(true);
     const login = await createNewLoginCommand([], false, undefined);
     const result = await login.run();
-    expect(result).to.deep.equal(authFields);
+    expect(result.accessToken).to.include('[REDACTED]');
+    expect(result.refreshToken).to.be.undefined;
+    expect(result.clientSecret).to.be.undefined;
+    expect(result.username).to.equal(authFields.username);
   });
 
   it('should prompt for client secret when clientid is present', async () => {
@@ -354,5 +369,24 @@ describe('org:login:web', () => {
     );
     expect(verificationCodeCall).to.not.exist;
     expect(logSuccessStub.callCount).to.equal(1);
+  });
+
+  describe('secret redaction WITH env var (SF_TEMP_SHOW_SECRETS)', () => {
+    const SHOW_TOKENS_ENV = 'SF_TEMP_SHOW_SECRETS';
+
+    beforeEach(() => {
+      process.env[SHOW_TOKENS_ENV] = 'true';
+    });
+
+    afterEach(() => {
+      delete process.env[SHOW_TOKENS_ENV];
+    });
+
+    it('shows real auth fields when env var is set', async () => {
+      const login = await createNewLoginCommand([], false, undefined);
+      const result = await login.run();
+      expect(result.accessToken).to.equal(authFields.accessToken);
+      expect(result.username).to.equal(authFields.username);
+    });
   });
 });
