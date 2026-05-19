@@ -1,3 +1,9 @@
+# [4.4.0](https://github.com/salesforcecli/plugin-auth/compare/4.3.13...4.4.0) (2026-05-19)
+
+### Features
+
+- remove sensitive output ([f066245](https://github.com/salesforcecli/plugin-auth/commit/f066245a3a7a83513786395536ad27fa6177e486))
+
 ## [4.3.13](https://github.com/salesforcecli/plugin-auth/compare/4.3.12...4.3.13) (2026-05-16)
 
 ### Bug Fixes

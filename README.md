@@ -107,7 +107,7 @@ EXAMPLES
     $ sf org list auth
 ```
 
-_See code: [src/commands/org/list/auth.ts](https://github.com/salesforcecli/plugin-auth/blob/4.3.13/src/commands/org/list/auth.ts)_
+_See code: [src/commands/org/list/auth.ts](https://github.com/salesforcecli/plugin-auth/blob/4.4.0/src/commands/org/list/auth.ts)_
 
 ## `sf org login access-token`
 
@@ -161,7 +161,7 @@ FLAG DESCRIPTIONS
     To specify a sandbox, set --instance-url to "https://<MyDomainName>--<SandboxName>.sandbox.my.salesforce.com".
 ```
 
-_See code: [src/commands/org/login/access-token.ts](https://github.com/salesforcecli/plugin-auth/blob/4.3.13/src/commands/org/login/access-token.ts)_
+_See code: [src/commands/org/login/access-token.ts](https://github.com/salesforcecli/plugin-auth/blob/4.4.0/src/commands/org/login/access-token.ts)_
 
 ## `sf org login jwt`
 
@@ -252,7 +252,7 @@ FLAG DESCRIPTIONS
     To specify a sandbox, set --instance-url to "https://<MyDomainName>--<SandboxName>.sandbox.my.salesforce.com".
 ```
 
-_See code: [src/commands/org/login/jwt.ts](https://github.com/salesforcecli/plugin-auth/blob/4.3.13/src/commands/org/login/jwt.ts)_
+_See code: [src/commands/org/login/jwt.ts](https://github.com/salesforcecli/plugin-auth/blob/4.4.0/src/commands/org/login/jwt.ts)_
 
 ## `sf org login sfdx-url`
 
@@ -284,21 +284,21 @@ DESCRIPTION
   "https://"). Note that although the SFDX authorization URL starts with "force://", it has nothing to do with the
   actual authorization. Salesforce CLI always communicates with your org using HTTPS.
 
-  To see an example of an SFDX authorization URL, run "org display --verbose" on an org.
+  To see the SFDX authorization URL for an org, run "org auth show-sfdx-auth-url".
 
   You have three options when creating the authorization file. The easiest option is to redirect the output of the "sf
-  org display --verbose --json" command into a file. For example, using an org with alias my-org that you've already
-  authorized:
+  org auth show-sfdx-auth-url --json" command into a file. For example, using an org with alias my-org that you've
+  already authorized:
 
-  $ sf org display --target-org my-org --verbose --json > authFile.json
+  $ sf org auth show-sfdx-auth-url --target-org my-org --json > authFile.json
 
   The resulting JSON file contains the URL in the "sfdxAuthUrl" property of the "result" object. You can then reference
   the file when running this command:
 
   $ sf org login sfdx-url --sfdx-url-file authFile.json
 
-  NOTE: The "sf org display --verbose" command displays the refresh token only for orgs authorized with the web server
-  flow, and not the JWT bearer flow.
+  NOTE: The SFDX auth URL is only available for orgs authorized with a web-based OAuth flow, and not the JWT bearer
+  flow.
 
   You can also create a JSON file that has a top-level property named sfdxAuthUrl whose value is the authorization URL.
   Finally, you can create a normal text file that includes just the URL and nothing else.
@@ -322,7 +322,7 @@ EXAMPLES
   $ echo url | sf org login sfdx-url --sfdx-url-stdin
 ```
 
-_See code: [src/commands/org/login/sfdx-url.ts](https://github.com/salesforcecli/plugin-auth/blob/4.3.13/src/commands/org/login/sfdx-url.ts)_
+_See code: [src/commands/org/login/sfdx-url.ts](https://github.com/salesforcecli/plugin-auth/blob/4.4.0/src/commands/org/login/sfdx-url.ts)_
 
 ## `sf org login web`
 
@@ -427,7 +427,7 @@ FLAG DESCRIPTIONS
     To specify a sandbox, set --instance-url to "https://<MyDomainName>--<SandboxName>.sandbox.my.salesforce.com".
 ```
 
-_See code: [src/commands/org/login/web.ts](https://github.com/salesforcecli/plugin-auth/blob/4.3.13/src/commands/org/login/web.ts)_
+_See code: [src/commands/org/login/web.ts](https://github.com/salesforcecli/plugin-auth/blob/4.4.0/src/commands/org/login/web.ts)_
 
 ## `sf org logout`
 
@@ -493,6 +493,6 @@ FLAG DESCRIPTIONS
     All orgs includes Dev Hubs, sandboxes, DE orgs, and expired, deleted, and unknown-status scratch orgs.
 ```
 
-_See code: [src/commands/org/logout.ts](https://github.com/salesforcecli/plugin-auth/blob/4.3.13/src/commands/org/logout.ts)_
+_See code: [src/commands/org/logout.ts](https://github.com/salesforcecli/plugin-auth/blob/4.4.0/src/commands/org/logout.ts)_
 
 <!-- commandsstop -->
