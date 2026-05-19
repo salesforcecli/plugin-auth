@@ -32,6 +32,14 @@ describe('org:login:access-token', () => {
     username: 'foo@baz.org',
   } as const satisfies AuthFields;
 
+  const redactedAuthFields = {
+    ...authFields,
+    accessToken: "[REDACTED] Use 'sf org auth show-access-token' to view",
+    refreshToken: undefined,
+    clientSecret: undefined,
+    password: undefined,
+  };
+
   /* eslint-disable camelcase */
   const userInfo = {
     preferred_username: 'foo@baz.org',
@@ -65,7 +73,7 @@ describe('org:login:access-token', () => {
     const result = await Store.run(['--instance-url', 'https://foo.bar.org.salesforce.com']);
     expect(prompterStubs.secret.callCount).to.equal(1);
     expect(stubSfCommandUxStubs.logSuccess.callCount).to.equal(1);
-    expect(result).to.deep.equal(authFields);
+    expect(result).to.deep.equal(redactedAuthFields);
   });
 
   it('should show invalid access token provided as input', async () => {
@@ -91,7 +99,7 @@ describe('org:login:access-token', () => {
       },
     });
     const result = await Store.run(['--instance-url', 'https://foo.bar.org.salesforce.com']);
-    expect(result).to.deep.equal(authFields);
+    expect(result).to.deep.equal(redactedAuthFields);
     expect(prompterStubs.secret.callCount).to.equal(1);
     expect(prompterStubs.confirm.callCount).to.equal(1);
   });
@@ -105,7 +113,7 @@ describe('org:login:access-token', () => {
       },
     });
     const result = await Store.run(['--instance-url', 'https://foo.bar.org.salesforce.com']);
-    expect(result).to.deep.equal(authFields);
+    expect(result).to.deep.equal(redactedAuthFields);
     expect(prompterStubs.confirm.callCount).to.equal(0);
   });
 
@@ -118,7 +126,7 @@ describe('org:login:access-token', () => {
       .returns(undefined);
 
     const result = await Store.run(['--instance-url', 'https://foo.bar.org.salesforce.com']);
-    expect(result).to.deep.equal(authFields);
+    expect(result).to.deep.equal(redactedAuthFields);
     // no prompts needed when using Env
     expect(prompterStubs.confirm.callCount).to.equal(0);
     expect(prompterStubs.secret.callCount).to.equal(0);
@@ -133,9 +141,27 @@ describe('org:login:access-token', () => {
       .returns(undefined);
 
     const result = await Store.run(['--instance-url', 'https://foo.bar.org.salesforce.com']);
-    expect(result).to.deep.equal(authFields);
+    expect(result).to.deep.equal(redactedAuthFields);
     // no prompts needed when using Env
     expect(prompterStubs.confirm.callCount).to.equal(0);
     expect(prompterStubs.secret.callCount).to.equal(0);
+  });
+
+  describe('secret redaction WITH env var (SF_TEMP_SHOW_SECRETS)', () => {
+    const SHOW_TOKENS_ENV = 'SF_TEMP_SHOW_SECRETS';
+
+    beforeEach(() => {
+      process.env[SHOW_TOKENS_ENV] = 'true';
+      $$.SANDBOX.stub(env, 'getString').withArgs('SF_ACCESS_TOKEN').returns(accessToken);
+    });
+
+    afterEach(() => {
+      delete process.env[SHOW_TOKENS_ENV];
+    });
+
+    it('shows real auth fields when env var is set', async () => {
+      const result = await Store.run(['--instance-url', 'https://foo.bar.org.salesforce.com', '--no-prompt']);
+      expect(result.accessToken).to.equal(accessToken);
+    });
   });
 });

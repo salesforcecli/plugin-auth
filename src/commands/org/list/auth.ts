@@ -15,11 +15,12 @@
  */
 
 import { loglevel, SfCommand } from '@salesforce/sf-plugins-core';
-import { AuthInfo, Messages, OrgAuthorization } from '@salesforce/core';
+import { AuthInfo, envVars, Messages, OrgAuthorization } from '@salesforce/core';
 type AuthListResult = Omit<OrgAuthorization, 'aliases'> & { alias: string };
 export type AuthListResults = AuthListResult[];
 Messages.importMessagesDirectoryFromMetaUrl(import.meta.url);
 const messages = Messages.loadMessages('@salesforce/plugin-auth', 'list');
+const secretsMessages = Messages.loadMessages('@salesforce/plugin-auth', 'secrets-redacted');
 
 export default class ListAuth extends SfCommand<AuthListResults> {
   public static readonly summary = messages.getMessage('summary');
@@ -40,10 +41,18 @@ export default class ListAuth extends SfCommand<AuthListResults> {
         this.log(messages.getMessage('noResultsFound'));
         return [];
       }
+      // TODO: Remove env var workaround
+      const showSecretsEnvVarIsSet = envVars.getBoolean('SF_TEMP_SHOW_SECRETS', false);
+      const accessTokenRedacted = secretsMessages.getMessage('redacted.accessToken');
+
       const mappedAuths: AuthListResults = auths.map((auth: OrgAuthorization) => {
         const { aliases, ...rest } = auth;
         // core3 moved to aliases as a string[], revert to alias as a string
-        return { ...rest, alias: aliases ? aliases.join(',') : '' };
+        return {
+          ...rest,
+          alias: aliases ? aliases.join(',') : '',
+          accessToken: rest.accessToken ? (showSecretsEnvVarIsSet ? rest.accessToken : accessTokenRedacted) : undefined,
+        };
       });
 
       const hasErrors = auths.filter((auth) => !!auth.error).length > 0;
@@ -58,6 +67,15 @@ export default class ListAuth extends SfCommand<AuthListResults> {
         })),
         title: 'authenticated orgs',
       });
+      // TODO: Remove after env var workaround is removed
+      if (this.jsonEnabled()) {
+        if (showSecretsEnvVarIsSet) {
+          this.warn(secretsMessages.getMessage('temp.envVarIsSet', ['sf org list auth']));
+        } else {
+          this.warn(secretsMessages.getMessage('temp.envVarWorkaround', ['sf org list auth']));
+        }
+      }
+
       return mappedAuths;
     } catch (err) {
       this.log(messages.getMessage('noResultsFound'));

@@ -15,13 +15,23 @@
  */
 
 import { Flags, loglevel, SfCommand } from '@salesforce/sf-plugins-core';
-import { AuthFields, AuthInfo, Messages, matchesAccessToken, SfError, StateAggregator } from '@salesforce/core';
+import {
+  AuthFields,
+  AuthInfo,
+  envVars,
+  Messages,
+  matchesAccessToken,
+  SfError,
+  StateAggregator,
+} from '@salesforce/core';
 import { env } from '@salesforce/kit';
 import { InferredFlags } from '@oclif/core/interfaces';
+import common from '../../../common.js';
 
 Messages.importMessagesDirectoryFromMetaUrl(import.meta.url);
 const messages = Messages.loadMessages('@salesforce/plugin-auth', 'accesstoken.store');
 const commonMessages = Messages.loadMessages('@salesforce/plugin-auth', 'messages');
+const secretsMessages = Messages.loadMessages('@salesforce/plugin-auth', 'secrets-redacted');
 
 const ACCESS_TOKEN_FORMAT = '"<org id>!<accesstoken>"';
 
@@ -98,7 +108,17 @@ export default class LoginAccessToken extends SfCommand<AuthFields> {
       ]);
       this.logSuccess(successMsg);
     }
-    return authInfo.getFields(true);
+
+    // TODO: Remove env var workaround
+    if (this.jsonEnabled()) {
+      if (envVars.getBoolean('SF_TEMP_SHOW_SECRETS', false)) {
+        this.warn(secretsMessages.getMessage('temp.envVarIsSet', ['sf org login access-token']));
+      } else {
+        this.warn(secretsMessages.getMessage('temp.envVarWorkaround', ['sf org login access-token']));
+      }
+    }
+
+    return common.redactAuthFields(authInfo.getFields(true));
   }
 
   private async saveAuthInfo(authInfo: AuthInfo): Promise<void> {
