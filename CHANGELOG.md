@@ -1,3 +1,9 @@
+## [4.4.1](https://github.com/salesforcecli/plugin-auth/compare/4.4.0...4.4.1) (2026-05-23)
+
+### Bug Fixes
+
+- **deps:** bump ws from 8.18.0 to 8.21.0 ([f21a760](https://github.com/salesforcecli/plugin-auth/commit/f21a76086ad72f4bf4012665096cbde0efa25030))
+
 # [4.4.0](https://github.com/salesforcecli/plugin-auth/compare/4.3.13...4.4.0) (2026-05-19)
 
 ### Features
