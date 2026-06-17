@@ -1,3 +1,9 @@
+## [4.4.3](https://github.com/salesforcecli/plugin-auth/compare/4.4.2...4.4.3) (2026-06-17)
+
+### Bug Fixes
+
+- **deps:** bump markdown-it from 14.1.0 to 14.2.0 ([2f04027](https://github.com/salesforcecli/plugin-auth/commit/2f04027a118eaa3ff1f2081f50fc214a9d818de3))
+
 ## [4.4.2](https://github.com/salesforcecli/plugin-auth/compare/4.4.1...4.4.2) (2026-06-13)
 
 ### Bug Fixes
