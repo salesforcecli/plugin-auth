@@ -1,3 +1,9 @@
+## [4.4.5](https://github.com/salesforcecli/plugin-auth/compare/4.4.4...4.4.5) (2026-06-17)
+
+### Bug Fixes
+
+- **deps:** bump @babel/core from 7.25.2 to 7.29.7 ([afd1866](https://github.com/salesforcecli/plugin-auth/commit/afd18661397ffe675478798ecacc6522dea77729))
+
 ## [4.4.4](https://github.com/salesforcecli/plugin-auth/compare/4.4.3...4.4.4) (2026-06-17)
 
 ### Bug Fixes
