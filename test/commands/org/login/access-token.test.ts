@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import { Readable } from 'node:stream';
 import { AuthFields, AuthInfo, StateAggregator } from '@salesforce/core';
 import { assert, expect } from 'chai';
 import { TestContext } from '@salesforce/core/testSetup';
@@ -49,8 +50,57 @@ describe('org:login:access-token', () => {
   /* eslint-enable camelcase */
   let stubSfCommandUxStubs: ReturnType<typeof stubSfCommandUx>;
   let prompterStubs: ReturnType<typeof stubPrompter>;
+  const originalStdin = process.stdin;
+
+  const setStdinIsTTY = (isTTY: boolean): void => {
+    Object.defineProperty(process.stdin, 'isTTY', { value: isTTY, configurable: true });
+  };
+
+  /** Ensure the token env vars don't short-circuit the stdin-reading path. */
+  const stubNoTokenEnv = (): void => {
+    $$.SANDBOX.stub(env, 'getString')
+      .withArgs('SF_ACCESS_TOKEN')
+      // @ts-expect-error getString can return undefined
+      .returns(undefined)
+      .withArgs('SFDX_ACCESS_TOKEN')
+      // @ts-expect-error getString can return undefined
+      .returns(undefined);
+  };
+
+  /** Replace process.stdin with a non-TTY readable and clear any token env vars. */
+  const useStdin = (readable: Readable): void => {
+    stubNoTokenEnv();
+    Object.defineProperty(readable, 'isTTY', { value: undefined, configurable: true });
+    Object.defineProperty(process, 'stdin', { value: readable, configurable: true });
+  };
+
+  /** Simulate a non-TTY stdin that emits `content` then EOF. */
+  const pipeToStdin = (content: string): void => {
+    useStdin(Readable.from([content]));
+  };
+
+  /** A non-TTY stdin that is open but never sends data or EOF (would hang without a timeout). */
+  const openStdin = (): Readable => {
+    const stdin = new Readable({
+      read(): void {
+        /* no-op: never emits data or end */
+      },
+    });
+    useStdin(stdin);
+    return stdin;
+  };
+
+  /** Wait until the command under test has attached its stdin 'data' listener. */
+  const waitForStdinRead = async (stdin: Readable): Promise<void> => {
+    while (stdin.listenerCount('data') === 0) {
+      // eslint-disable-next-line no-await-in-loop
+      await new Promise((resolve) => setImmediate(resolve));
+    }
+  };
 
   beforeEach(() => {
+    // default to an interactive terminal; individual tests override as needed
+    setStdinIsTTY(true);
     // @ts-expect-error because private method
     $$.SANDBOX.stub(Store.prototype, 'saveAuthInfo').resolves(userInfo);
     $$.SANDBOX.stub(AuthInfo.prototype, 'getUsername').returns(authFields.username);
@@ -65,6 +115,10 @@ describe('org:login:access-token', () => {
     $$.SANDBOX.stub(Store.prototype, 'getUserInfo').resolves(AuthInfo.prototype);
     stubSfCommandUxStubs = stubSfCommandUx($$.SANDBOX);
     prompterStubs = stubPrompter($$.SANDBOX);
+  });
+
+  afterEach(() => {
+    Object.defineProperty(process, 'stdin', { value: originalStdin, configurable: true });
   });
 
   it('should return auth fields after successful auth', async () => {
@@ -102,6 +156,91 @@ describe('org:login:access-token', () => {
     expect(result).to.deep.equal(redactedAuthFields);
     expect(prompterStubs.secret.callCount).to.equal(1);
     expect(prompterStubs.confirm.callCount).to.equal(1);
+  });
+
+  it('should read the token piped to stdin and not prompt when auth file exists (non-TTY)', async () => {
+    // Core regression for W-22954140 / GH #3573: token piped via stdin + existing auth file.
+    // Drives the real stdin-reading path (no env var short-circuit).
+    pipeToStdin(`${accessToken}\n`);
+    $$.SANDBOX.stub(StateAggregator, 'getInstance').resolves({
+      // @ts-expect-error because incomplete interface
+      orgs: {
+        exists: () => Promise.resolve(true),
+      },
+    });
+
+    const result = await Store.run(['--instance-url', 'https://foo.bar.org.salesforce.com']);
+    expect(result).to.deep.equal(redactedAuthFields);
+    // token came from stdin, not the interactive prompt
+    expect(prompterStubs.secret.callCount).to.equal(0);
+    // overwrite prompt skipped because stdin isn't a TTY
+    expect(prompterStubs.confirm.callCount).to.equal(0);
+    expect(stubSfCommandUxStubs.logSuccess.callCount).to.equal(1);
+  });
+
+  it('should trim surrounding whitespace/newlines from a piped token', async () => {
+    pipeToStdin(`  ${accessToken}\n\n`);
+    $$.SANDBOX.stub(StateAggregator, 'getInstance').resolves({
+      // @ts-expect-error because incomplete interface
+      orgs: { exists: () => Promise.resolve(false) },
+    });
+
+    const result = await Store.run(['--instance-url', 'https://foo.bar.org.salesforce.com']);
+    expect(result).to.deep.equal(redactedAuthFields);
+    expect(prompterStubs.secret.callCount).to.equal(0);
+  });
+
+  it('should throw invalid-format error when stdin is empty (non-TTY)', async () => {
+    pipeToStdin('');
+    try {
+      await Store.run(['--instance-url', 'https://foo.bar.org.salesforce.com']);
+      assert(false, 'should throw error');
+    } catch (e) {
+      assert(e instanceof Error);
+      expect(e.message).to.include("The access token isn't in the correct format");
+    }
+    // never falls back to an interactive prompt
+    expect(prompterStubs.secret.callCount).to.equal(0);
+  });
+
+  it('should time out (not hang) when non-TTY stdin never sends data or EOF', async () => {
+    const clock = $$.SANDBOX.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] });
+    const stdin = openStdin();
+
+    const runPromise = Store.run(['--instance-url', 'https://foo.bar.org.salesforce.com']);
+    // Wait until the command has reached readPipedStdin and registered its listeners/timer,
+    // then advance the fake clock past the timeout. Avoids ticking before the timer exists.
+    await waitForStdinRead(stdin);
+    await clock.tickAsync(60_000);
+
+    try {
+      await runPromise;
+      assert(false, 'should throw error');
+    } catch (e) {
+      assert(e instanceof Error);
+      expect(e.message).to.include('Timed out while reading the access token from stdin');
+    }
+    expect(prompterStubs.secret.callCount).to.equal(0);
+  });
+
+  it('should reject and clean up listeners when non-TTY stdin errors', async () => {
+    const stdin = openStdin();
+
+    const runPromise = Store.run(['--instance-url', 'https://foo.bar.org.salesforce.com']);
+    await waitForStdinRead(stdin);
+    stdin.emit('error', new Error('stdin boom'));
+
+    try {
+      await runPromise;
+      assert(false, 'should throw error');
+    } catch (e) {
+      assert(e instanceof Error);
+      expect(e.message).to.include('stdin boom');
+    }
+    // listeners removed on cleanup so nothing dangles
+    expect(stdin.listenerCount('data')).to.equal(0);
+    expect(stdin.listenerCount('end')).to.equal(0);
+    expect(stdin.listenerCount('error')).to.equal(0);
   });
 
   it('should show that auth file does not already exist', async () => {

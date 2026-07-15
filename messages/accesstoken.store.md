@@ -6,6 +6,8 @@ Authorize an org using an existing Salesforce access token.
 
 By default, the command runs interactively and asks you for the access token. If you previously authorized the org, the command prompts whether you want to overwrite the local file. Specify --no-prompt to not be prompted.
 
+If you pipe the access token to the command (so stdin isn't an interactive terminal), the command reads the token from stdin and doesn't prompt to overwrite an existing file.
+
 To use the command in a CI/CD script, set the SF_ACCESS_TOKEN environment variable to the access token. Then run the command with the --no-prompt parameter.
 
 # examples
@@ -27,3 +29,8 @@ It should follow this pattern: %s.
 
 A file already exists for user "%s", which is associated with the access token you provided.
 Are you sure you want to overwrite the existing file?
+
+# stdinTimeout
+
+Timed out while reading the access token from stdin.
+Pipe the access token to the command, or set the SF_ACCESS_TOKEN environment variable and use --no-prompt.
