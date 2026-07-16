@@ -1,3 +1,9 @@
+## [4.4.6](https://github.com/salesforcecli/plugin-auth/compare/4.4.5...4.4.6) (2026-07-16)
+
+### Bug Fixes
+
+- **deps:** bump websocket-driver from 0.7.4 to 0.7.5 ([290312a](https://github.com/salesforcecli/plugin-auth/commit/290312a71ee8c1c51b92b85572c2f44b6b8cd35e))
+
 ## [4.4.5](https://github.com/salesforcecli/plugin-auth/compare/4.4.4...4.4.5) (2026-06-17)
 
 ### Bug Fixes
