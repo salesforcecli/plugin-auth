@@ -132,7 +132,10 @@ export default class LoginAccessToken extends SfCommand<AuthFields> {
   }
 
   private async overwriteAuthInfo(username: string): Promise<boolean> {
-    if (!this.flags['no-prompt']) {
+    // Only prompt to overwrite when we can actually receive an answer. When stdin is not a
+    // TTY (e.g. the token was piped in) the interactive prompt has no input to read and would
+    // reject with "User force closed the prompt with 13 null", so treat it like --no-prompt.
+    if (!this.flags['no-prompt'] && process.stdin.isTTY) {
       const stateAggregator = await StateAggregator.getInstance();
       if (await stateAggregator.orgs.exists(username)) {
         return this.confirm({ message: messages.getMessage('overwriteAccessTokenAuthUserFile', [username]) });
@@ -143,14 +146,65 @@ export default class LoginAccessToken extends SfCommand<AuthFields> {
 
   private async getAccessToken(): Promise<string> {
     const accessToken =
-      env.getString('SF_ACCESS_TOKEN') ??
-      env.getString('SFDX_ACCESS_TOKEN') ??
-      (this.flags['no-prompt'] === true
-        ? '' // will throw when validating
-        : await this.secretPrompt({ message: commonMessages.getMessage('accessTokenStdin') }));
+      env.getString('SF_ACCESS_TOKEN') ?? env.getString('SFDX_ACCESS_TOKEN') ?? (await this.resolveAccessToken());
     if (!matchesAccessToken(accessToken)) {
       throw new SfError(messages.getMessage('invalidAccessTokenFormat', [ACCESS_TOKEN_FORMAT]));
     }
     return accessToken;
   }
+
+  private async resolveAccessToken(): Promise<string> {
+    if (this.flags['no-prompt']) {
+      // will throw when validating
+      return '';
+    }
+    // When stdin is piped (not a TTY) the interactive secret prompt can't be used reliably,
+    // so read the token directly from the stream. This is the CI/CD "pipe the token" workflow.
+    if (!process.stdin.isTTY) {
+      return readPipedStdin();
+    }
+    return this.secretPrompt({ message: commonMessages.getMessage('accessTokenStdin') });
+  }
+}
+
+/**
+ * Read all data piped to stdin and return it trimmed. Returns '' if nothing was piped.
+ *
+ * A timeout guards against a stdin stream that is opened but never sends data or EOF (e.g. a
+ * pipe inherited from a supervisor process, or a terminal that reports a non-TTY stdin such as
+ * Git Bash/mintty on Windows), which would otherwise hang the command forever. On timeout the
+ * stream listeners are removed so no read is left dangling.
+ */
+async function readPipedStdin(ms = 60_000): Promise<string> {
+  const stdin = process.stdin;
+  const chunks: string[] = [];
+
+  return new Promise<string>((resolve, reject) => {
+    const onData = (chunk: Buffer | string): void => {
+      chunks.push(typeof chunk === 'string' ? chunk : chunk.toString('utf8'));
+    };
+    const cleanup = (): void => {
+      clearTimeout(timer);
+      stdin.removeListener('data', onData);
+      stdin.removeListener('end', onEnd);
+      stdin.removeListener('error', onError);
+    };
+    const onEnd = (): void => {
+      cleanup();
+      resolve(chunks.join('').trim());
+    };
+    const onError = (err: Error): void => {
+      cleanup();
+      reject(err);
+    };
+    const timer = setTimeout(() => {
+      cleanup();
+      reject(new SfError(messages.getMessage('stdinTimeout')));
+    }, ms);
+    timer.unref();
+
+    stdin.on('data', onData);
+    stdin.once('end', onEnd);
+    stdin.once('error', onError);
+  });
 }
