@@ -1,3 +1,9 @@
+## [4.4.7](https://github.com/salesforcecli/plugin-auth/compare/4.4.6...4.4.7) (2026-07-20)
+
+### Bug Fixes
+
+- read piped access token from stdin instead of prompting @W-22954140@ ([773a3f9](https://github.com/salesforcecli/plugin-auth/commit/773a3f9cf6ea41aebbd0145832da06b00420bb69)), closes [#3573](https://github.com/salesforcecli/plugin-auth/issues/3573)
+
 ## [4.4.6](https://github.com/salesforcecli/plugin-auth/compare/4.4.5...4.4.6) (2026-07-16)
 
 ### Bug Fixes
