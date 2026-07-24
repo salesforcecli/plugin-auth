@@ -1,3 +1,9 @@
+## [4.4.8](https://github.com/salesforcecli/plugin-auth/compare/4.4.7...4.4.8) (2026-07-24)
+
+### Bug Fixes
+
+- **deps:** bump linkify-it from 5.0.1 to 5.0.2 ([8a70f28](https://github.com/salesforcecli/plugin-auth/commit/8a70f28ea68ce674ca16f05ab18ddc15317e2073))
+
 ## [4.4.7](https://github.com/salesforcecli/plugin-auth/compare/4.4.6...4.4.7) (2026-07-20)
 
 ### Bug Fixes
