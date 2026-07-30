@@ -149,7 +149,7 @@ const supportsCliV2Crypto = async (doctor: SfDoctor): Promise<boolean> => {
   let pluginsSupportV2 = false;
   let linksSupportsV2 = false;
 
-  const { root, dataDir } = diagnosis.cliConfig;
+  const { root, dataDir } = diagnosis.cliConfig as Record<string, string | undefined>;
   // check core CLI
   if (root?.length) {
     try {
