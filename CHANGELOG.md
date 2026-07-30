@@ -1,3 +1,9 @@
+## [5.0.1](https://github.com/salesforcecli/plugin-auth/compare/5.0.0...5.0.1) (2026-07-30)
+
+### Bug Fixes
+
+- bump plugin-info ([#1531](https://github.com/salesforcecli/plugin-auth/issues/1531)) ([4c39df5](https://github.com/salesforcecli/plugin-auth/commit/4c39df519eb95ccfd4e56460a97a51a75a87e0f0))
+
 # [5.0.0](https://github.com/salesforcecli/plugin-auth/compare/4.4.9...5.0.0) (2026-07-30)
 
 ### Bug Fixes
