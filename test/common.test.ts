@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { ConfigContents, SfdcUrl, Global, Mode } from '@salesforce/core';
+import { ConfigContents, SfdcUrl, SfProject, Global, Mode } from '@salesforce/core';
 import { assert, expect } from 'chai';
 import { TestContext, uniqid } from '@salesforce/core/testSetup';
 import common from '../src/common.js';
@@ -144,13 +144,9 @@ describe('common unit tests', () => {
       expect(loginUrl).to.equal(INSTANCE_URL_1);
     });
     it('should return custom login URL if project with property sfdcLoginUrl present and not equal to production URL', async () => {
-      await projectSetup($$, true, {
-        packageDirectories: [
-          {
-            path: 'force-app',
-            default: true,
-          },
-        ],
+      $$.inProject(true);
+      $$.SANDBOXES.PROJECT.stub(SfProject.prototype, 'resolveProjectConfig').resolves({
+        packageDirectories: [{ path: 'force-app', default: true }],
         sfdcLoginUrl: INSTANCE_URL_2,
         sourceApiVersion: '50.0',
       });

@@ -27,7 +27,12 @@
                 "const": "web"
               }
             },
-            "required": ["clientId", "accessToken", "refreshToken", "oauthFlow"],
+            "required": [
+              "clientId",
+              "accessToken",
+              "refreshToken",
+              "oauthFlow"
+            ],
             "additionalProperties": false
           }
         },
@@ -82,9 +87,6 @@
         "refreshToken": {
           "type": "string"
         },
-        "scratchAdminUsername": {
-          "type": "string"
-        },
         "snapshot": {
           "type": "string"
         },
@@ -116,7 +118,10 @@
           "type": "string"
         },
         "namespacePrefix": {
-          "type": ["string", "null"]
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "isSandbox": {
           "type": "boolean"
@@ -125,7 +130,13 @@
           "type": "boolean"
         },
         "trailExpirationDate": {
-          "type": ["string", "null"]
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "orgEdition": {
+          "type": "string"
         }
       },
       "additionalProperties": false,
