@@ -1,3 +1,15 @@
+# [5.0.0](https://github.com/salesforcecli/plugin-auth/compare/4.4.9...5.0.0) (2026-07-30)
+
+### Bug Fixes
+
+- update test stub for core 9 config resolution + regenerate schemas ([cdf7cef](https://github.com/salesforcecli/plugin-auth/commit/cdf7cef91c8ab6f30d996af06ebf9ccb25fa5040))
+
+- feat!: require Node >=22, drop EOL Node versions @W-23480655@ ([c766955](https://github.com/salesforcecli/plugin-auth/commit/c766955bb795da88adb9b7c2e43f14472db7df38))
+
+### BREAKING CHANGES
+
+- engines.node raised to >=22.0.0, dropping support for Node 18 and 20
+
 ## [4.4.9](https://github.com/salesforcecli/plugin-auth/compare/4.4.8...4.4.9) (2026-07-25)
 
 ### Bug Fixes
