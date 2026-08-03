@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 import childProcess from 'node:child_process';
-import { ExecOptions, PromiseWithChild } from 'node:child_process';
+import { ExecFileOptions } from 'node:child_process';
 import util from 'node:util';
 import { join } from 'node:path';
 import fs from 'node:fs';
@@ -24,7 +24,11 @@ import { asString, isString } from '@salesforce/ts-types';
 import { parseJsonMap } from '@salesforce/kit';
 
 type HookFunction = (options: { doctor: SfDoctor }) => Promise<[void]>;
-type PromisifiedExec = (command: string, options?: ExecOptions) => PromiseWithChild<{ stdout: string; stderr: string }>;
+type PromisifiedExecFile = (
+  command: string,
+  args: string[],
+  options?: ExecFileOptions
+) => Promise<{ stdout: string; stderr: string }>;
 
 let logger: Logger;
 const getLogger = (): Logger => {
@@ -38,13 +42,15 @@ const pluginName = '@salesforce/plugin-auth';
 Messages.importMessagesDirectoryFromMetaUrl(import.meta.url);
 const messages = Messages.loadMessages(pluginName, 'diagnostics');
 
-let exec: PromisifiedExec;
+// Use execFile instead of exec to avoid shell interpretation.
+// exec invokes cmd.exe on Windows, which resolves commands from CWD before PATH.
+let execFile: PromisifiedExecFile;
 
 export const hook: HookFunction = async (options) => {
   getLogger().debug(`Running SfDoctor diagnostics for ${pluginName}`);
-  exec = util.promisify(childProcess.exec);
+  execFile = util.promisify(childProcess.execFile) as unknown as PromisifiedExecFile;
   try {
-    await exec('npm -v');
+    await execFile('npm', ['-v']);
     return await Promise.all([cryptoVersionTest(options.doctor)]);
   } catch (e: unknown) {
     const errMsg = e instanceof Error ? e.message : isString(e) ? e : 'unknown';
@@ -153,7 +159,7 @@ const supportsCliV2Crypto = async (doctor: SfDoctor): Promise<boolean> => {
   // check core CLI
   if (root?.length) {
     try {
-      const { stdout } = await exec('npm explain @salesforce/core --json', { cwd: root });
+      const { stdout } = await execFile('npm', ['explain', '@salesforce/core', '--json'], { cwd: root });
       const coreExplanation = JSON.parse(stdout) as NpmExplanation[];
       coreSupportsV2 = coreExplanation.every((exp) => exp?.version > '6.6.0');
     } catch (e: unknown) {
@@ -164,7 +170,7 @@ const supportsCliV2Crypto = async (doctor: SfDoctor): Promise<boolean> => {
   // check installed plugins
   if (dataDir?.length) {
     try {
-      const { stdout } = await exec('npm explain @salesforce/core --json', { cwd: dataDir });
+      const { stdout } = await execFile('npm', ['explain', '@salesforce/core', '--json'], { cwd: dataDir });
       const pluginsExplanation = JSON.parse(stdout) as NpmExplanation[];
       pluginsSupportV2 = pluginsExplanation?.length ? pluginsExplanation.every((exp) => exp?.version > '6.6.0') : true;
     } catch (e: unknown) {
@@ -186,7 +192,7 @@ const supportsCliV2Crypto = async (doctor: SfDoctor): Promise<boolean> => {
           // last entry is the path. E.g., "auth 3.3.17 (link) /Users/me/dev/plugin-auth",
           const pluginPath = pluginEntry.split(' ')?.pop();
           if (pluginPath?.length) {
-            const { stdout } = await exec('npm explain @salesforce/core --json', { cwd: pluginPath });
+            const { stdout } = await execFile('npm', ['explain', '@salesforce/core', '--json'], { cwd: pluginPath });
             const linksExplanation = JSON.parse(stdout) as NpmExplanation[];
             return linksExplanation?.every((exp) => exp?.version > '6.6.0');
           }
