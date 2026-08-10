@@ -48,7 +48,7 @@ let execFile: PromisifiedExecFile;
 
 export const hook: HookFunction = async (options) => {
   getLogger().debug(`Running SfDoctor diagnostics for ${pluginName}`);
-  execFile = util.promisify(childProcess.execFile) as unknown as PromisifiedExecFile;
+  execFile = util.promisify(childProcess.execFile);
   try {
     await execFile('npm', ['-v']);
     return await Promise.all([cryptoVersionTest(options.doctor)]);

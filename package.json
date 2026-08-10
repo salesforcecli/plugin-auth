@@ -20,13 +20,15 @@
   "devDependencies": {
     "@oclif/plugin-command-snapshot": "^5.3.20",
     "@salesforce/cli-plugins-testkit": "^5.3.57",
-    "@salesforce/dev-scripts": "^11.0.4",
+    "@salesforce/dev-scripts": "^13.0.0",
     "@salesforce/plugin-command-reference": "^3.1.101",
     "@salesforce/ts-sinon": "^1.4.34",
+    "eslint": "^10.4.0",
+    "eslint-config-salesforce-typescript": "^6.0.0",
     "eslint-plugin-sf-plugin": "^1.20.33",
     "oclif": "^4.23.16",
     "ts-node": "^10.9.2",
-    "typescript": "^5.5.4"
+    "typescript": "^5.5.4 || ^6"
   },
   "engines": {
     "node": ">=22.0.0"
@@ -152,6 +154,7 @@
         "src/**/*.ts",
         "test/**/*.ts",
         "messages/**",
+        "**/eslint.config.*",
         "**/.eslint*",
         "**/tsconfig.json"
       ],
