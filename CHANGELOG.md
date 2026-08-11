@@ -1,3 +1,9 @@
+## [5.0.4](https://github.com/salesforcecli/plugin-auth/compare/5.0.3...5.0.4) (2026-08-11)
+
+### Bug Fixes
+
+- bump core lib to latest ([b9ee582](https://github.com/salesforcecli/plugin-auth/commit/b9ee582cb02c3650c0d59a64a14df9c260e7f4ff))
+
 ## [5.0.3](https://github.com/salesforcecli/plugin-auth/compare/5.0.2...5.0.3) (2026-08-06)
 
 ### Bug Fixes
