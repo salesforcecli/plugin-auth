@@ -33,7 +33,6 @@ export default class LoginJwt extends SfCommand<AuthFields> {
 
   public static readonly flags = {
     username: Flags.string({
-      // eslint-disable-next-line sf-plugin/dash-o
       char: 'o',
       summary: messages.getMessage('flags.username.summary'),
       required: true,
@@ -95,10 +94,9 @@ export default class LoginJwt extends SfCommand<AuthFields> {
   public async run(): Promise<AuthFields> {
     const { flags } = await this.parse(LoginJwt);
     this.flags = flags;
-    let result: AuthFields = {};
-
     if (await common.shouldExitCommand(flags['no-prompt'])) return {};
 
+    let result: AuthFields;
     try {
       const authInfo = await this.initAuthInfo();
       await authInfo.handleAliasAndDefaultSettings({
