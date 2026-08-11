@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+ 
 import { AuthFields, AuthInfo, SfError } from '@salesforce/core';
 import { MockTestOrgData, TestContext } from '@salesforce/core/testSetup';
 import { StubbedType, stubInterface } from '@salesforce/ts-sinon';
@@ -205,7 +206,7 @@ describe('org:login:jwt', () => {
     await prepareStubs({ existingAuth: true });
     try {
       await LoginJwt.run(['-u', testData.username, '-f', 'path/to/key.json', '-i', '123456', '--json']);
-    } catch (e) {
+    } catch {
       expect.fail('Should not have thrown an error');
     }
   });
