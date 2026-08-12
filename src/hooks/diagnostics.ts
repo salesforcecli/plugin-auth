@@ -16,8 +16,9 @@
 import childProcess from 'node:child_process';
 import { ExecFileOptions } from 'node:child_process';
 import util from 'node:util';
-import { join } from 'node:path';
+import { dirname, join, resolve } from 'node:path';
 import fs from 'node:fs';
+import which from 'which';
 import { Global, Lifecycle, Logger, Messages } from '@salesforce/core';
 import { SfDoctor, SfDoctorDiagnosis } from '@salesforce/plugin-info';
 import { asString, isString } from '@salesforce/ts-types';
@@ -42,15 +43,29 @@ const pluginName = '@salesforce/plugin-auth';
 Messages.importMessagesDirectoryFromMetaUrl(import.meta.url);
 const messages = Messages.loadMessages(pluginName, 'diagnostics');
 
-// Use execFile instead of exec to avoid shell interpretation.
-// exec invokes cmd.exe on Windows, which resolves commands from CWD before PATH.
+// Resolve npm from PATH only, excluding CWD. On Windows, both execFile (CreateProcess)
+// and the `which` module resolve executables from CWD before PATH.
 let execFile: PromisifiedExecFile;
+let npmPath: string;
 
 export const hook: HookFunction = async (options) => {
   getLogger().debug(`Running SfDoctor diagnostics for ${pluginName}`);
-  execFile = util.promisify(childProcess.execFile) as unknown as PromisifiedExecFile;
+
+  const cwd = resolve(process.cwd());
+  const resolved = which.sync('npm', { nothrow: true });
+  if (!resolved || dirname(resolve(resolved)) === cwd) {
+    getLogger().warn(`Unable to run SfDoctor diagnostics for ${pluginName}: npm not found on PATH`);
+    return Promise.resolve([undefined]);
+  }
+  npmPath = resolved;
+
+  const useShell = /\.(cmd|bat)$/i.test(npmPath);
+  const rawExecFile = util.promisify(childProcess.execFile) as unknown as PromisifiedExecFile;
+  execFile = (cmd: string, args: string[], opts?: ExecFileOptions): Promise<{ stdout: string; stderr: string }> =>
+    rawExecFile(cmd, args, { ...opts, shell: useShell });
+
   try {
-    await execFile('npm', ['-v']);
+    await execFile(npmPath, ['-v']);
     return await Promise.all([cryptoVersionTest(options.doctor)]);
   } catch (e: unknown) {
     const errMsg = e instanceof Error ? e.message : isString(e) ? e : 'unknown';
@@ -159,7 +174,7 @@ const supportsCliV2Crypto = async (doctor: SfDoctor): Promise<boolean> => {
   // check core CLI
   if (root?.length) {
     try {
-      const { stdout } = await execFile('npm', ['explain', '@salesforce/core', '--json'], { cwd: root });
+      const { stdout } = await execFile(npmPath, ['explain', '@salesforce/core', '--json'], { cwd: root });
       const coreExplanation = JSON.parse(stdout) as NpmExplanation[];
       coreSupportsV2 = coreExplanation.every((exp) => exp?.version > '6.6.0');
     } catch (e: unknown) {
@@ -170,7 +185,7 @@ const supportsCliV2Crypto = async (doctor: SfDoctor): Promise<boolean> => {
   // check installed plugins
   if (dataDir?.length) {
     try {
-      const { stdout } = await execFile('npm', ['explain', '@salesforce/core', '--json'], { cwd: dataDir });
+      const { stdout } = await execFile(npmPath, ['explain', '@salesforce/core', '--json'], { cwd: dataDir });
       const pluginsExplanation = JSON.parse(stdout) as NpmExplanation[];
       pluginsSupportV2 = pluginsExplanation?.length ? pluginsExplanation.every((exp) => exp?.version > '6.6.0') : true;
     } catch (e: unknown) {
@@ -192,7 +207,7 @@ const supportsCliV2Crypto = async (doctor: SfDoctor): Promise<boolean> => {
           // last entry is the path. E.g., "auth 3.3.17 (link) /Users/me/dev/plugin-auth",
           const pluginPath = pluginEntry.split(' ')?.pop();
           if (pluginPath?.length) {
-            const { stdout } = await execFile('npm', ['explain', '@salesforce/core', '--json'], { cwd: pluginPath });
+            const { stdout } = await execFile(npmPath, ['explain', '@salesforce/core', '--json'], { cwd: pluginPath });
             const linksExplanation = JSON.parse(stdout) as NpmExplanation[];
             return linksExplanation?.every((exp) => exp?.version > '6.6.0');
           }
