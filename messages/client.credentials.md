@@ -11,7 +11,7 @@ Logging into an org authorizes the CLI to run other commands that connect to tha
 Complete these steps before you run this command:
 
     1. Create a connected app or external client app in your org. Enable the client credentials flow and choose the user that the integration runs as.
-    2. Make note of the consumer key (also called client id) and consumer secret (also called client secret) that are generated for you. When you run this command, you set the --client-id flag to the consumer key and the --client-secret flag to the consumer secret.
+    2. Make note of the consumer key (also called client id) and consumer secret (also called client secret) that are generated for you. Set the consumer secret in the SF_CLIENT_SECRET environment variable. When you run this command, set the --client-id flag to the consumer key so the secret isn't passed as a command argument.
     3. Use your org’s My Domain URL with --instance-url. The client credentials flow doesn’t support login.salesforce.com or test.salesforce.com.
 
 See https://help.salesforce.com/s/articleView?id=sf.remoteaccess_oauth_client_credentials_flow.htm for more information.
@@ -20,29 +20,25 @@ We recommend that you set an alias when you log into an org. Aliases make it eas
 
 # examples
 
-- Log into an org with username jdoe@example.org. The command uses the connected app with a fake consumer key (client id) 04580y4051234051 and the consumer secret.
+- Log into an org with username jdoe@example.org. Set the connected app consumer secret as an environment variable, then run the command with its fake consumer key (client id) 04580y4051234051.
 
-  <%= config.bin %> <%= command.id %> --username jdoe@example.org --client-secret very-secret --client-id 04580y4051234051 --instance-url https://MyDomainName.my.salesforce.com
+  SF_CLIENT_SECRET=very-secret <%= config.bin %> <%= command.id %> --username jdoe@example.org --client-id 04580y4051234051 --instance-url https://MyDomainName.my.salesforce.com
 
 - Set the org as the default and give it an alias:
 
-  <%= config.bin %> <%= command.id %> --username jdoe@example.org --client-secret very-secret --client-id 04580y4051234051 --instance-url https://MyDomainName.my.salesforce.com --alias ci-org --set-default
+  SF_CLIENT_SECRET=very-secret <%= config.bin %> <%= command.id %> --username jdoe@example.org --client-id 04580y4051234051 --instance-url https://MyDomainName.my.salesforce.com --alias ci-org --set-default
 
 - Set the org as the default Dev Hub and give it an alias:
 
-  <%= config.bin %> <%= command.id %> --username jdoe@example.org --client-secret very-secret --client-id 04580y4051234051 --instance-url https://MyDomainName.my.salesforce.com --alias ci-dev-hub --set-default-dev-hub
+  SF_CLIENT_SECRET=very-secret <%= config.bin %> <%= command.id %> --username jdoe@example.org --client-id 04580y4051234051 --instance-url https://MyDomainName.my.salesforce.com --alias ci-dev-hub --set-default-dev-hub
 
 - Log in to a sandbox using URL https://MyDomainName--SandboxName.sandbox.my.salesforce.com:
 
-  <%= config.bin %> <%= command.id %> --username jdoe@example.org --client-secret very-secret --client-id 04580y4051234051 --alias ci-org --set-default --instance-url https://MyDomainName--SandboxName.sandbox.my.salesforce.com
+  SF_CLIENT_SECRET=very-secret <%= config.bin %> <%= command.id %> --username jdoe@example.org --client-id 04580y4051234051 --alias ci-org --set-default --instance-url https://MyDomainName--SandboxName.sandbox.my.salesforce.com
 
 # flags.username.summary
 
 Username of the user logging in.
-
-# flags.client-secret.summary
-
-OAuth client secret (also called consumer secret) of your custom connected app.
 
 # ClientCredentialsGrantError
 
@@ -51,6 +47,10 @@ We encountered a client credentials error, which is likely not an issue with Sal
 # httpsRequired
 
 The client credentials flow requires an HTTPS instance URL. Use your org’s My Domain URL, such as https://MyDomainName.my.salesforce.com.
+
+# clientSecretMissingResponse
+
+The client secret environment variable was not set, aborting login call.
 
 # invalidTokenResponse
 

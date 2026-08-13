@@ -14,28 +14,46 @@
  * limitations under the License.
  */
 
-import { AuthFields, AuthInfo, SfError } from '@salesforce/core';
-import { MockTestOrgData, TestContext } from '@salesforce/core/testSetup';
-import { StubbedType, stubInterface } from '@salesforce/ts-sinon';
+import { AuthFields, SfError } from '@salesforce/core';
+import { TestContext } from '@salesforce/core/testSetup';
+import type { SinonStub } from 'sinon';
 import { expect } from 'chai';
-import { stubUx } from '@salesforce/sf-plugins-core';
 import LoginClientCredentials from '../../../../src/commands/org/login/client-credentials.js';
+import AccessToken from '../../../../src/commands/org/login/access-token.js';
 
 type Options = {
-  authInfoCreateFails?: boolean;
-  existingAuth?: boolean;
   tokenRequestFails?: boolean;
 };
 
 describe('org:login:client-credentials', () => {
   const $$ = new TestContext();
-
-  const testData = new MockTestOrgData();
   const clientSecret = 'very-secret';
   const instanceUrl = 'https://MyDomainName.my.salesforce.com';
-  let authFields: AuthFields;
-  let authInfoStub: StubbedType<AuthInfo>;
+  const authFields = { username: 'jdoe@example.org' } as AuthFields;
   let fetchStub: { callCount: number; firstCall: { args: unknown[] } };
+  let accessTokenRunStub: SinonStub;
+  let originalClientSecret: string | undefined;
+  let originalAccessToken: string | undefined;
+
+  beforeEach(() => {
+    originalClientSecret = process.env.SF_CLIENT_SECRET;
+    originalAccessToken = process.env.SF_ACCESS_TOKEN;
+    process.env.SF_CLIENT_SECRET = clientSecret;
+    accessTokenRunStub = $$.SANDBOX.stub(AccessToken.prototype, 'run').resolves(authFields);
+  });
+
+  afterEach(() => {
+    if (originalClientSecret !== undefined) {
+      process.env.SF_CLIENT_SECRET = originalClientSecret;
+    } else {
+      delete process.env.SF_CLIENT_SECRET;
+    }
+    if (originalAccessToken !== undefined) {
+      process.env.SF_ACCESS_TOKEN = originalAccessToken;
+    } else {
+      delete process.env.SF_ACCESS_TOKEN;
+    }
+  });
 
   const jsonResponse = (body: unknown, ok = true, status = 200): Response =>
     ({
@@ -44,79 +62,61 @@ describe('org:login:client-credentials', () => {
       json: () => Promise.resolve(body),
     } as Response);
 
-  async function prepareStubs(options: Options = {}): Promise<void> {
-    authFields = await testData.getConfig();
-    delete authFields.isDevHub;
-
-    authInfoStub = stubInterface<AuthInfo>($$.SANDBOX, {
-      getFields: () => authFields,
-    });
-
-    await $$.stubAuths(testData);
-
+  const prepareStubs = (options: Options = {}): void => {
     /* eslint-disable camelcase */
-    if (options.tokenRequestFails) {
-      fetchStub = $$.SANDBOX.stub(globalThis, 'fetch').resolves(
-        jsonResponse({ error: 'invalid_client', error_description: 'client identifier invalid' }, false, 400)
-      );
-    } else {
-      fetchStub = $$.SANDBOX.stub(globalThis, 'fetch').resolves(
-        jsonResponse({
-          access_token: '00Dxx0000000000!token',
-          instance_url: instanceUrl,
-        })
-      );
-    }
+    fetchStub = $$.SANDBOX.stub(globalThis, 'fetch').resolves(
+      options.tokenRequestFails
+        ? jsonResponse({ error: 'invalid_client', error_description: 'client identifier invalid' }, false, 400)
+        : jsonResponse({
+            access_token: '00Dxx0000000000!token',
+            instance_url: instanceUrl,
+          })
+    );
     /* eslint-enable camelcase */
+  };
 
-    if (options.authInfoCreateFails) {
-      $$.SANDBOX.stub(AuthInfo, 'create').throws(new Error('invalid client id'));
-    } else if (options.existingAuth) {
-      $$.SANDBOX.stub(AuthInfo, 'create')
-        .onFirstCall()
-        .throws(new SfError('auth exists', 'AuthInfoOverwriteError'))
-        .onSecondCall()
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        .resolves(authInfoStub);
-    } else if (!options.tokenRequestFails) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      $$.SANDBOX.stub(AuthInfo, 'create').resolves(authInfoStub);
+  it('should return the access-token login response', async () => {
+    prepareStubs();
+    const response = await LoginClientCredentials.run(['-i', '123456', '-r', instanceUrl, '--json']);
+
+    expect(response).to.equal(authFields);
+    expect(accessTokenRunStub.callCount).to.equal(1);
+    expect(process.env.SF_ACCESS_TOKEN).to.be.undefined;
+  });
+
+  it('should omit the short client-id flag before delegating to the access-token command', async () => {
+    prepareStubs();
+    await LoginClientCredentials.run(['-i', '123456', '-r', instanceUrl, '--set-default', '--json']);
+
+    const delegatedCommand = accessTokenRunStub.firstCall.thisValue as { argv: string[] };
+    expect(delegatedCommand.argv).to.deep.equal(['-r', instanceUrl, '--set-default', '--json']);
+  });
+
+  it('should omit the long client-id flag before delegating to the access-token command', async () => {
+    prepareStubs();
+    await LoginClientCredentials.run(['--client-id', '123456', '-r', instanceUrl, '--alias', 'ci-org', '--json']);
+
+    const delegatedCommand = accessTokenRunStub.firstCall.thisValue as { argv: string[] };
+    expect(delegatedCommand.argv).to.deep.equal(['-r', instanceUrl, '--alias', 'ci-org', '--json']);
+  });
+
+  it('should throw an error when the client secret environment variable is missing', async () => {
+    delete process.env.SF_CLIENT_SECRET;
+    try {
+      await LoginClientCredentials.run(['-i', '123456', '-r', instanceUrl, '--json']);
+      expect.fail('Should have thrown an error');
+    } catch (e) {
+      expect(e).to.be.instanceOf(Error);
+      const authError = e as SfError;
+      expect(authError.message).to.include('The client secret environment variable was not set');
     }
-
-    stubUx($$.SANDBOX);
-  }
-
-  it('should return auth fields', async () => {
-    await prepareStubs();
-    const response = await LoginClientCredentials.run([
-      '-o',
-      testData.username,
-      '--client-secret',
-      clientSecret,
-      '-i',
-      '123456',
-      '-r',
-      instanceUrl,
-      '--json',
-    ]);
-    expect(response.username).to.equal(testData.username);
+    expect(accessTokenRunStub.callCount).to.equal(0);
   });
 
   it('should request a token with client credentials in the POST body, not the URL', async () => {
-    await prepareStubs();
-    await LoginClientCredentials.run([
-      '-o',
-      testData.username,
-      '--client-secret',
-      clientSecret,
-      '-i',
-      '123456',
-      '-r',
-      instanceUrl,
-      '--json',
-    ]);
+    prepareStubs();
+    await LoginClientCredentials.run(['-i', '123456', '-r', instanceUrl, '--json']);
+
     expect(fetchStub.callCount).to.equal(1);
     const [url, init] = fetchStub.firstCall.args as [URL, RequestInit];
     expect(url.pathname).to.equal('/services/oauth2/token');
@@ -130,191 +130,10 @@ describe('org:login:client-credentials', () => {
     expect(body).to.include(`client_secret=${clientSecret}`);
   });
 
-  it('should set alias when -a is provided', async () => {
-    await prepareStubs();
-    await LoginClientCredentials.run([
-      '-o',
-      testData.username,
-      '--client-secret',
-      clientSecret,
-      '-i',
-      '123456',
-      '-r',
-      instanceUrl,
-      '-a',
-      'MyAlias',
-      '--json',
-    ]);
-    expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
-  });
-
-  it('should set target-org to alias when -s and -a are provided', async () => {
-    await prepareStubs();
-    await LoginClientCredentials.run([
-      '-o',
-      testData.username,
-      '--client-secret',
-      clientSecret,
-      '-i',
-      '123456',
-      '-r',
-      instanceUrl,
-      '-a',
-      'MyAlias',
-      '-s',
-      '--json',
-    ]);
-    expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
-    expect(authInfoStub.handleAliasAndDefaultSettings.args[0]).to.deep.equal([
-      {
-        alias: 'MyAlias',
-        setDefaultDevHub: undefined,
-        setDefault: true,
-      },
-    ]);
-  });
-
-  it('should set target-org to username when -s is provided', async () => {
-    await prepareStubs();
-    await LoginClientCredentials.run([
-      '-o',
-      testData.username,
-      '--client-secret',
-      clientSecret,
-      '-i',
-      '123456',
-      '-r',
-      instanceUrl,
-      '-s',
-      '--json',
-    ]);
-    expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
-    expect(authInfoStub.handleAliasAndDefaultSettings.args[0]).to.deep.equal([
-      {
-        alias: undefined,
-        setDefaultDevHub: undefined,
-        setDefault: true,
-      },
-    ]);
-  });
-
-  it('should set target-dev-hub to alias when -d and -a are provided', async () => {
-    await prepareStubs();
-    await LoginClientCredentials.run([
-      '-o',
-      testData.username,
-      '--client-secret',
-      clientSecret,
-      '-i',
-      '123456',
-      '-r',
-      instanceUrl,
-      '-a',
-      'MyAlias',
-      '-d',
-      '--json',
-    ]);
-    expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
-    expect(authInfoStub.handleAliasAndDefaultSettings.args[0]).to.deep.equal([
-      {
-        alias: 'MyAlias',
-        setDefaultDevHub: true,
-        setDefault: undefined,
-      },
-    ]);
-  });
-
-  it('should set target-dev-hub to username when -d is provided', async () => {
-    await prepareStubs();
-    await LoginClientCredentials.run([
-      '-o',
-      testData.username,
-      '--client-secret',
-      clientSecret,
-      '-i',
-      '123456',
-      '-r',
-      instanceUrl,
-      '-d',
-      '--json',
-    ]);
-    expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
-    expect(authInfoStub.handleAliasAndDefaultSettings.args[0]).to.deep.equal([
-      {
-        alias: undefined,
-        setDefaultDevHub: true,
-        setDefault: undefined,
-      },
-    ]);
-  });
-
-  it('should set target-org and target-dev-hub to username when -d and -s are provided', async () => {
-    await prepareStubs();
-    await LoginClientCredentials.run([
-      '-o',
-      testData.username,
-      '--client-secret',
-      clientSecret,
-      '-i',
-      '123456',
-      '-r',
-      instanceUrl,
-      '-d',
-      '-s',
-      '--json',
-    ]);
-    expect(authInfoStub.setAlias.callCount).to.equal(0);
-    expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
-    expect(authInfoStub.handleAliasAndDefaultSettings.args[0]).to.deep.equal([
-      {
-        alias: undefined,
-        setDefaultDevHub: true,
-        setDefault: true,
-      },
-    ]);
-  });
-
-  it('should set target-org and target-dev-hub to alias when -a, -d, and -s are provided', async () => {
-    await prepareStubs();
-    await LoginClientCredentials.run([
-      '-o',
-      testData.username,
-      '--client-secret',
-      clientSecret,
-      '-i',
-      '123456',
-      '-r',
-      instanceUrl,
-      '-d',
-      '-s',
-      '-a',
-      'MyAlias',
-      '--json',
-    ]);
-    expect(authInfoStub.handleAliasAndDefaultSettings.callCount).to.equal(1);
-    expect(authInfoStub.handleAliasAndDefaultSettings.args[0]).to.deep.equal([
-      {
-        alias: 'MyAlias',
-        setDefaultDevHub: true,
-        setDefault: true,
-      },
-    ]);
-  });
-
-  it('should throw an error when client id is invalid', async () => {
-    await prepareStubs({ tokenRequestFails: true });
+  it('should wrap token request errors', async () => {
+    prepareStubs({ tokenRequestFails: true });
     try {
-      await LoginClientCredentials.run([
-        '-o',
-        testData.username,
-        '--client-secret',
-        clientSecret,
-        '-i',
-        '123456INVALID',
-        '-r',
-        instanceUrl,
-        '--json',
-      ]);
+      await LoginClientCredentials.run(['-i', '123456INVALID', '-r', instanceUrl, '--json']);
       expect.fail('Should have thrown an error');
     } catch (e) {
       expect(e).to.be.instanceOf(Error);
@@ -323,71 +142,6 @@ describe('org:login:client-credentials', () => {
       expect(authError.message).to.include('client identifier invalid');
       expect(authError.cause, 'ClientCredentialsGrantError should include original error as the cause').to.be.ok;
     }
-  });
-
-  it('should throw an error when AuthInfo.create fails', async () => {
-    await prepareStubs({ authInfoCreateFails: true });
-    try {
-      await LoginClientCredentials.run([
-        '-o',
-        testData.username,
-        '--client-secret',
-        clientSecret,
-        '-i',
-        '123456',
-        '-r',
-        instanceUrl,
-        '--json',
-      ]);
-      expect.fail('Should have thrown an error');
-    } catch (e) {
-      expect(e).to.be.instanceOf(Error);
-      const authError = e as SfError;
-      expect(authError.message).to.include('We encountered a client credentials error');
-      expect(authError.message).to.include('invalid client id');
-      expect(authError.cause, 'ClientCredentialsGrantError should include original error as the cause').to.be.ok;
-    }
-  });
-
-  it('should not throw an error when the authorization already exists', async () => {
-    await prepareStubs({ existingAuth: true });
-    try {
-      await LoginClientCredentials.run([
-        '-o',
-        testData.username,
-        '--client-secret',
-        clientSecret,
-        '-i',
-        '123456',
-        '-r',
-        instanceUrl,
-        '--json',
-      ]);
-    } catch (e) {
-      expect.fail('Should not have thrown an error');
-    }
-  });
-
-  it('should throw an error when the instance URL is not HTTPS', async () => {
-    await prepareStubs();
-    try {
-      await LoginClientCredentials.run([
-        '-o',
-        testData.username,
-        '--client-secret',
-        clientSecret,
-        '-i',
-        '123456',
-        '-r',
-        'http://MyDomainName.my.salesforce.com',
-        '--json',
-      ]);
-      expect.fail('Should have thrown an error');
-    } catch (e) {
-      expect(e).to.be.instanceOf(Error);
-      const authError = e as SfError;
-      expect(authError.message).to.include('We encountered a client credentials error');
-      expect(authError.message).to.include('requires an HTTPS instance URL');
-    }
+    expect(accessTokenRunStub.callCount).to.equal(0);
   });
 });

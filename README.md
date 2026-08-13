@@ -173,8 +173,7 @@ Log in to a Salesforce org using the OAuth 2.0 client credentials flow.
 
 ```
 USAGE
-  $ sf org login client-credentials -o <value> --client-secret <value> -i <value> [--json] [--flags-dir <value>] [-r <value>] [-d]
-    [-s] [-a <value>]
+  $ SF_CLIENT_SECRET=mySecretKey sf org login client-credentials -o <value> -i <value> [--json] [--flags-dir <value>] [-r <value>] [-d] [-s] [-a <value>]
 
 FLAGS
   -a, --alias=<value>          Alias for the org.
@@ -183,8 +182,6 @@ FLAGS
   -o, --username=<value>       (required) Username of the user logging in.
   -r, --instance-url=<value>   URL of the instance that the org lives on.
   -s, --set-default            Set the authenticated org as the default that all org-related commands run against.
-      --client-secret=<value>  (required) OAuth client secret (also called consumer secret) of your custom connected
-                               app.
 
 GLOBAL FLAGS
   --flags-dir=<value>  Import flag values from a directory.
@@ -205,8 +202,8 @@ DESCRIPTION
   1. Create a connected app or external client app in your org. Enable the client credentials flow and choose the user
   that the integration runs as.
   2. Make note of the consumer key (also called client id) and consumer secret (also called client secret) that are
-  generated for you. When you run this command, you set the --client-id flag to the consumer key and the --client-secret
-  flag to the consumer secret.
+  generated for you. Set the consumer secret in the SF_CLIENT_SECRET environment variable. When you run this command,
+  set the --client-id flag to the consumer key.
   3. Use your org’s My Domain URL with --instance-url. The client credentials flow doesn’t support login.salesforce.com
   or test.salesforce.com.
 
@@ -219,25 +216,25 @@ DESCRIPTION
   --set-default for your default scratch org or sandbox, or --set-default-dev-hub for your default Dev Hub.
 
 EXAMPLES
-  Log into an org with username jdoe@example.org. The command uses the connected app with consumer key (client id)
-  04580y4051234051 and the consumer secret.
+  Log into an org with username jdoe@example.org. Set the connected app consumer secret as an environment variable, then
+  run the command with its consumer key (client id) 04580y4051234051.
 
-    $ sf org login client-credentials --username jdoe@example.org --client-secret very-secret --client-id \
+    $ SF_CLIENT_SECRET=very-secret sf org login client-credentials --username jdoe@example.org --client-id \
       04580y4051234051 --instance-url https://MyDomainName.my.salesforce.com
 
   Set the org as the default and give it an alias:
 
-    $ sf org login client-credentials --username jdoe@example.org --client-secret very-secret --client-id \
+    $ SF_CLIENT_SECRET=very-secret sf org login client-credentials --username jdoe@example.org --client-id \
       04580y4051234051 --instance-url https://MyDomainName.my.salesforce.com --alias ci-org --set-default
 
   Set the org as the default Dev Hub and give it an alias:
 
-    $ sf org login client-credentials --username jdoe@example.org --client-secret very-secret --client-id \
+    $ SF_CLIENT_SECRET=very-secret sf org login client-credentials --username jdoe@example.org --client-id \
       04580y4051234051 --instance-url https://MyDomainName.my.salesforce.com --alias ci-dev-hub --set-default-dev-hub
 
   Log in to a sandbox using URL https://MyDomainName--SandboxName.sandbox.my.salesforce.com:
 
-    $ sf org login client-credentials --username jdoe@example.org --client-secret very-secret --client-id \
+    $ SF_CLIENT_SECRET=very-secret sf org login client-credentials --username jdoe@example.org --client-id \
       04580y4051234051 --alias ci-org --set-default --instance-url \
       https://MyDomainName--SandboxName.sandbox.my.salesforce.com
 

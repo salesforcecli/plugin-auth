@@ -15,14 +15,15 @@
  */
 
 import { Flags, SfCommand, loglevel } from '@salesforce/sf-plugins-core';
-import { AuthFields, AuthInfo, AuthRemover, envVars, Logger, Messages, SfError } from '@salesforce/core';
+import { AuthFields, Messages, SfError } from '@salesforce/core';
+import { env } from '@salesforce/kit';
 import { Interfaces } from '@oclif/core';
 import common from '../../../common.js';
+import AccessToken from './access-token.js';
 
 Messages.importMessagesDirectoryFromMetaUrl(import.meta.url);
 const messages = Messages.loadMessages('@salesforce/plugin-auth', 'client.credentials');
 const commonMessages = Messages.loadMessages('@salesforce/plugin-auth', 'messages');
-const secretsMessages = Messages.loadMessages('@salesforce/plugin-auth', 'secrets-redacted');
 
 type ClientCredentialsTokenResponse = {
   accessToken: string;
@@ -35,16 +36,6 @@ export default class LoginClientCredentials extends SfCommand<AuthFields> {
   public static readonly examples = messages.getMessages('examples');
 
   public static readonly flags = {
-    username: Flags.string({
-      // eslint-disable-next-line sf-plugin/dash-o
-      char: 'o',
-      summary: messages.getMessage('flags.username.summary'),
-      required: true,
-    }),
-    'client-secret': Flags.string({
-      summary: messages.getMessage('flags.client-secret.summary'),
-      required: true,
-    }),
     'client-id': Flags.string({
       char: 'i',
       summary: commonMessages.getMessage('flags.client-id.summary'),
@@ -76,24 +67,21 @@ export default class LoginClientCredentials extends SfCommand<AuthFields> {
     loglevel,
   };
   private flags!: Interfaces.InferredFlags<typeof LoginClientCredentials.flags>;
-  private logger = Logger.childFromRoot(this.constructor.name);
+
+  private static getClientSecret(): string {
+    const clientSecret = env.getString('SF_CLIENT_SECRET');
+    if (!clientSecret) {
+      throw new SfError(messages.getMessage('clientSecretMissingResponse'));
+    }
+    return clientSecret;
+  }
 
   public async run(): Promise<AuthFields> {
     const { flags } = await this.parse(LoginClientCredentials);
     this.flags = flags;
-    let result: AuthFields = {};
-
-    if (await common.shouldExitCommand(flags['no-prompt'])) return {};
 
     try {
-      const authInfo = await this.initAuthInfo();
-      await authInfo.handleAliasAndDefaultSettings({
-        alias: flags.alias,
-        setDefault: flags['set-default'],
-        setDefaultDevHub: flags['set-default-dev-hub'],
-      });
-      result = authInfo.getFields(true);
-      await AuthInfo.identifyPossibleScratchOrgs(result, authInfo);
+      return await this.performClientCredentialsLogin();
     } catch (err) {
       const msg = err instanceof Error ? `${err.name}::${err.message}` : typeof err === 'string' ? err : 'UNKNOWN';
       throw SfError.create({
@@ -101,58 +89,29 @@ export default class LoginClientCredentials extends SfCommand<AuthFields> {
         name: 'ClientCredentialsGrantError',
         ...(err instanceof Error ? { cause: err } : {}),
       });
+    } finally {
+      env.unset('SF_ACCESS_TOKEN');
     }
-
-    const successMsg = commonMessages.getMessage('authorizeCommandSuccess', [result.username, result.orgId]);
-    this.logSuccess(successMsg);
-
-    // TODO: Remove env var workaround
-    if (this.jsonEnabled()) {
-      if (envVars.getBoolean('SF_TEMP_SHOW_SECRETS', false)) {
-        this.warn(secretsMessages.getMessage('temp.envVarIsSet', ['sf org login client-credentials']));
-      } else {
-        this.warn(secretsMessages.getMessage('temp.envVarWorkaround', ['sf org login client-credentials']));
-      }
-    }
-
-    return common.redactAuthFields(result);
   }
 
-  private async initAuthInfo(): Promise<AuthInfo> {
+  private async performClientCredentialsLogin(): Promise<AuthFields> {
     const loginUrl = await common.resolveLoginUrl(this.flags['instance-url']?.href);
-    const token = await this.requestClientCredentialsToken(loginUrl);
+    const tokenResponse = await this.requestClientCredentialsToken(loginUrl);
 
-    const accessTokenOptions = {
-      accessToken: token.accessToken,
-      instanceUrl: token.instanceUrl,
-      loginUrl,
-    };
+    env.setString('SF_ACCESS_TOKEN', tokenResponse.accessToken);
 
-    let authInfo: AuthInfo;
-    try {
-      authInfo = await AuthInfo.create({
-        username: this.flags.username,
-        accessTokenOptions,
-      });
-    } catch (error) {
-      const err = error as SfError;
-      if (err.name === 'AuthInfoOverwriteError') {
-        this.logger.debug('Auth file already exists. Removing and starting fresh.');
-        const remover = await AuthRemover.create();
-        await remover.removeAuth(this.flags.username);
-        authInfo = await AuthInfo.create({
-          username: this.flags.username,
-          accessTokenOptions,
-        });
-      } else {
-        throw err;
-      }
-    }
-    await authInfo.save({
-      clientId: this.flags['client-id'],
-      clientSecret: this.flags['client-secret'],
-    });
-    return authInfo;
+    // the AccessToken command, and other commands in general
+    // don't play nice with extra args being passed to them, so we strip out
+    // the one extra flag prior to calling that command
+    const accessTokenArgs = this.argv.filter(
+      (arg, index, args) =>
+        !['-i', '--client-id'].includes(arg) &&
+        !arg.startsWith('-i=') &&
+        !arg.startsWith('--client-id=') &&
+        !['-i', '--client-id'].includes(args[index - 1] ?? '')
+    );
+    const response = await new AccessToken(accessTokenArgs, this.config).run();
+    return response;
   }
 
   /**
@@ -169,7 +128,7 @@ export default class LoginClientCredentials extends SfCommand<AuthFields> {
     const body = new URLSearchParams();
     body.set('grant_type', 'client_credentials');
     body.set('client_id', this.flags['client-id']);
-    body.set('client_secret', this.flags['client-secret']);
+    body.set('client_secret', LoginClientCredentials.getClientSecret());
 
     const response = await fetch(tokenUrl, {
       method: 'POST',

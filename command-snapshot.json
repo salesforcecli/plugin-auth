@@ -35,19 +35,17 @@
     "alias": [],
     "command": "org:login:client-credentials",
     "flagAliases": [],
-    "flagChars": ["a", "d", "i", "o", "p", "r", "s"],
+    "flagChars": ["a", "d", "i", "p", "r", "s"],
     "flags": [
       "alias",
       "client-id",
-      "client-secret",
       "flags-dir",
       "instance-url",
       "json",
       "loglevel",
       "no-prompt",
       "set-default",
-      "set-default-dev-hub",
-      "username"
+      "set-default-dev-hub"
     ],
     "plugin": "@salesforce/plugin-auth"
   },
