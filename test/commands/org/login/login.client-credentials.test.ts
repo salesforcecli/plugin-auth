@@ -84,6 +84,20 @@ describe('org:login:client-credentials', () => {
     expect(process.env.SF_ACCESS_TOKEN).to.be.undefined;
   });
 
+  it('should temporarily replace and then restore an existing access token', async () => {
+    const priorAccessToken = 'prior-access-token';
+    process.env.SF_ACCESS_TOKEN = priorAccessToken;
+    accessTokenRunStub.callsFake(() => {
+      expect(process.env.SF_ACCESS_TOKEN).to.equal('00Dxx0000000000!token');
+      return Promise.resolve(authFields);
+    });
+    prepareStubs();
+
+    await LoginClientCredentials.run(['-i', '123456', '-r', instanceUrl, '--json']);
+
+    expect(process.env.SF_ACCESS_TOKEN).to.equal(priorAccessToken);
+  });
+
   it('should omit the short client-id flag before delegating to the access-token command', async () => {
     prepareStubs();
     await LoginClientCredentials.run(['-i', '123456', '-r', instanceUrl, '--set-default', '--json']);

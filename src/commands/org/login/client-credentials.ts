@@ -30,6 +30,8 @@ type ClientCredentialsTokenResponse = {
   instanceUrl: string;
 };
 
+const PREFERRED_ENV_ACCESS_TOKEN_NAME = 'SF_ACCESS_TOKEN';
+
 export default class LoginClientCredentials extends SfCommand<AuthFields> {
   public static readonly summary = messages.getMessage('summary');
   public static readonly description = messages.getMessage('description');
@@ -67,6 +69,7 @@ export default class LoginClientCredentials extends SfCommand<AuthFields> {
     loglevel,
   };
   private flags!: Interfaces.InferredFlags<typeof LoginClientCredentials.flags>;
+  private priorEnvAccessToken?: string;
 
   private static getClientSecret(): string {
     const clientSecret = env.getString('SF_CLIENT_SECRET');
@@ -81,6 +84,10 @@ export default class LoginClientCredentials extends SfCommand<AuthFields> {
     this.flags = flags;
 
     try {
+      // cache any previously-stored access token; we will temporarily override that value (if any)
+      // when authenticating here, and then restore the prior value (or wipe out the variable entirely)
+      // in the finally block
+      this.priorEnvAccessToken = env.getString(PREFERRED_ENV_ACCESS_TOKEN_NAME);
       return await this.performClientCredentialsLogin();
     } catch (err) {
       const msg = err instanceof Error ? `${err.name}::${err.message}` : typeof err === 'string' ? err : 'UNKNOWN';
@@ -90,7 +97,7 @@ export default class LoginClientCredentials extends SfCommand<AuthFields> {
         ...(err instanceof Error ? { cause: err } : {}),
       });
     } finally {
-      env.unset('SF_ACCESS_TOKEN');
+      env.setString(PREFERRED_ENV_ACCESS_TOKEN_NAME, this.priorEnvAccessToken);
     }
   }
 
@@ -98,19 +105,9 @@ export default class LoginClientCredentials extends SfCommand<AuthFields> {
     const loginUrl = await common.resolveLoginUrl(this.flags['instance-url']?.href);
     const tokenResponse = await this.requestClientCredentialsToken(loginUrl);
 
-    env.setString('SF_ACCESS_TOKEN', tokenResponse.accessToken);
+    env.setString(PREFERRED_ENV_ACCESS_TOKEN_NAME, tokenResponse.accessToken);
 
-    // the AccessToken command, and other commands in general
-    // don't play nice with extra args being passed to them, so we strip out
-    // the one extra flag prior to calling that command
-    const accessTokenArgs = this.argv.filter(
-      (arg, index, args) =>
-        !['-i', '--client-id'].includes(arg) &&
-        !arg.startsWith('-i=') &&
-        !arg.startsWith('--client-id=') &&
-        !['-i', '--client-id'].includes(args[index - 1] ?? '')
-    );
-    const response = await new AccessToken(accessTokenArgs, this.config).run();
+    const response = await new AccessToken(this.transformClientCredArgsIntoAccessArgs(), this.config).run();
     return response;
   }
 
@@ -149,6 +146,29 @@ export default class LoginClientCredentials extends SfCommand<AuthFields> {
       accessToken: payload.accessToken,
       instanceUrl: payload.instanceUrl,
     };
+  }
+
+  private transformClientCredArgsIntoAccessArgs(): string[] {
+    // the AccessToken command, and other commands in general
+    // don't play nice with extra args being passed to them, so we strip out
+    // the one extra flag prior to calling that command after verifying the other flags match
+    const clientCredentialFlagsWithoutClientId = new Set<string>(Object.keys(AccessToken.flags));
+    if (
+      Object.keys(LoginClientCredentials.flags)
+        .filter((flagName) => flagName !== 'client-id')
+        .find((flagName) => !clientCredentialFlagsWithoutClientId.has(flagName))
+    ) {
+      throw new SfError('Access token login flags and client credential flags have diverged');
+    }
+
+    const accessTokenArgs = this.argv.filter(
+      (arg, index, args) =>
+        !['-i', '--client-id'].includes(arg) &&
+        !arg.startsWith('-i=') &&
+        !arg.startsWith('--client-id=') &&
+        !['-i', '--client-id'].includes(args[index - 1] ?? '')
+    );
+    return accessTokenArgs;
   }
 }
 
