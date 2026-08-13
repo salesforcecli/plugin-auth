@@ -32,6 +32,26 @@
     "plugin": "@salesforce/plugin-auth"
   },
   {
+    "alias": [],
+    "command": "org:login:client-credentials",
+    "flagAliases": [],
+    "flagChars": ["a", "d", "i", "o", "p", "r", "s"],
+    "flags": [
+      "alias",
+      "client-id",
+      "client-secret",
+      "flags-dir",
+      "instance-url",
+      "json",
+      "loglevel",
+      "no-prompt",
+      "set-default",
+      "set-default-dev-hub",
+      "username"
+    ],
+    "plugin": "@salesforce/plugin-auth"
+  },
+  {
     "alias": ["force:auth:jwt:grant", "auth:jwt:grant"],
     "command": "org:login:jwt",
     "flagAliases": [
