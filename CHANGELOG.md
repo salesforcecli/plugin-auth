@@ -1,3 +1,9 @@
+## [5.0.5](https://github.com/salesforcecli/plugin-auth/compare/5.0.4...5.0.5) (2026-08-13)
+
+### Bug Fixes
+
+- resolve npm from PATH only, excluding CWD ([#1538](https://github.com/salesforcecli/plugin-auth/issues/1538)) ([778ee7b](https://github.com/salesforcecli/plugin-auth/commit/778ee7bfe1792d7fa141da73eac38ece4a7fab70))
+
 ## [5.0.4](https://github.com/salesforcecli/plugin-auth/compare/5.0.3...5.0.4) (2026-08-11)
 
 ### Bug Fixes
