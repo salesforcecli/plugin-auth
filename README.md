@@ -211,39 +211,25 @@ DESCRIPTION
   information.
 
   We recommend that you set an alias when you log into an org. Aliases make it easy to later reference this org when
-  running commands that require it. If you don’t set an alias, you use the username that you specified when you logged
-  in to the org. If you run multiple commands that reference the same org, consider setting the org as your default. Use
+  running commands that require it. If you don’t set an alias, the username for the user associated with the client credentials flow is used.
+  If you run multiple commands that reference the same org, consider setting the org as your default. Use
   --set-default for your default scratch org or sandbox, or --set-default-dev-hub for your default Dev Hub.
 
 EXAMPLES
-  Log into an org with username jdoe@example.org. Set the connected app consumer secret as an environment variable, then
-  run the command with its consumer key (client id) 04580y4051234051.
-
-    $ SF_CLIENT_SECRET=very-secret sf org login client-credentials --username jdoe@example.org --client-id \
-      04580y4051234051 --instance-url https://MyDomainName.my.salesforce.com
-
   Set the org as the default and give it an alias:
 
-    $ SF_CLIENT_SECRET=very-secret sf org login client-credentials --username jdoe@example.org --client-id \
+    $ SF_CLIENT_SECRET=very-secret sf org login client-credentials --client-id \
       04580y4051234051 --instance-url https://MyDomainName.my.salesforce.com --alias ci-org --set-default
 
   Set the org as the default Dev Hub and give it an alias:
 
-    $ SF_CLIENT_SECRET=very-secret sf org login client-credentials --username jdoe@example.org --client-id \
+    $ SF_CLIENT_SECRET=very-secret sf org login client-credentials --client-id \
       04580y4051234051 --instance-url https://MyDomainName.my.salesforce.com --alias ci-dev-hub --set-default-dev-hub
-
-  Log in to a sandbox using URL https://MyDomainName--SandboxName.sandbox.my.salesforce.com:
-
-    $ SF_CLIENT_SECRET=very-secret sf org login client-credentials --username jdoe@example.org --client-id \
-      04580y4051234051 --alias ci-org --set-default --instance-url \
-      https://MyDomainName--SandboxName.sandbox.my.salesforce.com
 
 FLAG DESCRIPTIONS
   -r, --instance-url=<value>  URL of the instance that the org lives on.
 
-    If you specify an --instance-url value, this value overrides the sfdcLoginUrl value in your sfdx-project.json file.
-
-    To specify a My Domain URL, use the format "https://<MyDomainName>.my.salesforce.com".
+    To specify a production environment My Domain URL, use the format "https://<MyDomainName>.my.salesforce.com".
 
     To specify a sandbox, set --instance-url to "https://<MyDomainName>--<SandboxName>.sandbox.my.salesforce.com".
 ```

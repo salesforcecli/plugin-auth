@@ -47,6 +47,7 @@ export default class LoginClientCredentials extends SfCommand<AuthFields> {
       char: 'r',
       summary: commonMessages.getMessage('flags.instance-url.summary'),
       description: commonMessages.getMessage('flags.instance-url.description'),
+      required: true,
     }),
     'set-default-dev-hub': Flags.boolean({
       char: 'd',
@@ -63,7 +64,6 @@ export default class LoginClientCredentials extends SfCommand<AuthFields> {
     'no-prompt': Flags.boolean({
       char: 'p',
       summary: commonMessages.getMessage('flags.no-prompt.summary'),
-      required: false,
       hidden: true,
     }),
     loglevel,

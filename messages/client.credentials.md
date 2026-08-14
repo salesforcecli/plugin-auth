@@ -20,25 +20,13 @@ We recommend that you set an alias when you log into an org. Aliases make it eas
 
 # examples
 
-- Log into an org with username jdoe@example.org. Set the connected app consumer secret as an environment variable, then run the command with its fake consumer key (client id) 04580y4051234051.
-
-  SF_CLIENT_SECRET=very-secret <%= config.bin %> <%= command.id %> --username jdoe@example.org --client-id 04580y4051234051 --instance-url https://MyDomainName.my.salesforce.com
-
 - Set the org as the default and give it an alias:
 
-  SF_CLIENT_SECRET=very-secret <%= config.bin %> <%= command.id %> --username jdoe@example.org --client-id 04580y4051234051 --instance-url https://MyDomainName.my.salesforce.com --alias ci-org --set-default
+  SF_CLIENT_SECRET=very-secret <%= config.bin %> <%= command.id %> --client-id 04580y4051234051 --instance-url https://MyDomainName.my.salesforce.com --alias ci-org --set-default
 
 - Set the org as the default Dev Hub and give it an alias:
 
-  SF_CLIENT_SECRET=very-secret <%= config.bin %> <%= command.id %> --username jdoe@example.org --client-id 04580y4051234051 --instance-url https://MyDomainName.my.salesforce.com --alias ci-dev-hub --set-default-dev-hub
-
-- Log in to a sandbox using URL https://MyDomainName--SandboxName.sandbox.my.salesforce.com:
-
-  SF_CLIENT_SECRET=very-secret <%= config.bin %> <%= command.id %> --username jdoe@example.org --client-id 04580y4051234051 --alias ci-org --set-default --instance-url https://MyDomainName--SandboxName.sandbox.my.salesforce.com
-
-# flags.username.summary
-
-Username of the user logging in.
+  SF_CLIENT_SECRET=very-secret <%= config.bin %> <%= command.id %> --client-id 04580y4051234051 --instance-url https://MyDomainName.my.salesforce.com --alias ci-dev-hub --set-default-dev-hub
 
 # ClientCredentialsGrantError
 
