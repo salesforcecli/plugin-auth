@@ -35,7 +35,8 @@ const getLoginUrl = async (logger: Logger): Promise<string> => {
   try {
     const project = await SfProject.resolve();
     const projectJson = await project.resolveProjectConfig();
-    return getString(projectJson, 'sfdcLoginUrl', SfdcUrl.PRODUCTION);
+    const projectLoginUrl = getString(projectJson, 'sfdcLoginUrl');
+    return projectLoginUrl ? new URL(projectLoginUrl).href : SfdcUrl.PRODUCTION;
   } catch (err) {
     const message: string = (isObject(err) ? Reflect.get(err, 'message') ?? err : err) as string;
     logger.debug(`error occurred while trying to determine loginUrl: ${message}`);
