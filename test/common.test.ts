@@ -56,7 +56,7 @@ describe('common unit tests', () => {
         sourceApiVersion: '50.0',
       });
       const loginUrl = await common.resolveLoginUrl(undefined);
-      expect(loginUrl).to.equal(SfdcUrl.PRODUCTION);
+      expect(loginUrl).to.equal(`${SfdcUrl.PRODUCTION}/`);
     });
     it('should return production URL if project with property sfdcLoginUrl present', async () => {
       await projectSetup($$, true, {
@@ -70,7 +70,7 @@ describe('common unit tests', () => {
         sourceApiVersion: '50.0',
       });
       const loginUrl = await common.resolveLoginUrl(undefined);
-      expect(loginUrl).to.equal(SfdcUrl.PRODUCTION);
+      expect(loginUrl).to.equal(`${SfdcUrl.PRODUCTION}/`);
     });
     it('should throw on lightning login URL in sfdcLoginUrl property', async () => {
       await projectSetup($$, true, {
@@ -119,6 +119,29 @@ describe('common unit tests', () => {
       }
     });
   });
+  describe('sfdcLoginUrl normalization', () => {
+    const stubProjectLoginUrl = (sfdcLoginUrl: string): void => {
+      $$.inProject(true);
+      $$.SANDBOXES.PROJECT.stub(SfProject.prototype, 'resolveProjectConfig').resolves({
+        packageDirectories: [{ path: 'force-app', default: true }],
+        sfdcLoginUrl,
+        sourceApiVersion: '50.0',
+      });
+    };
+
+    it('should percent-encode a double-quote in a project sfdcLoginUrl', async () => {
+      stubProjectLoginUrl('https://evil.com/"; calc; "');
+      const loginUrl = await common.resolveLoginUrl(undefined);
+      expect(loginUrl).to.not.include('"');
+      expect(loginUrl).to.equal('https://evil.com/%22;%20calc;%20%22');
+    });
+    it('should fall back to production URL when the project sfdcLoginUrl is malformed', async () => {
+      stubProjectLoginUrl('https://evil.com"; calc; "');
+      const loginUrl = await common.resolveLoginUrl(undefined);
+      expect(loginUrl).to.equal(SfdcUrl.PRODUCTION);
+    });
+  });
+
   describe('custom login url', () => {
     const INSTANCE_URL_1 = 'https://example.com';
     const INSTANCE_URL_2 = 'https://some.other.com';
@@ -151,7 +174,7 @@ describe('common unit tests', () => {
         sourceApiVersion: '50.0',
       });
       const loginUrl = await common.resolveLoginUrl(undefined);
-      expect(loginUrl).to.equal(INSTANCE_URL_2);
+      expect(loginUrl).to.equal(`${INSTANCE_URL_2}/`);
     });
     it('should return custom login URL 1 if project with property sfdcLoginUrl equal to custom url 2', async () => {
       await projectSetup($$, true, {
