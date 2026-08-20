@@ -25,7 +25,6 @@ const projectSetup = async ($$: TestContext, inProject = true, contents?: Config
     if (contents) {
       $$.setConfigStubContents('SfProjectJson', contents);
       if ($$.configStubs.SfProjectJson) {
-        // eslint-disable-next-line @typescript-eslint/require-await
         $$.configStubs.SfProjectJson.retrieveContents = async (): Promise<ConfigContents> => contents;
       }
     }

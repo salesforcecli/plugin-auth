@@ -77,7 +77,7 @@ export default class ListAuth extends SfCommand<AuthListResults> {
       }
 
       return mappedAuths;
-    } catch (err) {
+    } catch (_err) {
       this.log(messages.getMessage('noResultsFound'));
       return [];
     }

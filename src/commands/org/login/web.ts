@@ -223,7 +223,7 @@ export default class LoginWeb extends SfCommand<AuthFields> {
   }
 
   // leave it because it's stubbed in the test
-  // eslint-disable-next-line class-methods-use-this
+   
   private async executeLoginFlow({
     oauthConfig,
     browser,
