@@ -95,6 +95,7 @@ export default class LoginJwt extends SfCommand<AuthFields> {
   public async run(): Promise<AuthFields> {
     const { flags } = await this.parse(LoginJwt);
     this.flags = flags;
+    // eslint-disable-next-line no-useless-assignment -- assignment isn't actually useless.
     let result: AuthFields = {};
 
     if (await common.shouldExitCommand(flags['no-prompt'])) return {};

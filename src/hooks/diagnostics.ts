@@ -94,6 +94,7 @@ type NpmExplanation = {
 
 // Detects if the auth key used is crypto v1 or v2
 // Detects if the SF_CRYPTO_V2 env var is set and if it matches the key crypto version
+// eslint-disable-next-line complexity
 const cryptoVersionTest = async (doctor: SfDoctor): Promise<void> => {
   getLogger().debug('Running Crypto Version tests');
 
@@ -164,6 +165,7 @@ const cryptoVersionTest = async (doctor: SfDoctor): Promise<void> => {
 
 // Inspect CLI install and plugins to ensure all versions of `@salesforce/core` can support v2 crypto.
 // This uses `npm explain @salesforce/core` to ensure all versions are greater than 6.6.0.
+// eslint-disable-next-line complexity
 const supportsCliV2Crypto = async (doctor: SfDoctor): Promise<boolean> => {
   const diagnosis: SfDoctorDiagnosis = doctor.getDiagnosis();
   let coreSupportsV2 = false;
