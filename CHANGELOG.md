@@ -1,3 +1,12 @@
+## [5.0.6](https://github.com/salesforcecli/plugin-auth/compare/5.0.6-qa.0...5.0.6) (2026-08-18)
+
+## [5.0.6-qa.0](https://github.com/salesforcecli/plugin-auth/compare/5.0.5...5.0.6-qa.0) (2026-08-18)
+
+### Bug Fixes
+
+- **@W-23807280@:** dependency upgrades to pick up downstream bug fix in jsforce-node ([2747292](https://github.com/salesforcecli/plugin-auth/commit/27472927c475bffa90d4892cbf3ad670e7560526))
+- **@W-23807280@:** normalize projectLoginUrl in getLoginUrl ([c230e93](https://github.com/salesforcecli/plugin-auth/commit/c230e935120d37924215fcd96b1a0bb5aa34d25d))
+
 ## [5.0.5](https://github.com/salesforcecli/plugin-auth/compare/5.0.4...5.0.5) (2026-08-13)
 
 ### Bug Fixes
