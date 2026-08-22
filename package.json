@@ -74,6 +74,9 @@
             "description": "Authorize an org for use with Salesforce CLI.",
             "longDescription": "Use the auth commands to authorize a Salesforce org for use with the Salesforce CLI.",
             "subtopics": {
+              "client-credentials": {
+                "description": "authorize an org using OAuth client credentials"
+              },
               "jwt": {
                 "description": "authorize an org using JWT"
               },

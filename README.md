@@ -72,6 +72,7 @@ sfdx plugins
 
 - [`sf org list auth`](#sf-org-list-auth)
 - [`sf org login access-token`](#sf-org-login-access-token)
+- [`sf org login client-credentials`](#sf-org-login-client-credentials)
 - [`sf org login jwt`](#sf-org-login-jwt)
 - [`sf org login sfdx-url`](#sf-org-login-sfdx-url)
 - [`sf org login web`](#sf-org-login-web)
@@ -165,6 +166,75 @@ FLAG DESCRIPTIONS
 ```
 
 _See code: [src/commands/org/login/access-token.ts](https://github.com/salesforcecli/plugin-auth/blob/5.0.6/src/commands/org/login/access-token.ts)_
+
+## `sf org login client-credentials`
+
+Log in to a Salesforce org using the OAuth 2.0 client credentials flow.
+
+```
+USAGE
+  $ SF_CLIENT_SECRET=mySecretKey sf org login client-credentials -o <value> -i <value> [--json] [--flags-dir <value>] [-r <value>] [-d] [-s] [-a <value>]
+
+FLAGS
+  -a, --alias=<value>          Alias for the org.
+  -d, --set-default-dev-hub    Set the authenticated org as the default Dev Hub.
+  -i, --client-id=<value>      (required) OAuth client ID (also called consumer key) of your custom connected app.
+  -o, --username=<value>       (required) Username of the user logging in.
+  -r, --instance-url=<value>   URL of the instance that the org lives on.
+  -s, --set-default            Set the authenticated org as the default that all org-related commands run against.
+
+GLOBAL FLAGS
+  --flags-dir=<value>  Import flag values from a directory.
+  --json               Format output as json.
+
+DESCRIPTION
+  Log in to a Salesforce org using the OAuth 2.0 client credentials flow.
+
+  Use this command in automated environments where you can’t interactively log in with a browser, such as in CI/CD
+  scripts.
+
+  Logging into an org authorizes the CLI to run other commands that connect to that org, such as deploying or retrieving
+  a project. You can log into many types of orgs, such as sandboxes, Dev Hubs, Env Hubs, production orgs, and scratch
+  orgs.
+
+  Complete these steps before you run this command:
+
+  1. Create a connected app or external client app in your org. Enable the client credentials flow and choose the user
+  that the integration runs as.
+  2. Make note of the consumer key (also called client id) and consumer secret (also called client secret) that are
+  generated for you. Set the consumer secret in the SF_CLIENT_SECRET environment variable. When you run this command,
+  set the --client-id flag to the consumer key.
+  3. Use your org’s My Domain URL with --instance-url. The client credentials flow doesn’t support login.salesforce.com
+  or test.salesforce.com.
+
+  See https://help.salesforce.com/s/articleView?id=sf.remoteaccess_oauth_client_credentials_flow.htm for more
+  information.
+
+  We recommend that you set an alias when you log into an org. Aliases make it easy to later reference this org when
+  running commands that require it. If you don’t set an alias, the username for the user associated with the client credentials flow is used.
+  If you run multiple commands that reference the same org, consider setting the org as your default. Use
+  --set-default for your default scratch org or sandbox, or --set-default-dev-hub for your default Dev Hub.
+
+EXAMPLES
+  Set the org as the default and give it an alias:
+
+    $ SF_CLIENT_SECRET=very-secret sf org login client-credentials --client-id \
+      04580y4051234051 --instance-url https://MyDomainName.my.salesforce.com --alias ci-org --set-default
+
+  Set the org as the default Dev Hub and give it an alias:
+
+    $ SF_CLIENT_SECRET=very-secret sf org login client-credentials --client-id \
+      04580y4051234051 --instance-url https://MyDomainName.my.salesforce.com --alias ci-dev-hub --set-default-dev-hub
+
+FLAG DESCRIPTIONS
+  -r, --instance-url=<value>  URL of the instance that the org lives on.
+
+    To specify a production environment My Domain URL, use the format "https://<MyDomainName>.my.salesforce.com".
+
+    To specify a sandbox, set --instance-url to "https://<MyDomainName>--<SandboxName>.sandbox.my.salesforce.com".
+```
+
+_See code: [src/commands/org/login/client-credentials.ts](https://github.com/salesforcecli/plugin-auth/blob/5.0.4/src/commands/org/login/client-credentials.ts)_
 
 ## `sf org login jwt`
 

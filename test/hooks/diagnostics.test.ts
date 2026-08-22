@@ -75,6 +75,7 @@ describe('Doctor diagnostics', () => {
 
   it('should fail when CLI does not support v2 crypto', async () => {
     sandbox.stub(util, 'promisify').returns(() => ({ stdout: JSON.stringify([{ version: '6.5.0' }]) }));
+    sandbox.stub(fs, 'readFileSync').throws(new Error('key file is unavailable'));
     process.env.SF_USE_GENERIC_UNIX_KEYCHAIN = 'false';
 
     await hook({ doctor: doctorMock });
@@ -101,6 +102,7 @@ describe('Doctor diagnostics', () => {
 
   it('should pass when CLI supports v2 crypto', async () => {
     sandbox.stub(util, 'promisify').returns(() => ({ stdout: JSON.stringify([{ version: '6.7.0' }]) }));
+    sandbox.stub(fs, 'readFileSync').throws(new Error('key file is unavailable'));
     process.env.SF_USE_GENERIC_UNIX_KEYCHAIN = 'false';
     await hook({ doctor: doctorMock });
 
