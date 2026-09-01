@@ -1,3 +1,9 @@
+## [5.0.7](https://github.com/salesforcecli/plugin-auth/compare/5.0.6...5.0.7) (2026-09-01)
+
+### Bug Fixes
+
+- bump oclif deps to V5 ([#1545](https://github.com/salesforcecli/plugin-auth/issues/1545)) ([14a952a](https://github.com/salesforcecli/plugin-auth/commit/14a952a6f197602aa4b52544c73c8fed93a2eee0))
+
 ## [5.0.6](https://github.com/salesforcecli/plugin-auth/compare/5.0.6-qa.0...5.0.6) (2026-08-18)
 
 ## [5.0.6-qa.0](https://github.com/salesforcecli/plugin-auth/compare/5.0.5...5.0.6-qa.0) (2026-08-18)
