@@ -4,7 +4,11 @@
     "outDir": "lib",
     "rootDir": "src",
     "strictNullChecks": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "types": ["mocha"]
   },
-  "include": ["./src/**/*.ts"]
+  "include": ["./src/**/*.ts"],
+  "ts-node": {
+    "transpileOnly": true
+  }
 }
