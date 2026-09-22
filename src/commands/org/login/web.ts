@@ -223,7 +223,7 @@ export default class LoginWeb extends SfCommand<AuthFields> {
   }
 
   // leave it because it's stubbed in the test
-   
+
   private async executeLoginFlow({
     oauthConfig,
     browser,
@@ -250,18 +250,24 @@ export default class LoginWeb extends SfCommand<AuthFields> {
       (childProcess) =>
         new Promise((resolve, reject) => {
           // https://nodejs.org/api/child_process.html#event-exit
-          childProcess.on('exit', (code) => {
+          const handleExit = (code: number | null): void => {
             if (code && code > 0) {
               this.logger.debug(`Failed to open browser ${browserApp ?? ''}`);
               reject(messages.createError('error.cannotOpenBrowser', [browserApp], [browserApp]));
             }
-            // If the process exited, code is the final exit code of the process, otherwise null.
-            // resolve on null just to be safe, worst case the browser didn't open and the CLI just hangs.
             if (code === null || code === 0) {
               this.logger.debug(`Successfully opened browser ${browserApp ?? ''}`);
               resolve(childProcess);
             }
-          });
+          };
+
+          // On fast systems (especially Linux), the child process may have already
+          // exited before we register the handler — call it directly in that case.
+          if (childProcess.exitCode !== null) {
+            handleExit(childProcess.exitCode);
+          } else {
+            childProcess.on('exit', handleExit);
+          }
         })
     );
     return oauthServer.authorizeAndSave();
