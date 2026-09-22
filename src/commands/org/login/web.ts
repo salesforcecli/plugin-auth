@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import { type ChildProcess } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import open, { apps, AppName } from 'open';
 import { Flags, SfCommand, loglevel } from '@salesforce/sf-plugins-core';
@@ -245,32 +246,40 @@ export default class LoginWeb extends SfCommand<AuthFields> {
     const browserApp = browser && browser in apps ? (browser as AppName) : undefined;
     const openOptions = browserApp ? { app: { name: apps[browserApp] }, wait: false } : { wait: false };
     this.logger.debug(`Opening browser ${browserApp ?? ''}`);
-    // the following `childProcess` wrapper is needed to catch when `open` fails to open a browser.
-    await open(oauthServer.getAuthorizationUrl(), openOptions).then(
-      (childProcess) =>
-        new Promise((resolve, reject) => {
-          // https://nodejs.org/api/child_process.html#event-exit
-          const handleExit = (code: number | null): void => {
-            if (code && code > 0) {
-              this.logger.debug(`Failed to open browser ${browserApp ?? ''}`);
-              reject(messages.createError('error.cannotOpenBrowser', [browserApp], [browserApp]));
-            } else {
-              this.logger.debug(`Successfully opened browser ${browserApp ?? ''}`);
-              resolve(childProcess);
-            }
-          };
-
-          // On fast systems (especially Linux), the child process may have already
-          // exited before we register the handler — call it directly in that case.
-          if (childProcess.exitCode !== null) {
-            handleExit(childProcess.exitCode);
-          } else {
-            childProcess.on('exit', handleExit);
-          }
-        })
+    await open(oauthServer.getAuthorizationUrl(), openOptions).then((childProcess) =>
+      waitForProcessExit(childProcess).then(
+        () => {
+          this.logger.debug(`Successfully opened browser ${browserApp ?? ''}`);
+        },
+        () => {
+          this.logger.debug(`Failed to open browser ${browserApp ?? ''}`);
+          throw messages.createError('error.cannotOpenBrowser', [browserApp], [browserApp]);
+        }
+      )
     );
     return oauthServer.authorizeAndSave();
   }
+}
+
+// Exported for testing — resolves when the child process exits with code 0/null, rejects on non-zero.
+export function waitForProcessExit(childProcess: ChildProcess): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const handleExit = (code: number | null): void => {
+      if (code && code > 0) {
+        reject(new Error(`Process exited with code ${code}`));
+      } else {
+        resolve();
+      }
+    };
+
+    // On fast systems (especially Linux), the child process may have already
+    // exited before we register the handler — call it directly in that case.
+    if (childProcess.exitCode !== null) {
+      handleExit(childProcess.exitCode);
+    } else {
+      childProcess.on('exit', handleExit);
+    }
+  });
 }
 
 const isContainerMode = (): boolean => {
