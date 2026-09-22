@@ -28,20 +28,37 @@ function mockChildProcess(exitCode: number | null): ChildProcess {
 describe('waitForProcessExit', () => {
   it('resolves immediately when process already exited with code 0', async () => {
     const cp = mockChildProcess(0);
-    await waitForProcessExit(cp);
+    const result = await waitForProcessExit(cp);
+    expect(result).to.be.undefined;
   });
 
   it('resolves when process emits exit with code 0 (not yet exited)', async () => {
     const cp = mockChildProcess(null);
     const promise = waitForProcessExit(cp);
     cp.emit('exit', 0);
-    await promise;
+    const result = await promise;
+    expect(result).to.be.undefined;
   });
 
   it('resolves when process emits exit with code null', async () => {
     const cp = mockChildProcess(null);
     const promise = waitForProcessExit(cp);
     cp.emit('exit', null);
+    const result = await promise;
+    expect(result).to.be.undefined;
+  });
+
+  it('does not register an exit listener when process already exited', async () => {
+    const cp = mockChildProcess(0);
+    await waitForProcessExit(cp);
+    expect(cp.listenerCount('exit')).to.equal(0);
+  });
+
+  it('registers an exit listener when process has not yet exited', async () => {
+    const cp = mockChildProcess(null);
+    const promise = waitForProcessExit(cp);
+    expect(cp.listenerCount('exit')).to.equal(1);
+    cp.emit('exit', 0);
     await promise;
   });
 
