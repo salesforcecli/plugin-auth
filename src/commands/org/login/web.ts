@@ -254,8 +254,7 @@ export default class LoginWeb extends SfCommand<AuthFields> {
             if (code && code > 0) {
               this.logger.debug(`Failed to open browser ${browserApp ?? ''}`);
               reject(messages.createError('error.cannotOpenBrowser', [browserApp], [browserApp]));
-            }
-            if (code === null || code === 0) {
+            } else {
               this.logger.debug(`Successfully opened browser ${browserApp ?? ''}`);
               resolve(childProcess);
             }
