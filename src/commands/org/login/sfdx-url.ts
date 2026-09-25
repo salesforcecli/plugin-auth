@@ -126,12 +126,8 @@ export default class LoginSfdxUrl extends SfCommand<AuthFields> {
     this.logSuccess(successMsg);
 
     // TODO: Remove env var workaround
-    if (this.jsonEnabled()) {
-      if (envVars.getBoolean('SF_TEMP_SHOW_SECRETS', false)) {
-        this.warn(secretsMessages.getMessage('temp.envVarIsSet', ['sf org login sfdx-url']));
-      } else {
-        this.warn(secretsMessages.getMessage('temp.envVarWorkaround', ['sf org login sfdx-url']));
-      }
+    if (this.jsonEnabled() && envVars.getBoolean('SF_TEMP_SHOW_SECRETS', false)) {
+      this.warn(secretsMessages.getMessage('temp.envVarIsSet', ['sf org login sfdx-url']));
     }
 
     return common.redactAuthFields(result);

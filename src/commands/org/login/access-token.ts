@@ -110,12 +110,8 @@ export default class LoginAccessToken extends SfCommand<AuthFields> {
     }
 
     // TODO: Remove env var workaround
-    if (this.jsonEnabled()) {
-      if (envVars.getBoolean('SF_TEMP_SHOW_SECRETS', false)) {
-        this.warn(secretsMessages.getMessage('temp.envVarIsSet', ['sf org login access-token']));
-      } else {
-        this.warn(secretsMessages.getMessage('temp.envVarWorkaround', ['sf org login access-token']));
-      }
+    if (this.jsonEnabled() && envVars.getBoolean('SF_TEMP_SHOW_SECRETS', false)) {
+      this.warn(secretsMessages.getMessage('temp.envVarIsSet', ['sf org login access-token']));
     }
 
     return common.redactAuthFields(authInfo.getFields(true));
