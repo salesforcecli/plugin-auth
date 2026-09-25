@@ -122,12 +122,8 @@ export default class LoginJwt extends SfCommand<AuthFields> {
     this.logSuccess(successMsg);
 
     // TODO: Remove env var workaround
-    if (this.jsonEnabled()) {
-      if (envVars.getBoolean('SF_TEMP_SHOW_SECRETS', false)) {
-        this.warn(secretsMessages.getMessage('temp.envVarIsSet', ['sf org login jwt']));
-      } else {
-        this.warn(secretsMessages.getMessage('temp.envVarWorkaround', ['sf org login jwt']));
-      }
+    if (this.jsonEnabled() && envVars.getBoolean('SF_TEMP_SHOW_SECRETS', false)) {
+      this.warn(secretsMessages.getMessage('temp.envVarIsSet', ['sf org login jwt']));
     }
 
     return common.redactAuthFields(result);

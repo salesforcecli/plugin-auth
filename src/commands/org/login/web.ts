@@ -166,12 +166,8 @@ export default class LoginWeb extends SfCommand<AuthFields> {
       this.logSuccess(messages.getMessage('linkedClientApp', [flags['client-app'], flags.username]));
 
       // TODO: Remove env var workaround
-      if (this.jsonEnabled()) {
-        if (envVars.getBoolean('SF_TEMP_SHOW_SECRETS', false)) {
-          this.warn(secretsMessages.getMessage('temp.envVarIsSet', ['sf org login web']));
-        } else {
-          this.warn(secretsMessages.getMessage('temp.envVarWorkaround', ['sf org login web']));
-        }
+      if (this.jsonEnabled() && envVars.getBoolean('SF_TEMP_SHOW_SECRETS', false)) {
+        this.warn(secretsMessages.getMessage('temp.envVarIsSet', ['sf org login web']));
       }
 
       return common.redactAuthFields(userAuthInfo.getFields(true));
@@ -204,12 +200,8 @@ export default class LoginWeb extends SfCommand<AuthFields> {
       this.logSuccess(successMsg);
 
       // TODO: Remove env var workaround
-      if (this.jsonEnabled()) {
-        if (envVars.getBoolean('SF_TEMP_SHOW_SECRETS', false)) {
-          this.warn(secretsMessages.getMessage('temp.envVarIsSet', ['sf org login web']));
-        } else {
-          this.warn(secretsMessages.getMessage('temp.envVarWorkaround', ['sf org login web']));
-        }
+      if (this.jsonEnabled() && envVars.getBoolean('SF_TEMP_SHOW_SECRETS', false)) {
+        this.warn(secretsMessages.getMessage('temp.envVarIsSet', ['sf org login web']));
       }
 
       return common.redactAuthFields(fields);
@@ -223,7 +215,7 @@ export default class LoginWeb extends SfCommand<AuthFields> {
   }
 
   // leave it because it's stubbed in the test
-   
+
   private async executeLoginFlow({
     oauthConfig,
     browser,

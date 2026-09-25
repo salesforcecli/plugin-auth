@@ -68,12 +68,8 @@ export default class ListAuth extends SfCommand<AuthListResults> {
         title: 'authenticated orgs',
       });
       // TODO: Remove after env var workaround is removed
-      if (this.jsonEnabled()) {
-        if (showSecretsEnvVarIsSet) {
-          this.warn(secretsMessages.getMessage('temp.envVarIsSet', ['sf org list auth']));
-        } else {
-          this.warn(secretsMessages.getMessage('temp.envVarWorkaround', ['sf org list auth']));
-        }
+      if (this.jsonEnabled() && showSecretsEnvVarIsSet) {
+        this.warn(secretsMessages.getMessage('temp.envVarIsSet', ['sf org list auth']));
       }
 
       return mappedAuths;
