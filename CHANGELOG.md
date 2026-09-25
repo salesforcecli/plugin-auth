@@ -1,3 +1,9 @@
+## [5.0.8](https://github.com/salesforcecli/plugin-auth/compare/5.0.7...5.0.8) (2026-09-25)
+
+### Bug Fixes
+
+- hide SF_TEMP_SHOW_SECRETS suggestion, add eol date ([#1550](https://github.com/salesforcecli/plugin-auth/issues/1550)) ([efe8d0a](https://github.com/salesforcecli/plugin-auth/commit/efe8d0a6200f4a7ba5d50aa7f073bca270979dd7))
+
 ## [5.0.7](https://github.com/salesforcecli/plugin-auth/compare/5.0.6...5.0.7) (2026-09-01)
 
 ### Bug Fixes
