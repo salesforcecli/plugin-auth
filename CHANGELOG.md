@@ -1,3 +1,10 @@
+## [5.0.9](https://github.com/salesforcecli/plugin-auth/compare/5.0.8...5.0.9) (2026-09-25)
+
+### Bug Fixes
+
+- ensure negative exit codes resolve instead of hanging ([9fc3ad1](https://github.com/salesforcecli/plugin-auth/commit/9fc3ad11f2f43d3a2685093e309bb10e1d0d74b7))
+- handle race condition in browser open during web login @W-24132648@ ([59df4f8](https://github.com/salesforcecli/plugin-auth/commit/59df4f8970e66bc4ea7d397bc37d96ab15bfee69))
+
 ## [5.0.8](https://github.com/salesforcecli/plugin-auth/compare/5.0.7...5.0.8) (2026-09-25)
 
 ### Bug Fixes
