@@ -1,3 +1,9 @@
+## [5.0.10](https://github.com/salesforcecli/plugin-auth/compare/5.0.9...5.0.10) (2026-09-28)
+
+### Bug Fixes
+
+- eol date ([#1552](https://github.com/salesforcecli/plugin-auth/issues/1552)) ([f783edd](https://github.com/salesforcecli/plugin-auth/commit/f783edd6f6cfd11ce9e671c5b8558aeec6db2c75))
+
 ## [5.0.9](https://github.com/salesforcecli/plugin-auth/compare/5.0.8...5.0.9) (2026-09-25)
 
 ### Bug Fixes
