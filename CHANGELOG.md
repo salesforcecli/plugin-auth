@@ -1,3 +1,9 @@
+## [5.0.11](https://github.com/salesforcecli/plugin-auth/compare/5.0.10...5.0.11) (2026-09-30)
+
+### Bug Fixes
+
+- **deps:** bump fast-uri from 3.1.5 to 3.1.7 ([08db857](https://github.com/salesforcecli/plugin-auth/commit/08db857c081d1424acc2a7c32a4c842f54db71fc))
+
 ## [5.0.10](https://github.com/salesforcecli/plugin-auth/compare/5.0.9...5.0.10) (2026-09-28)
 
 ### Bug Fixes
