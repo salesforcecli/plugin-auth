@@ -1,3 +1,9 @@
+## [5.0.14](https://github.com/salesforcecli/plugin-auth/compare/5.0.13...5.0.14) (2026-10-09)
+
+### Bug Fixes
+
+- **deps:** bump handlebars from 4.7.9 to 4.7.10 ([58f2bde](https://github.com/salesforcecli/plugin-auth/commit/58f2bdeb1643170c39305e20eb1cf7c5c5cabbfb))
+
 ## [5.0.13](https://github.com/salesforcecli/plugin-auth/compare/5.0.12...5.0.13) (2026-10-09)
 
 ### Bug Fixes
