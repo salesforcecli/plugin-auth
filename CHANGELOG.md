@@ -1,3 +1,9 @@
+## [5.0.15](https://github.com/salesforcecli/plugin-auth/compare/5.0.14...5.0.15) (2026-10-09)
+
+### Bug Fixes
+
+- **deps:** bump source-map-js from 1.2.1 to 1.2.2 ([83d2b22](https://github.com/salesforcecli/plugin-auth/commit/83d2b22e3720e26651d75a306306a2a87e07d6a3))
+
 ## [5.0.14](https://github.com/salesforcecli/plugin-auth/compare/5.0.13...5.0.14) (2026-10-09)
 
 ### Bug Fixes
