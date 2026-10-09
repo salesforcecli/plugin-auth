@@ -1,3 +1,9 @@
+## [5.0.13](https://github.com/salesforcecli/plugin-auth/compare/5.0.12...5.0.13) (2026-10-09)
+
+### Bug Fixes
+
+- **deps:** bump undici from 8.9.0 to 8.11.2 ([dbd6da3](https://github.com/salesforcecli/plugin-auth/commit/dbd6da304b7e2132a7e5a9407199784c7fab28df))
+
 ## [5.0.12](https://github.com/salesforcecli/plugin-auth/compare/5.0.11...5.0.12) (2026-10-05)
 
 ### Bug Fixes
