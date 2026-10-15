@@ -286,7 +286,7 @@ describe('org:login:access-token', () => {
     expect(prompterStubs.secret.callCount).to.equal(0);
   });
 
-  describe('secret redaction WITH env var (SF_TEMP_SHOW_SECRETS)', () => {
+  describe('removed env var SF_TEMP_SHOW_SECRETS has no effect', () => {
     const SHOW_TOKENS_ENV = 'SF_TEMP_SHOW_SECRETS';
 
     beforeEach(() => {
@@ -298,9 +298,14 @@ describe('org:login:access-token', () => {
       delete process.env[SHOW_TOKENS_ENV];
     });
 
-    it('shows real auth fields when env var is set', async () => {
+    it('still redacts auth fields and emits no warning', async () => {
       const result = await Store.run(['--instance-url', 'https://foo.bar.org.salesforce.com', '--no-prompt']);
-      expect(result.accessToken).to.equal(accessToken);
+      expect(result).to.deep.equal(redactedAuthFields);
+      expect(
+        stubSfCommandUxStubs.warn.args
+          .flat()
+          .some((arg) => typeof arg === 'string' && arg.includes('SF_TEMP_SHOW_SECRETS'))
+      ).to.be.false;
     });
   });
 });

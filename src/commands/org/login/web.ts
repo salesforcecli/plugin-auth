@@ -18,23 +18,13 @@ import { type ChildProcess } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import open, { apps, AppName } from 'open';
 import { Flags, SfCommand, loglevel } from '@salesforce/sf-plugins-core';
-import {
-  AuthFields,
-  AuthInfo,
-  envVars,
-  Logger,
-  Messages,
-  OAuth2Config,
-  SfError,
-  WebOAuthServer,
-} from '@salesforce/core';
+import { AuthFields, AuthInfo, Logger, Messages, OAuth2Config, SfError, WebOAuthServer } from '@salesforce/core';
 import { Env } from '@salesforce/kit';
 import common from '../../../common.js';
 
 Messages.importMessagesDirectoryFromMetaUrl(import.meta.url);
 const messages = Messages.loadMessages('@salesforce/plugin-auth', 'web.login');
 const commonMessages = Messages.loadMessages('@salesforce/plugin-auth', 'messages');
-const secretsMessages = Messages.loadMessages('@salesforce/plugin-auth', 'secrets-redacted');
 
 export const CODE_BUILDER_STATE_ENV_VAR = 'CODE_BUILDER_STATE';
 
@@ -166,11 +156,6 @@ export default class LoginWeb extends SfCommand<AuthFields> {
 
       this.logSuccess(messages.getMessage('linkedClientApp', [flags['client-app'], flags.username]));
 
-      // TODO: Remove env var workaround
-      if (this.jsonEnabled() && envVars.getBoolean('SF_TEMP_SHOW_SECRETS', false)) {
-        this.warn(secretsMessages.getMessage('temp.envVarIsSet', ['sf org login web']));
-      }
-
       return common.redactAuthFields(userAuthInfo.getFields(true));
     }
 
@@ -199,11 +184,6 @@ export default class LoginWeb extends SfCommand<AuthFields> {
 
       const successMsg = commonMessages.getMessage('authorizeCommandSuccess', [fields.username, fields.orgId]);
       this.logSuccess(successMsg);
-
-      // TODO: Remove env var workaround
-      if (this.jsonEnabled() && envVars.getBoolean('SF_TEMP_SHOW_SECRETS', false)) {
-        this.warn(secretsMessages.getMessage('temp.envVarIsSet', ['sf org login web']));
-      }
 
       return common.redactAuthFields(fields);
     } catch (err) {
