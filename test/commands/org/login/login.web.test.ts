@@ -371,7 +371,7 @@ describe('org:login:web', () => {
     expect(logSuccessStub.callCount).to.equal(1);
   });
 
-  describe('secret redaction WITH env var (SF_TEMP_SHOW_SECRETS)', () => {
+  describe('removed env var SF_TEMP_SHOW_SECRETS has no effect', () => {
     const SHOW_TOKENS_ENV = 'SF_TEMP_SHOW_SECRETS';
 
     beforeEach(() => {
@@ -382,11 +382,14 @@ describe('org:login:web', () => {
       delete process.env[SHOW_TOKENS_ENV];
     });
 
-    it('shows real auth fields when env var is set', async () => {
+    it('still redacts auth fields and emits no warning', async () => {
       const login = await createNewLoginCommand([], false, undefined);
+      const warnStub = $$.SANDBOX.stub(login, 'warn');
       const result = await login.run();
-      expect(result.accessToken).to.equal(authFields.accessToken);
+      expect(result.accessToken).to.include('[REDACTED]');
       expect(result.username).to.equal(authFields.username);
+      expect(warnStub.args.flat().some((arg) => typeof arg === 'string' && arg.includes('SF_TEMP_SHOW_SECRETS'))).to.be
+        .false;
     });
   });
 });

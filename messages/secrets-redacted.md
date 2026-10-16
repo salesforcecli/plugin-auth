@@ -5,7 +5,3 @@
 # redacted.sfdxAuthUrl
 
 [REDACTED] Use 'sf org auth show-sfdx-auth-url' to view
-
-# temp.envVarIsSet
-
-The SF_TEMP_SHOW_SECRETS env var is set. This is a temporary env var to continue to show secrets in the '%s' command output. This workaround will be removed on October 28, 2026. Switch to use the 'sf org auth' commands to avoid future disruption.

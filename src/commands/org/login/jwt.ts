@@ -15,14 +15,13 @@
  */
 
 import { Flags, SfCommand, loglevel } from '@salesforce/sf-plugins-core';
-import { AuthFields, AuthInfo, AuthRemover, envVars, Logger, Messages, SfError } from '@salesforce/core';
+import { AuthFields, AuthInfo, AuthRemover, Logger, Messages, SfError } from '@salesforce/core';
 import { Interfaces } from '@oclif/core';
 import common from '../../../common.js';
 
 Messages.importMessagesDirectoryFromMetaUrl(import.meta.url);
 const messages = Messages.loadMessages('@salesforce/plugin-auth', 'jwt.grant');
 const commonMessages = Messages.loadMessages('@salesforce/plugin-auth', 'messages');
-const secretsMessages = Messages.loadMessages('@salesforce/plugin-auth', 'secrets-redacted');
 
 export default class LoginJwt extends SfCommand<AuthFields> {
   public static readonly summary = messages.getMessage('summary');
@@ -120,11 +119,6 @@ export default class LoginJwt extends SfCommand<AuthFields> {
 
     const successMsg = commonMessages.getMessage('authorizeCommandSuccess', [result.username, result.orgId]);
     this.logSuccess(successMsg);
-
-    // TODO: Remove env var workaround
-    if (this.jsonEnabled() && envVars.getBoolean('SF_TEMP_SHOW_SECRETS', false)) {
-      this.warn(secretsMessages.getMessage('temp.envVarIsSet', ['sf org login jwt']));
-    }
 
     return common.redactAuthFields(result);
   }
