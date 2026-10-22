@@ -1,3 +1,9 @@
+## [6.0.1](https://github.com/salesforcecli/plugin-auth/compare/6.0.0...6.0.1) (2026-10-22)
+
+### Bug Fixes
+
+- **deps:** bump markdown-it from 14.3.1 to 14.3.3 ([58a7627](https://github.com/salesforcecli/plugin-auth/commit/58a7627cf074df95367edb784bc66d8dc9a127ef))
+
 # [6.0.0](https://github.com/salesforcecli/plugin-auth/compare/5.0.16...6.0.0) (2026-10-16)
 
 - feat!: removes SF_TEMP_SHOW_SECRETS workaround (#1560) ([5ad2ee7](https://github.com/salesforcecli/plugin-auth/commit/5ad2ee7b95110908506daa6a62c01eaee4e7012a)), closes [#1560](https://github.com/salesforcecli/plugin-auth/issues/1560)
