@@ -9,6 +9,7 @@
   "dependencies": {
     "@inquirer/checkbox": "^2.5.0",
     "@inquirer/select": "^2.5.0",
+    "@jsforce/jsforce-node": "^3.10.24",
     "@oclif/core": "^5.0.0",
     "@salesforce/core": "^9.1.11",
     "@salesforce/kit": "^4.0.0",
