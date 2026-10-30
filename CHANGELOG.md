@@ -1,3 +1,9 @@
+## [6.0.3](https://github.com/salesforcecli/plugin-auth/compare/6.0.2...6.0.3) (2026-10-30)
+
+### Bug Fixes
+
+- **deps:** bump zod from 4.1.13 to 4.6.7 ([fcabe9f](https://github.com/salesforcecli/plugin-auth/commit/fcabe9f5eb7c3f64c098a78649417fee8ba00fa5))
+
 ## [6.0.2](https://github.com/salesforcecli/plugin-auth/compare/6.0.1...6.0.2) (2026-10-30)
 
 ### Bug Fixes
