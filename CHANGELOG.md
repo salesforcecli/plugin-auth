@@ -1,3 +1,9 @@
+## [6.0.2](https://github.com/salesforcecli/plugin-auth/compare/6.0.1...6.0.2) (2026-10-30)
+
+### Bug Fixes
+
+- **deps:** bump undici from 8.11.2 to 8.12.3 ([7ce1516](https://github.com/salesforcecli/plugin-auth/commit/7ce1516a257bca27f2b5318ee2819e3ba681a110))
+
 ## [6.0.1](https://github.com/salesforcecli/plugin-auth/compare/6.0.0...6.0.1) (2026-10-22)
 
 ### Bug Fixes
