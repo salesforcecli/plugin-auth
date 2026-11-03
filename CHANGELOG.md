@@ -1,3 +1,10 @@
+## [6.0.5](https://github.com/salesforcecli/plugin-auth/compare/6.0.4...6.0.5) (2026-11-03)
+
+### Bug Fixes
+
+- update md files ([ca3993e](https://github.com/salesforcecli/plugin-auth/commit/ca3993ee79d1a0c39fe5242174325d462b56f8f3))
+- update readme ([3ed705e](https://github.com/salesforcecli/plugin-auth/commit/3ed705ed7ecab2241f74e3b232441e9d32d4a1fd))
+
 ## [6.0.4](https://github.com/salesforcecli/plugin-auth/compare/6.0.3...6.0.4) (2026-10-30)
 
 ### Bug Fixes
