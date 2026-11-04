@@ -21,6 +21,7 @@ import { Flags, SfCommand, loglevel } from '@salesforce/sf-plugins-core';
 import { AuthFields, AuthInfo, Logger, Messages, OAuth2Config, SfError, WebOAuthServer } from '@salesforce/core';
 import { Env } from '@salesforce/kit';
 import common from '../../../common.js';
+import { createManualLoginSession, parseCallbackUrl } from '../../../manualWebLogin.js';
 
 Messages.importMessagesDirectoryFromMetaUrl(import.meta.url);
 const messages = Messages.loadMessages('@salesforce/plugin-auth', 'web.login');
@@ -52,7 +53,13 @@ export default class LoginWeb extends SfCommand<AuthFields> {
       summary: messages.getMessage('flags.browser.summary'),
       description: messages.getMessage('flags.browser.description'),
       options: ['chrome', 'edge', 'firefox'], // These are ones supported by "open" package
+      exclusive: ['manual'],
     })(),
+    manual: Flags.boolean({
+      summary: messages.getMessage('flags.manual.summary'),
+      description: messages.getMessage('flags.manual.description'),
+      exclusive: ['browser', 'client-app'],
+    }),
     'client-id': Flags.string({
       char: 'i',
       summary: commonMessages.getMessage('flags.client-id.summary'),
@@ -117,7 +124,11 @@ export default class LoginWeb extends SfCommand<AuthFields> {
 
   public async run(): Promise<AuthFields> {
     const { flags } = await this.parse(LoginWeb);
-    if (isContainerMode()) {
+    // The hidden prompt writes to stdout, which would corrupt the JSON output.
+    if (flags.manual && this.jsonEnabled()) {
+      throw messages.createError('error.manualJsonNotSupported');
+    }
+    if (!flags.manual && isContainerMode()) {
       throw new SfError(messages.getMessage('error.headlessWebAuth'));
     }
 
@@ -168,12 +179,14 @@ export default class LoginWeb extends SfCommand<AuthFields> {
     };
 
     try {
-      const authInfo = await this.executeLoginFlow({
-        oauthConfig,
-        browser: flags.browser,
-        clientApp: undefined,
-        scopes: flags.scopes,
-      });
+      const authInfo = flags.manual
+        ? await this.executeManualLoginFlow(oauthConfig, flags.scopes)
+        : await this.executeLoginFlow({
+            oauthConfig,
+            browser: flags.browser,
+            clientApp: undefined,
+            scopes: flags.scopes,
+          });
       await authInfo.handleAliasAndDefaultSettings({
         alias: flags.alias,
         setDefault: flags['set-default'],
@@ -193,6 +206,48 @@ export default class LoginWeb extends SfCommand<AuthFields> {
       }
       throw err;
     }
+  }
+
+  // Same authorization code + PKCE flow as executeLoginFlow, but the user opens the URL on any device and pastes
+  // the callback URL back, so no local browser or listening port is needed.
+  private async executeManualLoginFlow(oauthConfig: OAuth2Config, scopes?: string): Promise<AuthInfo> {
+    const redirectUri = `http://localhost:${await WebOAuthServer.determineOauthPort()}/OauthRedirect`;
+    const session = createManualLoginSession({ ...oauthConfig, scope: scopes }, redirectUri);
+
+    this.log(messages.getMessage('manual.openUrl'));
+    this.log('');
+    this.log(session.authUrl);
+    this.log('');
+    this.log(messages.getMessage('manual.pasteCallback', [redirectUri]));
+
+    const timeout = WebOAuthServer.getAuthTimeout();
+    let pasted: string;
+    try {
+      // Hidden input because the callback URL carries the authorization code.
+      pasted = await this.secretPrompt({ message: messages.getMessage('manual.prompt'), ms: timeout });
+    } catch (err) {
+      if (err instanceof Error && err.name === 'ExitPromptError') throw messages.createError('error.manualCancelled');
+      // sf-plugins-core's secretPrompt rejects with exactly this message on timeout.
+      if (err instanceof Error && err.message === 'Prompt timed out.') {
+        throw messages.createError('error.manualTimeout', [Math.round(timeout / 1000)]);
+      }
+      throw err;
+    }
+
+    session.oauthConfig.authCode = parseCallbackUrl(pasted, { redirectUri, state: session.oauthConfig.state });
+    let authInfo: AuthInfo;
+    try {
+      authInfo = await AuthInfo.create({ oauth2Options: session.oauthConfig, oauth2: session.oauth2 });
+    } catch (err) {
+      if (err instanceof SfError && err.name === 'AuthCodeExchangeError') {
+        throw messages.createError('error.manualAuthCodeExchange', [err.message], [], err);
+      }
+      throw err;
+    } finally {
+      delete session.oauthConfig.authCode;
+    }
+    await authInfo.save();
+    return authInfo;
   }
 
   // leave it because it's stubbed in the test

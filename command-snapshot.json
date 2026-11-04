@@ -114,6 +114,7 @@
       "instance-url",
       "json",
       "loglevel",
+      "manual",
       "no-prompt",
       "scopes",
       "set-default",

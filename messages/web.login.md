@@ -83,3 +83,59 @@ Unable to open the browser you specified (%s).
 # verificationCode
 
 - Verification Code: %s — If prompted, enter this code in your browser window.
+
+# flags.manual.summary
+
+Print the authorization URL and paste the callback URL instead of opening a browser; for machines without a browser.
+
+# flags.manual.description
+
+Use this flag on a machine without a browser, such as a remote server, container, or SSH session. The command prints the authorization URL. Open it in a browser on any device, such as your laptop or phone, and log in as usual, including SSO and MFA. After you log in, the browser is redirected to a "http://localhost:1717/OauthRedirect" address that fails to load; this is expected. Copy the full address from the browser's address bar and paste it at the hidden prompt. The command then completes the login exactly as without this flag. The OAuth flow, connected app, scopes, and stored authorization are the same.
+
+# manual.openUrl
+
+Open this URL in a browser on any device:
+
+# manual.pasteCallback
+
+Log in. The browser is then redirected to %s and fails to load; this is expected. Copy the full address from the browser's address bar and paste it below. The input is hidden.
+
+# manual.prompt
+
+Callback URL
+
+# error.manualJsonNotSupported
+
+The --manual flag is interactive and can't be used with --json. Run the command without --json; then run "org display --json" to see the result.
+
+# error.emptyCallbackUrl
+
+No callback URL was entered.
+
+# error.malformedCallbackUrl
+
+The pasted value isn't a valid URL. Paste the full address from the browser, starting with "http://localhost".
+
+# error.unexpectedRedirectUri
+
+The pasted URL doesn't start with the expected callback %s. Paste the address the browser was redirected to after you logged in, not the authorization URL.
+
+# error.stateMismatch
+
+The "state" value in the callback URL doesn't match this login attempt. Run the command again and use the new URL that it prints.
+
+# error.missingAuthCode
+
+The callback URL doesn't contain an authorization code.
+
+# error.manualAuthCodeExchange
+
+Salesforce rejected the authorization code: %s. Codes are single use and expire after a few minutes, so run the command again and paste the new callback URL right after you log in. If you use --client-id, also verify the client secret.
+
+# error.manualTimeout
+
+Timed out after %s seconds waiting for the callback URL. Run the command again, or set the SF_WEB_OAUTH_SERVER_TIMEOUT environment variable (in milliseconds) to wait longer.
+
+# error.manualCancelled
+
+Login cancelled.
