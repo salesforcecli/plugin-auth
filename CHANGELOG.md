@@ -1,3 +1,9 @@
+## [6.0.6](https://github.com/salesforcecli/plugin-auth/compare/6.0.5...6.0.6) (2026-11-12)
+
+### Bug Fixes
+
+- **deps:** bump brace-expansion from 1.1.11 to 1.1.22 ([54b6555](https://github.com/salesforcecli/plugin-auth/commit/54b655554c5958a8ced8e4ca9d3e350bde5d1e36))
+
 ## [6.0.5](https://github.com/salesforcecli/plugin-auth/compare/6.0.4...6.0.5) (2026-11-03)
 
 ### Bug Fixes
