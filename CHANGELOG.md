@@ -1,3 +1,9 @@
+## [6.0.7](https://github.com/salesforcecli/plugin-auth/compare/6.0.6...6.0.7) (2026-11-12)
+
+### Bug Fixes
+
+- **deps:** bump js-yaml from 3.14.1 to 3.15.2 ([91de986](https://github.com/salesforcecli/plugin-auth/commit/91de986a0576cb223979dce186aecc0b5e2182a1))
+
 ## [6.0.6](https://github.com/salesforcecli/plugin-auth/compare/6.0.5...6.0.6) (2026-11-12)
 
 ### Bug Fixes
